@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmsConnect</title>
+    <link rel="icon" type="image/png" href="img/FarmsConnect.jpg"> <!-- Chemin vers votre image -->
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+<div class="blur-background"></div> <!-- Couche floue en arrière-plan -->
+
+<header>
+    <h2 class="Bienvenue">Bienvenue sur FarmsConnect Burkina</h2>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="index.html" id="show-login">Connexion</a></li>
+        <li><a href="apropo.html">À propos</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
+</nav>
+
+<div class="description">
+    <div class="blur-background"></div> <!-- Ajoutez cette ligne pour l'effet de flou -->
+    <p>FarmsConnect est une plateforme innovante agissant comme un marketplace dédié aux produits d'élevage et aux services de contrôle de la santé animale. Nous facilitons la connexion entre les éleveurs, les vendeurs, les vétérinaires et les consommateurs, offrant ainsi un accès simplifié aux produits de qualité et aux services de santé indispensables. Avec FarmsConnect, nous nous engageons à promouvoir un élevage responsable et durable, tout en renforçant les communautés rurales au Burkina Faso grâce à des solutions adaptées aux besoins du secteur.</p>
+</div>
+
+
+<div class="form-container" id="form-container">
+    <div class="login-form">
+        <h1>Connexion</h1>
+        <form id="login-form">
+            <input type="text" id="login-username" placeholder="Nom d'utilisateur" required>
+            <input type="email" id="login-email" placeholder="Email" required>
+            <input type="text" id="login-contact" placeholder="Contact" required>
+            <input type="password" id="login-password" placeholder="Mot de passe" required>
+            <button type="submit">Se connecter</button>
+        </form>
+        
+    </div>
+
+    <div class="signup-form">
+        <h2>Créer un compte</h2>
+        <form id="signup-form">
+            <input type="text" id="signup-username" name="username" placeholder="Nom d'utilisateur" required>
+            <input type="email" id="signup-email" name="email" placeholder="Email" required>
+            <input type="text" id="signup-contact" name="contact" placeholder="Contact" required>
+            <input type="password" id="signup-password" name="password" placeholder="Mot de passe" required>
+            <select name="userType" required>
+                <option value="Vendeur">Vendeur</option>
+                <option value="Acheteur">Acheteur</option>
+                <option value="Visiteur">Visiteur</option>
+            </select>
+            <button type="submit">S'inscrire</button>
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+    // Afficher les formulaires lors du clic sur "Connexion"
+    document.getElementById('show-login').addEventListener('click', function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        document.getElementById('form-container').style.display = 'flex'; // Affiche le formulaire
+    });
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Gestion de l'inscription
+        document.getElementById('signup-form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Empêche le rechargement de la page
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('http://localhost:3002/api/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    localStorage.setItem('username', data.username);
+                    localStorage.setItem('email', data.email);
+                    localStorage.setItem('contact', data.contact);
+
+                    showAlert('Inscription réussie !');
+                    window.location.href = 'Acceuil.html'; // Rediriger après l'inscription
+                } else {
+                    const message = await response.text();
+                    alert('Erreur lors de l\'inscription : ' + message);
+                }
+            } catch (error) {
+                alert('Erreur de réseau lors de l\'inscription : ' + error.message);
+            }
+        });
+
+        // Gestion de la connexion
+const loginForm = document.getElementById("login-form");
+loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault(); // Empêche le rechargement de la page
+
+    const username = document.getElementById("login-username").value.trim();
+    const email = document.getElementById("login-email").value.trim();
+    const contact = document.getElementById("login-contact").value.trim();
+    const password = document.getElementById("login-password").value;
+
+    // Assurez-vous que toutes les valeurs sont bien définies
+    if (!username || !email || !contact || !password) {
+        alert('Veuillez remplir tous les champs.');
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:3002/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, contact, password }), // Envoi des quatre champs
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            showAlert('Connexion réussie !');
+
+            // Stocker les informations dans le localStorage
+            localStorage.setItem('username', data.username);
+            localStorage.setItem('email', data.email);
+            localStorage.setItem('contact', data.contact);
+
+            // Redirection vers la page d'accueil après connexion réussie
+            window.location.href = 'Acceuil.html';
+        } else {
+            const errorMessage = await response.text();
+            alert('Erreur : ' + errorMessage);
+        }
+    } catch (error) {
+        alert('Erreur de réseau : ' + error.message);
+    }
+});
+
+
+    });
+
+
+
+
+
+    function showAlert(message) {
+    const alertBox = document.getElementById("customAlert");
+    const alertMessage = document.getElementById("alertMessage");
+
+    alertMessage.textContent = message;
+    alertBox.classList.remove("hidden");
+
+    // Masquer l'alerte après un certain temps (facultatif)
+    setTimeout(() => {
+        closeAlert();
+    }, 10000); // Masquer après 5 secondes
+}
+
+function closeAlert() {
+    document.getElementById("customAlert").classList.add("hidden");
+}
+</script>
+
+<script src="apropo.js"></script>
+
+<div class="alert hidden" id="customAlert">
+    <button onclick="closeAlert()">×</button>
+    <p id="alertMessage"></p>
+</div>
+
+</body>
+</html>
