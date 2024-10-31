@@ -1,0 +1,276 @@
+/* Style de base */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    position: relative;
+    line-height: 1.6; /* Améliore la lisibilité du texte */
+    background-image: url('img/fond.jpg'); /* Chemin vers votre image */
+    background-size: cover; /* L'image couvre tout le corps */
+    background-repeat: no-repeat; /* Évite que l'image se répète */
+    background-position: center; /* Centre l'image */
+    min-height: 100vh; /* Assure que le corps a au moins la hauteur de la fenêtre */
+    filter: brightness(0.8) contrast(1.6); /* Ajustez la luminosité et le contraste */
+}
+
+
+
+/* Style pour l'en-tête */
+header {
+    text-align: center;
+    margin: 15px 0; /* Espace au-dessus et en dessous */
+}
+
+.Bienvenue {
+    font-size: 3.8em;
+    color: #fffefe; /* Texte blanc */
+    text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.8); /* Ombre portée pour le contraste */
+    margin: 0;
+}
+
+/* Style de la navigation */
+nav {
+    background-color: rgba(40, 199, 48, 0.9); /* Fond légèrement transparent */
+    padding: 2px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre pour effet de profondeur */
+    border-radius: 5px; /* Coins arrondis */
+    margin: 0 20px; /* Espace latéral */
+
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+    font-size: 30px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #f1f4f7; /* Couleur primaire */
+    font-weight: bold;
+    transition: color 0.3s; /* Animation douce sur le survol */
+}
+
+nav ul li a:hover {
+    color: #0056b3; /* Couleur au survol */
+}
+
+/* Style de la description */
+.description {
+    position: relative; /* Ajoutez cette ligne */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.95); /* Fond légèrement plus opaque */
+    border-radius: 8px; /* Coins arrondis */
+    margin: 10px; /* Marge autour */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre pour profondeur */
+    text-align: center;
+    font-size: 25px;
+    overflow: hidden; /* Assurez-vous que le flou ne dépasse pas les bords */
+}
+
+.blur-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5); /* Couleur de fond blanche avec transparence */
+    filter: blur(20px); /* Ajustez la valeur selon l'intensité désirée */
+    z-index: -1; /* En arrière-plan */
+    border-radius: 8px; /* Assurez-vous que cela correspond au conteneur parent */
+}
+
+
+/* Style du conteneur de formulaires */
+.form-container {
+    display: flex; /* Masqué par défaut */
+    margin: 20px auto; /* Centrer horizontalement */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.95); /* Fond pour le conteneur */
+    border-radius: 8px; /* Coins arrondis */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre pour profondeur */
+    max-width: 800px; /* Largeur maximale */
+    display: none; /* Utiliser flexbox pour aligner les cartes */
+    justify-content: space-between; /* Espacement entre les cartes */
+}
+
+/* Style pour chaque formulaire */
+.login-form, .signup-form {
+    background-color: rgba(255, 255, 255, 0.9); /* Fond légèrement plus opaque pour les cartes */
+    border-radius: 8px; /* Coins arrondis */
+    padding: 20px; /* Espacement interne */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre pour profondeur */
+    width: 48%; /* Largeur de chaque carte (ajustée pour tenir compte de la marge) */
+    margin: 1%; /* Marge entre les cartes */
+}
+
+/* Ajout d'un style pour s'assurer que les cartes ne soient pas trop petites */
+@media (max-width: 600px) {
+    .login-form, .signup-form {
+        width: 90%; /* Prend presque toute la largeur sur les petits écrans */
+        margin: 10px auto; /* Centrer avec marges */
+    }
+}
+
+
+/* Ajout d'un style pour s'assurer que les cartes ne soient pas trop petites */
+@media (max-width: 600px) {
+    .login-form, .signup-form {
+        width: 90%; /* Prend presque toute la largeur sur les petits écrans */
+    }
+}
+
+
+h1, h2 {
+    color: #333; /* Couleur des titres */
+}
+
+label {
+    font-weight: bold; /* Met en gras les labels */
+}
+
+/* Style des champs de formulaire */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select {
+    width: 100%; /* Largeur pleine */
+    padding: 10px; /* Espacement interne */
+    margin: 10px 0; /* Marge entre les champs */
+    border: 1px solid #ccc; /* Bordure grise */
+    border-radius: 5px; /* Coins arrondis */
+    transition: border-color 0.3s; /* Animation douce pour la bordure */
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+select:focus {
+    border-color: #007bff; /* Bordure bleue au focus */
+    outline: none; /* Pas d'ombre par défaut */
+}
+
+/* Style des boutons */
+button {
+    background-color: #007bff; /* Couleur primaire */
+    color: white; /* Texte blanc */
+    padding: 10px 20px; /* Espacement interne */
+    border: none; /* Pas de bordure */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer; /* Curseur main au survol */
+    transition: background-color 0.3s; /* Animation douce pour la couleur */
+}
+
+button:hover {
+    background-color: #0056b3; /* Couleur au survol */
+}
+
+
+
+
+
+
+/* Styles pour les petits écrans (mobiles) */
+@media (max-width: 600px) {
+    .login-form, .signup-form {
+        width: 90%;
+        margin: 10px auto;
+    }
+
+    .Bienvenue {
+        font-size: 2.5em;
+    }
+
+    nav ul li {
+        font-size: 18px;
+        display: block;
+        margin: 10px 0;
+    }
+
+    .description {
+        font-size: 20px;
+    }
+}
+
+/* Styles pour les écrans moyens (tablettes) */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .login-form, .signup-form {
+        width: 48%;
+        margin: 1%;
+    }
+
+    .Bienvenue {
+        font-size: 3em;
+    }
+
+    nav ul li {
+        font-size: 24px;
+        display: inline-block;
+    }
+
+    .description {
+        font-size: 22px;
+    }
+}
+
+/* Styles pour les grands écrans (ordinateurs) */
+@media (min-width: 1025px) {
+    .login-form, .signup-form {
+        width: 48%;
+        margin: 1%;
+    }
+
+    .Bienvenue {
+        font-size: 3.8em;
+    }
+
+    nav ul li {
+        font-size: 30px;
+    }
+
+    .description {
+        font-size: 25px;
+    }
+}
+
+
+.alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; /* Largeur ajustable selon tes préférences */
+    max-width: 600px; /* Limite maximale de la largeur */
+    background-color: #21f02c;
+    color: white;
+    padding: 30px; /* Plus d’espace pour agrandir l’alerte */
+    font-size: px; /* Augmente la taille du texte */
+    text-align: center; /* Centrer le texte */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    transition: opacity 0.5s;
+}
+
+.alert.hidden {
+    display: none;
+}
+
+.alert button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px; /* Augmente la taille du bouton de fermeture */
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
