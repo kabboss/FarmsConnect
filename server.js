@@ -20,7 +20,10 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 // Appliquer le middleware CORS sans options (autorise toutes les origines par défaut)
-app.use(cors());
+app.use(cors({
+    origin: 'https://farmsconnect-b084ddb02391.herokuapp.com', // ou '*' pour autoriser toutes les origines
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
 
 mongoose.connect('mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority', {
 })
