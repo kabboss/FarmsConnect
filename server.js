@@ -23,8 +23,6 @@ app.use(express.static('public'));
 app.use(cors());
 
 mongoose.connect('mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
 })
 .then(() => console.log('Connecté à MongoDB...'))
 .catch(err => console.error('Erreur de connexion à MongoDB:', err));
@@ -206,7 +204,7 @@ app.get('/api/messages', async (req, res) => {
 });
 
 // Démarrer le serveur
-const PORT = process.env.PORT || 3000; // 3000 est un port par défaut
+const PORT = process.env.PORT || 3002; // 3002 est un port par défaut
 app.listen(PORT, () => {
     console.log(`Le serveur est en marche sur le port ${PORT}...`);
 });

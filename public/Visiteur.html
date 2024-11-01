@@ -89,7 +89,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 function sendEmail(content) {
-    fetch('http://localhost:3000/api/send-email', {
+    fetch('http://localhost:3002/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content })
