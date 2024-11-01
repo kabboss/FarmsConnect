@@ -13,7 +13,7 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
             contactPrincipal: document.getElementById('contact-principal').value,
             contactSecondaire: document.getElementById('contact-secondaire').value,
             emailVendeur: document.getElementById('email-vendeur').value,
-            codeVendeur: 'V' + Date.now(), // Génère un code vendeur unique
+            codeVendeur: 'V' + Date.now(),
             location: {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude
@@ -21,28 +21,38 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
         };
 
         const files = document.getElementById('images').files;
-        const fileReaders = [];
-
         if (files.length === 0) {
-            showAlert("Veuillez sélectionner au moins une image."); // Vérification si des fichiers sont sélectionnés
+            showAlert("Veuillez sélectionner au moins une image.");
             return;
         }
 
-        for (let i = 0; i < files.length; i++) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                animal.images.push(event.target.result); // Ajout de l'image sous forme de data URL
-                if (animal.images.length === files.length) {
-                    let annonces = JSON.parse(localStorage.getItem('annonces')) || [];
-                    annonces.push(animal);
-                    localStorage.setItem('annonces', JSON.stringify(annonces));
-                    showAlert("Votre annonce a été ajoutée avec succès ! 🎉");
-                }
-            };
-            reader.readAsDataURL(files[i]);
-        }
+        // Lire les images en tant que base64
+        const fileReaders = Array.from(files).map(file => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = event => resolve(event.target.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        });
+
+        Promise.all(fileReaders).then(images => {
+            animal.images = images;
+
+            // Envoyer les données de l'annonce au serveur
+            fetch('/api/annonces', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(animal)
+            })
+            .then(response => response.json())
+            .then(data => showAlert(data.message))
+            .catch(error => showAlert("Erreur lors de l'ajout de l'annonce : " + error.message));
+        });
     }, function(error) {
-        showAlert("La localisation est requise pour ajouter une annonce."); // Utilisation de showAlert pour les erreurs
+        showAlert("La localisation est requise pour ajouter une annonce.");
     });
 });
 
@@ -53,23 +63,9 @@ function showAlert(message) {
     alertMessage.textContent = message;
     alertBox.classList.remove("hidden");
 
-    // Masquer l'alerte après un certain temps (facultatif)
-    setTimeout(() => {
-        closeAlert();
-    }, 10000); // Masquer après 10 secondes
+    setTimeout(() => closeAlert(), 10000);
 }
 
 function closeAlert() {
     document.getElementById("customAlert").classList.add("hidden");
 }
-
-// Remplacez `alert()` par `showAlert()` pour afficher le message dans l'alerte personnalisée
-fetch('/api/endpoint', { /*... options de requête ...*/ })
-    .then(response => {
-        if (response.ok) {
-            showAlert("Votre annonce a été ajoutée avec succès ! 🎉\n\nNous vous informerons dès qu'un utilisateur est intéressé par votre produit. Merci de faire confiance à notre plateforme pour vos transactions !");
-        } else {
-            showAlert("Erreur lors de l'envoi de l'email."); // Affiche le message d'erreur approprié
-        }
-    })
-    
