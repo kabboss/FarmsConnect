@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Charger les messages depuis le backend
     function loadMessages() {
-        fetch('http://localhost:3002/api/messages')
+        fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/messages')
             .then(response => response.json())
             .then(data => {
                 messageList.innerHTML = ""; // Nettoyer la liste avant d'afficher les messages
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const username = localStorage.getItem('username'); // Utiliser le nom d'utilisateur stocké
 
         if (newMessage.trim() !== "" && username) {
-            fetch('http://localhost:3002/api/messages', {
+            fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/messages', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const messageId = messageDiv.querySelector(".reply-button").getAttribute("data-id"); // Récupérer l'ID du message d'origine
 
             if (replyMessage.trim() !== "" && username) {
-                fetch(`http://localhost:3002/api/messages/${messageId}/replies`, {
+                fetch(`https://farmsconnect-b084ddb02391.herokuapp.com/api/messages/${messageId}/replies`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
