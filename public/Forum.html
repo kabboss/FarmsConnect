@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum de Discussion - FarmsConnect</title>
+    <link rel="stylesheet" href="Forum.css">
+</head>
+<body>
+    <header>
+        <h1>Forum de Discussion de FarmsConnect</h1>
+    </header>
+
+    <nav>
+        <ul class="nav-list">
+            <li><a href="Acceuil.html">Accueil</a></li>
+            <li><a href="vente.html">Vendre</a></li>
+            <li><a href="visiteur.html">Animaux mis en Vente</a></li>
+            <li><a href="apropo.html">À Propos</a></li>
+        </ul>
+    </nav>
+
+    <section id="forum">
+        <div id="message-list">
+            <!-- Les messages seront ajoutés ici via JavaScript -->
+        </div>
+
+        <form id="message-form">
+            <textarea id="message-input" placeholder="Tapez votre message ici..." required></textarea>
+            <button type="submit">Publier</button>
+        </form>
+    </section>
+
+    <script src="Forum.js"></script>
+</body>
+</html>

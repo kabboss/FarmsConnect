@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animaux à Vendre - FarmsConnect</title>
+    <link rel="icon" type="image/png" href="img/FarmsConnect.jpg"> <!-- Chemin vers votre image -->
+    <link rel="stylesheet" href="style_Visiter.css">
+</head>
+<body>
+    <header>
+        <h1>Animaux Disponibles</h1>
+        <nav>
+            <ul class="nav-list">
+                <li><a href="Acceuil.html">Accueil</a></li>
+                <li><a href="vente.html">Vendre</a></li>
+                <li><a href="visiteur.html">Animaux mis en Vente</a></li>
+                <li><a href="apropo.html">À Propos</a></li>
+
+                
+
+            </ul>
+        </nav>
+    </header>
+    
+    <div id="animal-list">
+        <!-- Les animaux ajoutés seront affichés ici -->
+    </div>
+    
+    <section class="animals-list" id="animals-list">
+        <!-- Les informations sur les animaux à vendre s'afficheront ici -->
+    </section>
+
+<script>
+
+function handlePurchase(animal) {
+    const visitorInfo = {
+        username: prompt('Entrez votre nom d’utilisateur :'),
+        contact: prompt('Entrez votre numéro de contact :'),
+        email: prompt('Entrez votre e-mail :'),
+        quantity: prompt('Combien d\'unités souhaitez-vous acheter ?'),
+        budget: prompt('Quel est votre budget pour l\'achat d\'une unité ?'),
+        buyerLocation: {} // Ajout d'un objet pour stocker la localisation de l'acheteur
+    };
+
+    // Récupération de la localisation de l'acheteur
+    navigator.geolocation.getCurrentPosition(function(position) {
+        visitorInfo.buyerLocation.latitude = position.coords.latitude;
+        visitorInfo.buyerLocation.longitude = position.coords.longitude;
+
+        // Calculer la distance (exemple avec une fonction de calcul de distance)
+        const distance = calculateDistance(animal.location.latitude, animal.location.longitude, visitorInfo.buyerLocation.latitude, visitorInfo.buyerLocation.longitude);
+
+        const emailContent = `
+            Détails de l'achat :
+            Nom de l'animal : ${animal.nom}
+            Catégorie : ${animal.categorie}
+            Prix unitaire : ${animal.prix} FCFA
+            Code du vendeur : ${animal.codeVendeur}
+            Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? ` (secondaire : ${animal.contactSecondaire})` : ''}
+            
+            Informations sur le visiteur :
+            Nom d'utilisateur : ${visitorInfo.username}
+            Contact : ${visitorInfo.contact}
+            E-mail : ${visitorInfo.email}
+            Nombre souhaité : ${visitorInfo.quantity}
+            Budget pour l'achat d'une unité : ${visitorInfo.budget} FCFA
+            Distance au vendeur : ${distance.toFixed(2)} km 
+
+        `;
+
+        sendEmail(emailContent);
+    }, function(error) {
+        showAlert("Erreur lors de la récupération de la localisation. L'email ne peut pas être envoyé sans cette information.");
+    });
+}
+
+// Fonction pour calculer la distance entre deux coordonnées (latitude et longitude)
+// Utilisation de la formule de Haversine
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Rayon de la Terre en kilomètres
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // Distance en kilomètres
+}
+
+function sendEmail(content) {
+    fetch('http://localhost:3002/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content })
+    })
+    .then(response => {
+        if (response.ok) {
+            showAlert("Merci pour votre commande !\n\nNous l'avons bien reçue et nous vous contacterons prochainement pour organiser la livraison. Notez que chaque produit passe par un contrôle sanitaire rigoureux pour garantir sa qualité.\n\nÀ très bientôt !");
+        } else {
+            showAlert("Erreur lors de l'envoi de l'email.");
+        }
+    })
+    .catch(error => {
+        console.error('Erreur de réseau :', error);
+    });
+}
+
+
+
+</script>
+
+    <script src="script_Visiter.js"></script>
+
+    <div class="alert hidden" id="customAlert">
+        <button onclick="closeAlert()">×</button>
+        <p id="alertMessage"></p>
+    </div>
+
+</body>
+</html>
