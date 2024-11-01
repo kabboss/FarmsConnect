@@ -206,7 +206,8 @@ app.get('/api/messages', async (req, res) => {
 });
 
 // Démarrer le serveur
-const PORT = 3002;
+const PORT = process.env.PORT || 3000; // 3000 est un port par défaut
 app.listen(PORT, () => {
     console.log(`Le serveur est en marche sur le port ${PORT}...`);
 });
+
