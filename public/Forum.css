@@ -114,4 +114,7 @@ nav {
     margin-top: 5px; /* Espace au-dessus de la réponse */
 }
 
+nav ul li a:hover {
+    text-decoration: underline; /* Effet au survol */
+}
 

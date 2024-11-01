@@ -9,24 +9,26 @@ body {
 
 h2, h3 {
     margin: 0;
-    color: #2c3e50;
+    color: #04080c;
 }
 
 /* Header styles */
 header {
-    background-color: #2e8b57;
-    padding: 15px 20px;
+    background-color: #1dd12c;
+    padding: 10px 15px; /* Espacement réduit */
+    text-align: center; /* Centre le contenu */
 }
 
 nav ul {
     list-style: none;
     padding: 0;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center; /* Centre horizontalement */
+    flex-wrap: wrap; /* Permet au contenu de passer à la ligne */
 }
 
 nav ul li {
-    margin-right: 20px;
+    margin: 0 10px; /* Espacement ajusté */
 }
 
 nav a {
@@ -34,10 +36,11 @@ nav a {
     color: white;
     font-weight: bold;
     transition: color 0.3s;
+    font-size: 16px; /* Taille de police ajustée */
 }
 
 nav a:hover {
-    color: #ecf0f1;
+    color: #1be468;
 }
 
 /* Hero section */
@@ -45,32 +48,39 @@ nav a:hover {
     text-align: center;
     background-color: #2980b9;
     color: white;
-    padding: 40px 20px;
+    padding: 30px 15px; /* Espacement réduit */
 }
 
 .hero h2 {
-    font-size: 2.5em;
+    font-size: 1.8em; /* Taille réduite pour mobile */
 }
 
 .hero p {
-    font-size: 1.2em;
+    font-size: 1em; /* Taille réduite pour mobile */
 }
 
 /* Categories section */
 .categories {
     text-align: center;
-    margin: 20px 0;
+    margin: 15px 0;
+}
+
+.category-list {
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    gap: 10px; /* Espacement entre les boutons */
 }
 
 .category-list button {
     background-color: #3498db;
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 16px 7px; /* Espacement ajusté */
     margin: 5px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.5s;
+    font-size: 14px; /* Taille de police réduite */
 }
 
 .category-list button:hover {
@@ -79,7 +89,7 @@ nav a:hover {
 
 /* Products section */
 .products {
-    margin: 20px 0;
+    margin: 15px 0;
 }
 
 .product-list {
@@ -92,13 +102,12 @@ nav a:hover {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin: 70px;
-    padding: 15px;
+    margin: 15px; /* Marge réduite pour mobile */
+    padding: 10px; /* Espacement ajusté */
     text-align: center;
-    width: 250px;
+    width: 80%; /* Largeur ajustée pour mobile */
+    max-width: 300px; /* Limite de largeur pour une meilleure visibilité */
     transition: transform 0.2s;
-    margin-top: -50px;
-
 }
 
 .product img {
@@ -107,12 +116,12 @@ nav a:hover {
 }
 
 .product h3 {
-    font-size: 1.5em;
+    font-size: 1.4em; /* Taille réduite pour mobile */
     margin: 10px 0;
 }
 
 .product p {
-    font-size: 1.2em;
+    font-size: 1em; /* Taille ajustée pour mobile */
     color: #e74c3c; /* Couleur pour le prix */
 }
 
@@ -122,7 +131,7 @@ nav a:hover {
 }
 
 .product input {
-    width: 80%;
+    width: 90%; /* Largeur ajustée */
     padding: 5px;
     margin: 5px 0;
     border: 1px solid #ddd;
@@ -133,11 +142,12 @@ nav a:hover {
     background-color: #2e8b57; /* Couleur pour le bouton "Acheter" */
     color: white;
     border: none;
-    padding: 10px;
-    margin-top: 10px;
+    padding: 8px; /* Espacement ajusté */
+    margin-top: 5px; /* Marge réduite */
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    font-size: 14px; /* Taille de police réduite */
 }
 
 .product button:hover {
@@ -152,7 +162,7 @@ nav a:hover {
     }
 
     nav ul {
-        flex-direction: column;
+        flex-direction: column; /* Change la direction pour mobile */
     }
 
     nav ul li {
@@ -160,146 +170,65 @@ nav a:hover {
     }
 
     .hero h2 {
-        font-size: 2em;
+        font-size: 1.5em; /* Taille réduite pour mobile */
     }
 
     .hero p {
-        font-size: 1em;
+        font-size: 0.9em; /* Taille réduite pour mobile */
     }
 }
 
-
-/* En-tête */
-header {
-    background-color: #4CAF50; /* Couleur de fond de l'en-tête */
-    padding: 20px 0; /* Espacement en haut et en bas */
-    text-align: center; /* Centre le contenu */
-}
-
-nav {
-    margin-bottom: 15px; /* Espace en bas du menu */
-}
-
-nav ul {
-    list-style: none; /* Supprime les puces des éléments de la liste */
-    padding: 0; /* Supprime le padding par défaut */
-    display: flex; /* Affiche les éléments de la liste en ligne */
-    justify-content: center; /* Centre les éléments horizontalement */
-}
-
-nav ul li {
-    margin: 0 20px; /* Espace horizontal entre les éléments du menu */
-}
-
-nav ul li a {
-    color: white; /* Couleur du texte des liens */
-    text-decoration: none; /* Supprime le soulignement des liens */
-    font-size: 20px; /* Taille de la police agrandie */
-    transition: color 0.3s; /* Transition douce pour le changement de couleur */
-}
-
-nav ul li a:hover {
-    color: #e7f3fe; /* Couleur du texte au survol */
-}
-
-h2 {
-    font-size: 36px; /* Taille de la police agrandie pour le titre */
-    color: white; /* Couleur du texte du titre */
-    margin: 0; /* Supprime la marge par défaut */
-}
-
-
-/* Section des catégories */
-.categories {
-    display: flex; /* Utilise Flexbox pour centrer le contenu */
-    justify-content: center; /* Centre horizontalement */
-    align-items: center; /* Centre verticalement */
-    padding: 40px 0; /* Espacement en haut et en bas */
-    margin-top: -10px;
-}
-
-.category-list {
-    display: flex; /* Affiche les boutons en ligne */
-    gap: 20px; /* Espace entre les boutons */
-}
-
-.category-list button {
-    padding: 15px 25px; /* Espacement interne des boutons */
-    font-size: 20px; /* Taille de la police agrandie */
-    color: white; /* Couleur du texte */
-    background-color: #413fd6; /* Couleur de fond des boutons */
-    border: none; /* Supprime la bordure par défaut */
-    border-radius: 25px; /* Coins arrondis */
-    cursor: pointer; /* Change le curseur au survol */
-    transition: background-color 0.3s, transform 0.2s; /* Transition douce pour le changement de couleur et d'échelle */
-}
-
-.category-list button:hover {
-    background-color: #45a049; /* Couleur de fond au survol */
-    transform: scale(1.05); /* Légère augmentation de la taille au survol */
-}
-
-
-
-/* Style général */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
-
-/* Style de la section À propos */
+/* Section À propos */
 .about {
-    background-color: #2e8b57; /* Vert foncé rappelant la nature et l'agriculture */
+    background-color: #2e8b57; /* Vert foncé */
     color: white;
-    padding: 50px;
+    padding: 30px; /* Espacement réduit */
     text-align: center;
 }
 
 .about h2 {
-    font-size: 36px;
-    margin-bottom: 20px;
+    font-size: 28px; /* Taille ajustée */
+    margin-bottom: 15px; /* Marge ajustée */
 }
 
 .about p {
-    font-size: 18px;
-    line-height: 1.6;
-    max-width: 800px;
-    margin: 0 auto;
+    font-size: 16px; /* Taille réduite pour mobile */
+    line-height: 1.4; /* Espacement de ligne ajusté */
+    max-width: 90%; /* Limite de largeur */
+    margin: 0 auto; /* Centre le paragraphe */
 }
 
-/* Style de la section Témoignages */
+/* Section Témoignages */
 .testimonials {
     background-color: #fff;
     color: #333;
-    padding: 50px;
+    padding: 30px; /* Espacement réduit */
     text-align: center;
 }
 
 .testimonials h2 {
-    font-size: 36px;
-    margin-bottom: 30px;
+    font-size: 28px; /* Taille ajustée */
+    margin-bottom: 20px; /* Marge ajustée */
 }
 
 .testimonial {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 10px;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 600px;
+    padding: 15px; /* Espacement réduit */
+    margin: 15px auto; /* Marge réduite */
+    max-width: 90%; /* Limite de largeur */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .testimonial p {
-    font-size: 16px;
+    font-size: 14px; /* Taille ajustée */
     font-style: italic;
     margin-bottom: 10px;
 }
 
 .testimonial cite {
-    font-size: 14px;
+    font-size: 12px; /* Taille réduite */
     color: #888;
 }
 
@@ -308,27 +237,27 @@ footer {
     background-color: #2e8b57; /* Vert foncé */
     color: white;
     text-align: center;
-    padding: 20px;
+    padding: 15px; /* Espacement réduit */
 }
 
 footer p {
     margin: 0;
-    font-size: 14px;
+    font-size: 12px; /* Taille réduite */
 }
 
-
+/* Alert styles */
 .alert {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%; /* Largeur ajustable selon tes préférences */
-    max-width: 600px; /* Limite maximale de la largeur */
+    width: 90%; /* Largeur ajustable */
+    max-width: 500px; /* Limite maximale de la largeur */
     background-color: #21f02c;
     color: white;
-    padding: 30px; /* Plus d’espace pour agrandir l’alerte */
-    font-size: px; /* Augmente la taille du texte */
-    text-align: center; /* Centrer le texte */
+    padding: 20px; /* Espacement ajusté */
+    font-size: 16px; /* Taille de police ajustée */
+    text-align: center; /* Centre le texte */
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     z-index: 1000;
@@ -343,14 +272,9 @@ footer p {
     background: none;
     border: none;
     color: white;
-    font-size: 22px; /* Augmente la taille du bouton de fermeture */
+    font-size: 20px; /* Taille ajustée */
     cursor: pointer;
     position: absolute;
     top: 10px;
     right: 15px;
 }
-
-
-
-
-
