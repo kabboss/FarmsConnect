@@ -147,6 +147,12 @@ app.get('/users', (req, res) => {
     res.sendFile(__dirname + '/public/users.html');
 });
 
+// Route pour servir le fichier Visiteur.html
+app.get('/Visiteur', (req, res) => {
+    res.sendFile(__dirname + '/public/Visiteur.html');
+});
+
+
 // Route pour récupérer les informations de l'utilisateur
 app.post('/api/getUserInfo', async (req, res) => {
     const userId = req.body.userId;
