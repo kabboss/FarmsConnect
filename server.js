@@ -22,10 +22,13 @@ app.use(express.static('public'));
 // Appliquer le middleware CORS sans options (autorise toutes les origines par défaut)
 app.use(cors());
 
-// Connexion à MongoDB
-mongoose.connect('mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority')
-    .then(() => console.log('Connecté à MongoDB...'))
-    .catch(err => console.error('Erreur de connexion à MongoDB:', err));
+mongoose.connect('mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log('Connecté à MongoDB...'))
+.catch(err => console.error('Erreur de connexion à MongoDB:', err));
+
 
 // Configurer le transporteur Nodemailer
 const transporter = nodemailer.createTransport({
