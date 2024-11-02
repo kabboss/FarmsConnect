@@ -6,17 +6,72 @@ body {
     padding: 0;
 }
 
+/* Style de l'en-tête */
 header {
-    background-color: #4CAF50;
-    padding: 20px;
-    text-align: center;
-    color: white;
+    background: linear-gradient(137deg, #86eb12, #0858ec); /* Dégradé de couleurs vertes naturelles */
+    padding: 40px 20px; /* Espacement interne */
+    text-align: center; /* Centre le texte */
+    position: relative; /* Pour l'animation */
+    overflow: hidden; /* Évite les débordements */
+    opacity: 0; /* Commence invisible */
+    animation: fadeIn 1s forwards; /* Animation d'apparition */
 }
 
-header h1 {
-    margin: 0;
-    font-size: 32px;
+/* Animation d'apparition */
+@keyframes fadeIn {
+    from {
+        opacity: 0; /* Commence totalement transparent */
+        transform: translateY(-20px); /* Légère montée */
+    }
+    to {
+        opacity: 1; /* Finit totalement opaque */
+        transform: translateY(0); /* Retourne à sa position d'origine */
+    }
 }
+
+/* Style du titre */
+h1 {
+    font-size: 3em; /* Taille de la police */
+    color: #ffffff; /* Couleur marron foncé */
+    margin: 0 0 20px; /* Espacement */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Ombre pour le texte */
+}
+
+/* Style de la navigation */
+nav {
+    margin-top: 20px; /* Espacement supérieur */
+}
+
+/* Liste de navigation */
+.nav-list {
+    list-style: none; /* Supprime les puces */
+    display: flex; /* Aligne horizontalement */
+    justify-content: center; /* Centre les éléments */
+    padding: 0; /* Supprime le padding */
+    margin: -5px; /* Supprime la marge */
+}
+
+/* Style des éléments de la liste */
+.nav-list li {
+    margin: 8px 15px; /* Espacement entre les éléments */
+}
+
+/* Style des liens de navigation */
+.nav-list li a {
+    text-decoration: none; /* Supprime le soulignement */
+    color: #fff; /* Couleur blanche */
+    font-weight: bold; /* Texte en gras */
+    padding: 10px 20px; /* Espacement interne */
+    border-radius: 30px; /* Bords arrondis */
+    background-color: rgba(0, 0, 0, 0.2); /* Fond semi-transparent */
+    transition: background-color 0.3s ease; /* Transition fluide */
+}
+
+/* Effet au survol des liens */
+.nav-list li a:hover {
+    background-color: rgba(64, 243, 9, 0.5); /* Couleur de fond plus claire au survol */
+}
+
 
 /* Section des animaux */
 .animals-list {
@@ -74,53 +129,6 @@ header h1 {
     background-color: #45a049;
 }
 
-/* Responsive Navigation */
-nav {
-    background-color: #333;
-    padding: 10px 0;
-}
-
-.nav-list {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    flex-wrap: wrap; /* Permet de passer sur plusieurs lignes si l'écran est trop étroit */
-}
-
-.nav-list li {
-    margin: 0 15px;
-}
-
-.nav-list a {
-    text-decoration: none;
-    color: white;
-    font-size: 18px;
-    padding: 10px 20px;
-    transition: background-color 0.3s ease;
-}
-
-.nav-list a:hover {
-    background-color: #4CAF50;
-    border-radius: 5px;
-}
-
-/* Responsive pour les écrans moyens */
-@media (max-width: 768px) {
-    .animals-list {
-        grid-template-columns: 1fr 1fr; /* Deux colonnes sur les écrans moyens */
-    }
-
-    .nav-list {
-        flex-direction: column; /* La navigation passe en colonne pour les écrans plus petits */
-        align-items: center;
-    }
-
-    .nav-list li {
-        margin: 10px 0;
-    }
-}
 
 /* Responsive pour les petits écrans */
 @media (max-width: 480px) {

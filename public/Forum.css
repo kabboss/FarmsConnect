@@ -11,41 +11,77 @@ body {
     background-image: url(img/FarmsConnect.jpg);
 }
 
+/* Style de l'en-tête */
 header {
-    background-color: #0056b3;
+    background: linear-gradient(135deg, #0056b3 0%, #007bff 100%); /* Dégradé de fond */
     color: white;
-    padding: 20px;
+    padding: 20px; /* Réduire le padding pour une taille plus compacte */
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
+    border-radius: 0 0 20px 20px; /* Bords arrondis en bas */
+    position: relative; /* Positionnement pour l'effet d'animation */
+    overflow: hidden; /* Pour gérer les animations */
 }
 
+/* Style de la navigation */
 nav {
-    background-color: #fff;
+    background-color: #ffffff; /* Couleur de fond blanche pour la navigation */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 20px; /* Bords arrondis pour la navigation */
+    margin: 10px; /* Réduire la marge pour un ajustement sur petit écran */
+    overflow: hidden; /* Pour gérer l'effet arrondi */
 }
 
+/* Liste de navigation */
 .nav-list {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0; /* Supprime la marge pour un alignement parfait */
     display: flex;
-    justify-content: center;
+    justify-content: center; /* Centre les éléments */
+    flex-wrap: wrap; /* Permet aux éléments de se réorganiser sur plusieurs lignes */
 }
 
+/* Style des éléments de la liste */
 .nav-list li {
-    margin: 0 15px;
+    margin: 0 5px; /* Réduire l'espace entre les éléments */
 }
 
+/* Style des liens de navigation */
 .nav-list a {
-    text-decoration: none;
-    color: #0056b3;
-    font-weight: bold;
-    transition: color 0.3s;
+    text-decoration: none; /* Supprime le soulignement */
+    color: #0a06f7; /* Couleur des liens */
+    font-weight: bold; /* Met le texte en gras */
+    padding: 8px 12px; /* Ajustement du padding pour un meilleur ajustement */
+    border-radius: 25px; /* Bords arrondis pour les liens */
+    transition: background-color 0.3s, color 0.3s; /* Effet de transition pour le fond et la couleur */
 }
 
+/* Effet au survol des liens */
 .nav-list a:hover {
-    color: #003d7a;
+    background-color: rgba(0, 86, 179, 0.1); /* Fond léger au survol */
+    color: #02e039; /* Couleur de texte au survol */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre au survol */
+    transform: scale(1.05); /* Légère mise en valeur au survol */
 }
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px); /* Déplacement vers le haut */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); /* Position d'origine */
+    }
+}
+
+/* Appliquer l'animation à l'en-tête */
+header {
+    animation: fadeIn 0.5s ease forwards; /* Animation à l'ouverture */
+}
+
 
 #forum {
     max-width: 800px;

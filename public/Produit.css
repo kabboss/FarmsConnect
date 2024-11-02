@@ -7,40 +7,76 @@ body {
     color: #333;
 }
 
-h2, h3 {
-    margin: 0;
-    color: #04080c;
-}
-
-/* Header styles */
+/* Style de l'en-tête */
 header {
-    background-color: #1dd12c;
-    padding: 10px 15px; /* Espacement réduit */
-    text-align: center; /* Centre le contenu */
+    background: linear-gradient(to right, #4a90e2, #10eb10); /* Dégradé de fond */
+    padding: 20px; /* Espacement intérieur */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Ombre portée */
+    display: flex; /* Utilisation de Flexbox pour aligner le contenu */
+    flex-direction: column; /* Aligne les éléments verticalement */
+    align-items: center; /* Centre le contenu */
+    text-align: center; /* Centre le texte */
 }
 
+/* Style du titre */
+h2 {
+    font-size: 2.5em; /* Taille du texte */
+    color: #fff; /* Couleur du texte */
+    margin-bottom: 15px; /* Espacement en bas */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Ombre pour le titre */
+}
+
+/* Style de la navigation */
+nav {
+    width: 100%; /* Prend toute la largeur */
+}
+
+/* Liste de navigation */
 nav ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
+    list-style: none; /* Supprime les puces */
+    display: flex; /* Aligne les éléments horizontalement */
     justify-content: center; /* Centre horizontalement */
-    flex-wrap: wrap; /* Permet au contenu de passer à la ligne */
+    padding: 0; /* Supprime le padding */
+    margin: 0; /* Supprime la marge */
 }
 
+/* Style des éléments de la liste */
 nav ul li {
-    margin: 0 10px; /* Espacement ajusté */
+    margin: 10px 20px; /* Espacement entre les éléments */
 }
 
-nav a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-    transition: color 0.3s;
-    font-size: 16px; /* Taille de police ajustée */
+/* Style des liens de navigation */
+nav ul li a {
+    text-decoration: none; /* Supprime le soulignement */
+    color: #fff; /* Couleur du texte */
+    font-weight: bold; /* Met le texte en gras */
+    padding: 7px 20px; /* Espacement intérieur */
+    border-radius: 25px; /* Bords arrondis */
+    background-color: rgba(255, 255, 255, 0.2); /* Couleur de fond semi-transparente */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Effets de transition */
 }
 
-nav a:hover {
-    color: #1be468;
+/* Effet au survol des liens */
+nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.308); /* Couleur de fond plus claire */
+    transform: scale(1.05); /* Légère augmentation de la taille */
+}
+
+/* Animation d'apparition */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Application de l'animation à l'en-tête */
+header {
+    animation: fadeInDown 0.6s ease forwards; /* Animation d'apparition */
 }
 
 /* Hero section */
@@ -59,33 +95,69 @@ nav a:hover {
     font-size: 1em; /* Taille réduite pour mobile */
 }
 
-/* Categories section */
+/* Style de la section Catégories */
 .categories {
     text-align: center;
-    margin: 15px 0;
+    margin: 30px 0; /* Marges ajoutées pour une meilleure espacement */
 }
 
+/* Liste des catégories */
 .category-list {
     display: flex;
     justify-content: center; /* Centre horizontalement */
-    gap: 10px; /* Espacement entre les boutons */
+    gap: 15px; /* Espacement entre les boutons */
 }
 
+/* Style des boutons de catégorie */
 .category-list button {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 16px 7px; /* Espacement ajusté */
-    margin: 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.5s;
-    font-size: 14px; /* Taille de police réduite */
+    background-color: #4a90e2; /* Couleur de fond bleu clair */
+    color: white; /* Couleur du texte */
+    border: none; /* Pas de bordure */
+    padding: 16px 20px; /* Espacement ajusté */
+    border-radius: 25px; /* Bords arrondis prononcés */
+    cursor: pointer; /* Curseur en forme de main */
+    font-size: 16px; /* Taille de police augmentée */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transitions douces */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre légère pour effet de profondeur */
 }
 
+/* Effet au survol des boutons */
 .category-list button:hover {
-    background-color: #2980b9;
+    background-color: #16e75c; /* Couleur de fond plus foncée */
+    transform: scale(1.1); /* Légère augmentation de la taille au survol */
 }
+
+/* Animation d'apparition */
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Applique l'animation à chaque bouton */
+.category-list button {
+    animation: zoomIn 1s ease forwards; /* Animation d'apparition */
+    margin: -10px; /* Ajuster cette valeur pour réduire l'espace autour des boutons */
+}
+
+/* Pour un léger décalage entre les animations des boutons */
+.category-list button:nth-child(1) {
+    animation-delay: 0.5s;
+}
+
+.category-list button:nth-child(2) {
+    animation-delay: 1s;
+}
+
+.category-list button:nth-child(3) {
+    animation-delay: 1.5s;
+}
+
 
 /* Products section */
 .products {

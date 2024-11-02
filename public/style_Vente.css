@@ -6,49 +6,75 @@ body {
     color: #333;
 }
 
+/* Style de l'en-tête */
 header {
-    background-color: #4CAF50;
-    padding: 20px;
-    text-align: center;
-    color: white;
+    background: linear-gradient(135deg, #00e239, #6d81f1); /* Dégradé pour un look sophistiqué */
+    padding: 40px; /* Espacement intérieur */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Ombre portée douce */
+    text-align: center; /* Centre le texte */
+    position: relative; /* Position pour l'animation */
+    overflow: hidden; /* Pour gérer l'animation */
 }
 
-header h1 {
-    margin: 0;
-    font-size: 36px;
+/* Style du titre */
+h1 {
+    font-size: 3em; /* Grande taille de texte */
+    color: #ffffff; /* Couleur blanche */
+    margin-bottom: 20px; /* Espacement en bas */
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2); /* Ombre pour le titre */
 }
 
-/* Styles de la navigation */
+/* Style de la navigation */
 nav {
-    background-color: #2c3e50;
-    padding: 5px 0;
+    width: 100%; /* Prend toute la largeur */
 }
 
+/* Liste de navigation */
 nav ul {
-    list-style-type: none;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    flex-wrap: wrap; /* Permet de gérer l'adaptation sur petits écrans */
+    list-style: none; /* Supprime les puces */
+    display: flex; /* Aligne les éléments horizontalement */
+    justify-content: center; /* Centre horizontalement */
+    padding: 0; /* Supprime le padding */
+    margin: 0; /* Supprime la marge */
 }
 
+/* Style des éléments de la liste */
 nav ul li {
-    margin: 0;
+    margin: 0 30px; /* Espacement entre les éléments */
 }
 
+/* Style des liens de navigation */
 nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 18px; /* Taille de police réduite pour meilleure lisibilité sur petits écrans */
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
+    text-decoration: none; /* Supprime le soulignement */
+    color: #ffffff; /* Couleur du texte */
+    font-weight: bold; /* Met le texte en gras */
+    padding: 10px 20px; /* Espacement intérieur */
+    border-radius: 30px; /* Bords arrondis */
+    background-color: rgba(107, 176, 240, 0.747); /* Couleur de fond semi-transparente */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Effets de transition */
 }
 
+/* Effet au survol des liens */
 nav ul li a:hover {
-    background-color: #3498db;
-    color: white;
+    background-color: rgb(78, 243, 28); /* Couleur de fond plus claire */
+    transform: scale(1.1); /* Légère augmentation de la taille */
+}
+
+/* Animation d'apparition */
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Application de l'animation à l'en-tête */
+header {
+    animation: slideIn 0.8s ease forwards; /* Animation d'apparition */
 }
 
 /* Section de formulaire */

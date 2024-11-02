@@ -40,7 +40,7 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
             animal.images = images;
 
             // Envoyer les données de l'annonce au serveur
-            fetch('/api/annonces', {
+            fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/annonces', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
