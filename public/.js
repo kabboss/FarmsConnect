@@ -191,7 +191,6 @@ app.get('/api/annonces', async (req, res) => {
         res.json(annonces);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Erreur lors du chargement des annonces' });
     }
 });
 
