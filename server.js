@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const User = require('./models/User'); // Assurez-vous que le modèle User est correctement importé
 const Message = require('./models/message'); // Assurez-vous que le modèle Message est également importé
+const Annonce = require('./models/Annonce'); // Assurez-vous que le modèle Annonce est correctement importé
 
 // Créer une instance de l'application Express
 const app = express();
@@ -19,24 +20,19 @@ const io = new Server(server, { cors: { origin: "*" } });
 // Middleware pour augmenter la limite de taille des requêtes JSON
 app.use(express.json({ limit: '10mb' })); // Vous pouvez ajuster cette valeur
 
-// Middleware pour analyser le corps des requêtes JSON
-app.use(express.json());
-app.use(bodyParser.json());
-
 // Middleware pour servir des fichiers statiques
 app.use(express.static('public'));
 
-// Appliquer le middleware CORS sans options (autorise toutes les origines par défaut)
+// Appliquer le middleware CORS
 app.use(cors({
-    origin: 'https://farmsconnect-b084ddb02391.herokuapp.com', // ou '*' pour autoriser toutes les origines
+    origin: 'https://farmsconnect-b084ddb02391.herokuapp.com',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 
-mongoose.connect('mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority', {
-})
-.then(() => console.log('Connecté à MongoDB...'))
-.catch(err => console.error('Erreur de connexion à MongoDB:', err));
-
+// Connexion à MongoDB
+mongoose.connect('mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority')
+    .then(() => console.log('Connecté à MongoDB...'))
+    .catch(err => console.error('Erreur de connexion à MongoDB:', err));
 
 // Configurer le transporteur Nodemailer
 const transporter = nodemailer.createTransport({
@@ -159,7 +155,6 @@ app.get('/Visiteur', (req, res) => {
     res.sendFile(__dirname + '/public/Visiteur.html');
 });
 
-
 // Route pour récupérer les informations de l'utilisateur
 app.post('/api/getUserInfo', async (req, res) => {
     const userId = req.body.userId;
@@ -219,91 +214,22 @@ app.get('/api/messages', async (req, res) => {
     res.send(messages);
 });
 
-// Démarrer le serveur
-const PORT = process.env.PORT || 3002; // 3002 est un port par défaut
-app.listen(PORT, () => {
-    console.log(`Le serveur est en marche sur le port ${PORT}...`);
-});
 
+// Gestion des événements WebSocket
+io.on('connection', (socket) => {
+    console.log('Nouvelle connexion:', socket.id);
 
-
-
-// Toujours dans server.js ou app.js
-const Annonce = require('./models/Annonce'); // Assure-toi que le chemin du modèle est correct
-
-// Route pour ajouter une annonce
-app.post('/api/annonces', async (req, res) => {
-    try {
-        const annonce = new Annonce(req.body);
-        await annonce.save(); // Sauvegarde l'annonce dans MongoDB
-        res.status(201).json({ message: 'Annonce ajoutée avec succès' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'annonce' });
-    }
-});
-
-// Route pour récupérer toutes les annonces
-app.get('/api/annonces', async (req, res) => {
-    try {
-        const annonces = await Annonce.find(); // Récupère toutes les annonces depuis MongoDB
-        res.json(annonces);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Erreur lors du chargement des annonces' });
-    }
-});
-
-
-// API Endpoints
-app.get("/api/messages", async (req, res) => {
-    const messages = await Message.find();
-    res.json(messages);
-  });
-  
-  app.post("/api/messages", async (req, res) => {
-    const { username, content } = req.body;
-    const newMessage = new Message({ username, content });
-    await newMessage.save();
-  
-    // Broadcast new message to all connected clients
-    io.emit("newMessage", newMessage);
-    res.status(201).json(newMessage);
-  });
-  
-  app.post("/api/messages/:id/replies", async (req, res) => {
-    const { username, content } = req.body;
-    const { id } = req.params;
-  
-    const message = await Message.findById(id);
-    message.replies.push({ username, content });
-    await message.save();
-  
-    // Broadcast reply to all connected clients
-    io.emit("newReply", { messageId: id, reply: { username, content } });
-    res.status(201).json(message);
-  });
-  
-  // Socket.IO connection
-  io.on('connection', (socket) => {
-    console.log(`User connected: ${socket.id}`);
-    
-    socket.on('joinRoom', (room) => {
-        socket.join(room);
-        console.log(`User ${socket.id} joined room: ${room}`);
-    });
-
-    socket.on('newMessage', (data) => {
-        const { room, message } = data;
-        io.to(room).emit('receiveMessage', message);
+    socket.on('send-message', (message) => {
+        io.emit('receive-message', message);
     });
 
     socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
+        console.log('Utilisateur déconnecté:', socket.id);
     });
 });
 
-  
-  server.listen(3002, () => {
-    console.log("Server is running on https://farmsconnect-b084ddb02391.herokuapp.com");
-  });
+
+// Démarrer le serveur
+server.listen(3002, () => {
+    console.log('Serveur en écoute sur le port 3002');
+});
