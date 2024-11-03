@@ -7,16 +7,15 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const User = require('./models/User'); // Assurez-vous que le modèle User est correctement importé
-const Message = require('./models/message'); // Assurez-vous que le modèle Message est également importé
+const Message = require('./models/Message'); // Assurez-vous que le modèle Message est également importé
+const Annonce = require('./models/Annonce'); // Assurez-vous que le modèle Annonce est correctement importé
 const http = require('http');
 const socketIo = require('socket.io');
-
 
 // Créer une instance de l'application Express
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
-
 
 // Middleware pour analyser le corps des requêtes JSON
 app.use(express.json());
@@ -31,11 +30,11 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 
+// Connexion à MongoDB
 mongoose.connect('mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority', {
 })
 .then(() => console.log('Connecté à MongoDB...'))
 .catch(err => console.error('Erreur de connexion à MongoDB:', err));
-
 
 // Configurer le transporteur Nodemailer
 const transporter = nodemailer.createTransport({
@@ -158,12 +157,14 @@ app.get('/Visiteur', (req, res) => {
     res.sendFile(__dirname + '/public/Visiteur.html');
 });
 
-
 // Route pour récupérer les informations de l'utilisateur
 app.post('/api/getUserInfo', async (req, res) => {
     const userId = req.body.userId;
     try {
         const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+        }
         res.json(user);
     } catch (error) {
         res.status(500).json({ error: 'Erreur lors de la récupération des informations de l\'utilisateur.' });
@@ -223,86 +224,48 @@ app.delete('/api/messages/:id', (req, res) => {
         .catch(err => res.status(400).json(err));
 });
 
-// Routes pour les réponses
-app.post('/api/messages/:id/replies', (req, res) => {
-    const { username, content } = req.body;
-    const reply = { username, content };
-    Message.findByIdAndUpdate(req.params.id, { $push: { replies: reply } }, { new: true })
-        .then(updatedMessage => {
-            io.emit('newMessage', updatedMessage);
-            res.json(updatedMessage);
+// Routes pour les annonces
+app.get('/api/annonces', (req, res) => {
+    Annonce.find()
+        .then(annonces => res.json(annonces))
+        .catch(err => res.status(400).json(err));
+});
+
+app.post('/api/annonces', (req, res) => {
+    const { title, description } = req.body;
+    const newAnnonce = new Annonce({ title, description });
+    newAnnonce.save()
+        .then(savedAnnonce => {
+            io.emit('newAnnonce', savedAnnonce);
+            res.status(201).json(savedAnnonce);
         })
         .catch(err => res.status(400).json(err));
 });
 
-// Routes pour les utilisateurs
-app.post('/api/users', (req, res) => {
-    const { username, password } = req.body; // Ne pas stocker le mot de passe en clair
-    const newUser = new User({ username, password });
-    newUser.save()
-        .then(savedUser => res.status(201).json(savedUser))
+app.put('/api/annonces/:id', (req, res) => {
+    const { title, description } = req.body;
+    Annonce.findByIdAndUpdate(req.params.id, { title, description }, { new: true })
+        .then(updatedAnnonce => res.json(updatedAnnonce))
         .catch(err => res.status(400).json(err));
 });
 
-app.get('/api/users', (req, res) => {
-    User.find()
-        .then(users => res.json(users))
-        .catch(err => res.status(400).json(err));
-});
-
-app.get('/api/users/:id', (req, res) => {
-    User.findById(req.params.id)
-        .then(user => {
-            if (!user) return res.status(404).send();
-            res.json(user);
-        })
-        .catch(err => res.status(400).json(err));
-});
-
-app.put('/api/users/:id', (req, res) => {
-    const { username, password } = req.body; // Ne pas stocker le mot de passe en clair
-    User.findByIdAndUpdate(req.params.id, { username, password }, { new: true })
-        .then(updatedUser => res.json(updatedUser))
-        .catch(err => res.status(400).json(err));
-});
-
-app.delete('/api/users/:id', (req, res) => {
-    User.findByIdAndDelete(req.params.id)
+app.delete('/api/annonces/:id', (req, res) => {
+    Annonce.findByIdAndDelete(req.params.id)
         .then(() => res.status(204).send())
         .catch(err => res.status(400).json(err));
 });
 
+// Écoute des connexions WebSocket
+io.on('connection', (socket) => {
+    console.log('Un nouvel utilisateur est connecté.');
+
+    socket.on('disconnect', () => {
+        console.log('Un utilisateur s\'est déconnecté.');
+    });
+});
+
 // Démarrer le serveur
-const PORT = process.env.PORT || 3002; // 3002 est un port par défaut
-app.listen(PORT, () => {
-    console.log(`Le serveur est en marche sur le port ${PORT}...`);
-});
-
-
-
-
-// Toujours dans server.js ou app.js
-const Annonce = require('./models/Annonce'); // Assure-toi que le chemin du modèle est correct
-
-// Route pour ajouter une annonce
-app.post('/api/annonces', async (req, res) => {
-    try {
-        const annonce = new Annonce(req.body);
-        await annonce.save(); // Sauvegarde l'annonce dans MongoDB
-        res.status(201).json({ message: 'Annonce ajoutée avec succès' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'annonce' });
-    }
-});
-
-// Route pour récupérer toutes les annonces
-app.get('/api/annonces', async (req, res) => {
-    try {
-        const annonces = await Annonce.find(); // Récupère toutes les annonces depuis MongoDB
-        res.json(annonces);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Erreur lors du chargement des annonces' });
-    }
+const PORT = process.env.PORT || 3002;
+server.listen(PORT, () => {
+    console.log(`Serveur démarré sur le port ${PORT}`);
 });
