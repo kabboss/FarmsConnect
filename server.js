@@ -186,31 +186,32 @@ app.post('/api/send-email', async (req, res) => {
     });
 });
 
-// Route pour ajouter un message
-app.post('/api/messages', async (req, res) => {
+// Routes pour les messages
+app.put('/api/messages/:id', (req, res) => {
+    const { content } = req.body;
+    Message.findByIdAndUpdate(req.params.id, { content }, { new: true })
+        .then(updatedMessage => res.json(updatedMessage))
+        .catch(err => res.status(400).json(err));
+});
+
+app.delete('/api/messages/:id', (req, res) => {
+    Message.findByIdAndDelete(req.params.id)
+        .then(() => res.status(204).send())
+        .catch(err => res.status(400).json(err));
+});
+
+// Routes pour les réponses
+app.post('/api/messages/:id/replies', (req, res) => {
     const { username, content } = req.body;
-    const message = new Message({ username, content });
-    await message.save();
-    res.status(201).send(message);
+    const reply = { username, content };
+    Message.findByIdAndUpdate(req.params.id, { $push: { replies: reply } }, { new: true })
+        .then(updatedMessage => {
+            io.emit('newMessage', updatedMessage);
+            res.json(updatedMessage);
+        })
+        .catch(err => res.status(400).json(err));
 });
 
-// Route pour ajouter une réponse à un message
-app.post('/api/messages/:id/replies', async (req, res) => {
-    const { id } = req.params;
-    const { username, content } = req.body;
-
-    const message = await Message.findById(id);
-    message.replies.push({ username, content });
-    await message.save();
-    
-    res.status(200).send(message);
-});
-
-// Route pour obtenir tous les messages
-app.get('/api/messages', async (req, res) => {
-    const messages = await Message.find();
-    res.send(messages);
-});
 
 // Démarrer le serveur
 const PORT = process.env.PORT || 3002; // 3002 est un port par défaut
