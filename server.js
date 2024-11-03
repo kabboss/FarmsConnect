@@ -8,9 +8,15 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const User = require('./models/User'); // Assurez-vous que le modèle User est correctement importé
 const Message = require('./models/message'); // Assurez-vous que le modèle Message est également importé
+const http = require('http');
+const socketIo = require('socket.io');
+
 
 // Créer une instance de l'application Express
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
+
 
 // Middleware pour analyser le corps des requêtes JSON
 app.use(express.json());
@@ -187,6 +193,23 @@ app.post('/api/send-email', async (req, res) => {
 });
 
 // Routes pour les messages
+app.get('/api/messages', (req, res) => {
+    Message.find()
+        .then(messages => res.json(messages))
+        .catch(err => res.status(400).json(err));
+});
+
+app.post('/api/messages', (req, res) => {
+    const { content } = req.body;
+    const newMessage = new Message({ content });
+    newMessage.save()
+        .then(savedMessage => {
+            io.emit('newMessage', savedMessage);
+            res.status(201).json(savedMessage);
+        })
+        .catch(err => res.status(400).json(err));
+});
+
 app.put('/api/messages/:id', (req, res) => {
     const { content } = req.body;
     Message.findByIdAndUpdate(req.params.id, { content }, { new: true })
@@ -212,6 +235,42 @@ app.post('/api/messages/:id/replies', (req, res) => {
         .catch(err => res.status(400).json(err));
 });
 
+// Routes pour les utilisateurs
+app.post('/api/users', (req, res) => {
+    const { username, password } = req.body; // Ne pas stocker le mot de passe en clair
+    const newUser = new User({ username, password });
+    newUser.save()
+        .then(savedUser => res.status(201).json(savedUser))
+        .catch(err => res.status(400).json(err));
+});
+
+app.get('/api/users', (req, res) => {
+    User.find()
+        .then(users => res.json(users))
+        .catch(err => res.status(400).json(err));
+});
+
+app.get('/api/users/:id', (req, res) => {
+    User.findById(req.params.id)
+        .then(user => {
+            if (!user) return res.status(404).send();
+            res.json(user);
+        })
+        .catch(err => res.status(400).json(err));
+});
+
+app.put('/api/users/:id', (req, res) => {
+    const { username, password } = req.body; // Ne pas stocker le mot de passe en clair
+    User.findByIdAndUpdate(req.params.id, { username, password }, { new: true })
+        .then(updatedUser => res.json(updatedUser))
+        .catch(err => res.status(400).json(err));
+});
+
+app.delete('/api/users/:id', (req, res) => {
+    User.findByIdAndDelete(req.params.id)
+        .then(() => res.status(204).send())
+        .catch(err => res.status(400).json(err));
+});
 
 // Démarrer le serveur
 const PORT = process.env.PORT || 3002; // 3002 est un port par défaut
