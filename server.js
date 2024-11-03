@@ -12,6 +12,9 @@ const Message = require('./models/message'); // Assurez-vous que le modèle Mess
 // Créer une instance de l'application Express
 const app = express();
 
+// Middleware pour augmenter la limite de taille des requêtes JSON
+app.use(express.json({ limit: '10mb' })); // Vous pouvez ajuster cette valeur
+
 // Middleware pour analyser le corps des requêtes JSON
 app.use(express.json());
 app.use(bodyParser.json());
