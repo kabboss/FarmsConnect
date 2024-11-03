@@ -1,109 +1,79 @@
-/* style.css */
+/* Reset CSS pour des styles de base cohérents */
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f0f4f8;
-    margin: 0;
-    padding: 0;
-    background-image: url(img/FarmsConnect.jpg);
+    line-height: 1.6;
+    background: linear-gradient(to right, #f8f9fa, #e9ecef);
+    color: #333;
 }
 
-/* Style de l'en-tête */
 header {
-    background: linear-gradient(135deg, #0056b3 0%, #007bff 100%); /* Dégradé de fond */
+    background-color: #4a8cff;
     color: white;
-    padding: 20px; /* Réduire le padding pour une taille plus compacte */
+    padding: 20px;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
-    border-radius: 0 0 20px 20px; /* Bords arrondis en bas */
-    position: relative; /* Positionnement pour l'effet d'animation */
-    overflow: hidden; /* Pour gérer les animations */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Style de la navigation */
+h1 {
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+}
+
 nav {
-    background-color: #ffffff; /* Couleur de fond blanche pour la navigation */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 20px; /* Bords arrondis pour la navigation */
-    margin: 10px; /* Réduire la marge pour un ajustement sur petit écran */
-    overflow: hidden; /* Pour gérer l'effet arrondi */
+    background-color: #343a40;
 }
 
-/* Liste de navigation */
 .nav-list {
     list-style: none;
-    padding: 0;
-    margin: 0; /* Supprime la marge pour un alignement parfait */
     display: flex;
-    justify-content: center; /* Centre les éléments */
-    flex-wrap: wrap; /* Permet aux éléments de se réorganiser sur plusieurs lignes */
+    justify-content: center;
+    padding: 10px 0;
 }
 
-/* Style des éléments de la liste */
 .nav-list li {
-    margin: 0 5px; /* Réduire l'espace entre les éléments */
+    margin: 0 15px;
 }
 
-/* Style des liens de navigation */
 .nav-list a {
-    text-decoration: none; /* Supprime le soulignement */
-    color: #0a06f7; /* Couleur des liens */
-    font-weight: bold; /* Met le texte en gras */
-    padding: 8px 12px; /* Ajustement du padding pour un meilleur ajustement */
-    border-radius: 25px; /* Bords arrondis pour les liens */
-    transition: background-color 0.3s, color 0.3s; /* Effet de transition pour le fond et la couleur */
+    color: #f8f9fa;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
-/* Effet au survol des liens */
 .nav-list a:hover {
-    background-color: rgba(0, 86, 179, 0.1); /* Fond léger au survol */
-    color: #02e039; /* Couleur de texte au survol */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre au survol */
-    transform: scale(1.05); /* Légère mise en valeur au survol */
+    background-color: #495057;
+    border-radius: 5px;
 }
-
-/* Animation d'apparition */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px); /* Déplacement vers le haut */
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0); /* Position d'origine */
-    }
-}
-
-/* Appliquer l'animation à l'en-tête */
-header {
-    animation: fadeIn 0.5s ease forwards; /* Animation à l'ouverture */
-}
-
 
 #forum {
     max-width: 800px;
     margin: 20px auto;
-    padding: 20px;
-    background-color: white;
+    background: white;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
 }
 
 #message-list {
-    margin-bottom: 20px;
     max-height: 400px;
     overflow-y: auto;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    margin-bottom: 20px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
     padding: 10px;
-    background-color: #fafafa;
+    background-color: #f8f9fa;
 }
 
 .message {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #dee2e6;
     padding: 10px 0;
 }
 
@@ -111,46 +81,56 @@ header {
     border-bottom: none;
 }
 
-#message-form input[type="text"],
-#message-form textarea {
+textarea {
     width: 100%;
-    margin-bottom: 10px;
-    padding: 15px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    font-size: 1em;
+    height: 100px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    resize: none;
     transition: border-color 0.3s;
 }
 
-#message-form input[type="text"]:focus,
-#message-form textarea:focus {
-    border-color: #0056b3;
+textarea:focus {
+    border-color: #4a8cff;
+    outline: none;
 }
 
-#message-form button {
-    padding: 10px 20px;
+button {
+    background-color: #4a8cff;
     color: white;
-    background-color: #0056b3;
     border: none;
-    border-radius: 4px;
+    padding: 10px 20px;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 1rem;
     transition: background-color 0.3s;
 }
 
-#message-form button:hover {
-    background-color: #003d7a;
+button:hover {
+    background-color: #0069d9;
 }
 
-
-
-.reply {
-    margin-left: 20px; /* Décalage à gauche pour indiquer que c'est une réponse */
-    border-left: 2px solid #ccc; /* Une ligne pour relier la réponse au message d'origine */
-    padding-left: 10px; /* Espacement à gauche */
-    margin-top: 5px; /* Espace au-dessus de la réponse */
+#notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.5s forwards;
 }
 
-nav ul li a:hover {
-    text-decoration: underline; /* Effet au survol */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
-

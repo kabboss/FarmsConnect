@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const http = require("http");
+const { Server } = require("socket.io");
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const User = require('./models/User'); // Assurez-vous que le modèle User est correctement importé
@@ -11,6 +13,8 @@ const Message = require('./models/message'); // Assurez-vous que le modèle Mess
 
 // Créer une instance de l'application Express
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: "*" } });
 
 // Middleware pour augmenter la limite de taille des requêtes JSON
 app.use(express.json({ limit: '10mb' })); // Vous pouvez ajuster cette valeur
@@ -249,3 +253,57 @@ app.get('/api/annonces', async (req, res) => {
         res.status(500).json({ message: 'Erreur lors du chargement des annonces' });
     }
 });
+
+
+// API Endpoints
+app.get("/api/messages", async (req, res) => {
+    const messages = await Message.find();
+    res.json(messages);
+  });
+  
+  app.post("/api/messages", async (req, res) => {
+    const { username, content } = req.body;
+    const newMessage = new Message({ username, content });
+    await newMessage.save();
+  
+    // Broadcast new message to all connected clients
+    io.emit("newMessage", newMessage);
+    res.status(201).json(newMessage);
+  });
+  
+  app.post("/api/messages/:id/replies", async (req, res) => {
+    const { username, content } = req.body;
+    const { id } = req.params;
+  
+    const message = await Message.findById(id);
+    message.replies.push({ username, content });
+    await message.save();
+  
+    // Broadcast reply to all connected clients
+    io.emit("newReply", { messageId: id, reply: { username, content } });
+    res.status(201).json(message);
+  });
+  
+  // Socket.IO connection
+  io.on('connection', (socket) => {
+    console.log(`User connected: ${socket.id}`);
+    
+    socket.on('joinRoom', (room) => {
+        socket.join(room);
+        console.log(`User ${socket.id} joined room: ${room}`);
+    });
+
+    socket.on('newMessage', (data) => {
+        const { room, message } = data;
+        io.to(room).emit('receiveMessage', message);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected:', socket.id);
+    });
+});
+
+  
+  server.listen(3002, () => {
+    console.log("Server is running on https://farmsconnect-b084ddb02391.herokuapp.com");
+  });
