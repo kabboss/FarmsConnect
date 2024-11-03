@@ -168,6 +168,29 @@ app.post('/api/send-email', async (req, res) => {
     });
 });
 
+// Route pour ajouter une annonce
+app.post('/api/annonces', async (req, res) => {
+    try {
+        const annonce = new Annonce(req.body);
+        await annonce.save(); // Sauvegarde l'annonce dans MongoDB
+        res.status(201).json({ message: 'Annonce ajoutée avec succès' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'annonce' });
+    }
+});
+
+// Route pour récupérer toutes les annonces
+app.get('/api/annonces', async (req, res) => {
+    try {
+        const annonces = await Annonce.find(); // Récupère toutes les annonces depuis MongoDB
+        res.json(annonces);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erreur lors du chargement des annonces' });
+    }
+});
+
 
 
 // Routes pour les messages
