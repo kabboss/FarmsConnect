@@ -19,6 +19,9 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
+app.use(express.json({ limit: '10mb' })); // Augmentez cette valeur selon vos besoins
+
+
 // Middleware pour analyser le corps des requêtes JSON
 app.use(express.json());
 app.use(bodyParser.json());
