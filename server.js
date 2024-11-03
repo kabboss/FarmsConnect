@@ -19,8 +19,8 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-app.use(express.json({ limit: '10mb' })); // Augmentez cette valeur selon vos besoins
-
+// Middleware pour augmenter la limite de taille des requêtes JSON
+app.use(express.json({ limit: '20mb' })); // Vous pouvez ajuster cette valeur
 
 // Middleware pour analyser le corps des requêtes JSON
 app.use(express.json());
