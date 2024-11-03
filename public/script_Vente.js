@@ -39,17 +39,34 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
         Promise.all(fileReaders).then(images => {
             animal.images = images;
 
-            // Envoyer les données de l'annonce au serveur
-            fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/annonces', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(animal)
-            })
-            .then(response => response.json())
-            .then(data => showAlert(data.message))
-            .catch(error => showAlert("Erreur lors de l'ajout de l'annonce : " + error.message));
+          // Envoyer les données de l'annonce au serveur
+fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/annonces', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(animal) // Assurez-vous que 'animal' est bien formé
+})
+.then(response => {
+    // Vérifiez si la réponse est réussie
+    if (!response.ok) {
+        // Si la réponse n'est pas en succès, affichez l'erreur
+        return response.text().then(text => {
+            throw new Error(`Erreur HTTP : ${response.status} - ${text}`);
+        });
+    }
+    // Essayez de convertir la réponse en JSON
+    return response.json();
+})
+.then(data => {
+    // Affichez le message de succès
+    showAlert(data.message);
+})
+.catch(error => {
+    // Affichez les erreurs
+    showAlert("Erreur lors de l'ajout de l'annonce : " + error.message);
+});
+
         });
     }, function(error) {
         showAlert("La localisation est requise pour ajouter une annonce.");
