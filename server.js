@@ -173,15 +173,17 @@ app.get('/api/messages', (req, res) => {
 });
 
 app.post('/api/messages', (req, res) => {
-    const { content } = req.body;
-    const newMessage = new Message({ content });
+    const { username, content } = req.body;
+    const newMessage = new Message({ username, content });
     newMessage.save()
-        .then(savedMessage => {
-            io.emit('newMessage', savedMessage);
-            res.status(201).json(savedMessage);
+        .then(message => {
+            res.status(201).json(message);
+            // Émettre l'événement pour les nouveaux messages
+            io.emit('newMessage', message);
         })
-        .catch(err => res.status(400).json(err));
+        .catch(err => res.status(500).json({ error: err.message }));
 });
+
 
 app.put('/api/messages/:id', (req, res) => {
     const { content } = req.body;

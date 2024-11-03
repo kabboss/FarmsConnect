@@ -9,8 +9,12 @@ document.addEventListener("DOMContentLoaded", function() {
     function displayMessage(message) {
         const messageDiv = document.createElement("div");
         messageDiv.className = "message";
+        
+        // Vérifiez si username existe pour éviter 'undefined'
+        const username = message.username || "Utilisateur anonyme";
+        
         messageDiv.innerHTML = `
-            <strong>${message.username}:</strong> ${message.content}
+            <strong>${username}:</strong> ${message.content}
             <button class="edit-button" data-id="${message._id}">Modifier</button>
             <button class="delete-button" data-id="${message._id}">Supprimer</button>
             <button class="reply-button" data-id="${message._id}">Répondre</button>
