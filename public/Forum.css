@@ -1,133 +1,235 @@
+/* Réinitialisation de base */
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
+/* Style du corps */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f0f4f8;
-    margin: 0;
-    padding: 0;
-    background-image: url(img/FarmsConnect.jpg);
-    background-size: cover;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #dfe9f3 0%, #ffffff 100%);
+    color: #333;
 }
 
+/* En-tête */
 header {
-    background-color: #0056b3;
+    background: linear-gradient(135deg, #3498db, #2980b9);
     color: white;
-    padding: 20px;
+    padding: 20px 10px;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 1.5em;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
+/* Navigation */
 nav {
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #3498db;
+    padding: 10px 0;
 }
 
 .nav-list {
     list-style: none;
-    padding: 0;
-    margin: 0;
     display: flex;
     justify-content: center;
+    gap: 20px;
+    transition: all 0.3s ease;
 }
 
 .nav-list li {
-    margin: 0 15px;
+    margin: 0;
 }
 
 .nav-list a {
+    color: white;
     text-decoration: none;
-    color: #0056b3;
     font-weight: bold;
-    transition: color 0.3s;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
 }
 
 .nav-list a:hover {
-    color: #003d7a;
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
 }
 
+/* Section Forum */
 #forum {
     max-width: 800px;
-    margin: 20px auto;
+    margin: 30px auto;
     padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 1s ease;
 }
 
+/* Message list */
 #message-list {
-    margin-bottom: 20px;
     max-height: 400px;
     overflow-y: auto;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 10px;
-    background-color: #fafafa;
+    margin-bottom: 20px;
 }
 
-.message {
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
-    position: relative; /* Pour positionner les boutons de suppression/modification */
-}
-
-.message:last-child {
-    border-bottom: none;
-}
-
-#message-form textarea {
+/* Champ de texte */
+#message-input {
     width: 100%;
-    margin-bottom: 10px;
+    height: 100px;
     padding: 15px;
-    border-radius: 4px;
     border: 1px solid #ddd;
-    font-size: 1em;
-    transition: border-color 0.3s;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border 0.3s ease;
 }
 
-#message-form textarea:focus {
-    border-color: #0056b3;
+#message-input:focus {
+    border-color: #2980b9;
+    box-shadow: 0 0 8px rgba(41, 128, 185, 0.2);
 }
 
+/* Bouton Publier */
 #message-form button {
-    padding: 10px 20px;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
     color: white;
-    background-color: #0056b3;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
+    padding: 10px 20px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, transform 0.3s ease;
 }
 
 #message-form button:hover {
-    background-color: #003d7a;
+    background: linear-gradient(135deg, #27ae60, #229954);
+    transform: scale(1.05);
 }
 
-.reply {
-    margin-left: 20px; 
-    border-left: 2px solid #ccc; 
-    padding-left: 10px; 
-    margin-top: 5px; 
+/* Styles pour chaque message */
+.message {
+    background: #f9f9f9;
+    padding: 15px;
+    border-left: 4px solid #3498db;
+    border-radius: 8px;
+    margin: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: transform 0.2s ease;
 }
 
-nav ul li a:hover {
-    text-decoration: underline; 
+.message:hover {
+    transform: translateX(5px);
 }
 
-/* Styles pour les boutons de suppression et de modification */
-.delete-button, .edit-button {
-    position: absolute;
-    right: 0;
+.message strong {
+    color: #2980b9;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Boutons de modification/suppression/réponse */
+.edit-button, .delete-button, .reply-button {
     background: transparent;
     border: none;
+    color: #3498db;
     cursor: pointer;
+    font-size: 14px;
+    margin-left: 8px;
+    transition: color 0.3s ease;
 }
 
-.edit-button {
-    margin-right: 50px; /* Pour espacer les boutons */
-    color: #ffc107; /* Couleur pour le bouton d'édition */
+.edit-button:hover, .delete-button:hover, .reply-button:hover {
+    color: #2980b9;
 }
-.delete-button {
-    color: #dc3545; /* Couleur pour le bouton de suppression */
+
+/* Réponses */
+.reply {
+    background: #e9ecef;
+    padding: 10px;
+    border-radius: 6px;
+    margin: 8px 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.reply:before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 15px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #3498db;
+}
+
+/* Animation pour les réponses */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Champ de réponse */
+.reply-input {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.reply-message-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border 0.3s ease;
+}
+
+.reply-message-input:focus {
+    border-color: #2980b9;
+}
+
+/* Bouton d'envoi de réponse */
+.send-reply-button {
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.send-reply-button:hover {
+    background: #2980b9;
+}
+
+/* Media queries pour petits écrans */
+@media (max-width: 600px) {
+    .nav-list {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #forum {
+        padding: 15px;
+    }
+
+    #message-input {
+        height: 80px;
+    }
 }
