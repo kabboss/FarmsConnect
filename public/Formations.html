@@ -3,56 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formation</title>
     <link rel="stylesheet" href="Formation.css">
-    <script src="/socket.io/socket.io.js"></script>
+    <title>Page de Formation</title>
 </head>
 <body>
     <div class="container">
-        <h1>Plateforme de Formation</h1>
+        <h1>Page de Formation</h1>
+        <form id="uploadForm">
+            <h2>Télécharger des fichiers de formation</h2>
+            <input type="file" name="video" accept="video/*" required>
+            <input type="file" name="audio" accept="audio/*" required>
+            <input type="password" id="password" placeholder="Mot de passe" required>
+            <button type="submit">Télécharger</button>
+        </form>
 
-        <!-- Section d'upload pour l'administrateur -->
-        <section id="admin-upload-section">
-            <h2>Uploader un Contenu de Formation</h2>
-            <form id="uploadForm" enctype="multipart/form-data">
-                <input type="text" id="securityCode" placeholder="Code de sécurité" required>
-                <input type="text" id="title" placeholder="Titre du contenu" required>
-                <textarea id="description" placeholder="Description du contenu"></textarea>
-                <select id="category">
-                    <option value="Debutant">Débutant</option>
-                    <option value="Avance">Avancé</option>
-                    <option value="Expert">Expert</option>
-                </select>
-                <select id="type">
-                    <option value="video">Vidéo</option>
-                    <option value="audio">Audio</option>
-                </select>
-                <input type="file" id="file" required>
-                <button type="submit">Uploader</button>
+        <div id="commentsSection">
+            <h2>Commentaires</h2>
+            <div id="comments"></div>
+            <form id="commentForm">
+                <input type="text" id="username" placeholder="Votre nom" required>
+                <textarea id="commentText" placeholder="Votre commentaire" required></textarea>
+                <button type="submit">Envoyer</button>
             </form>
-            <p id="uploadMessage"></p>
-        </section>
-
-        <!-- Section pour afficher les contenus -->
-        <section id="content-section">
-            <h2>Contenus Disponibles</h2>
-            <div id="content-list"></div>
-        </section>
-
-        <!-- Notifications pour les nouveaux contenus -->
-        <div id="notifications"></div>
+        </div>
     </div>
 
-    <!-- Template de commentaire pour chaque contenu -->
-    <template id="comment-template">
-        <div class="comment">
-            <p class="comment-text"></p>
-            <p class="comment-user"></p>
-            <button class="like-comment-btn">❤️ <span class="likes-count">0</span></button>
-        </div>
-    </template>
     <script src="Formation.js"></script>
-
-    
 </body>
 </html>

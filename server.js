@@ -258,148 +258,48 @@ app.post('/api/users', (req, res) => {
 //Formation
 
 
-
-// Configuration des middlewares
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-// Configuration de Multer pour l'upload des fichiers
+// Configuration du stockage des fichiers
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
+        cb(null, Date.now() + '-' + file.originalname);
     },
 });
-const upload = multer({ storage: storage });
 
-// Modèles de base de données
-const Content = require('./models/content');
-const Comment = require('./models/comment');
+const upload = multer({ storage });
 
-// Middleware pour vérifier le code de sécurité
-const verifySecurityCode = (req, res, next) => {
-    const { securityCode } = req.body;
-    if (securityCode !== "ka23bo23re23") {
-        return res.status(403).json({ message: 'Code de sécurité invalide' });
-    }
-    next();
-};
+// Modèle Mongoose pour les commentaires
+const Comment = mongoose.model('Comment', new mongoose.Schema({
+    username: String,
+    text: String,
+    date: { type: Date, default: Date.now }
+}));
 
-// Routes pour le contenu
+app.use(cors());
+app.use(express.json());
+app.use(express.static('public'));
+app.use('/uploads', express.static('uploads'));
 
-// Route pour uploader un contenu (seul l'administrateur avec le bon code de sécurité peut le faire)
-app.post('/api/content/upload', verifySecurityCode, upload.single('file'), async (req, res) => {
-    try {
-        const { title, description, category, level, type } = req.body;
-        const content = new Content({
-            title,
-            description,
-            category,
-            level,
-            type,
-            filePath: `/uploads/${req.file.filename}`,
-            uploadedBy: 'admin'
-        });
-        
-        await content.save();
-        const io = req.app.get('io'); // Récupérer `io` via `app`
-        io.emit('new-content', content); // Notification aux utilisateurs
-
-        res.json(content);
-    } catch (error) {
-        console.error('Erreur lors de l\'upload du contenu :', error); // Journalisation de l'erreur
-        res.status(500).json({ message: 'Erreur lors de l\'upload du contenu' });
-    }
+// Route pour le téléchargement de fichiers
+app.post('/upload', upload.fields([{ name: 'video' }, { name: 'audio' }]), (req, res) => {
+    res.json({ message: 'Fichiers téléchargés avec succès!', files: req.files });
 });
 
-// Route pour obtenir tous les contenus
-app.get('/api/content/all', async (req, res) => {
-    try {
-        const contents = await Content.find({});
-        res.json(contents);
-    } catch (error) {
-        res.status(500).json({ message: 'Erreur lors de la récupération des contenus' });
-    }
+// Route pour récupérer les commentaires
+app.get('/comments', async (req, res) => {
+    const comments = await Comment.find();
+    res.json(comments);
 });
-
-// Route pour liker un contenu
-app.patch('/api/content/like/:id', async (req, res) => {
-    try {
-        const content = await Content.findById(req.params.id);
-        if (!content) {
-            return res.status(404).json({ message: 'Contenu non trouvé' });
-        }
-        
-        content.likes += 1;
-        await content.save();
-        res.json(content);
-    } catch (error) {
-        res.status(500).json({ message: 'Erreur lors du like du contenu' });
-    }
-});
-
-// Routes pour les commentaires
 
 // Route pour ajouter un commentaire
-app.post('/api/comments/add', async (req, res) => {
-    try {
-        const { contentId, user, text } = req.body;
-        const comment = new Comment({ contentId, user, text });
-        
-        await comment.save();
-        io.emit('new-comment', comment); // Envoie une notification aux utilisateurs
-        res.json(comment);
-    } catch (error) {
-        res.status(500).json({ message: 'Erreur lors de l\'ajout du commentaire' });
-    }
+app.post('/comments', async (req, res) => {
+    const newComment = new Comment(req.body);
+    await newComment.save();
+    res.json(newComment);
 });
-
-// Route pour obtenir les commentaires d'un contenu spécifique
-app.get('/api/comments/:contentId', async (req, res) => {
-    try {
-        const comments = await Comment.find({ contentId: req.params.contentId });
-        res.json(comments);
-    } catch (error) {
-        res.status(500).json({ message: 'Erreur lors de la récupération des commentaires' });
-    }
-});
-
-// Route pour liker un commentaire
-app.patch('/api/comments/like/:id', async (req, res) => {
-    try {
-        const comment = await Comment.findById(req.params.id);
-        if (!comment) {
-            return res.status(404).json({ message: 'Commentaire non trouvé' });
-        }
-        
-        comment.likes += 1;
-        await comment.save();
-        res.json(comment);
-    } catch (error) {
-        res.status(500).json({ message: 'Erreur lors du like du commentaire' });
-    }
-});
-
-// Gestion des notifications avec Socket.IO
-
-io.on('connection', (socket) => {
-    console.log('Nouvelle connexion client');
-
-    socket.on('disconnect', () => {
-        console.log('Client déconnecté');
-    });
-});
-
-
-
-
-
-
-
-
+   
 
 
 
