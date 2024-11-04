@@ -2,45 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page de Formation</title>
-    <link rel="stylesheet" href="Formation.css">
+    <title>Interactive Training Platform</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <div id="formationContainer"></div>
-
-    <div class="container">
-        <h1>Formation</h1>
-        
-        <!-- Upload de fichiers pour les administrateurs -->
-        <div class="upload-section">
-            <h2>Uploader un fichier de formation</h2>
-            <form id="uploadForm" enctype="multipart/form-data">
-                <input type="file" id="fileInput" name="file" required>
-                <input type="password" id="codeInput" placeholder="Entrez le code secret" required>
-                <button type="submit">Uploader</button>
-            </form>
-        </div>
-        
-        <!-- Liste des fichiers de formation -->
-        <div class="files-section">
-            <h2>Vidéos et Audios</h2>
-            <div id="filesList"></div>
-        </div>
-
-        <!-- Section des commentaires -->
-        <div class="comments-section">
-            <h2>Commentaires</h2>
-            <div id="commentsList"></div>
-            <form id="commentForm">
-                <input type="text" id="usernameInput" placeholder="Votre nom" required>
-                <textarea id="contentInput" placeholder="Votre commentaire" required></textarea>
-                <button type="submit">Poster</button>
-            </form>
-        </div>
-    </div>
-
-    <script src="Formation.js"></script>
+    <header>
+        <h1>Formation Interactive</h1>
+    </header>
+    <section id="content-list">
+        <h2>Contenus Disponibles</h2>
+        <div id="videos"></div>
+    </section>
+    <section id="comments">
+        <h2>Commentaires</h2>
+        <textarea id="comment-input" placeholder="Ajouter un commentaire..."></textarea>
+        <button onclick="addComment()">Publier</button>
+        <div id="comment-list"></div>
+    </section>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>

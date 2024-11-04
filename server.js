@@ -8,11 +8,16 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const http = require('http');
 const socketIo = require('socket.io');
+const router = express.Router();
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 // Modèles
 const User = require('./models/User');
 const Message = require('./models/message');
 const Annonce = require('./models/Annonce'); // Assurez-vous que le chemin du modèle est correct
+const Content = require('../models/content');
+const Comment = require('../models/comment');
 
 // Créer une instance de l'application Express
 const app = express();
@@ -252,120 +257,87 @@ app.post('/api/users', (req, res) => {
 
 
 
-
-
 //Formation
 
-const express = require('express');
-const Formation = require('./models/formation');
-const Comment = require('./models/comment');
-const router = express.Router();
 
-// Ajouter une formation
+app.use('/api/content', contentRoutes);
+app.use('/api/comments', commentRoutes);
 
-// Code d'accès pour uploader
-const ACCESS_CODE = "ka23bo23re23";
-
-// Configurer le stockage avec multer
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/'); // Dossier de destination
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname)); // Nom unique
-    }
+io.on('connection', (socket) => {
+    console.log('New client connected');
+    socket.on('new-content', (content) => {
+        io.emit('update-content', content);
+    });
+    socket.on('new-comment', (comment) => {
+        io.emit('update-comments', comment);
+    });
+    socket.on('disconnect', () => console.log('Client disconnected'));
 });
 
-const upload = multer({
-    storage: storage,
-    fileFilter: function (req, file, cb) {
-        const fileTypes = /mp4|mkv|mp3|wav/; // Extensions autorisées
-        const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
-        if (extname) {
-            return cb(null, true);
-        } else {
-            cb("Erreur : seuls les fichiers vidéo et audio sont acceptés !");
-        }
-    }
-});
 
-// Route pour uploader une formation
+// Route pour uploader du contenu
 router.post('/upload', upload.single('file'), async (req, res) => {
-    const { code } = req.body;
-
-    // Vérification du code d'accès
-    if (code !== ACCESS_CODE) {
-        return res.status(403).send({ message: "Code d'accès invalide." });
+    const { title, description, category, level, type, securityCode } = req.body;
+    
+    // Vérification du code de sécurité
+    if (securityCode !== "ka23bo23re23") {
+        return res.status(403).json({ message: 'Code de sécurité invalide' });
     }
-
-    try {
-        // Enregistrement des informations de la formation
-        const formation = new Formation({
-            title: req.file.originalname,
-            filePath: req.file.path,
-            uploadDate: new Date(),
-        });
-
-        await formation.save();
-        res.status(201).send({ message: "Fichier uploadé avec succès !" });
-    } catch (error) {
-        res.status(500).send(error);
-    }
+    
+    const content = new Content({
+        title,
+        description,
+        category,
+        level,
+        type,
+        filePath: `/uploads/${req.file.filename}`,
+        uploadedBy: 'admin'
+    });
+    
+    await content.save();
+    res.json(content);
 });
 
-
-router.get('/formations', async (req, res) => {
-    try {
-        const formations = await Formation.find();
-        res.status(200).send(formations);
-    } catch (error) {
-        res.status(500).send(error);
-    }
+// Route pour obtenir tout le contenu
+router.get('/all', async (req, res) => {
+    const contents = await Content.find({});
+    res.json(contents);
 });
 
-
-// Récupérer toutes les formations
-router.get('/formations', async (req, res) => {
-    try {
-        const formations = await Formation.find();
-        res.send(formations);
-    } catch (error) {
-        res.status(500).send(error);
-    }
-});
-
-// Ajouter un commentaire
-router.post('/comments', async (req, res) => {
-    try {
-        const comment = new Comment(req.body);
-        await comment.save();
-        res.status(201).send(comment);
-    } catch (error) {
-        res.status(400).send(error);
-    }
-});
-
-// Récupérer les commentaires pour une formation
-router.get('/comments/:formationId', async (req, res) => {
-    try {
-        const comments = await Comment.find({ formationId: req.params.formationId });
-        res.send(comments);
-    } catch (error) {
-        res.status(500).send(error);
-    }
+// Route pour liker un contenu
+router.patch('/like/:id', async (req, res) => {
+    const content = await Content.findById(req.params.id);
+    content.likes += 1;
+    await content.save();
+    res.json(content);
 });
 
 module.exports = router;
 
 
+// Route pour ajouter un commentaire
+router.post('/add', async (req, res) => {
+    const { contentId, user, text } = req.body;
+    const comment = new Comment({ contentId, user, text });
+    await comment.save();
+    res.json(comment);
+});
 
+// Route pour obtenir les commentaires d'un contenu spécifique
+router.get('/:contentId', async (req, res) => {
+    const comments = await Comment.find({ contentId: req.params.contentId });
+    res.json(comments);
+});
 
+// Route pour liker un commentaire
+router.patch('/like/:id', async (req, res) => {
+    const comment = await Comment.findById(req.params.id);
+    comment.likes += 1;
+    await comment.save();
+    res.json(comment);
+});
 
-
-
-
-
-
+module.exports = router;
 
 
 
