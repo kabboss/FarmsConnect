@@ -258,48 +258,60 @@ app.post('/api/users', (req, res) => {
 //Formation
 
 
-// Configuration du stockage des fichiers
+const fs = require('fs');
+const path = require('path');
+const VIDEO_DIR = path.join(__dirname, 'videos');
+
+
+// Configuration de multer pour le stockage des vidéos
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, VIDEO_DIR);
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
-    },
+        cb(null, file.originalname);
+    }
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
-// Modèle Mongoose pour les commentaires
-const Comment = mongoose.model('Comment', new mongoose.Schema({
-    username: String,
-    text: String,
-    date: { type: Date, default: Date.now }
-}));
-
-app.use(cors());
-app.use(express.json());
-app.use(express.static('public'));
-app.use('/uploads', express.static('uploads'));
-
-// Route pour le téléchargement de fichiers
-app.post('/upload', upload.fields([{ name: 'video' }, { name: 'audio' }]), (req, res) => {
-    res.json({ message: 'Fichiers téléchargés avec succès!', files: req.files });
+// Route pour télécharger une vidéo
+app.post('/upload', upload.single('video'), (req, res) => {
+    res.sendStatus(200);
 });
 
-// Route pour récupérer les commentaires
-app.get('/comments', async (req, res) => {
-    const comments = await Comment.find();
-    res.json(comments);
+// Route pour lister les vidéos
+app.get('/videos', (req, res) => {
+    fs.readdir(VIDEO_DIR, (err, files) => {
+        if (err) return res.sendStatus(500);
+        const videos = files.map(file => ({ filename: file }));
+        res.json(videos);
+    });
 });
 
-// Route pour ajouter un commentaire
-app.post('/comments', async (req, res) => {
-    const newComment = new Comment(req.body);
-    await newComment.save();
-    res.json(newComment);
+// Route pour supprimer une vidéo
+app.delete('/delete/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(VIDEO_DIR, filename);
+    fs.unlink(filePath, (err) => {
+        if (err) return res.sendStatus(500);
+        res.sendStatus(200);
+    });
 });
-   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

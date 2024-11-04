@@ -1,62 +1,72 @@
-document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const password = document.getElementById('password').value;
-    if (password !== 'ka23bo23re23') {
-        alert('Mot de passe incorrect!');
+document.getElementById('uploadButton').addEventListener('click', async () => {
+    const fileInput = document.getElementById('videoUpload');
+    const accessCodeInput = document.getElementById('accessCode');
+    const accessCode = accessCodeInput.value.trim();
+
+    if (accessCode !== 'ka23bo23re23') {
+        alert("Code d'accès incorrect !");
         return;
     }
 
-    const formData = new FormData();
-    const videoFile = document.querySelector('input[name="video"]').files[0];
-    const audioFile = document.querySelector('input[name="audio"]').files[0];
+    if (fileInput.files.length === 0) {
+        alert("Veuillez sélectionner un fichier vidéo !");
+        return;
+    }
 
-    formData.append('video', videoFile);
-    formData.append('audio', audioFile);
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('video', file);
 
     try {
         const response = await fetch('/upload', {
             method: 'POST',
             body: formData
         });
-        const data = await response.json();
-        alert(data.message);
+
+        if (response.ok) {
+            loadVideoList();
+        } else {
+            alert("Échec de l'importation de la vidéo !");
+        }
     } catch (error) {
-        console.error('Erreur de téléchargement:', error);
+        console.error('Erreur lors de l\'importation de la vidéo :', error);
     }
 });
 
-// Charger les commentaires
-async function loadComments() {
-    const response = await fetch('/comments');
-    const comments = await response.json();
-    const commentsContainer = document.getElementById('comments');
-    commentsContainer.innerHTML = '';
-    comments.forEach(comment => {
-        const div = document.createElement('div');
-        div.className = 'comment';
-        div.innerHTML = `<strong>${comment.username}</strong>: ${comment.text} <em>${new Date(comment.date).toLocaleString()}</em>`;
-        commentsContainer.appendChild(div);
+async function loadVideoList() {
+    const response = await fetch('/videos');
+    const videos = await response.json();
+    const videoList = document.getElementById('videoList');
+    videoList.innerHTML = '';
+
+    videos.forEach(video => {
+        const li = document.createElement('li');
+        li.className = 'videoItem';
+        li.textContent = video.filename;
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'deleteButton';
+        deleteButton.textContent = 'Supprimer';
+        deleteButton.onclick = () => deleteVideo(video.filename);
+        li.appendChild(deleteButton);
+        videoList.appendChild(li);
     });
 }
 
-// Envoyer un commentaire
-document.getElementById('commentForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const username = document.getElementById('username').value;
-    const text = document.getElementById('commentText').value;
+async function deleteVideo(filename) {
+    const accessCode = prompt("Entrez le code d'accès pour supprimer la vidéo :");
+    if (accessCode !== 'ka23bo23re23') {
+        alert("Code d'accès incorrect !");
+        return;
+    }
 
-    const response = await fetch('/comments', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, text })
-    });
+    const response = await fetch(`/delete/${encodeURIComponent(filename)}`, { method: 'DELETE' });
 
-    const newComment = await response.json();
-    loadComments(); // Recharger les commentaires
-    document.getElementById('commentForm').reset(); // Réinitialiser le formulaire
-});
+    if (response.ok) {
+        loadVideoList();
+    } else {
+        alert("Échec de la suppression de la vidéo !");
+    }
+}
 
-// Charger les commentaires au démarrage
-loadComments();
+// Charger la liste des vidéos au démarrage
+loadVideoList();

@@ -1,58 +1,74 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
     margin: 0;
-    padding: 20px;
+    background-color: #f4f4f4;
 }
 
 .container {
     max-width: 800px;
-    margin: auto;
-    background: white;
+    margin: 20px auto;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1, h2 {
-    color: #2c3e50;
+header {
+    text-align: center;
 }
 
-form {
+h1 {
+    color: #333;
+}
+
+h2 {
+    color: #666;
+}
+
+#uploadSection {
     margin-bottom: 20px;
 }
 
-input[type="file"], input[type="text"], textarea {
-    width: 100%;
+input[type="file"],
+input[type="password"] {
+    width: calc(100% - 22px);
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
 button {
-    background-color: #3498db;
-    color: white;
     padding: 10px 15px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: white;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #2980b9;
+    background-color: #218838;
 }
 
-#commentsSection {
-    margin-top: 30px;
+#videoList {
+    list-style: none;
+    padding: 0;
 }
 
-.comment {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
+.videoItem {
+    margin: 10px 0;
 }
 
-.comment strong {
-    color: #2980b9;
+.deleteButton {
+    background-color: #dc3545;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.deleteButton:hover {
+    background-color: #c82333;
 }
