@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Utilisateur - Live</title>
+    <style>
+        video { width: 100%; max-width: 600px; margin-bottom: 20px; }
+    </style>
 </head>
 <body>
     <h1>Interface Utilisateur</h1>
@@ -10,7 +13,7 @@
     <button onclick="requestToJoin('video')">Demander à rejoindre en vidéo</button>
     <button onclick="requestToJoin('audio')">Demander à rejoindre en audio</button>
     <button onclick="quitLive()">Quitter le live</button>
-    
+
     <h2>Chat</h2>
     <input type="text" id="message" placeholder="Tapez votre message">
     <button onclick="sendMessage()">Envoyer</button>
@@ -25,24 +28,38 @@
         socket.on('receiveAdminStream', (streamData) => {
             const video = document.getElementById('liveVideo');
             video.srcObject = new MediaStream(streamData);
+            video.play();
         });
 
         // Demander à rejoindre le live
         function requestToJoin(mode) {
-            const username = prompt("Entrez votre nom d'utilisateur :");
+            const username = prompt("Entrez votre nom:");
             socket.emit('requestToJoin', username, mode);
         }
 
-        // Autoriser l'accès à la caméra et au micro si la demande est acceptée
-        socket.on('joinApproved', async () => {
+        // Recevoir une approbation pour rejoindre
+        socket.on('joinApproved', () => {
+            alert("Vous avez été approuvé pour rejoindre le live !");
+            startUserStream();
+        });
+
+        // Démarrer le flux de l'utilisateur
+        async function startUserStream() {
             try {
                 localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                const streamData = localStream.getTracks().map(track => track);
-                socket.emit('userStream', streamData);
+                socket.emit('userStream', localStream.getTracks()); // Envoyer le flux de l'utilisateur
             } catch (error) {
                 console.error("Erreur d'accès à la caméra ou au micro :", error);
             }
-        });
+        }
+
+        // Quitter le live
+        function quitLive() {
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+            }
+            window.location.href = "Acceuil.html"; // Rediriger vers la page d'accueil
+        }
 
         // Chat
         function sendMessage() {
@@ -57,14 +74,6 @@
             messageEl.textContent = message;
             chatDiv.appendChild(messageEl);
         });
-
-        // Quitter le live
-        function quitLive() {
-            if (localStream) {
-                localStream.getTracks().forEach(track => track.stop());
-            }
-            window.location.href = "Acceuil.html";
-        }
     </script>
 </body>
 </html>

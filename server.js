@@ -255,7 +255,7 @@ app.post('/api/users', (req, res) => {
 
 
 let adminSocketId = null;
-let userRequests = [];  // Stocker les demandes des utilisateurs
+let userRequests = [];
 
 // Gestion des connexions
 io.on('connection', (socket) => {
@@ -271,14 +271,14 @@ io.on('connection', (socket) => {
             socket.join('user');
             socket.emit('userInterface');
             if (adminSocketId) {
-                io.to(socket.id).emit('requestAdminStream');  // Demander le flux de l'admin
+                io.to(socket.id).emit('requestAdminStream');
             }
         } else {
             socket.emit('loginFailed');
         }
     });
 
-    // L'admin envoie soit une vidéo uploadée soit un flux de caméra en direct
+    // L'admin envoie un flux de caméra ou une vidéo uploadée
     socket.on('adminStream', (streamData) => {
         io.to('user').emit('receiveAdminStream', streamData);  // Diffuser aux utilisateurs
     });
@@ -296,12 +296,17 @@ io.on('connection', (socket) => {
 
     // L'utilisateur envoie son flux après acceptation
     socket.on('userStream', (streamData) => {
-        io.emit('receiveUserStream', { userId: socket.id, streamData });  // Diffuser le flux à tous
+        io.emit('receiveUserStream', { userId: socket.id, streamData });
     });
 
     // Gestion du chat
     socket.on('sendMessage', (message) => {
         io.emit('receiveMessage', message);
+    });
+
+    // Terminer le live
+    socket.on('endLive', () => {
+        io.emit('liveEnded'); // Informer tous les utilisateurs que le live est terminé
     });
 
     // Déconnexion
@@ -311,7 +316,6 @@ io.on('connection', (socket) => {
         io.to(adminSocketId).emit('newJoinRequest', userRequests);
     });
 });
-
 
 
 

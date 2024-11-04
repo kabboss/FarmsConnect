@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin - Diffusion en Direct</title>
+    <style>
+        video { width: 100%; max-width: 600px; margin-bottom: 20px; }
+    </style>
 </head>
 <body>
     <h1>Interface Admin</h1>
@@ -10,10 +13,11 @@
     <input type="file" id="uploadVideo" accept="video/*">
     <button onclick="uploadAndStreamVideo()">Uploader et Diffuser la Vidéo</button>
     <button onclick="startLiveStream()">Démarrer le live avec la caméra</button>
-    
+    <button onclick="endLive()">Terminer le live</button>
+
     <h2>Demandes des Utilisateurs</h2>
     <div id="requests"></div>
-    
+
     <h2>Chat</h2>
     <input type="text" id="message" placeholder="Tapez votre message">
     <button onclick="sendMessage()">Envoyer</button>
@@ -39,11 +43,17 @@
         // Uploader et diffuser une vidéo
         function uploadAndStreamVideo() {
             const videoFile = document.getElementById('uploadVideo').files[0];
-            const videoElement = document.getElementById('adminVideo');
-            const videoUrl = URL.createObjectURL(videoFile);
-            videoElement.src = videoUrl;
-            videoElement.play();
-            socket.emit('adminStream', videoUrl);  // Envoyer l'URL de la vidéo uploadée
+            if (videoFile) {
+                const videoElement = document.createElement('video');
+                const videoUrl = URL.createObjectURL(videoFile);
+                videoElement.src = videoUrl;
+                videoElement.controls = true;
+                videoElement.autoplay = true;
+                document.body.appendChild(videoElement);
+                socket.emit('adminStream', videoUrl);  // Envoyer l'URL de la vidéo uploadée
+            } else {
+                alert("Veuillez sélectionner une vidéo à uploader.");
+            }
         }
 
         // Accepter une demande de rejoindre
@@ -74,6 +84,16 @@
             userVideo.style.width = '150px';
             document.body.appendChild(userVideo);
         });
+
+        // Terminer le live
+        function endLive() {
+            socket.emit('endLive');
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+            }
+            document.getElementById('adminVideo').srcObject = null; // Arrêter la diffusion
+            alert("Le live a été terminé.");
+        }
 
         // Chat
         function sendMessage() {
