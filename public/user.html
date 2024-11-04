@@ -27,14 +27,20 @@
         // Recevoir le flux de l'admin (vidéo uploadée ou flux en direct)
         socket.on('receiveAdminStream', (streamData) => {
             const video = document.getElementById('liveVideo');
-            video.srcObject = new MediaStream(streamData);
+            // Créer un nouvel objet MediaStream à partir des données du flux
+            const mediaStream = new MediaStream(streamData);
+            video.srcObject = mediaStream;
             video.play();
         });
 
         // Demander à rejoindre le live
         function requestToJoin(mode) {
             const username = prompt("Entrez votre nom:");
-            socket.emit('requestToJoin', username, mode);
+            if (username) {
+                socket.emit('requestToJoin', username, mode);
+            } else {
+                alert("Nom requis pour faire une demande.");
+            }
         }
 
         // Recevoir une approbation pour rejoindre
@@ -47,7 +53,8 @@
         async function startUserStream() {
             try {
                 localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                socket.emit('userStream', localStream.getTracks()); // Envoyer le flux de l'utilisateur
+                // Envoyer le flux de l'utilisateur au serveur
+                socket.emit('userStream', localStream.getTracks());
             } catch (error) {
                 console.error("Erreur d'accès à la caméra ou au micro :", error);
             }
@@ -64,10 +71,15 @@
         // Chat
         function sendMessage() {
             const message = document.getElementById('message').value;
-            socket.emit('sendMessage', message);
-            document.getElementById('message').value = "";
+            if (message.trim() !== "") {
+                socket.emit('sendMessage', message);
+                document.getElementById('message').value = "";
+            } else {
+                alert("Veuillez entrer un message.");
+            }
         }
 
+        // Afficher les messages du chat
         socket.on('receiveMessage', (message) => {
             const chatDiv = document.getElementById('chat');
             const messageEl = document.createElement('p');

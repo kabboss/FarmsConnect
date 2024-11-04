@@ -294,10 +294,13 @@ io.on('connection', (socket) => {
         io.to(userId).emit('joinApproved');
     });
 
-    // L'utilisateur envoie son flux après acceptation
-    socket.on('userStream', (streamData) => {
-        io.emit('receiveUserStream', { userId: socket.id, streamData });
-    });
+   
+   // L'utilisateur envoie son flux après acceptation
+socket.on('userStream', (tracks) => {
+    // Créer un nouveau MediaStream à partir des pistes de l'utilisateur
+    const userStream = new MediaStream(tracks);
+    io.emit('receiveUserStream', { userId: socket.id, streamData: userStream.getTracks() });
+});
 
     // Gestion du chat
     socket.on('sendMessage', (message) => {
