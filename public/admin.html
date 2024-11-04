@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Interface Admin</h1>
-    <video id="adminVideo" controls autoplay></video>
+    <video id="adminVideo" autoplay muted></video>
     <button onclick="startLive()">Démarrer le live</button>
     <button onclick="endLive()">Terminer le live</button>
     
@@ -21,18 +21,22 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
+        let localStream;
 
-        // Démarrer la diffusion
-        function startLive() {
-            const video = document.getElementById('adminVideo');
-            video.onplay = () => {
-                const stream = video.captureStream();
-                socket.emit('startLive', stream);
-            };
+        // Démarrer la diffusion avec caméra et micro
+        async function startLive() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                document.getElementById('adminVideo').srcObject = localStream;
+                socket.emit('startLive', localStream);
+            } catch (error) {
+                console.error("Erreur d'accès à la caméra ou au micro :", error);
+            }
         }
 
         // Terminer la diffusion
         function endLive() {
+            localStream.getTracks().forEach(track => track.stop());
             socket.emit('endLive');
         }
 
@@ -54,6 +58,15 @@
                 requestEl.appendChild(acceptBtn);
                 requestsDiv.appendChild(requestEl);
             });
+        });
+
+        // Recevoir la vidéo des utilisateurs
+        socket.on('receiveUserStream', ({ userId, stream }) => {
+            const userVideo = document.createElement('video');
+            userVideo.srcObject = stream;
+            userVideo.autoplay = true;
+            userVideo.style.width = '150px';
+            document.body.appendChild(userVideo);
         });
 
         // Chat

@@ -253,8 +253,8 @@ app.post('/api/users', (req, res) => {
 
 //live 
 
-let liveStream = null;  // Stocke la vidéo diffusée par l'admin
-let userRequests = [];  // Stocke les demandes des utilisateurs
+let adminStream = null;  // Vidéo diffusée par l'admin
+let userRequests = [];  // Stocker les demandes des utilisateurs
 
 // Diffusion en direct et gestion des rôles
 io.on('connection', (socket) => {
@@ -268,8 +268,8 @@ io.on('connection', (socket) => {
         } else if (code === "User2323") {
             socket.join('user');
             socket.emit('userInterface');
-            if (liveStream) {
-                socket.emit('receiveStream', liveStream);
+            if (adminStream) {
+                socket.emit('receiveStream', adminStream);
             }
         } else {
             socket.emit('loginFailed');
@@ -278,17 +278,11 @@ io.on('connection', (socket) => {
 
     // L'admin démarre la diffusion
     socket.on('startLive', (stream) => {
-        liveStream = stream;
-        io.to('user').emit('receiveStream', liveStream);
+        adminStream = stream;
+        io.to('user').emit('receiveStream', adminStream);
     });
 
-    // Gérer la fin du live
-    socket.on('endLive', () => {
-        liveStream = null;
-        io.emit('liveEnded');
-    });
-
-    // Gestion des demandes des utilisateurs
+    // Gérer les demandes des utilisateurs
     socket.on('requestToJoin', (username, mode) => {
         userRequests.push({ id: socket.id, username, mode });
         io.to('admin').emit('newJoinRequest', userRequests);
@@ -297,6 +291,11 @@ io.on('connection', (socket) => {
     // Acceptation de la demande par l'admin
     socket.on('acceptRequest', (userId) => {
         io.to(userId).emit('joinApproved');
+    });
+
+    // Gestion des flux des utilisateurs
+    socket.on('userStream', (stream) => {
+        io.to('admin').emit('receiveUserStream', { userId: socket.id, stream });
     });
 
     // Gestion du chat
@@ -311,6 +310,7 @@ io.on('connection', (socket) => {
         io.to('admin').emit('newJoinRequest', userRequests);
     });
 });
+
 
 
 

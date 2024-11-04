@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Interface Utilisateur</h1>
-    <video id="liveVideo" controls autoplay></video>
+    <video id="liveVideo" controls autoplay muted></video>
     <button onclick="requestToJoin('video')">Demander à rejoindre en vidéo</button>
     <button onclick="requestToJoin('audio')">Demander à rejoindre en audio</button>
     <button onclick="quitLive()">Quitter le live</button>
@@ -19,18 +19,29 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
+        let localStream;
 
-        // Recevoir la diffusion
+        // Recevoir la diffusion de l'admin
         socket.on('receiveStream', (stream) => {
             const video = document.getElementById('liveVideo');
             video.srcObject = stream;
         });
 
-        // Demander à rejoindre
+        // Demander à rejoindre le live
         function requestToJoin(mode) {
             const username = prompt("Entrez votre nom d'utilisateur :");
             socket.emit('requestToJoin', username, mode);
         }
+
+        // Autoriser l'accès à la caméra et au micro si la demande est acceptée
+        socket.on('joinApproved', async () => {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                socket.emit('userStream', localStream);
+            } catch (error) {
+                console.error("Erreur d'accès à la caméra ou au micro :", error);
+            }
+        });
 
         // Chat
         function sendMessage() {
