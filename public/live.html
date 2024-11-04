@@ -9,16 +9,18 @@
 <body>
     <div id="live-container">
         <h1>Live Formation - FarmsConnect</h1>
-        <video id="video-stream" autoplay muted></video>
+        <video id="video-stream" autoplay muted style="display:none;"></video>
         <div id="controls">
-            <button id="start-live" onclick="startLive()">Démarrer le Live (FarmsConnect seulement)</button>
+            <input type="text" id="admin-code" placeholder="Entrez le code Admin" />
+            <button id="start-live" onclick="startLive()">Démarrer le Live</button>
             <button id="join-live" onclick="joinLive()">Rejoindre le Live</button>
             <button id="end-live" onclick="endLive()">Terminer le Live</button>
         </div>
-        <div id="chat-section">
+        <div id="chat-section" style="display:none;">
             <h2>Chat en Direct</h2>
             <div id="messages"></div>
             <input type="text" id="message-input" placeholder="Envoyer un message..." onkeypress="sendMessage(event)">
+            <button onclick="sendMessageButton()">Envoyer</button>
         </div>
     </div>
 

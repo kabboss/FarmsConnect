@@ -255,12 +255,11 @@ app.post('/api/users', (req, res) => {
 
 let liveStatus = false;
 
-
 // Configuration des événements Socket.IO
 io.on('connection', (socket) => {
     console.log('Nouvel utilisateur connecté');
 
-    // Démarrage du live - Accessible uniquement par FarmsConnect
+    // Démarrage du live
     socket.on('startLive', () => {
         if (!liveStatus) {
             liveStatus = true;
@@ -278,7 +277,7 @@ io.on('connection', (socket) => {
         }
     });
 
-    // Terminer le live - Accessible uniquement par FarmsConnect
+    // Terminer le live
     socket.on('endLive', () => {
         if (liveStatus) {
             liveStatus = false;
