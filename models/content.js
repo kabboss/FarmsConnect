@@ -1,16 +1,12 @@
+// models/content.js
 const mongoose = require('mongoose');
 
-const ContentSchema = new mongoose.Schema({
-    title: String,
-    description: String,
-    category: String,
-    level: String,
-    filePath: String,
-    type: { type: String, enum: ['video', 'audio'] },
-    likes: { type: Number, default: 0 },
-    uploadedBy: { type: String, required: true },
-    dateAdded: { type: Date, default: Date.now },
-    newContent: { type: Boolean, default: true }
+const contentSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  category: { type: String, required: true },
+  filePath: { type: String, required: true },
+  type: { type: String, required: true }, // e.g., 'video' or 'audio'
+  createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Content', ContentSchema);
+module.exports = mongoose.model('Content', contentSchema);

@@ -305,9 +305,12 @@ app.post('/api/content/upload', verifySecurityCode, upload.single('file'), async
         });
         
         await content.save();
-        io.emit('new-content', content); // Envoie une notification aux utilisateurs
+        const io = req.app.get('io'); // Récupérer `io` via `app`
+        io.emit('new-content', content); // Notification aux utilisateurs
+
         res.json(content);
     } catch (error) {
+        console.error('Erreur lors de l\'upload du contenu :', error); // Journalisation de l'erreur
         res.status(500).json({ message: 'Erreur lors de l\'upload du contenu' });
     }
 });
