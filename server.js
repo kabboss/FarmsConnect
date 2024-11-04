@@ -49,6 +49,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+
 // Routes
 
 // Route pour s'inscrire (signup)

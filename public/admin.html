@@ -19,43 +19,45 @@
         const configuration = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
 
         async function startLiveStream() {
-            try {
-                // Obtenir le flux de la caméra
-                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                document.getElementById('adminVideo').srcObject = localStream;
+    try {
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        document.getElementById('adminVideo').srcObject = localStream;
 
-                // Créer une nouvelle connexion
-                peerConnection = new RTCPeerConnection(configuration);
+        peerConnection = new RTCPeerConnection(configuration);
 
-                // Ajouter les pistes du flux local à la connexion
-                localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+        // Vérification des pistes ajoutées
+        localStream.getTracks().forEach(track => {
+            peerConnection.addTrack(track, localStream);
+            console.log("Piste ajoutée :", track);
+        });
 
-                // Gestion des candidats ICE
-                peerConnection.onicecandidate = (event) => {
-                    if (event.candidate) {
-                        socket.emit('candidate', event.candidate);
-                    }
-                };
-
-                // Créer et envoyer une offre
-                const offer = await peerConnection.createOffer();
-                await peerConnection.setLocalDescription(offer);
-                socket.emit('offer', offer);
-
-            } catch (error) {
-                console.error("Erreur de démarrage du flux :", error);
+        peerConnection.onicecandidate = (event) => {
+            if (event.candidate) {
+                socket.emit('candidate', event.candidate);
+                console.log("Candidat ICE envoyé :", event.candidate);
             }
-        }
+        };
 
-        // Recevoir la réponse de l'utilisateur
-        socket.on('answer', async (answer) => {
-            await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
-        });
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+        console.log("Offre envoyée :", offer);
+        socket.emit('offer', offer);
 
-        // Recevoir les candidats ICE de l'utilisateur
-        socket.on('candidate', (candidate) => {
-            peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
-        });
+    } catch (error) {
+        console.error("Erreur de démarrage du flux :", error);
+    }
+}
+
+socket.on('answer', async (answer) => {
+    console.log("Réponse reçue :", answer);
+    await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+});
+
+socket.on('candidate', (candidate) => {
+    console.log("Candidat ICE reçu :", candidate);
+    peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+});
+
 
         function endLive() {
             if (peerConnection) {
