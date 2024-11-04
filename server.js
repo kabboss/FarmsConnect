@@ -253,15 +253,18 @@ app.post('/api/users', (req, res) => {
 
 //live 
 
-
+// Variables pour suivre l'admin et les utilisateurs
 let adminSocketId = null;
 let userRequests = [];
+
+// Route pour servir les fichiers statiques
+app.use(express.static(__dirname + '/public'));
 
 // Gestion des connexions
 io.on('connection', (socket) => {
     console.log(`Nouvel utilisateur connecté : ${socket.id}`);
 
-    // Authentification utilisateur/admin
+    // Authentification de l'admin ou des utilisateurs
     socket.on('login', (code) => {
         if (code === "ka23bo23re23") {
             adminSocketId = socket.id;
@@ -271,7 +274,7 @@ io.on('connection', (socket) => {
             socket.join('user');
             socket.emit('userInterface');
             if (adminSocketId) {
-                io.to(socket.id).emit('requestAdminStream');
+                io.to(adminSocketId).emit('requestAdminStream', socket.id);
             }
         } else {
             socket.emit('loginFailed');
@@ -284,8 +287,8 @@ io.on('connection', (socket) => {
     });
 
     // Les utilisateurs demandent à rejoindre le live
-    socket.on('requestToJoin', (username, mode) => {
-        userRequests.push({ id: socket.id, username, mode });
+    socket.on('requestToJoin', (data) => {
+        userRequests.push({ id: socket.id, username: data.username, mode: data.mode });
         io.to(adminSocketId).emit('newJoinRequest', userRequests);
     });
 
@@ -294,13 +297,10 @@ io.on('connection', (socket) => {
         io.to(userId).emit('joinApproved');
     });
 
-   
-   // L'utilisateur envoie son flux après acceptation
-socket.on('userStream', (tracks) => {
-    // Créer un nouveau MediaStream à partir des pistes de l'utilisateur
-    const userStream = new MediaStream(tracks);
-    io.emit('receiveUserStream', { userId: socket.id, streamData: userStream.getTracks() });
-});
+    // L'utilisateur envoie son flux après acceptation
+    socket.on('userStream', (tracks) => {
+        io.to(adminSocketId).emit('receiveUserStream', { userId: socket.id, streamData: tracks });
+    });
 
     // Gestion du chat
     socket.on('sendMessage', (message) => {
@@ -319,6 +319,8 @@ socket.on('userStream', (tracks) => {
         io.to(adminSocketId).emit('newJoinRequest', userRequests);
     });
 });
+
+
 
 
 

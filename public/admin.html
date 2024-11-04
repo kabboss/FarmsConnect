@@ -33,8 +33,7 @@
             try {
                 localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 document.getElementById('adminVideo').srcObject = localStream;
-                const streamData = localStream.getTracks().map(track => track);
-                socket.emit('adminStream', streamData);
+                socket.emit('adminStream', localStream);
             } catch (error) {
                 console.error("Erreur d'accès à la caméra ou au micro :", error);
             }
@@ -44,13 +43,9 @@
         function uploadAndStreamVideo() {
             const videoFile = document.getElementById('uploadVideo').files[0];
             if (videoFile) {
-                const videoElement = document.createElement('video');
                 const videoUrl = URL.createObjectURL(videoFile);
-                videoElement.src = videoUrl;
-                videoElement.controls = true;
-                videoElement.autoplay = true;
-                document.body.appendChild(videoElement);
-                socket.emit('adminStream', videoUrl);  // Envoyer l'URL de la vidéo uploadée
+                document.getElementById('adminVideo').src = videoUrl;
+                socket.emit('adminStream', videoUrl);
             } else {
                 alert("Veuillez sélectionner une vidéo à uploader.");
             }
@@ -76,30 +71,13 @@
             });
         });
 
-        // Recevoir le flux des utilisateurs et l'afficher
-        socket.on('receiveUserStream', ({ userId, streamData }) => {
-            const userVideo = document.createElement('video');
-            userVideo.srcObject = new MediaStream(streamData);
-            userVideo.autoplay = true;
-            userVideo.style.width = '150px';
-            document.body.appendChild(userVideo);
-        });
-
-        // Terminer le live
-        function endLive() {
-            socket.emit('endLive');
-            if (localStream) {
-                localStream.getTracks().forEach(track => track.stop());
-            }
-            document.getElementById('adminVideo').srcObject = null; // Arrêter la diffusion
-            alert("Le live a été terminé.");
-        }
-
         // Chat
         function sendMessage() {
             const message = document.getElementById('message').value;
-            socket.emit('sendMessage', message);
-            document.getElementById('message').value = "";
+            if (message.trim() !== "") {
+                socket.emit('sendMessage', message);
+                document.getElementById('message').value = "";
+            }
         }
 
         socket.on('receiveMessage', (message) => {

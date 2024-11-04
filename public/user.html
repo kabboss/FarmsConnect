@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Utilisateur - Live</title>
     <style>
-        video { width: 100%; max-width: 600px; margin-bottom: 20px; }
+        video { width: 100%; max-width: 500px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -12,7 +12,6 @@
     <video id="liveVideo" controls autoplay muted></video>
     <button onclick="requestToJoin('video')">Demander à rejoindre en vidéo</button>
     <button onclick="requestToJoin('audio')">Demander à rejoindre en audio</button>
-    <button onclick="quitLive()">Quitter le live</button>
 
     <h2>Chat</h2>
     <input type="text" id="message" placeholder="Tapez votre message">
@@ -22,14 +21,10 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
-        let localStream;
 
-        // Recevoir le flux de l'admin (vidéo uploadée ou flux en direct)
         socket.on('receiveAdminStream', (streamData) => {
             const video = document.getElementById('liveVideo');
-            // Créer un nouvel objet MediaStream à partir des données du flux
-            const mediaStream = new MediaStream(streamData);
-            video.srcObject = mediaStream;
+            video.src = streamData;
             video.play();
         });
 
@@ -37,7 +32,7 @@
         function requestToJoin(mode) {
             const username = prompt("Entrez votre nom:");
             if (username) {
-                socket.emit('requestToJoin', username, mode);
+                socket.emit('requestToJoin', { username, mode });
             } else {
                 alert("Nom requis pour faire une demande.");
             }
@@ -49,23 +44,14 @@
             startUserStream();
         });
 
-        // Démarrer le flux de l'utilisateur
+        // Commencer la diffusion utilisateur
         async function startUserStream() {
             try {
-                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                // Envoyer le flux de l'utilisateur au serveur
-                socket.emit('userStream', localStream.getTracks());
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                socket.emit('userStream', stream);
             } catch (error) {
                 console.error("Erreur d'accès à la caméra ou au micro :", error);
             }
-        }
-
-        // Quitter le live
-        function quitLive() {
-            if (localStream) {
-                localStream.getTracks().forEach(track => track.stop());
-            }
-            window.location.href = "Acceuil.html"; // Rediriger vers la page d'accueil
         }
 
         // Chat
@@ -74,17 +60,19 @@
             if (message.trim() !== "") {
                 socket.emit('sendMessage', message);
                 document.getElementById('message').value = "";
-            } else {
-                alert("Veuillez entrer un message.");
             }
         }
 
-        // Afficher les messages du chat
         socket.on('receiveMessage', (message) => {
             const chatDiv = document.getElementById('chat');
             const messageEl = document.createElement('p');
             messageEl.textContent = message;
             chatDiv.appendChild(messageEl);
+        });
+
+        // Fin du live
+        socket.on('liveEnded', () => {
+            alert("Le live est terminé.");
         });
     </script>
 </body>
