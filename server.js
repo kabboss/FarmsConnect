@@ -252,95 +252,119 @@ app.post('/api/users', (req, res) => {
 
 
 
-//live 
-
-// Variables pour suivre l'admin et les utilisateurs
-let adminSocketId = null;
-let userRequests = [];
-
-// Route pour servir les fichiers statiques
-app.use(express.static(__dirname + '/public'));
-
-// Gestion des connexions
-io.on('connection', (socket) => {
-    console.log(`Nouvel utilisateur connecté : ${socket.id}`);
-
-    // Authentification de l'admin ou des utilisateurs
-    socket.on('login', (code) => {
-        if (code === "ka23bo23re23") {
-            adminSocketId = socket.id;
-            socket.join('admin');
-            socket.emit('adminInterface');
-        } else if (code === "User2323") {
-            socket.join('user');
-            socket.emit('userInterface');
-            if (adminSocketId) {
-                io.to(adminSocketId).emit('requestAdminStream', socket.id);
-            }
-        } else {
-            socket.emit('loginFailed');
-        }
-    });
 
 
-    // Gestion des messages de signalisation WebRTC
-    socket.on('offer', (offer) => {
-        io.to(adminSocketId).emit('offer', offer);
-    });
+//Formation
 
-    socket.on('answer', (answer) => {
-        io.to(adminSocketId).emit('answer', answer);
-    });
+const express = require('express');
+const Formation = require('./models/formation');
+const Comment = require('./models/comment');
+const router = express.Router();
 
-    socket.on('candidate', (candidate) => {
-        socket.to(adminSocketId).emit('candidate', candidate);
-    });
+// Ajouter une formation
 
-    // Déconnexion
-    socket.on('disconnect', () => {
-        console.log(`Déconnexion : ${socket.id}`);
-    });
+// Code d'accès pour uploader
+const ACCESS_CODE = "ka23bo23re23";
 
-    // L'admin envoie un flux de caméra ou une vidéo uploadée
-    socket.on('adminStream', (streamData) => {
-        io.to('user').emit('receiveAdminStream', streamData);  // Diffuser aux utilisateurs
-    });
-
-    // Les utilisateurs demandent à rejoindre le live
-    socket.on('requestToJoin', (data) => {
-        userRequests.push({ id: socket.id, username: data.username, mode: data.mode });
-        io.to(adminSocketId).emit('newJoinRequest', userRequests);
-    });
-
-    // L'admin accepte la demande de l'utilisateur
-    socket.on('acceptRequest', (userId) => {
-        io.to(userId).emit('joinApproved');
-    });
-
-    // L'utilisateur envoie son flux après acceptation
-    socket.on('userStream', (tracks) => {
-        io.to(adminSocketId).emit('receiveUserStream', { userId: socket.id, streamData: tracks });
-    });
-
-    
-
-    // Gestion du chat
-    socket.on('sendMessage', (message) => {
-        io.emit('receiveMessage', message);
-    });
-
-    // Terminer le live
-    socket.on('endLive', () => {
-        io.emit('liveEnded'); // Informer tous les utilisateurs que le live est terminé
-    });
-
-    // Déconnexion
-    socket.on('disconnect', () => {
-        console.log(`Utilisateur déconnecté : ${socket.id}`);
-        userRequests = userRequests.filter(req => req.id !== socket.id);
-        io.to(adminSocketId).emit('newJoinRequest', userRequests);
-    });
+// Configurer le stockage avec multer
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/'); // Dossier de destination
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)); // Nom unique
+    }
 });
+
+const upload = multer({
+    storage: storage,
+    fileFilter: function (req, file, cb) {
+        const fileTypes = /mp4|mkv|mp3|wav/; // Extensions autorisées
+        const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+        if (extname) {
+            return cb(null, true);
+        } else {
+            cb("Erreur : seuls les fichiers vidéo et audio sont acceptés !");
+        }
+    }
+});
+
+// Route pour uploader une formation
+router.post('/upload', upload.single('file'), async (req, res) => {
+    const { code } = req.body;
+
+    // Vérification du code d'accès
+    if (code !== ACCESS_CODE) {
+        return res.status(403).send({ message: "Code d'accès invalide." });
+    }
+
+    try {
+        // Enregistrement des informations de la formation
+        const formation = new Formation({
+            title: req.file.originalname,
+            filePath: req.file.path,
+            uploadDate: new Date(),
+        });
+
+        await formation.save();
+        res.status(201).send({ message: "Fichier uploadé avec succès !" });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+
+router.get('/formations', async (req, res) => {
+    try {
+        const formations = await Formation.find();
+        res.status(200).send(formations);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+
+// Récupérer toutes les formations
+router.get('/formations', async (req, res) => {
+    try {
+        const formations = await Formation.find();
+        res.send(formations);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+// Ajouter un commentaire
+router.post('/comments', async (req, res) => {
+    try {
+        const comment = new Comment(req.body);
+        await comment.save();
+        res.status(201).send(comment);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
+
+// Récupérer les commentaires pour une formation
+router.get('/comments/:formationId', async (req, res) => {
+    try {
+        const comments = await Comment.find({ formationId: req.params.formationId });
+        res.send(comments);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+module.exports = router;
+
+
+
+
+
+
+
+
+
 
 
 
