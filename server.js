@@ -253,47 +253,54 @@ app.post('/api/users', (req, res) => {
 
 //live 
 
-let liveStatus = false;
+let users = {}; // Stocker les utilisateurs et leur état
+let liveActive = false;
 
-// Configuration des événements Socket.IO
+// Gérer les connexions
 io.on('connection', (socket) => {
-    console.log('Nouvel utilisateur connecté');
-
-    // Démarrage du live
+    console.log('Nouvel utilisateur connecté : ' + socket.id);
+    
+    // Gérer le démarrage du live
     socket.on('startLive', () => {
-        if (!liveStatus) {
-            liveStatus = true;
-            io.emit('liveStarted');
-            console.log('Le live a commencé');
-        }
+        liveActive = true;
+        io.emit('liveStarted');
     });
 
-    // Rejoindre le live
-    socket.on('joinLive', () => {
-        if (liveStatus) {
-            socket.emit('joinSuccess', 'Bienvenue au live.');
-        } else {
-            socket.emit('joinFailure', 'Le live n’est pas disponible.');
-        }
-    });
-
-    // Terminer le live
+    // Gérer la fin du live
     socket.on('endLive', () => {
-        if (liveStatus) {
-            liveStatus = false;
-            io.emit('liveEnded');
-            console.log('Le live est terminé');
+        liveActive = false;
+        io.emit('liveEnded');
+    });
+
+    // Gérer la demande de rejoindre le live
+    socket.on('joinLive', () => {
+        if (liveActive) {
+            users[socket.id] = { id: socket.id, authorized: false };
+            socket.emit('requestToJoin', socket.id);
         }
     });
 
-    // Gestion des messages de chat
+    // Gérer l'autorisation des utilisateurs
+    socket.on('authorizeUser', (userId) => {
+        const userSocket = io.sockets.sockets.get(userId);
+        if (userSocket) {
+            userSocket.emit('userAuthorized', userSocket.stream); // Envoyer le flux vidéo à l'utilisateur autorisé
+        }
+    });
+
+    // Recevoir un nouveau participant
+    socket.on('newParticipant', (stream) => {
+        socket.stream = stream; // Stocker le stream de l'utilisateur
+    });
+
+    // Gérer l'envoi des messages
     socket.on('sendMessage', (message) => {
         io.emit('receiveMessage', message);
     });
 
-    // Déconnexion
     socket.on('disconnect', () => {
-        console.log('Utilisateur déconnecté');
+        console.log('Utilisateur déconnecté : ' + socket.id);
+        delete users[socket.id];
     });
 });
 

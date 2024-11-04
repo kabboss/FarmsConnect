@@ -1,11 +1,16 @@
 const socket = io('https://farmsconnect-b084ddb02391.herokuapp.com'); // URL du serveur Heroku
 
 let isLive = false;
+let userRole = ''; // 'admin' ou 'user'
+let userStream = null;
+const maxParticipants = 3;
+let participants = []; // Stocker les participants autorisés
 
 // Fonction pour démarrer le live avec code Admin
 function startLive() {
     const adminCode = document.getElementById('admin-code').value;
     if (adminCode === 'ka23bo23re23') {
+        userRole = 'admin';
         socket.emit('startLive');
     } else {
         alert("Code Admin incorrect !");
@@ -14,8 +19,15 @@ function startLive() {
 
 // Fonction pour rejoindre le live
 function joinLive() {
-    socket.emit('joinLive');
-    document.getElementById('chat-section').style.display = 'block'; // Afficher la section de chat
+    const userCode = document.getElementById('user-code').value;
+    if (userCode === 'user2323') {
+        userRole = 'user';
+        socket.emit('joinLive');
+        document.getElementById('chat-section').style.display = 'block'; // Afficher la section de chat
+        document.getElementById('request-section').style.display = 'block'; // Afficher la section des demandes
+    } else {
+        alert("Code utilisateur incorrect !");
+    }
 }
 
 // Fonction pour terminer le live
@@ -26,14 +38,12 @@ function endLive() {
 // Recevoir les événements du serveur
 socket.on('liveStarted', () => {
     isLive = true;
-    document.getElementById('video-stream').style.display = 'block'; // Afficher le flux vidéo
     startStreaming(); // Démarrer le streaming
     document.getElementById('messages').innerHTML += `<p><strong>Le live a commencé.</strong></p>`;
 });
 
 socket.on('liveEnded', () => {
     isLive = false;
-    document.getElementById('video-stream').style.display = 'none'; // Cacher le flux vidéo
     stopStreaming(); // Arrêter le streaming
     document.getElementById('messages').innerHTML += `<p><strong>Le live est terminé.</strong></p>`;
 });
@@ -45,6 +55,8 @@ function startStreaming() {
             const video = document.getElementById('video-stream');
             video.srcObject = stream;
             video.play();
+            userStream = stream;
+            socket.emit('newParticipant', stream); // Notifier le serveur d'un nouveau participant
         })
         .catch((error) => console.error("Erreur lors de l'accès à la caméra : ", error));
 }
@@ -79,4 +91,29 @@ function sendMessageToServer() {
 
 socket.on('receiveMessage', (message) => {
     document.getElementById('messages').innerHTML += `<p>${message}</p>`;
+});
+
+// Gérer les demandes pour rejoindre le live
+socket.on('requestToJoin', (userId) => {
+    document.getElementById('requests').innerHTML += `<div>${userId} souhaite rejoindre le live <button onclick="authorizeUser('${userId}')">Autoriser</button></div>`;
+});
+
+// Autoriser un utilisateur à rejoindre le live
+function authorizeUser(userId) {
+    if (participants.length < maxParticipants) {
+        socket.emit('authorizeUser', userId);
+        participants.push(userId);
+    } else {
+        alert("Maximum de participants atteint !");
+    }
+}
+
+// Recevoir la vidéo des participants
+socket.on('userAuthorized', (stream) => {
+    const videoElement = document.createElement('video');
+    videoElement.srcObject = stream;
+    videoElement.autoplay = true;
+    videoElement.style.width = '30%';
+    videoElement.style.margin = '0 5px';
+    document.getElementById('participants').appendChild(videoElement);
 });
