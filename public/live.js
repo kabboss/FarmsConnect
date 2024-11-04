@@ -1,15 +1,15 @@
 const socket = io('https://farmsconnect-b084ddb02391.herokuapp.com'); // URL du serveur Heroku
 
 let isLive = false;
-let isAdmin = false; // À utiliser pour vérifier si FarmsConnect est connecté
 
-// Fonction pour démarrer le live - Accès limité à FarmsConnect
+// Fonction pour démarrer le live avec vérification du code Admin
 function startLive() {
-    if (!isAdmin) {
-        alert("Seul FarmsConnect peut démarrer le live.");
-        return;
+    const adminCode = prompt("Veuillez entrer le code Admin pour démarrer le live:");
+    if (adminCode === "ka23bo23re23") {
+        socket.emit('startLive');
+    } else {
+        alert("Code Admin incorrect. Vous n'êtes pas autorisé à démarrer le live.");
     }
-    socket.emit('startLive');
 }
 
 // Fonction pour rejoindre le live
@@ -19,11 +19,12 @@ function joinLive() {
 
 // Fonction pour terminer le live
 function endLive() {
-    if (!isAdmin) {
-        alert("Seul FarmsConnect peut terminer le live.");
-        return;
+    const adminCode = prompt("Veuillez entrer le code Admin pour terminer le live:");
+    if (adminCode === "ka23bo23re23") {
+        socket.emit('endLive');
+    } else {
+        alert("Code Admin incorrect. Vous n'êtes pas autorisé à terminer le live.");
     }
-    socket.emit('endLive');
 }
 
 // Recevoir les événements du serveur
