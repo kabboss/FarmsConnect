@@ -253,49 +253,49 @@ app.post('/api/users', (req, res) => {
 
 //live 
 
-let adminStream = null;  // Vidéo diffusée par l'admin
+let adminSocketId = null;  // ID de l'admin pour la gestion de la connexion
 let userRequests = [];  // Stocker les demandes des utilisateurs
 
-// Diffusion en direct et gestion des rôles
+// Gestion des connexions
 io.on('connection', (socket) => {
     console.log(`Nouvel utilisateur connecté : ${socket.id}`);
 
     // Authentification utilisateur/admin
     socket.on('login', (code) => {
         if (code === "ka23bo23re23") {
+            adminSocketId = socket.id;
             socket.join('admin');
             socket.emit('adminInterface');
         } else if (code === "User2323") {
             socket.join('user');
             socket.emit('userInterface');
-            if (adminStream) {
-                socket.emit('receiveStream', adminStream);
+            if (adminSocketId) {
+                io.to(socket.id).emit('requestAdminStream');  // Demander le flux de l'admin
             }
         } else {
             socket.emit('loginFailed');
         }
     });
 
-    // L'admin démarre la diffusion
-    socket.on('startLive', (stream) => {
-        adminStream = stream;
-        io.to('user').emit('receiveStream', adminStream);
+    // L'admin envoie son flux pour diffusion
+    socket.on('adminStream', (streamData) => {
+        io.to('user').emit('receiveAdminStream', streamData);  // Diffuser aux utilisateurs
     });
 
-    // Gérer les demandes des utilisateurs
+    // Les utilisateurs demandent à rejoindre le live
     socket.on('requestToJoin', (username, mode) => {
         userRequests.push({ id: socket.id, username, mode });
-        io.to('admin').emit('newJoinRequest', userRequests);
+        io.to(adminSocketId).emit('newJoinRequest', userRequests);
     });
 
-    // Acceptation de la demande par l'admin
+    // L'admin accepte la demande de l'utilisateur
     socket.on('acceptRequest', (userId) => {
         io.to(userId).emit('joinApproved');
     });
 
-    // Gestion des flux des utilisateurs
-    socket.on('userStream', (stream) => {
-        io.to('admin').emit('receiveUserStream', { userId: socket.id, stream });
+    // L'utilisateur envoie son flux
+    socket.on('userStream', (streamData) => {
+        io.to(adminSocketId).emit('receiveUserStream', { userId: socket.id, streamData });
     });
 
     // Gestion du chat
@@ -307,9 +307,11 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log(`Utilisateur déconnecté : ${socket.id}`);
         userRequests = userRequests.filter(req => req.id !== socket.id);
-        io.to('admin').emit('newJoinRequest', userRequests);
+        io.to(adminSocketId).emit('newJoinRequest', userRequests);
     });
 });
+
+
 
 
 
