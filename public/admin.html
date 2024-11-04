@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Live</title>
+</head>
+<body>
+    <h1>Interface Admin</h1>
+    <button onclick="startLive()">Démarrer le live</button>
+    <button onclick="endLive()">Terminer le live</button>
+    <div id="chat"></div>
+    <div id="joinRequests"></div>
+    <video id="adminVideo" autoplay></video>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        function startLive() {
+            socket.emit('startLive');
+        }
+
+        function endLive() {
+            socket.emit('endLive');
+        }
+
+        socket.on('newJoinRequest', (request) => {
+            const requestDiv = document.createElement('div');
+            requestDiv.textContent = `Demande de ${request.id} en ${request.type}`;
+            const acceptButton = document.createElement('button');
+            acceptButton.textContent = "Accepter";
+            acceptButton.onclick = () => socket.emit('acceptUser', request.id);
+            requestDiv.appendChild(acceptButton);
+            document.getElementById('joinRequests').appendChild(requestDiv);
+        });
+    </script>
+</body>
+</html>

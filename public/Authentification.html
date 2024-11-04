@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <form id="loginForm">
+        <input type="text" id="accessCode" placeholder="Entrez le code">
+        <button type="submit">Se connecter</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const code = document.getElementById('accessCode').value;
+            socket.emit('login', code);
+        });
+
+        socket.on('adminLogin', () => {
+            window.location.href = "/admin.html";
+        });
+
+        socket.on('userLogin', () => {
+            window.location.href = "/user.html";
+        });
+
+        socket.on('loginFailed', () => {
+            alert("Code incorrect. Veuillez réessayer.");
+        });
+    </script>
+</body>
+</html>

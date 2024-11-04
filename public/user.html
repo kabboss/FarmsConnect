@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Utilisateur Live</title>
+</head>
+<body>
+    <h1>Interface Utilisateur</h1>
+    <button onclick="requestToJoin('video')">Rejoindre en vidéo</button>
+    <button onclick="requestToJoin('audio')">Rejoindre en audio</button>
+    <button onclick="quitLive()">Quitter le live</button>
+    <video id="userVideo" autoplay></video>
+
+    <div id="chat"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        function requestToJoin(type) {
+            socket.emit('joinRequest', { type });
+        }
+
+        function quitLive() {
+            window.location.href = "/Acceuil.html";
+        }
+    </script>
+</body>
+</html>
