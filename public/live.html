@@ -13,60 +13,8 @@
     <div id="status"></div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-        const socket = io();
+    <script src="live.js"></script>
 
-        const startButton = document.getElementById('startLive');
-        const liveVideo = document.getElementById('liveVideo');
-        const remoteVideo = document.getElementById('remoteVideo');
-        const statusDiv = document.getElementById('status');
-
-        // Nom d'utilisateur (ajusté en fonction de l'utilisateur actuel)
-        const username = prompt("Entrez votre nom d'utilisateur");
-
-        // Seuls "farmsconnect" verra le bouton de démarrage du live
-        if (username === 'farmsconnect.admin') {
-            startButton.style.display = 'block';
-        }
-
-        // Démarrage du live par farmsconnect
-        startButton.addEventListener('click', async () => {
-            socket.emit('start-live', username);
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                liveVideo.srcObject = stream;
-
-                stream.getTracks().forEach(track => {
-                    socket.emit('stream-data', track);
-                });
-            } catch (error) {
-                console.error('Erreur lors de la capture de l\'audio/vidéo:', error);
-            }
-        });
-
-        // Recevoir et afficher le flux de "farmsconnect" pour les spectateurs
-        socket.on('stream', (data) => {
-            const remoteStream = new MediaStream([data]);
-            remoteVideo.srcObject = remoteStream;
-        });
-
-        // Messages pour les événements de live
-        socket.on('live-started', (host) => {
-            statusDiv.innerText = `Live démarré par ${host}`;
-        });
-
-        socket.on('live-ended', () => {
-            statusDiv.innerText = "Le live est terminé.";
-            remoteVideo.srcObject = null;
-        });
-
-        socket.on('live-already-active', (message) => {
-            alert(message);
-        });
-
-        socket.on('not-authorized', (message) => {
-            alert(message);
-        });
-    </script>
+    
 </body>
 </html>
