@@ -259,7 +259,6 @@ app.post('/api/users', (req, res) => {
 
 
 const fs = require('fs');
-const path = require('path');
 const VIDEO_DIR = path.join(__dirname, 'videos');
 
 
