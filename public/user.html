@@ -2,27 +2,53 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Utilisateur Live</title>
+    <title>Utilisateur - Live</title>
 </head>
 <body>
     <h1>Interface Utilisateur</h1>
-    <button onclick="requestToJoin('video')">Rejoindre en vidéo</button>
-    <button onclick="requestToJoin('audio')">Rejoindre en audio</button>
+    <video id="liveVideo" controls autoplay></video>
+    <button onclick="requestToJoin('video')">Demander à rejoindre en vidéo</button>
+    <button onclick="requestToJoin('audio')">Demander à rejoindre en audio</button>
     <button onclick="quitLive()">Quitter le live</button>
-    <video id="userVideo" autoplay></video>
-
+    
+    <h2>Chat</h2>
+    <input type="text" id="message" placeholder="Tapez votre message">
+    <button onclick="sendMessage()">Envoyer</button>
     <div id="chat"></div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
 
-        function requestToJoin(type) {
-            socket.emit('joinRequest', { type });
+        // Recevoir la diffusion
+        socket.on('receiveStream', (stream) => {
+            const video = document.getElementById('liveVideo');
+            video.srcObject = stream;
+        });
+
+        // Demander à rejoindre
+        function requestToJoin(mode) {
+            const username = prompt("Entrez votre nom d'utilisateur :");
+            socket.emit('requestToJoin', username, mode);
         }
 
+        // Chat
+        function sendMessage() {
+            const message = document.getElementById('message').value;
+            socket.emit('sendMessage', message);
+            document.getElementById('message').value = "";
+        }
+
+        socket.on('receiveMessage', (message) => {
+            const chatDiv = document.getElementById('chat');
+            const messageEl = document.createElement('p');
+            messageEl.textContent = message;
+            chatDiv.appendChild(messageEl);
+        });
+
+        // Quitter le live
         function quitLive() {
-            window.location.href = "/Acceuil.html";
+            window.location.href = "/accueil.html";
         }
     </script>
 </body>

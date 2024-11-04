@@ -253,55 +253,65 @@ app.post('/api/users', (req, res) => {
 
 //live 
 
+let liveStream = null;  // Stocke la vidéo diffusée par l'admin
+let userRequests = [];  // Stocke les demandes des utilisateurs
 
-let liveActive = false;
-
+// Diffusion en direct et gestion des rôles
 io.on('connection', (socket) => {
-    console.log('Nouvel utilisateur connecté : ' + socket.id);
+    console.log(`Nouvel utilisateur connecté : ${socket.id}`);
 
-    // Authentification
+    // Authentification utilisateur/admin
     socket.on('login', (code) => {
         if (code === "ka23bo23re23") {
-            socket.emit('adminLogin');
+            socket.join('admin');
+            socket.emit('adminInterface');
         } else if (code === "User2323") {
-            socket.emit('userLogin');
+            socket.join('user');
+            socket.emit('userInterface');
+            if (liveStream) {
+                socket.emit('receiveStream', liveStream);
+            }
         } else {
             socket.emit('loginFailed');
         }
     });
 
-    // Démarrer le live
-    socket.on('startLive', () => {
-        liveActive = true;
-        io.emit('liveStarted');
+    // L'admin démarre la diffusion
+    socket.on('startLive', (stream) => {
+        liveStream = stream;
+        io.to('user').emit('receiveStream', liveStream);
     });
 
-    // Terminer le live
+    // Gérer la fin du live
     socket.on('endLive', () => {
-        liveActive = false;
+        liveStream = null;
         io.emit('liveEnded');
     });
 
-    // Demande d'accès d'un utilisateur
-    socket.on('joinRequest', (data) => {
-        io.to('admin').emit('newJoinRequest', { id: socket.id, type: data.type });
+    // Gestion des demandes des utilisateurs
+    socket.on('requestToJoin', (username, mode) => {
+        userRequests.push({ id: socket.id, username, mode });
+        io.to('admin').emit('newJoinRequest', userRequests);
     });
 
-    // Accepter ou rejeter la demande de l'utilisateur
-    socket.on('acceptUser', (userId) => {
-        io.to(userId).emit('joinAccepted');
+    // Acceptation de la demande par l'admin
+    socket.on('acceptRequest', (userId) => {
+        io.to(userId).emit('joinApproved');
     });
 
-    // Chat en direct
+    // Gestion du chat
     socket.on('sendMessage', (message) => {
         io.emit('receiveMessage', message);
     });
 
-    // Gérer la déconnexion de l'utilisateur
+    // Déconnexion
     socket.on('disconnect', () => {
-        console.log('Utilisateur déconnecté : ' + socket.id);
+        console.log(`Utilisateur déconnecté : ${socket.id}`);
+        userRequests = userRequests.filter(req => req.id !== socket.id);
+        io.to('admin').emit('newJoinRequest', userRequests);
     });
 });
+
 
 
 
