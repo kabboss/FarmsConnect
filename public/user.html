@@ -21,11 +21,7 @@
         const socket = io();
         let localStream;
 
-        // Recevoir le flux de l'admin
-        socket.on('requestAdminStream', async () => {
-            socket.emit('adminStreamRequest');
-        });
-
+        // Recevoir le flux de l'admin (vidéo uploadée ou flux en direct)
         socket.on('receiveAdminStream', (streamData) => {
             const video = document.getElementById('liveVideo');
             video.srcObject = new MediaStream(streamData);
@@ -67,7 +63,7 @@
             if (localStream) {
                 localStream.getTracks().forEach(track => track.stop());
             }
-            window.location.href = "Acceuill.html";
+            window.location.href = "Acceuil.html";
         }
     </script>
 </body>

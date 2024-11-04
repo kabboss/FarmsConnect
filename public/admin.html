@@ -7,8 +7,9 @@
 <body>
     <h1>Interface Admin</h1>
     <video id="adminVideo" autoplay muted></video>
-    <button onclick="startLive()">Démarrer le live</button>
-    <button onclick="endLive()">Terminer le live</button>
+    <input type="file" id="uploadVideo" accept="video/*">
+    <button onclick="uploadAndStreamVideo()">Uploader et Diffuser la Vidéo</button>
+    <button onclick="startLiveStream()">Démarrer le live avec la caméra</button>
     
     <h2>Demandes des Utilisateurs</h2>
     <div id="requests"></div>
@@ -23,8 +24,8 @@
         const socket = io();
         let localStream;
 
-        // Démarrer la diffusion avec caméra et micro
-        async function startLive() {
+        // Démarrer la diffusion depuis la caméra
+        async function startLiveStream() {
             try {
                 localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 document.getElementById('adminVideo').srcObject = localStream;
@@ -35,18 +36,22 @@
             }
         }
 
-        // Terminer la diffusion
-        function endLive() {
-            localStream.getTracks().forEach(track => track.stop());
-            socket.emit('endLive');
+        // Uploader et diffuser une vidéo
+        function uploadAndStreamVideo() {
+            const videoFile = document.getElementById('uploadVideo').files[0];
+            const videoElement = document.getElementById('adminVideo');
+            const videoUrl = URL.createObjectURL(videoFile);
+            videoElement.src = videoUrl;
+            videoElement.play();
+            socket.emit('adminStream', videoUrl);  // Envoyer l'URL de la vidéo uploadée
         }
 
-        // Accepter une demande
+        // Accepter une demande de rejoindre
         function acceptRequest(userId) {
             socket.emit('acceptRequest', userId);
         }
 
-        // Gérer les nouvelles demandes
+        // Afficher les demandes de rejoindre
         socket.on('newJoinRequest', (requests) => {
             const requestsDiv = document.getElementById('requests');
             requestsDiv.innerHTML = "";
@@ -61,7 +66,7 @@
             });
         });
 
-        // Recevoir la vidéo des utilisateurs
+        // Recevoir le flux des utilisateurs et l'afficher
         socket.on('receiveUserStream', ({ userId, streamData }) => {
             const userVideo = document.createElement('video');
             userVideo.srcObject = new MediaStream(streamData);
