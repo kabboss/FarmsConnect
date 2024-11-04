@@ -1,25 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Interactive Training Platform</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation</title>
+    <link rel="stylesheet" href="Formation.css">
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Formation Interactive</h1>
-    </header>
-    <section id="content-list">
-        <h2>Contenus Disponibles</h2>
-        <div id="videos"></div>
-    </section>
-    <section id="comments">
-        <h2>Commentaires</h2>
-        <textarea id="comment-input" placeholder="Ajouter un commentaire..."></textarea>
-        <button onclick="addComment()">Publier</button>
-        <div id="comment-list"></div>
-    </section>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="main.js"></script>
+    <div class="container">
+        <h1>Plateforme de Formation</h1>
+
+        <!-- Section d'upload pour l'administrateur -->
+        <section id="admin-upload-section">
+            <h2>Uploader un Contenu de Formation</h2>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="text" id="securityCode" placeholder="Code de sécurité" required>
+                <input type="text" id="title" placeholder="Titre du contenu" required>
+                <textarea id="description" placeholder="Description du contenu"></textarea>
+                <select id="category">
+                    <option value="Debutant">Débutant</option>
+                    <option value="Avance">Avancé</option>
+                    <option value="Expert">Expert</option>
+                </select>
+                <select id="type">
+                    <option value="video">Vidéo</option>
+                    <option value="audio">Audio</option>
+                </select>
+                <input type="file" id="file" required>
+                <button type="submit">Uploader</button>
+            </form>
+            <p id="uploadMessage"></p>
+        </section>
+
+        <!-- Section pour afficher les contenus -->
+        <section id="content-section">
+            <h2>Contenus Disponibles</h2>
+            <div id="content-list"></div>
+        </section>
+
+        <!-- Notifications pour les nouveaux contenus -->
+        <div id="notifications"></div>
+    </div>
+
+    <!-- Template de commentaire pour chaque contenu -->
+    <template id="comment-template">
+        <div class="comment">
+            <p class="comment-text"></p>
+            <p class="comment-user"></p>
+            <button class="like-comment-btn">❤️ <span class="likes-count">0</span></button>
+        </div>
+    </template>
+    <script src="Formation.js"></script>
+
+    
 </body>
 </html>
