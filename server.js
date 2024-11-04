@@ -253,46 +253,52 @@ app.post('/api/users', (req, res) => {
 
 //live 
 
-app.get('/', (req, res) => {
-    res.send('Bienvenue sur FarmsConnect Live');
-});
+let liveStatus = false;
 
-let isLive = false;
 
+// Configuration des événements Socket.IO
 io.on('connection', (socket) => {
-    console.log(`Utilisateur connecté : ${socket.id}`);
-    
-    // Uniquement FarmsConnect peut démarrer un live
-    socket.on('startLive', (data) => {
-        if (data.user === 'FarmsConnect') {
-            isLive = true;
-            io.emit('liveStarted', { message: 'La formation en direct a commencé !' });
-            console.log('Live démarré par FarmsConnect');
+    console.log('Nouvel utilisateur connecté');
+
+    // Démarrage du live - Accessible uniquement par FarmsConnect
+    socket.on('startLive', () => {
+        if (!liveStatus) {
+            liveStatus = true;
+            io.emit('liveStarted');
+            console.log('Le live a commencé');
         }
     });
 
-    // Gestion des connexions utilisateurs
+    // Rejoindre le live
     socket.on('joinLive', () => {
-        if (isLive) {
-            socket.emit('joinSuccess', { message: 'Vous avez rejoint le live !' });
+        if (liveStatus) {
+            socket.emit('joinSuccess', 'Bienvenue au live.');
         } else {
-            socket.emit('joinFailure', { message: 'Aucun live n\'est actuellement en cours.' });
+            socket.emit('joinFailure', 'Le live n’est pas disponible.');
         }
     });
 
-    // Fin du live
-    socket.on('endLive', (data) => {
-        if (data.user === 'FarmsConnect') {
-            isLive = false;
-            io.emit('liveEnded', { message: 'La formation en direct est terminée.' });
-            console.log('Live terminé par FarmsConnect');
+    // Terminer le live - Accessible uniquement par FarmsConnect
+    socket.on('endLive', () => {
+        if (liveStatus) {
+            liveStatus = false;
+            io.emit('liveEnded');
+            console.log('Le live est terminé');
         }
     });
 
+    // Gestion des messages de chat
+    socket.on('sendMessage', (message) => {
+        io.emit('receiveMessage', message);
+    });
+
+    // Déconnexion
     socket.on('disconnect', () => {
-        console.log(`Utilisateur déconnecté : ${socket.id}`);
+        console.log('Utilisateur déconnecté');
     });
 });
+
+
 
 
 
