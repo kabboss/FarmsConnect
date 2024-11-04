@@ -247,6 +247,55 @@ app.post('/api/users', (req, res) => {
         .catch(err => res.status(400).json(err));
 });
 
+
+
+
+
+//live 
+
+app.get('/', (req, res) => {
+    res.send('Bienvenue sur FarmsConnect Live');
+});
+
+let isLive = false;
+
+io.on('connection', (socket) => {
+    console.log(`Utilisateur connecté : ${socket.id}`);
+    
+    // Uniquement FarmsConnect peut démarrer un live
+    socket.on('startLive', (data) => {
+        if (data.user === 'FarmsConnect') {
+            isLive = true;
+            io.emit('liveStarted', { message: 'La formation en direct a commencé !' });
+            console.log('Live démarré par FarmsConnect');
+        }
+    });
+
+    // Gestion des connexions utilisateurs
+    socket.on('joinLive', () => {
+        if (isLive) {
+            socket.emit('joinSuccess', { message: 'Vous avez rejoint le live !' });
+        } else {
+            socket.emit('joinFailure', { message: 'Aucun live n\'est actuellement en cours.' });
+        }
+    });
+
+    // Fin du live
+    socket.on('endLive', (data) => {
+        if (data.user === 'FarmsConnect') {
+            isLive = false;
+            io.emit('liveEnded', { message: 'La formation en direct est terminée.' });
+            console.log('Live terminé par FarmsConnect');
+        }
+    });
+
+    socket.on('disconnect', () => {
+        console.log(`Utilisateur déconnecté : ${socket.id}`);
+    });
+});
+
+
+
 // Configuration du serveur
 const PORT = process.env.PORT || 3002;
 server.listen(PORT, () => {
@@ -260,3 +309,4 @@ io.on('connection', (socket) => {
         console.log('Utilisateur déconnecté');
     });
 });
+
