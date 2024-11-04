@@ -3,89 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin - Diffusion en Direct</title>
-    <style>
-        video { width: 100%; max-width: 600px; margin-bottom: 20px; }
-    </style>
+    <style> video { width: 100%; max-width: 600px; margin-bottom: 20px; } </style>
 </head>
 <body>
     <h1>Interface Admin</h1>
     <video id="adminVideo" autoplay muted></video>
-    <input type="file" id="uploadVideo" accept="video/*">
-    <button onclick="uploadAndStreamVideo()">Uploader et Diffuser la Vidéo</button>
-    <button onclick="startLiveStream()">Démarrer le live avec la caméra</button>
+    <button onclick="startLiveStream()">Démarrer le live</button>
     <button onclick="endLive()">Terminer le live</button>
-
-    <h2>Demandes des Utilisateurs</h2>
-    <div id="requests"></div>
-
-    <h2>Chat</h2>
-    <input type="text" id="message" placeholder="Tapez votre message">
-    <button onclick="sendMessage()">Envoyer</button>
-    <div id="chat"></div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
         let localStream;
+        let peerConnection;
+        const configuration = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
 
-        // Démarrer la diffusion depuis la caméra
         async function startLiveStream() {
             try {
+                // Obtenir le flux de la caméra
                 localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 document.getElementById('adminVideo').srcObject = localStream;
-                socket.emit('adminStream', localStream);
+
+                // Créer une nouvelle connexion
+                peerConnection = new RTCPeerConnection(configuration);
+
+                // Ajouter les pistes du flux local à la connexion
+                localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+                // Gestion des candidats ICE
+                peerConnection.onicecandidate = (event) => {
+                    if (event.candidate) {
+                        socket.emit('candidate', event.candidate);
+                    }
+                };
+
+                // Créer et envoyer une offre
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+                socket.emit('offer', offer);
+
             } catch (error) {
-                console.error("Erreur d'accès à la caméra ou au micro :", error);
+                console.error("Erreur de démarrage du flux :", error);
             }
         }
 
-        // Uploader et diffuser une vidéo
-        function uploadAndStreamVideo() {
-            const videoFile = document.getElementById('uploadVideo').files[0];
-            if (videoFile) {
-                const videoUrl = URL.createObjectURL(videoFile);
-                document.getElementById('adminVideo').src = videoUrl;
-                socket.emit('adminStream', videoUrl);
-            } else {
-                alert("Veuillez sélectionner une vidéo à uploader.");
-            }
-        }
-
-        // Accepter une demande de rejoindre
-        function acceptRequest(userId) {
-            socket.emit('acceptRequest', userId);
-        }
-
-        // Afficher les demandes de rejoindre
-        socket.on('newJoinRequest', (requests) => {
-            const requestsDiv = document.getElementById('requests');
-            requestsDiv.innerHTML = "";
-            requests.forEach(req => {
-                const requestEl = document.createElement('div');
-                requestEl.innerHTML = `${req.username} demande à rejoindre en ${req.mode}`;
-                const acceptBtn = document.createElement('button');
-                acceptBtn.textContent = "Accepter";
-                acceptBtn.onclick = () => acceptRequest(req.id);
-                requestEl.appendChild(acceptBtn);
-                requestsDiv.appendChild(requestEl);
-            });
+        // Recevoir la réponse de l'utilisateur
+        socket.on('answer', async (answer) => {
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
         });
 
-        // Chat
-        function sendMessage() {
-            const message = document.getElementById('message').value;
-            if (message.trim() !== "") {
-                socket.emit('sendMessage', message);
-                document.getElementById('message').value = "";
-            }
-        }
-
-        socket.on('receiveMessage', (message) => {
-            const chatDiv = document.getElementById('chat');
-            const messageEl = document.createElement('p');
-            messageEl.textContent = message;
-            chatDiv.appendChild(messageEl);
+        // Recevoir les candidats ICE de l'utilisateur
+        socket.on('candidate', (candidate) => {
+            peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
         });
+
+        function endLive() {
+            if (peerConnection) {
+                peerConnection.close();
+            }
+            socket.emit('endLive');
+        }
     </script>
 </body>
 </html>

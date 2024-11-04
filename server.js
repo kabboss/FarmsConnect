@@ -281,6 +281,25 @@ io.on('connection', (socket) => {
         }
     });
 
+
+    // Gestion des messages de signalisation WebRTC
+    socket.on('offer', (offer) => {
+        io.to(adminSocketId).emit('offer', offer);
+    });
+
+    socket.on('answer', (answer) => {
+        io.to(adminSocketId).emit('answer', answer);
+    });
+
+    socket.on('candidate', (candidate) => {
+        socket.to(adminSocketId).emit('candidate', candidate);
+    });
+
+    // Déconnexion
+    socket.on('disconnect', () => {
+        console.log(`Déconnexion : ${socket.id}`);
+    });
+
     // L'admin envoie un flux de caméra ou une vidéo uploadée
     socket.on('adminStream', (streamData) => {
         io.to('user').emit('receiveAdminStream', streamData);  // Diffuser aux utilisateurs
@@ -301,6 +320,8 @@ io.on('connection', (socket) => {
     socket.on('userStream', (tracks) => {
         io.to(adminSocketId).emit('receiveUserStream', { userId: socket.id, streamData: tracks });
     });
+
+    
 
     // Gestion du chat
     socket.on('sendMessage', (message) => {
