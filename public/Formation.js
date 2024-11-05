@@ -3,21 +3,17 @@ let peerConnection;
 const video = document.getElementById('liveVideo');
 const configuration = { 
     iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' },
-        { urls: 'stun:stun2.l.google.com:19302' },
-        { urls: 'stun:stun3.l.google.com:19302' },
-        { urls: 'stun:stun4.l.google.com:19302' }
+        { urls: 'stun:stun.l.google.com:19302' }
     ]
 };
 
-// Authentification de l'administrateur
+// Admin : Démarrer le stream
 document.getElementById('startAdminStream').onclick = async () => {
     const password = document.getElementById('adminPassword').value;
     socket.emit('adminStartStream', password);
 };
 
-// Réponse de l'authentification de l'admin
+// Authentification Admin
 socket.on('adminAuthenticated', (authenticated) => {
     if (authenticated) {
         startStreaming();
@@ -29,7 +25,7 @@ socket.on('adminAuthenticated', (authenticated) => {
     }
 });
 
-// Démarrer le streaming pour l'administrateur
+// Fonction de streaming de l'admin
 async function startStreaming() {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -41,21 +37,20 @@ async function startStreaming() {
         const offer = await peerConnection.createOffer();
         await peerConnection.setLocalDescription(offer);
 
-        console.log("Emettre l'offre vers les utilisateurs");
         socket.emit('startStream', offer);
 
+        // Recevoir l'answer de l'utilisateur
         socket.on('answer', async (answer) => {
-            console.log("Réponse reçue de l'utilisateur");
             await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
         });
 
     } catch (error) {
-        console.error('Erreur lors du démarrage du streaming:', error);
-        alert("Erreur lors de l'accès à la caméra ou au microphone.");
+        console.error('Erreur de streaming:', error);
+        alert("Erreur lors de l'accès à la caméra/microphone.");
     }
 }
 
-// Arrêter le streaming pour l'administrateur
+// Arrêter le stream côté admin
 document.getElementById('stopAdminStream').onclick = () => {
     socket.emit('stopStream');
     stopStreaming();
@@ -70,24 +65,13 @@ function stopStreaming() {
     document.getElementById('status').textContent = 'Live terminé';
 }
 
-// Recevoir et afficher le flux pour les spectateurs
+// Utilisateur : Réception du stream
 socket.on('offer', async (offer) => {
     try {
-        console.log("Offre reçue, préparation de la connexion pour afficher le live");
-
         peerConnection = new RTCPeerConnection(configuration);
 
         peerConnection.ontrack = (event) => {
-            console.log("Track reçu, configuration du flux vidéo");
             video.srcObject = event.streams[0];
-        };
-
-        peerConnection.oniceconnectionstatechange = () => {
-            console.log("État de la connexion ICE:", peerConnection.iceConnectionState);
-            if (peerConnection.iceConnectionState === "failed" || peerConnection.iceConnectionState === "disconnected") {
-                console.warn("Problème de connexion ICE, re-connexion en cours...");
-                peerConnection.restartIce();
-            }
         };
 
         await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
@@ -98,14 +82,13 @@ socket.on('offer', async (offer) => {
 
     } catch (error) {
         console.error('Erreur de connexion au flux:', error);
-        alert("Impossible de se connecter au flux.");
     }
 });
 
-// Gérer l'état du live
+// Mise à jour de l'état de streaming
 socket.on('streamStatus', (status) => {
     document.getElementById('status').textContent = status ? 'Live en cours' : 'Le live est terminé';
     if (!status && video.srcObject) {
-        video.srcObject = null;  // Stoppe la vidéo si le live est terminé
+        video.srcObject = null;
     }
 });

@@ -277,9 +277,6 @@ app.get('/Visiteur', (req, res) => {
 
 // Formation 
 
-const ADMIN_PASSWORD = 'votreMotDePasseAdmin';
-let isAdminStreaming = false;
-let adminSocketId = null;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -287,50 +284,49 @@ app.get('/formation', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Formation.html'));
 });
 
+let isStreaming = false;
+
 io.on('connection', (socket) => {
-    console.log('Nouvelle connexion:', socket.id);
+    console.log('Client connecté');
 
-    socket.emit('streamStatus', isAdminStreaming);
-
+    // Authentification de l'admin
     socket.on('adminStartStream', (password) => {
-        if (password === ADMIN_PASSWORD) {
-            isAdminStreaming = true;
-            adminSocketId = socket.id;
+        if (password === "2323") {
             socket.emit('adminAuthenticated', true);
+            isStreaming = true;
             io.emit('streamStatus', true);
         } else {
             socket.emit('adminAuthenticated', false);
         }
     });
 
+    // Démarrage du live
     socket.on('startStream', (offer) => {
-        if (socket.id === adminSocketId) {
+        if (isStreaming) {
             socket.broadcast.emit('offer', offer);
         }
     });
 
+    // Réception de l'answer de l'utilisateur
     socket.on('answer', (answer) => {
-        if (adminSocketId) {
-            io.to(adminSocketId).emit('answer', answer);
-        }
+        socket.broadcast.emit('answer', answer);
     });
 
+    // Arrêter le streaming
     socket.on('stopStream', () => {
-        if (socket.id === adminSocketId) {
-            isAdminStreaming = false;
-            adminSocketId = null;
-            io.emit('streamStatus', false);
-        }
+        isStreaming = false;
+        io.emit('streamStatus', false);
     });
 
     socket.on('disconnect', () => {
-        if (socket.id === adminSocketId) {
-            isAdminStreaming = false;
-            adminSocketId = null;
+        console.log('Client déconnecté');
+        if (isStreaming && socket.admin) {
             io.emit('streamStatus', false);
         }
     });
 });
+
+
 
 
 
