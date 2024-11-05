@@ -278,6 +278,12 @@ app.get('/Visiteur', (req, res) => {
 // Formation 
 
 const ADMIN_PASSWORD = 'ka23bo23re23'; // Mot de passe de l’administrateur
+
+let isAdminStreaming = false;  // Indique si l'admin est en streaming
+let currentStream = null;      // Garde le flux vidéo actuel
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.get('/formation', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Formation.html'));
 });
@@ -287,18 +293,36 @@ io.on('connection', (socket) => {
 
     // Administrateur démarre le flux vidéo
     socket.on('adminStartStream', (password) => {
-        if (password === ADMIN_PASSWORD) {
+        if (password === ADMIN_PASSWORD && !isAdminStreaming) {
             isAdminStreaming = true;
-            socket.emit('adminAuthenticated', true); // Confirme l'authentification admin
+            socket.emit('adminAuthenticated', true);  // Confirme l'authentification admin
+            socket.broadcast.emit('streamStatus', true);  // Informe les autres utilisateurs que le live est actif
         } else {
             socket.emit('adminAuthenticated', false); // Échec de l'authentification
         }
     });
 
-    // Diffuse le flux vidéo aux utilisateurs si l’administrateur est connecté
+    // Administrateur diffuse le flux vidéo
     socket.on('startStream', (track) => {
         if (isAdminStreaming) {
-            socket.broadcast.emit('stream', track);
+            currentStream = track;
+            socket.broadcast.emit('stream', currentStream);  // Diffuse le flux aux utilisateurs
+        }
+    });
+
+    // Envoi le flux actuel à tout nouvel utilisateur se connectant pendant le live
+    socket.on('requestStream', () => {
+        if (isAdminStreaming && currentStream) {
+            socket.emit('stream', currentStream);  // Envoie le flux aux utilisateurs tardifs
+        }
+    });
+
+    // Administrateur arrête le flux vidéo
+    socket.on('stopStream', () => {
+        if (isAdminStreaming) {
+            isAdminStreaming = false;
+            currentStream = null;
+            io.emit('streamStatus', false);  // Informe les utilisateurs que le live est terminé
         }
     });
 
@@ -307,29 +331,10 @@ io.on('connection', (socket) => {
         io.emit('chatMessage', msg);
     });
 
-    // Questions en direct
-    socket.on('question', (question) => {
-        io.emit('question', question);
-    });
-
-    // Réactions
-    socket.on('reaction', (reaction) => {
-        io.emit('reaction', reaction);
-    });
-
-    // Arrêt du flux si l'admin déconnecte
-    socket.on('stopStream', () => {
-        if (isAdminStreaming) {
-            isAdminStreaming = false;
-            io.emit('streamStopped');
-        }
-    });
-
     socket.on('disconnect', () => {
         console.log('Client déconnecté');
     });
 });
-
 
 
 

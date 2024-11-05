@@ -57,9 +57,12 @@ button {
     color: white;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
 }
 
 button:hover {
     background-color: #218838;
+}
+
+#adminSection {
+    margin-bottom: 20px;
 }

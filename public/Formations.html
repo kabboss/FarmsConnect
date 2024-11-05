@@ -10,11 +10,12 @@
     <div id="container">
         <h1>Live Formation</h1>
 
-        <!-- Section pour l’administrateur -->
+        <!-- Section pour l’administrateur (cachée si l'admin est authentifié) -->
         <div id="adminSection">
             <h2>Admin - Démarrer le Live</h2>
             <input type="password" id="adminPassword" placeholder="Mot de passe admin">
             <button id="startAdminStream">Démarrer le Live</button>
+            <button id="stopAdminStream" style="display: none;">Arrêter le Live</button>
         </div>
 
         <!-- Section vidéo -->

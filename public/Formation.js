@@ -11,6 +11,8 @@ document.getElementById('startAdminStream').onclick = () => {
 socket.on('adminAuthenticated', (authenticated) => {
     if (authenticated) {
         startStreaming();
+        document.getElementById('adminSection').style.display = 'none';
+        document.getElementById('stopAdminStream').style.display = 'block';
         document.getElementById('status').textContent = 'Live démarré';
     } else {
         alert('Mot de passe incorrect');
@@ -33,12 +35,31 @@ function startStreaming() {
         });
 }
 
+// Arrêter le streaming
+document.getElementById('stopAdminStream').onclick = () => {
+    socket.emit('stopStream');
+    stopStreaming();
+};
+
+function stopStreaming() {
+    const video = document.getElementById('liveVideo');
+    video.srcObject = null;
+    document.getElementById('status').textContent = 'Live terminé';
+}
+
 // Recevoir et afficher le flux vidéo pour les utilisateurs
 socket.on('stream', (track) => {
-    if (!isStreaming) {
-        const video = document.getElementById('liveVideo');
-        video.srcObject = new MediaStream([track]);
-        document.getElementById('status').textContent = 'Live en cours';
+    const video = document.getElementById('liveVideo');
+    video.srcObject = new MediaStream([track]);
+    document.getElementById('status').textContent = 'Live en cours';
+});
+
+// Gestion de l'état du live pour les utilisateurs
+socket.on('streamStatus', (status) => {
+    if (!status) {
+        document.getElementById('status').textContent = 'Le live est terminé.';
+    } else {
+        socket.emit('requestStream');  // Demande le flux en cas de reconnection
     }
 });
 
