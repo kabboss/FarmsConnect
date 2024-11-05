@@ -277,6 +277,7 @@ app.get('/Visiteur', (req, res) => {
 
 // Formation 
 
+const ADMIN_PASSWORD = '2323';
 let isAdminStreaming = false; // Indique si l’admin est en train de diffuser
 let adminSocketId = null; // ID du socket de l'admin pour le streaming
 
