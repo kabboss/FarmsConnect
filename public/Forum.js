@@ -177,7 +177,7 @@ button:hover {
 
     // Charger les messages depuis le backend
     function loadMessages() {
-        fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/message')
+        fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/messages')
             .then(response => response.json())
             .then(data => {
                 messageList.innerHTML = "";
