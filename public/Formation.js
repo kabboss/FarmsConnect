@@ -1,15 +1,16 @@
 const socket = io();
-let isStreaming = false;
+let isAdmin = false; // Indique si l'utilisateur est l'admin
 
-// Authentification administrateur
+// Authentification de l'administrateur
 document.getElementById('startAdminStream').onclick = () => {
     const password = document.getElementById('adminPassword').value;
     socket.emit('adminStartStream', password);
 };
 
-// Réponse d'authentification de l'administrateur
+// Réponse de l'authentification administrateur
 socket.on('adminAuthenticated', (authenticated) => {
     if (authenticated) {
+        isAdmin = true;
         startStreaming();
         document.getElementById('adminSection').style.display = 'none';
         document.getElementById('stopAdminStream').style.display = 'block';
@@ -19,23 +20,22 @@ socket.on('adminAuthenticated', (authenticated) => {
     }
 });
 
-// Démarrer le streaming en tant qu’administrateur
+// Démarrer le streaming pour l'admin
 function startStreaming() {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
         .then((stream) => {
             const video = document.getElementById('liveVideo');
             video.srcObject = stream;
 
-            const track = stream.getVideoTracks()[0];
-            socket.emit('startStream', track);
-            isStreaming = true;
+            const [videoTrack] = stream.getVideoTracks();
+            socket.emit('startStream', videoTrack); // Envoyer le flux au serveur
         })
         .catch((error) => {
             console.error('Erreur lors du démarrage du flux:', error);
         });
 }
 
-// Arrêter le streaming
+// Arrêter le live pour l'admin
 document.getElementById('stopAdminStream').onclick = () => {
     socket.emit('stopStream');
     stopStreaming();
@@ -48,9 +48,9 @@ function stopStreaming() {
 }
 
 // Recevoir et afficher le flux vidéo pour les utilisateurs
-socket.on('stream', (track) => {
+socket.on('stream', (stream) => {
     const video = document.getElementById('liveVideo');
-    video.srcObject = new MediaStream([track]);
+    video.srcObject = new MediaStream([stream]);
     document.getElementById('status').textContent = 'Live en cours';
 });
 
@@ -58,8 +58,6 @@ socket.on('stream', (track) => {
 socket.on('streamStatus', (status) => {
     if (!status) {
         document.getElementById('status').textContent = 'Le live est terminé.';
-    } else {
-        socket.emit('requestStream');  // Demande le flux en cas de reconnection
     }
 });
 

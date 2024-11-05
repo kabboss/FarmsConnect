@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Formation - FarmsConnect</title>
-    <link rel="stylesheet" href="Formation.css">
+    <title>Live Formation</title>
 </head>
 <body>
     <div id="container">
         <h1>Live Formation</h1>
 
-        <!-- Section pour l’administrateur (cachée si l'admin est authentifié) -->
+        <!-- Section pour l’administrateur (cachée après authentification) -->
         <div id="adminSection">
-            <h2>Admin - Démarrer le Live</h2>
             <input type="password" id="adminPassword" placeholder="Mot de passe admin">
             <button id="startAdminStream">Démarrer le Live</button>
             <button id="stopAdminStream" style="display: none;">Arrêter le Live</button>
@@ -20,13 +18,12 @@
 
         <!-- Section vidéo -->
         <div id="videoSection">
-            <video id="liveVideo" autoplay playsinline></video>
-            <p id="status">En attente du démarrage du live...</p>
+            <video id="liveVideo" autoplay playsinline controls></video>
+            <p id="status">En attente du live...</p>
         </div>
 
         <!-- Chat en direct -->
         <div id="chatSection">
-            <h2>Chat en Direct</h2>
             <div id="chatMessages"></div>
             <input type="text" id="chatInput" placeholder="Tapez votre message">
             <button id="sendChat">Envoyer</button>
