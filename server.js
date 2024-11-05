@@ -14,7 +14,7 @@ const fs = require('fs');
 
 // Modèles
 const User = require('./models/User');
-const Message = require('./models/Message');
+const Message = require('./models/message');
 const Annonce = require('./models/Annonce');
 
 // Créer une instance de l'application Express et du serveur HTTP
