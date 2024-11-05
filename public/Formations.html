@@ -3,27 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page de Formation - FarmsConnect</title>
     <link rel="stylesheet" href="Formation.css">
+    <title>Formation - FarmsConnect</title>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Gestion des Vidéos de Formation</h1>
-        </header>
-        <main>
-            <section id="uploadSection">
-                <h2>Importer une Vidéo</h2>
-                <input type="file" id="videoUpload" accept="video/*">
-                <input type="password" id="accessCode" placeholder="Entrez le code d'accès">
-                <button id="uploadButton">Importer</button>
-            </section>
-            <section id="videoListSection">
-                <h2>Vidéos Importées</h2>
-                <ul id="videoList"></ul>
-            </section>
-        </main>
+        <h1>Formations Vidéo</h1>
+        <div class="upload-section">
+            <input type="password" id="adminCode" placeholder="Code d'accès">
+            <input type="file" id="videoFile">
+            <button onclick="uploadVideo()">Uploader la Vidéo</button>
+        </div>
+        <div id="video-list"></div>
     </div>
+
     <script src="Formation.js"></script>
 </body>
 </html>

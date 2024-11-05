@@ -1,72 +1,54 @@
-document.getElementById('uploadButton').addEventListener('click', async () => {
-    const fileInput = document.getElementById('videoUpload');
-    const accessCodeInput = document.getElementById('accessCode');
-    const accessCode = accessCodeInput.value.trim();
+const baseURL = 'https://farmsconnect-b084ddb02391.herokuapp.com';
 
-    if (accessCode !== 'ka23bo23re23') {
-        alert("Code d'accès incorrect !");
-        return;
-    }
-
-    if (fileInput.files.length === 0) {
-        alert("Veuillez sélectionner un fichier vidéo !");
-        return;
-    }
-
-    const file = fileInput.files[0];
+async function uploadVideo() {
+    const fileInput = document.getElementById('videoFile');
+    const adminCode = document.getElementById('adminCode').value;
     const formData = new FormData();
-    formData.append('video', file);
+    formData.append('file', fileInput.files[0]);
+    formData.append('code', adminCode);
 
-    try {
-        const response = await fetch('/upload', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (response.ok) {
-            loadVideoList();
-        } else {
-            alert("Échec de l'importation de la vidéo !");
-        }
-    } catch (error) {
-        console.error('Erreur lors de l\'importation de la vidéo :', error);
-    }
-});
-
-async function loadVideoList() {
-    const response = await fetch('/videos');
-    const videos = await response.json();
-    const videoList = document.getElementById('videoList');
-    videoList.innerHTML = '';
-
-    videos.forEach(video => {
-        const li = document.createElement('li');
-        li.className = 'videoItem';
-        li.textContent = video.filename;
-        const deleteButton = document.createElement('button');
-        deleteButton.className = 'deleteButton';
-        deleteButton.textContent = 'Supprimer';
-        deleteButton.onclick = () => deleteVideo(video.filename);
-        li.appendChild(deleteButton);
-        videoList.appendChild(li);
+    const response = await fetch(`${baseURL}/upload`, {
+        method: 'POST',
+        body: formData
     });
-}
-
-async function deleteVideo(filename) {
-    const accessCode = prompt("Entrez le code d'accès pour supprimer la vidéo :");
-    if (accessCode !== 'ka23bo23re23') {
-        alert("Code d'accès incorrect !");
-        return;
-    }
-
-    const response = await fetch(`/delete/${encodeURIComponent(filename)}`, { method: 'DELETE' });
 
     if (response.ok) {
-        loadVideoList();
+        alert('Vidéo téléversée avec succès');
+        loadVideos();
     } else {
-        alert("Échec de la suppression de la vidéo !");
+        alert('Échec de téléversement');
     }
 }
 
-// Charger la liste des vidéos au démarrage
-loadVideoList();
+async function loadVideos() {
+    const response = await fetch(`${baseURL}/videos`);
+    const videos = await response.json();
+    const videoList = document.getElementById('video-list');
+    videoList.innerHTML = videos.map(video => `
+        <div class="video-item">
+            <video controls src="${baseURL}/videos/${video._id}"></video>
+            <button onclick="deleteVideo('${video._id}')">Supprimer</button>
+        </div>
+    `).join('');
+}
+
+async function deleteVideo(id) {
+    const adminCode = prompt("Entrez le code d'accès pour supprimer la vidéo");
+    const response = await fetch(`${baseURL}/videos/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ code: adminCode })
+    });
+
+    if (response.ok) {
+        alert('Vidéo supprimée avec succès');
+        loadVideos();
+    } else {
+        alert('Échec de la suppression');
+    }
+}
+
+// Charger les vidéos au démarrage
+loadVideos();

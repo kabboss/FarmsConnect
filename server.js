@@ -10,62 +10,80 @@ const http = require('http');
 const socketIo = require('socket.io');
 const multer = require('multer');
 const path = require('path');
-
+const Grid = require('gridfs-stream');
+const { GridFsStorage } = require('multer-gridfs-storage');
 
 // Modèles
 const User = require('./models/User');
-const Message = require('./models/message');
-const Annonce = require('./models/Annonce'); // Assurez-vous que le chemin du modèle est correct
+const Message = require('./models/Message');
+const Annonce = require('./models/Annonce');
 
-// Créer une instance de l'application Express
+// Créer une instance de l'application Express et du serveur HTTP
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-// Middleware pour augmenter la limite de taille des requêtes JSON
-app.use(express.json({ limit: '20mb' })); // Vous pouvez ajuster cette valeur
-
-// Middleware pour analyser le corps des requêtes JSON
-app.use(express.json());
+// Middleware pour gérer les fichiers JSON et statiques
+app.use(express.json({ limit: '20mb' }));
 app.use(bodyParser.json());
-
-// Middleware pour servir des fichiers statiques
 app.use(express.static('public'));
 
-// Middleware CORS
+// Configuration CORS pour permettre les requêtes provenant de l'origine spécifiée
 app.use(cors({
-    origin: 'https://farmsconnect-b084ddb02391.herokuapp.com', // ou '*' pour autoriser toutes les origines
+    origin: 'https://farmsconnect-b084ddb02391.herokuapp.com',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 
 // Connexion à MongoDB
-mongoose.connect('mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority', {})
+const mongoURI = 'mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority';
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connecté à MongoDB...'))
     .catch(err => console.error('Erreur de connexion à MongoDB:', err));
 
-// Configurer le transporteur Nodemailer
+// Initialisation de GridFS pour stocker les fichiers de formation
+let gfs;
+const conn = mongoose.connection;
+conn.once('open', () => {
+    gfs = Grid(conn.db, mongoose.mongo);
+    gfs.collection('uploads');
+});
+
+// Configuration du stockage GridFS avec multer pour le téléversement de fichiers
+const storage = new GridFsStorage({
+    url: mongoURI,
+    options: { useNewUrlParser: true, useUnifiedTopology: true },
+    file: (req, file) => ({
+        filename: `file_${Date.now()}${path.extname(file.originalname)}`,
+        bucketName: 'uploads'
+    })
+});
+const upload = multer({ storage });
+
+// Configuration du transporteur Nodemailer
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'kaboreabwa2020@gmail.com',
-        pass: 'swbo vejr klic otpu' // Remplacez par votre mot de passe ou mot de passe d'application
+        pass: 'swbo vejr klic otpu'
     }
 });
 
+// Code d'accès admin pour les téléversements de vidéos
+const adminCode = "ka23bo23re23";
 
-// Routes
+// Routes d'authentification
 
-// Route pour s'inscrire (signup)
+// Route pour l'inscription
 app.post('/api/signup', async (req, res) => {
     const { username, email, contact, password, userType } = req.body;
     try {
         const existingUser = await User.findOne({ username });
-        if (existingUser) {
-            return res.status(400).send('Cet utilisateur existe déjà.');
-        }
+        if (existingUser) return res.status(400).send('Cet utilisateur existe déjà.');
+        
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({ username, email, contact, password: hashedPassword, userType });
         await newUser.save();
+        
         res.status(201).send('Utilisateur créé avec succès !');
     } catch (error) {
         console.error('Erreur lors de l’inscription :', error);
@@ -73,25 +91,19 @@ app.post('/api/signup', async (req, res) => {
     }
 });
 
-// Route pour se connecter (login)
+// Route pour la connexion
 app.post('/api/login', async (req, res) => {
     const { username, email, contact, password } = req.body;
     try {
-        if (!username || !email || !contact || !password) {
-            return res.status(400).send('Veuillez fournir le nom d’utilisateur, l\'email, le contact et le mot de passe.');
-        }
+        if (!username || !email || !contact || !password) return res.status(400).send('Veuillez fournir tous les champs.');
+        
         const user = await User.findOne({ username });
-        if (!user) {
-            return res.status(400).send('Nom d’utilisateur incorrect.');
-        }
-        if (user.email !== email || user.contact !== contact) {
-            return res.status(400).send('Email ou contact incorrect.');
-        }
+        if (!user || user.email !== email || user.contact !== contact) return res.status(400).send('Informations incorrectes.');
+        
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).send('Mot de passe incorrect.');
-        }
-        const token = jwt.sign({ userId: user._id }, 'ka23bo23re23'); // Remplacez par une vraie clé secrète
+        if (!isMatch) return res.status(400).send('Mot de passe incorrect.');
+        
+        const token = jwt.sign({ userId: user._id }, 'ka23bo23re23');
         res.status(200).json({ username: user.username, email: user.email, contact: user.contact, token, message: 'Connexion réussie !' });
     } catch (error) {
         console.error('Erreur lors de la connexion :', error);
@@ -99,37 +111,27 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// Route pour passer une commande et envoyer l'email
+// Route pour passer une commande et envoyer l'email de confirmation
 app.post('/api/order', async (req, res) => {
-    console.log('Données reçues :', req.body);
     const { username, email, contact, price, quantity, weight, Produit: nomproduit } = req.body;
-
-    if (!username || !nomproduit || !email || !contact || !price || !quantity || !weight) {
-        console.error('Informations manquantes dans la requête :', req.body);
-        return res.status(400).send('Veuillez fournir toutes les informations nécessaires : username, nom du produit, email, contact, prix, quantité et poids.');
-    }
-
     try {
         const mailOptions = {
             from: 'kaboreabwa2020@gmail.com',
             to: email,
             subject: 'Confirmation de commande',
-            text: `Merci, ${username}, pour votre commande !\n\nVoici les détails :\n- Produit : ${nomproduit}\n- Prix total : ${price} FCFA\n- Quantité : ${quantity}\n- Poids total : ${weight} kg\n\nNous vous contacterons au numéro ${contact} pour valider la commande.\n\nNB : Les animaux subiront un contrôle de santé avec l'un de nos vétérinaires, et vous serez livré dans un délai de 24 heures maximum. Le paiement se fera à la livraison.`
+            text: `Merci, ${username}, pour votre commande ! Détails :\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n\nNous vous contacterons au ${contact} pour valider la commande.`
         };
-
         transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error('Erreur lors de l\'envoi de l\'e-mail :', error);
-                return res.status(500).send('Erreur lors de l\'envoi de l\'e-mail : ' + error.message);
-            }
-            console.log('E-mail envoyé : ' + info.response);
+            if (error) return res.status(500).send('Erreur lors de l\'envoi de l\'e-mail : ' + error.message);
             res.status(200).send('Commande passée avec succès et e-mail envoyé !');
         });
     } catch (error) {
-        console.error('Erreur lors du traitement de la commande :', error);
-        res.status(500).send('Erreur lors du traitement de la commande : ' + error.message);
+        console.error('Erreur lors de la commande :', error);
+        res.status(500).send('Erreur lors de la commande : ' + error.message);
     }
 });
+
+//Ajout
 
 // Route pour servir le fichier users.html
 app.get('/users', (req, res) => {
@@ -172,11 +174,14 @@ app.post('/api/send-email', async (req, res) => {
     });
 });
 
-// Route pour ajouter une annonce
+
+
+
+// Routes pour gérer les annonces
 app.post('/api/annonces', async (req, res) => {
     try {
         const annonce = new Annonce(req.body);
-        await annonce.save(); // Sauvegarde l'annonce dans MongoDB
+        await annonce.save();
         res.status(201).json({ message: 'Annonce ajoutée avec succès' });
     } catch (error) {
         console.error(error);
@@ -184,10 +189,9 @@ app.post('/api/annonces', async (req, res) => {
     }
 });
 
-// Route pour récupérer toutes les annonces
 app.get('/api/annonces', async (req, res) => {
     try {
-        const annonces = await Annonce.find(); // Récupère toutes les annonces depuis MongoDB
+        const annonces = await Annonce.find();
         res.json(annonces);
     } catch (error) {
         console.error(error);
@@ -195,27 +199,30 @@ app.get('/api/annonces', async (req, res) => {
     }
 });
 
-
-
-// Routes pour les messages
-app.get('/api/messages', (req, res) => {
-    Message.find()
-        .then(messages => res.json(messages))
-        .catch(err => res.status(400).json(err));
+// Routes pour gérer les messages
+app.get('/api/messages', async (req, res) => {
+    try {
+        const messages = await Message.find();
+        res.json(messages);
+    } catch (error) {
+        res.status(400).json(error);
+    }
 });
 
-app.post('/api/messages', (req, res) => {
+app.post('/api/messages', async (req, res) => {
     const { username, content } = req.body;
-    const newMessage = new Message({ username, content });
-    newMessage.save()
-        .then(message => {
-            res.status(201).json(message);
-            // Émettre l'événement pour les nouveaux messages
-            io.emit('newMessage', message);
-        })
-        .catch(err => res.status(500).json({ error: err.message }));
+    try {
+        const newMessage = new Message({ username, content });
+        const message = await newMessage.save();
+        io.emit('newMessage', message);
+        res.status(201).json(message);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
+
+//Ajout
 
 app.put('/api/messages/:id', (req, res) => {
     const { content } = req.body;
@@ -255,61 +262,57 @@ app.post('/api/users', (req, res) => {
 
 
 
-//Formation
-
-
-const fs = require('fs');
-const VIDEO_DIR = path.join(__dirname, 'videos');
-
-
-// Configuration de multer pour le stockage des vidéos
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, VIDEO_DIR);
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.originalname);
-    }
+// Route pour servir le fichier users.html
+app.get('/users', (req, res) => {
+    res.sendFile(__dirname + '/public/users.html');
 });
 
-const upload = multer({ storage: storage });
-
-// Route pour télécharger une vidéo
-app.post('/upload', upload.single('video'), (req, res) => {
-    res.sendStatus(200);
+// Route pour servir le fichier Visiteur.html
+app.get('/Visiteur', (req, res) => {
+    res.sendFile(__dirname + '/public/Visiteur.html');
 });
 
-// Route pour lister les vidéos
+
+
+
+// Formation 
+
+// Route pour le téléversement des vidéos (admin seulement)
+app.post('/upload', (req, res) => {
+    if (req.body.code !== adminCode) return res.status(403).json({ error: 'Accès refusé' });
+    upload.single('file')(req, res, (err) => {
+        if (err) return res.status(500).json({ error: 'Échec de téléversement' });
+        res.status(200).json({ message: 'Vidéo téléversée avec succès' });
+    });
+});
+
+
+
+// Route pour récupérer la liste des vidéos
 app.get('/videos', (req, res) => {
-    fs.readdir(VIDEO_DIR, (err, files) => {
-        if (err) return res.sendStatus(500);
-        const videos = files.map(file => ({ filename: file }));
-        res.json(videos);
+    gfs.files.find().toArray((err, files) => {
+        if (!files || files.length === 0) return res.status(404).json({ error: 'Aucune vidéo trouvée' });
+        res.json(files);
     });
 });
 
-// Route pour supprimer une vidéo
-app.delete('/delete/:filename', (req, res) => {
-    const filename = req.params.filename;
-    const filePath = path.join(VIDEO_DIR, filename);
-    fs.unlink(filePath, (err) => {
-        if (err) return res.sendStatus(500);
-        res.sendStatus(200);
+// Route pour récupérer une vidéo par ID
+app.get('/videos/:id', (req, res) => {
+    gfs.files.findOne({ _id: mongoose.Types.ObjectId(req.params.id) }, (err, file) => {
+        if (!file) return res.status(404).json({ error: 'Vidéo non trouvée' });
+        const readstream = gfs.createReadStream(file.filename);
+        readstream.pipe(res);
     });
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
+// Route pour supprimer une vidéo (admin seulement)
+app.delete('/videos/:id', (req, res) => {
+    if (req.body.code !== adminCode) return res.status(403).json({ error: 'Accès refusé' });
+    gfs.remove({ _id: mongoose.Types.ObjectId(req.params.id), root: 'uploads' }, (err) => {
+        if (err) return res.status(500).json({ error: 'Échec de la suppression' });
+        res.json({ message: 'Vidéo supprimée avec succès' });
+    });
+});
 
 
 
@@ -330,4 +333,3 @@ io.on('connection', (socket) => {
         console.log('Utilisateur déconnecté');
     });
 });
-
