@@ -279,6 +279,47 @@ app.get('/Visiteur', (req, res) => {
 
 
 
+app.get('/formation', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'Formation.html'));
+});
+
+io.on('connection', (socket) => {
+    console.log('Nouvelle connexion client');
+
+    // Démarrer le flux vidéo
+    socket.on('startStream', (track) => {
+        socket.broadcast.emit('stream', track);
+    });
+
+    // Chat en direct
+    socket.on('chatMessage', (msg) => {
+        io.emit('chatMessage', msg);
+    });
+
+    // Questions en direct
+    socket.on('question', (question) => {
+        io.emit('question', question);
+    });
+
+    // Réactions
+    socket.on('reaction', (reaction) => {
+        io.emit('reaction', reaction);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Client déconnecté');
+    });
+});
+
+
+
+
+
+
+
+
+
+
 
 
 

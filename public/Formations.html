@@ -3,29 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page de Formation</title>
+    <title>Formation Live - FarmsConnect</title>
     <link rel="stylesheet" href="Formation.css">
 </head>
 <body>
     <div class="container">
-        <h1>Upload de Vidéos de Formation</h1>
-        <form id="uploadForm" enctype="multipart/form-data">
-            <input type="file" name="video" accept="video/*" required>
-            <button type="submit">Uploader Vidéo</button>
-        </form>
-
-        <h2>Vidéos Disponibles</h2>
-        <div id="videoList">
-            <!-- Les vidéos seront insérées ici par JavaScript -->
+        <!-- Section vidéo en direct -->
+        <div class="live-section">
+            <video id="liveVideo" autoplay muted controls></video>
+            <button id="startLive" class="btn-primary">Démarrer le Live</button>
         </div>
 
-        <h2>Supprimer une Vidéo</h2>
-        <form id="deleteForm">
-            <input type="text" placeholder="ID de la vidéo à supprimer" name="videoId" required>
-            <input type="password" placeholder="Mot de passe" name="password" required>
-            <button type="submit">Supprimer Vidéo</button>
-        </form>
+        <!-- Chat en temps réel -->
+        <div class="chat-section">
+            <h2>Chat en Direct</h2>
+            <div id="chatBox" class="chat-box"></div>
+            <input type="text" id="chatInput" placeholder="Envoyer un message">
+            <button id="sendMessage" class="btn-secondary">Envoyer</button>
+        </div>
+
+        <!-- Q&R et Réactions -->
+        <div class="engagement-section">
+            <div class="qa-section">
+                <h2>Questions & Réponses</h2>
+                <ul id="qaList"></ul>
+                <input type="text" id="questionInput" placeholder="Poser une question">
+                <button id="askQuestion" class="btn-secondary">Envoyer</button>
+            </div>
+            <div class="reactions">
+                <h3>Réactions</h3>
+                <button class="reaction" data-reaction="👍">👍</button>
+                <button class="reaction" data-reaction="❤️">❤️</button>
+                <button class="reaction" data-reaction="👏">👏</button>
+            </div>
+        </div>
     </div>
+
+    <script src="/socket.io/socket.io.js"></script>
     <script src="Formation.js"></script>
 </body>
 </html>
