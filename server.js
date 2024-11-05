@@ -277,42 +277,6 @@ app.get('/Visiteur', (req, res) => {
 
 // Formation 
 
-// Route pour le téléversement des vidéos (admin seulement)
-app.post('/upload', (req, res) => {
-    if (req.body.code !== adminCode) return res.status(403).json({ error: 'Accès refusé' });
-    upload.single('file')(req, res, (err) => {
-        if (err) return res.status(500).json({ error: 'Échec de téléversement' });
-        res.status(200).json({ message: 'Vidéo téléversée avec succès' });
-    });
-});
-
-
-
-// Route pour récupérer la liste des vidéos
-app.get('/videos', (req, res) => {
-    gfs.files.find().toArray((err, files) => {
-        if (!files || files.length === 0) return res.status(404).json({ error: 'Aucune vidéo trouvée' });
-        res.json(files);
-    });
-});
-
-// Route pour récupérer une vidéo par ID
-app.get('/videos/:id', (req, res) => {
-    gfs.files.findOne({ _id: mongoose.Types.ObjectId(req.params.id) }, (err, file) => {
-        if (!file) return res.status(404).json({ error: 'Vidéo non trouvée' });
-        const readstream = gfs.createReadStream(file.filename);
-        readstream.pipe(res);
-    });
-});
-
-// Route pour supprimer une vidéo (admin seulement)
-app.delete('/videos/:id', (req, res) => {
-    if (req.body.code !== adminCode) return res.status(403).json({ error: 'Accès refusé' });
-    gfs.remove({ _id: mongoose.Types.ObjectId(req.params.id), root: 'uploads' }, (err) => {
-        if (err) return res.status(500).json({ error: 'Échec de la suppression' });
-        res.json({ message: 'Vidéo supprimée avec succès' });
-    });
-});
 
 
 
