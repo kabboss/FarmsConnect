@@ -316,7 +316,6 @@ app.get('/videos', (req, res) => {
 
 
 // Exemple : suppression d'un fichier après son upload
-const fs = require('fs');
 app.post('/delete', (req, res) => {
     const { password, videoId } = req.body;
     if (password === 'ka23bo23re23') {
