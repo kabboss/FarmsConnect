@@ -10,8 +10,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const multer = require('multer');
 const path = require('path');
-const Grid = require('gridfs-stream');
-const { GridFsStorage } = require('multer-gridfs-storage');
+const fs = require('fs');
 
 // Modèles
 const User = require('./models/User');
@@ -39,25 +38,6 @@ const mongoURI = 'mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connecté à MongoDB...'))
     .catch(err => console.error('Erreur de connexion à MongoDB:', err));
-
-// Initialisation de GridFS pour stocker les fichiers de formation
-let gfs;
-const conn = mongoose.connection;
-conn.once('open', () => {
-    gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('uploads');
-});
-
-// Configuration du stockage GridFS avec multer pour le téléversement de fichiers
-const storage = new GridFsStorage({
-    url: mongoURI,
-    options: { useNewUrlParser: true, useUnifiedTopology: true },
-    file: (req, file) => ({
-        filename: `file_${Date.now()}${path.extname(file.originalname)}`,
-        bucketName: 'uploads'
-    })
-});
-const upload = multer({ storage });
 
 // Configuration du transporteur Nodemailer
 const transporter = nodemailer.createTransport({
@@ -277,46 +257,88 @@ app.get('/Visiteur', (req, res) => {
 
 // Formation 
 
-// Route pour le téléversement des vidéos (admin seulement)
-app.post('/upload', (req, res) => {
-    if (req.body.code !== adminCode) return res.status(403).json({ error: 'Accès refusé' });
-    upload.single('file')(req, res, (err) => {
-        if (err) return res.status(500).json({ error: 'Échec de téléversement' });
-        res.status(200).json({ message: 'Vidéo téléversée avec succès' });
+// Create a schema for videos
+const videoSchema = new mongoose.Schema({
+    filename: String,
+    path: String,
+    date: { type: Date, default: Date.now }
+});
+
+const Video = mongoose.model('Video', videoSchema);
+
+// Middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
+
+// Multer setup
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
+    },
+});
+
+const upload = multer({ storage });
+
+// Routes
+app.get('/formation', (req, res) => {
+    Video.find({}, (err, videos) => {
+        if (err) return res.status(500).send(err);
+        res.sendFile(path.join(__dirname, 'public', 'Formation.html'));
+    });
+});
+
+app.post('/upload', upload.single('video'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('Aucun fichier n\'a été téléchargé.');
+    }
+    
+    const newVideo = new Video({
+        filename: req.file.originalname,
+        path: req.file.path,
+    });
+    
+    newVideo.save((err) => {
+        if (err) return res.status(500).send(err);
+        res.redirect('/formation');
     });
 });
 
 
-
-// Route pour récupérer la liste des vidéos
 app.get('/videos', (req, res) => {
-    gfs.files.find().toArray((err, files) => {
-        if (!files || files.length === 0) return res.status(404).json({ error: 'Aucune vidéo trouvée' });
-        res.json(files);
-    });
-});
-
-// Route pour récupérer une vidéo par ID
-app.get('/videos/:id', (req, res) => {
-    gfs.files.findOne({ _id: mongoose.Types.ObjectId(req.params.id) }, (err, file) => {
-        if (!file) return res.status(404).json({ error: 'Vidéo non trouvée' });
-        const readstream = gfs.createReadStream(file.filename);
-        readstream.pipe(res);
-    });
-});
-
-// Route pour supprimer une vidéo (admin seulement)
-app.delete('/videos/:id', (req, res) => {
-    if (req.body.code !== adminCode) return res.status(403).json({ error: 'Accès refusé' });
-    gfs.remove({ _id: mongoose.Types.ObjectId(req.params.id), root: 'uploads' }, (err) => {
-        if (err) return res.status(500).json({ error: 'Échec de la suppression' });
-        res.json({ message: 'Vidéo supprimée avec succès' });
+    Video.find({}, (err, videos) => {
+        if (err) return res.status(500).send(err);
+        res.json(videos);
     });
 });
 
 
-
-
+// Exemple : suppression d'un fichier après son upload
+const fs = require('fs');
+app.post('/delete', (req, res) => {
+    const { password, videoId } = req.body;
+    if (password === 'ka23bo23re23') {
+        Video.findById(videoId, (err, video) => {
+            if (err) return res.status(500).send(err);
+            if (video) {
+                fs.unlink(video.path, (err) => {
+                    if (err) return res.status(500).send(err);
+                    // Supprimez le document de la base de données
+                    Video.findByIdAndRemove(videoId, (err) => {
+                        if (err) return res.status(500).send(err);
+                        res.redirect('/formation');
+                    });
+                });
+            } else {
+                res.status(404).send('Vidéo non trouvée');
+            }
+        });
+    } else {
+        res.status(403).send('Unauthorized');
+    }
+});
 
 
 

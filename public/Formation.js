@@ -1,54 +1,55 @@
-const baseURL = 'https://farmsconnect-b084ddb02391.herokuapp.com';
-
-async function uploadVideo() {
-    const fileInput = document.getElementById('videoFile');
-    const adminCode = document.getElementById('adminCode').value;
-    const formData = new FormData();
-    formData.append('file', fileInput.files[0]);
-    formData.append('code', adminCode);
-
-    const response = await fetch(`${baseURL}/upload`, {
+document.getElementById('uploadForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    const formData = new FormData(this);
+    
+    fetch('/upload', {
         method: 'POST',
         body: formData
-    });
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url;
+        }
+    })
+    .catch(error => console.error('Erreur:', error));
+});
 
-    if (response.ok) {
-        alert('Vidéo téléversée avec succès');
-        loadVideos();
-    } else {
-        alert('Échec de téléversement');
-    }
-}
+document.getElementById('deleteForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    const formData = new FormData(this);
+    
+    fetch('/delete', {
+        method: 'POST',
+        body: new URLSearchParams(formData)
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else {
+            console.error('Erreur:', response);
+        }
+    })
+    .catch(error => console.error('Erreur:', error));
+});
 
-async function loadVideos() {
-    const response = await fetch(`${baseURL}/videos`);
-    const videos = await response.json();
-    const videoList = document.getElementById('video-list');
-    videoList.innerHTML = videos.map(video => `
-        <div class="video-item">
-            <video controls src="${baseURL}/videos/${video._id}"></video>
-            <button onclick="deleteVideo('${video._id}')">Supprimer</button>
-        </div>
-    `).join('');
-}
-
-async function deleteVideo(id) {
-    const adminCode = prompt("Entrez le code d'accès pour supprimer la vidéo");
-    const response = await fetch(`${baseURL}/videos/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ code: adminCode })
-    });
-
-    if (response.ok) {
-        alert('Vidéo supprimée avec succès');
-        loadVideos();
-    } else {
-        alert('Échec de la suppression');
-    }
-}
-
-// Charger les vidéos au démarrage
-loadVideos();
+// Load videos on page load
+window.addEventListener('load', function () {
+    fetch('/videos')
+        .then(response => response.json())
+        .then(videos => {
+            const videoList = document.getElementById('videoList');
+            videos.forEach(video => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'video-item';
+                videoItem.innerHTML = `
+                    <h3>${video.filename}</h3>
+                    <video controls>
+                        <source src="${video.path}" type="video/mp4">
+                        Votre navigateur ne supporte pas la vidéo.
+                    </video>
+                `;
+                videoList.appendChild(videoItem);
+            });
+        })
+        .catch(error => console.error('Erreur:', error));
+});

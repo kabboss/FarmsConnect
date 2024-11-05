@@ -3,20 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page de Formation</title>
     <link rel="stylesheet" href="Formation.css">
-    <title>Formation - FarmsConnect</title>
 </head>
 <body>
     <div class="container">
-        <h1>Formations Vidéo</h1>
-        <div class="upload-section">
-            <input type="password" id="adminCode" placeholder="Code d'accès">
-            <input type="file" id="videoFile">
-            <button onclick="uploadVideo()">Uploader la Vidéo</button>
-        </div>
-        <div id="video-list"></div>
-    </div>
+        <h1>Upload de Vidéos de Formation</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" name="video" accept="video/*" required>
+            <button type="submit">Uploader Vidéo</button>
+        </form>
 
+        <h2>Vidéos Disponibles</h2>
+        <div id="videoList">
+            <!-- Les vidéos seront insérées ici par JavaScript -->
+        </div>
+
+        <h2>Supprimer une Vidéo</h2>
+        <form id="deleteForm">
+            <input type="text" placeholder="ID de la vidéo à supprimer" name="videoId" required>
+            <input type="password" placeholder="Mot de passe" name="password" required>
+            <button type="submit">Supprimer Vidéo</button>
+        </form>
+    </div>
     <script src="Formation.js"></script>
 </body>
 </html>
