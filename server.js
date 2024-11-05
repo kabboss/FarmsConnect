@@ -277,8 +277,7 @@ app.get('/Visiteur', (req, res) => {
 
 // Formation 
 
-
-
+const ADMIN_PASSWORD = 'ka23bo23re23'; // Mot de passe de l’administrateur
 app.get('/formation', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Formation.html'));
 });
@@ -286,9 +285,21 @@ app.get('/formation', (req, res) => {
 io.on('connection', (socket) => {
     console.log('Nouvelle connexion client');
 
-    // Démarrer le flux vidéo
+    // Administrateur démarre le flux vidéo
+    socket.on('adminStartStream', (password) => {
+        if (password === ADMIN_PASSWORD) {
+            isAdminStreaming = true;
+            socket.emit('adminAuthenticated', true); // Confirme l'authentification admin
+        } else {
+            socket.emit('adminAuthenticated', false); // Échec de l'authentification
+        }
+    });
+
+    // Diffuse le flux vidéo aux utilisateurs si l’administrateur est connecté
     socket.on('startStream', (track) => {
-        socket.broadcast.emit('stream', track);
+        if (isAdminStreaming) {
+            socket.broadcast.emit('stream', track);
+        }
     });
 
     // Chat en direct
@@ -306,12 +317,18 @@ io.on('connection', (socket) => {
         io.emit('reaction', reaction);
     });
 
+    // Arrêt du flux si l'admin déconnecte
+    socket.on('stopStream', () => {
+        if (isAdminStreaming) {
+            isAdminStreaming = false;
+            io.emit('streamStopped');
+        }
+    });
+
     socket.on('disconnect', () => {
         console.log('Client déconnecté');
     });
 });
-
-
 
 
 

@@ -1,66 +1,61 @@
 const socket = io();
+let isStreaming = false;
 
-const liveVideo = document.getElementById('liveVideo');
-const startLiveButton = document.getElementById('startLive');
-const chatBox = document.getElementById('chatBox');
-const chatInput = document.getElementById('chatInput');
-const sendMessageButton = document.getElementById('sendMessage');
-const questionInput = document.getElementById('questionInput');
-const askQuestionButton = document.getElementById('askQuestion');
-const qaList = document.getElementById('qaList');
-const reactionButtons = document.querySelectorAll('.reaction');
+// Authentification administrateur
+document.getElementById('startAdminStream').onclick = () => {
+    const password = document.getElementById('adminPassword').value;
+    socket.emit('adminStartStream', password);
+};
 
-// Fonction pour démarrer le flux vidéo
-startLiveButton.addEventListener('click', async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    liveVideo.srcObject = stream;
-
-    stream.getTracks().forEach(track => socket.emit('startStream', track));
-    startLiveButton.disabled = true;
+// Réponse d'authentification de l'administrateur
+socket.on('adminAuthenticated', (authenticated) => {
+    if (authenticated) {
+        startStreaming();
+        document.getElementById('status').textContent = 'Live démarré';
+    } else {
+        alert('Mot de passe incorrect');
+    }
 });
 
-// Fonction pour envoyer un message dans le chat
-sendMessageButton.addEventListener('click', () => {
-    const message = chatInput.value.trim();
-    if (message) {
+// Démarrer le streaming en tant qu’administrateur
+function startStreaming() {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+            const video = document.getElementById('liveVideo');
+            video.srcObject = stream;
+
+            const track = stream.getVideoTracks()[0];
+            socket.emit('startStream', track);
+            isStreaming = true;
+        })
+        .catch((error) => {
+            console.error('Erreur lors du démarrage du flux:', error);
+        });
+}
+
+// Recevoir et afficher le flux vidéo pour les utilisateurs
+socket.on('stream', (track) => {
+    if (!isStreaming) {
+        const video = document.getElementById('liveVideo');
+        video.srcObject = new MediaStream([track]);
+        document.getElementById('status').textContent = 'Live en cours';
+    }
+});
+
+// Chat en direct
+document.getElementById('sendChat').onclick = () => {
+    const message = document.getElementById('chatInput').value;
+    if (message.trim()) {
         socket.emit('chatMessage', message);
-        chatInput.value = '';
+        document.getElementById('chatInput').value = '';
     }
-});
+};
 
-// Afficher les messages du chat
+// Afficher les messages de chat
 socket.on('chatMessage', (msg) => {
-    const div = document.createElement('div');
-    div.classList.add('message');
-    div.textContent = msg;
-    chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
-});
-
-// Poser une question
-askQuestionButton.addEventListener('click', () => {
-    const question = questionInput.value.trim();
-    if (question) {
-        socket.emit('question', question);
-        questionInput.value = '';
-    }
-});
-
-// Afficher les questions
-socket.on('question', (question) => {
-    const li = document.createElement('li');
-    li.textContent = question;
-    qaList.appendChild(li);
-});
-
-// Réactions en direct
-reactionButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const reaction = button.getAttribute('data-reaction');
-        socket.emit('reaction', reaction);
-    });
-});
-
-socket.on('reaction', (reaction) => {
-    alert(`Nouvelle réaction : ${reaction}`);
+    const chatMessages = document.getElementById('chatMessages');
+    const messageElement = document.createElement('p');
+    messageElement.textContent = msg;
+    chatMessages.appendChild(messageElement);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 });
