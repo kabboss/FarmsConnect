@@ -41,9 +41,11 @@ async function startStreaming() {
         const offer = await peerConnection.createOffer();
         await peerConnection.setLocalDescription(offer);
 
+        console.log("Emettre l'offre vers les utilisateurs");
         socket.emit('startStream', offer);
 
         socket.on('answer', async (answer) => {
+            console.log("Réponse reçue de l'utilisateur");
             await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
         });
 
@@ -71,10 +73,21 @@ function stopStreaming() {
 // Recevoir et afficher le flux pour les spectateurs
 socket.on('offer', async (offer) => {
     try {
+        console.log("Offre reçue, préparation de la connexion pour afficher le live");
+
         peerConnection = new RTCPeerConnection(configuration);
 
         peerConnection.ontrack = (event) => {
+            console.log("Track reçu, configuration du flux vidéo");
             video.srcObject = event.streams[0];
+        };
+
+        peerConnection.oniceconnectionstatechange = () => {
+            console.log("État de la connexion ICE:", peerConnection.iceConnectionState);
+            if (peerConnection.iceConnectionState === "failed" || peerConnection.iceConnectionState === "disconnected") {
+                console.warn("Problème de connexion ICE, re-connexion en cours...");
+                peerConnection.restartIce();
+            }
         };
 
         await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
