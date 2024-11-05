@@ -278,41 +278,46 @@ app.get('/Visiteur', (req, res) => {
 // Formation 
 
 
-// Dossier pour les fichiers statiques (HTML, CSS)
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Route pour accéder aux vidéos
-app.get('/video/:name', (req, res) => {
-    const videoPath = path.join(__dirname, 'videos', req.params.name);
-    const stat = fs.statSync(videoPath);
-    const fileSize = stat.size;
-    const range = req.headers.range;
-
-    if (range) {
-        const parts = range.replace(/bytes=/, "").split("-");
-        const start = parseInt(parts[0], 10);
-        const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
-        const chunkSize = (end - start) + 1;
-        const file = fs.createReadStream(videoPath, { start, end });
-        const head = {
-            'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-            'Accept-Ranges': 'bytes',
-            'Content-Length': chunkSize,
-            'Content-Type': 'video/mp4',
-        };
-        res.writeHead(206, head);
-        file.pipe(res);
-    } else {
-        const head = {
-            'Content-Length': fileSize,
-            'Content-Type': 'video/mp4',
-        };
-        res.writeHead(200, head);
-        fs.createReadStream(videoPath).pipe(res);
-    }
-});
-
-
+// Création d'un modèle pour les commentaires
+const Comment = mongoose.model('Comment', new mongoose.Schema({
+    username: String,
+    message: String,
+    date: { type: Date, default: Date.now }
+  }));
+  
+  // Middleware pour les fichiers statiques
+  app.use(express.static(path.join(__dirname, 'public')));
+  app.use(express.urlencoded({ extended: true }));
+  app.set('view engine', 'ejs');
+  
+  // Route principale pour afficher la page de formation
+  app.get('/', async (req, res) => {
+    const comments = await Comment.find();
+    res.render('index', { comments });
+  });
+  
+  // Route pour ajouter un commentaire
+  app.post('/comment', async (req, res) => {
+    const { username, message } = req.body;
+    const comment = new Comment({ username, message });
+    await comment.save();
+    res.redirect('/');
+  });
+  
+  // Serveur WebSocket pour gérer le chat en temps réel
+  io.on('connection', (socket) => {
+    console.log('Un utilisateur est connecté');
+    
+    // Écoute des messages de chat
+    socket.on('chat message', (msg) => {
+      io.emit('chat message', msg); // Diffuse à tous les clients
+    });
+  
+    socket.on('disconnect', () => {
+      console.log('Un utilisateur a quitté');
+    });
+  });
+  
 
 
 
