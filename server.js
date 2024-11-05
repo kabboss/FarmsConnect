@@ -277,53 +277,41 @@ app.get('/Visiteur', (req, res) => {
 
 // Formation 
 
+
+// Dossier pour les fichiers statiques (HTML, CSS)
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/formation', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'Formation.html'));
+// Route pour accéder aux vidéos
+app.get('/video/:name', (req, res) => {
+    const videoPath = path.join(__dirname, 'videos', req.params.name);
+    const stat = fs.statSync(videoPath);
+    const fileSize = stat.size;
+    const range = req.headers.range;
+
+    if (range) {
+        const parts = range.replace(/bytes=/, "").split("-");
+        const start = parseInt(parts[0], 10);
+        const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+        const chunkSize = (end - start) + 1;
+        const file = fs.createReadStream(videoPath, { start, end });
+        const head = {
+            'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+            'Accept-Ranges': 'bytes',
+            'Content-Length': chunkSize,
+            'Content-Type': 'video/mp4',
+        };
+        res.writeHead(206, head);
+        file.pipe(res);
+    } else {
+        const head = {
+            'Content-Length': fileSize,
+            'Content-Type': 'video/mp4',
+        };
+        res.writeHead(200, head);
+        fs.createReadStream(videoPath).pipe(res);
+    }
 });
 
-let isStreaming = false;
-
-io.on('connection', (socket) => {
-    console.log('Client connecté');
-
-    socket.on('adminStartStream', (password) => {
-        if (password === "2323") {
-            socket.emit('adminAuthenticated', true);
-            isStreaming = true;
-            io.emit('streamStatus', true);
-            console.log('Le live est démarré');
-        } else {
-            socket.emit('adminAuthenticated', false);
-        }
-    });
-
-    socket.on('startStream', (offer) => {
-        if (isStreaming) {
-            socket.broadcast.emit('offer', offer);
-            console.log('Offre envoyée aux utilisateurs');
-        }
-    });
-
-    socket.on('answer', (answer) => {
-        socket.broadcast.emit('answer', answer);
-        console.log('Réponse reçue et retransmise');
-    });
-
-    socket.on('stopStream', () => {
-        isStreaming = false;
-        io.emit('streamStatus', false);
-        console.log('Le live est terminé');
-    });
-
-    socket.on('disconnect', () => {
-        console.log('Client déconnecté');
-        if (isStreaming && socket.admin) {
-            io.emit('streamStatus', false);
-        }
-    });
-});
 
 
 

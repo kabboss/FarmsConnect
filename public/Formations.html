@@ -1,31 +1,43 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Formation</title>
-    <link rel="stylesheet" href="Formation.css">
-
+    <title>Vidéos de Formation</title>
 </head>
 <body>
-    <div id="container">
-        <h1>Live Formation</h1>
+    <h1>Vidéos de Formation</h1>
+    <ul id="videoList">
+        <!-- La liste des vidéos sera générée ici -->
+    </ul>
 
-        <!-- Section pour l’administrateur -->
-        <div id="adminSection">
-            <input type="password" id="adminPassword" placeholder="Mot de passe admin">
-            <button id="startAdminStream">Démarrer le Live</button>
-            <button id="stopAdminStream" style="display: none;">Arrêter le Live</button>
-        </div>
+    <video id="videoPlayer" controls width="640" height="360" style="display:none;">
+        <source id="videoSource" src="" type="video/mp4">
+    </video>
 
-        <!-- Section vidéo pour les spectateurs -->
-        <div id="videoSection">
-            <video id="liveVideo" autoplay playsinline controls></video>
-            <p id="status">En attente du live...</p>
-        </div>
-    </div>
+    <script>
+        // Liste des vidéos disponibles (vous pouvez adapter ceci pour générer dynamiquement)
+        const videos = ["formation1.mp4", "formation2.mp4", "formation3.mp4"];
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="Formation.js"></script>
+        // Créer les éléments de liste pour chaque vidéo
+        const videoList = document.getElementById('videoList');
+        videos.forEach(video => {
+            const listItem = document.createElement('li');
+            listItem.textContent = video;
+            listItem.style.cursor = "pointer";
+            listItem.onclick = () => playVideo(video);
+            videoList.appendChild(listItem);
+        });
+
+        // Fonction pour jouer la vidéo sélectionnée
+        function playVideo(video) {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const videoSource = document.getElementById('videoSource');
+            videoSource.src = `/video/${video}`;
+            videoPlayer.style.display = "block";
+            videoPlayer.load();
+            videoPlayer.play();
+        }
+    </script>
 </body>
 </html>
