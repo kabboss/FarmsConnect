@@ -277,7 +277,6 @@ app.get('/Visiteur', (req, res) => {
 
 // Formation 
 
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/formation', (req, res) => {
@@ -289,33 +288,33 @@ let isStreaming = false;
 io.on('connection', (socket) => {
     console.log('Client connecté');
 
-    // Authentification de l'admin
     socket.on('adminStartStream', (password) => {
         if (password === "2323") {
             socket.emit('adminAuthenticated', true);
             isStreaming = true;
             io.emit('streamStatus', true);
+            console.log('Le live est démarré');
         } else {
             socket.emit('adminAuthenticated', false);
         }
     });
 
-    // Démarrage du live
     socket.on('startStream', (offer) => {
         if (isStreaming) {
             socket.broadcast.emit('offer', offer);
+            console.log('Offre envoyée aux utilisateurs');
         }
     });
 
-    // Réception de l'answer de l'utilisateur
     socket.on('answer', (answer) => {
         socket.broadcast.emit('answer', answer);
+        console.log('Réponse reçue et retransmise');
     });
 
-    // Arrêter le streaming
     socket.on('stopStream', () => {
         isStreaming = false;
         io.emit('streamStatus', false);
+        console.log('Le live est terminé');
     });
 
     socket.on('disconnect', () => {
@@ -325,6 +324,7 @@ io.on('connection', (socket) => {
         }
     });
 });
+
 
 
 
