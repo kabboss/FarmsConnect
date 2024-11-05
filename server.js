@@ -277,10 +277,8 @@ app.get('/Visiteur', (req, res) => {
 
 // Formation 
 
-const ADMIN_PASSWORD = '2323'; // Mot de passe pour l’administrateur
-
-let isAdminStreaming = false; // Indique si le live est en cours par l'admin
-let adminStream = null; // Stocke le flux vidéo de l'admin
+let isAdminStreaming = false; // Indique si l’admin est en train de diffuser
+let adminSocketId = null; // ID du socket de l'admin pour le streaming
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -289,48 +287,53 @@ app.get('/formation', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    console.log('Nouvelle connexion client');
+    console.log('Nouvelle connexion:', socket.id);
 
-    // Vérifier si un flux est déjà actif et envoyer le flux actuel aux nouveaux utilisateurs
-    if (isAdminStreaming && adminStream) {
-        socket.emit('stream', adminStream);
-    }
+    // Envoyer l'état actuel du stream aux nouveaux utilisateurs
+    socket.emit('streamStatus', isAdminStreaming);
 
-    // Authentification administrateur pour démarrer le live
+    // Authentification administrateur
     socket.on('adminStartStream', (password) => {
         if (password === ADMIN_PASSWORD) {
             isAdminStreaming = true;
-            socket.emit('adminAuthenticated', true); // Confirme l’authentification de l’admin
-            io.emit('streamStatus', true); // Signale à tous les utilisateurs que le live a démarré
+            adminSocketId = socket.id;
+            socket.emit('adminAuthenticated', true); // Notifie l'admin que l'authentification est réussie
+            io.emit('streamStatus', true); // Notifie tous les utilisateurs que le live a démarré
         } else {
-            socket.emit('adminAuthenticated', false); // Échec de l’authentification
+            socket.emit('adminAuthenticated', false); // Notifie l'échec de l'authentification
         }
     });
 
-    // Stocker et diffuser le flux de l'admin
-    socket.on('startStream', (stream) => {
-        if (isAdminStreaming) {
-            adminStream = stream; // Stocker le flux de l'admin
-            socket.broadcast.emit('stream', adminStream); // Envoyer le flux aux autres utilisateurs
+    // Lorsque l'admin commence à diffuser
+    socket.on('startStream', (offer) => {
+        if (socket.id === adminSocketId) {
+            socket.broadcast.emit('offer', offer); // Envoie l'offre WebRTC aux spectateurs
+        }
+    });
+
+    // Lorsque les spectateurs répondent à l'offre
+    socket.on('answer', (answer) => {
+        if (adminSocketId) {
+            io.to(adminSocketId).emit('answer', answer); // Envoie les réponses des spectateurs à l'admin
         }
     });
 
     // Arrêter le live de l'admin
     socket.on('stopStream', () => {
-        if (isAdminStreaming) {
+        if (socket.id === adminSocketId) {
             isAdminStreaming = false;
-            adminStream = null;
-            io.emit('streamStatus', false); // Signaler à tous les utilisateurs que le live est terminé
+            adminSocketId = null;
+            io.emit('streamStatus', false); // Notifie tous les utilisateurs que le live est terminé
         }
     });
 
-    // Chat en direct
-    socket.on('chatMessage', (msg) => {
-        io.emit('chatMessage', msg);
-    });
-
     socket.on('disconnect', () => {
-        console.log('Client déconnecté');
+        // Si l'admin se déconnecte, arrêter le stream
+        if (socket.id === adminSocketId) {
+            isAdminStreaming = false;
+            adminSocketId = null;
+            io.emit('streamStatus', false);
+        }
     });
 });
 
