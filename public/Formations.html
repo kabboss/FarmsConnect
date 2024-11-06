@@ -1,77 +1,83 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formation en ligne</title>
-    <link rel="stylesheet" href="Formation.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formation Vidéo - Formation en Élevage</title>
+  <link rel="stylesheet" href="Formation.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1>Bienvenue dans notre formation</h1>
-        <nav>
-            <a href="#videoSection">Vidéos</a>
-            <a href="#chatSection">Chat</a>
-        </nav>
-    </header>
+  <div class="navbar">
+    <ul>
+      <li><a href="#categories">Catégories</a></li>
+      <li><a href="#comments">Commentaires</a></li>
+    </ul>
+  </div>
 
-    <!-- Section des vidéos -->
-    <section id="videoSection">
-        <h2>Nos vidéos de formation</h2>
-        <div class="video-container">
-            <div class="video">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/WlHuUfhEQM0?si=W_TBFL0EHIy8v_LY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                <p>Formation 1</p>
-            </div>
-            <div class="video">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/eLkEYenv6aI?si=XKL8XRATdPDf7Gan&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                <p>Formation 2</p>
-            </div>
-        </div>
-    </section>
+  <section id="categories">
+    <h2>Nos Catégories de Formation</h2>
+    <div class="categories-list">
+      <div class="category-item">
+        <img src="image-poule.jpg" alt="Poule">
+        <h3>Poule</h3>
+        <a href="#video-poule">Voir les vidéos</a>
+      </div>
+      <div class="category-item">
+        <img src="image-mouton.jpg" alt="Mouton">
+        <h3>Mouton</h3>
+        <a href="#video-mouton">Voir les vidéos</a>
+      </div>
+    </div>
+  </section>
 
-    <!-- Section des commentaires -->
-    <section id="commentSection">
-        <h2>Commentaires</h2>
-        <form action="/comment" method="POST">
-            <input type="text" name="username" placeholder="Ton nom" required>
-            <textarea name="message" placeholder="Ton commentaire" required></textarea>
-            <button type="submit">Ajouter un commentaire</button>
-        </form>
-        <ul id="comments-list">
-            <% comments.forEach(comment => { %>
-                <li>
-                    <strong><%= comment.username %></strong>: <%= comment.message %>
-                </li>
-            <% }); %>
-        </ul>
-    </section>
+  <section id="video-poule">
+    <h2>Formation en Poule</h2>
+    <div class="video-container">
+      <!-- Vidéo 1 -->
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/WDmoKIRmbbM?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <h3>Vidéo 1: Introduction à l'élevage de poules</h3>
+      <!-- Vidéo 2 -->
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/WDmoKIRmbbM?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <h3>Vidéo 2: Soins des poules en élevage</h3>
+    </div>
+  </section>
 
-    <!-- Section de Chat en Temps Réel -->
-    <section id="chatSection">
-        <h2>Chat en direct</h2>
-        <div id="chat-box"></div>
-        <input id="chat-input" type="text" placeholder="Écrire un message...">
-        <button id="send-btn">Envoyer</button>
-    </section>
+  <section id="video-mouton">
+    <h2>Formation en Mouton</h2>
+    <div class="video-container">
+      <!-- Vidéo 3 -->
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/WDmoKIRmbbM?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <h3>Vidéo 3: Introduction à l'élevage de moutons</h3>
+      <!-- Vidéo 4 -->
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/WDmoKIRmbbM?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <h3>Vidéo 4: Soins et alimentation des moutons</h3>
+    </div>
+  </section>
 
-    <script src="/js/app.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        const socket = io();
+  <section id="comments">
+    <h2>Commentaires</h2>
+    <div id="comment-section">
+      <div class="comment-box">
+        <textarea id="comment-input" placeholder="Laissez un commentaire..."></textarea>
+        <button id="post-comment">Publier</button>
+      </div>
+      <div id="comments-list">
+        <!-- Les commentaires s'afficheront ici après l'envoi -->
+      </div>
+    </div>
+  </section>
 
-        document.getElementById('send-btn').addEventListener('click', () => {
-            const msg = document.getElementById('chat-input').value;
-            socket.emit('chat message', msg);
-            document.getElementById('chat-input').value = ''; // Clear input
-        });
+  <div id="chat-container">
+    <h3>Chat en Direct</h3>
+    <div id="chat-box">
+      <div id="chat-messages"></div>
+      <input type="text" id="chat-input" placeholder="Posez une question..." />
+      <button id="send-chat">Envoyer</button>
+    </div>
+  </div>
 
-        socket.on('chat message', (msg) => {
-            const chatBox = document.getElementById('chat-box');
-            const messageElem = document.createElement('div');
-            messageElem.textContent = msg;
-            chatBox.appendChild(messageElem);
-        });
-    </script>
+  <script src="Formation.js"></script>
 </body>
 </html>

@@ -1,59 +1,117 @@
-/* Styles de base */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f9;
-}
-
-header {
-    background-color: #0044cc;
+    background-color: #f4f4f4;
+  }
+  
+  .navbar {
+    background-color: #333;
     color: white;
+    padding: 15px;
     text-align: center;
-    padding: 20px;
-}
-
-nav a {
-    margin: 0 15px;
+  }
+  
+  .navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar ul li {
+    display: inline;
+    margin-right: 20px;
+  }
+  
+  .navbar ul li a {
     color: white;
     text-decoration: none;
-}
-
-.video-container {
+  }
+  
+  h2 {
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  .categories-list {
     display: flex;
-    justify-content: space-around;
-    margin: 20px;
-}
-
-.video iframe {
-    width: 320px;
-    height: 180px;
-}
-
-#chat-box {
-    max-height: 300px;
-    overflow-y: scroll;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+  }
+  
+  .category-item {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 200px;
+  }
+  
+  .category-item img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .category-item a {
+    display: block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #007BFF;
+  }
+  
+  .video-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+  
+  #comments {
+    margin-top: 50px;
+    padding: 20px;
+  }
+  
+  #comment-section {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  #chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 250px;
+  }
+  
+  #chat-box {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #chat-input {
     margin-bottom: 10px;
-}
-
-#chat-input {
-    width: 80%;
-    padding: 10px;
-}
-
-#send-btn {
-    padding: 10px;
-    background-color: #0044cc;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  #send-chat {
+    padding: 8px;
+    background-color: #28a745;
     color: white;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
-}
-
-/* Animation de transition pour la section des vidéos */
-.video {
-    transition: transform 0.3s ease;
-}
-
-.video:hover {
-    transform: scale(1.05);
-}
+  }
+  
+  #send-chat:hover {
+    background-color: #218838;
+  }
+  
