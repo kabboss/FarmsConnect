@@ -1,83 +1,108 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formation Vidéo - Formation en Élevage</title>
-  <link rel="stylesheet" href="Formation.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation Animaux de Ferme</title>
+    <link rel="stylesheet" href="Formation.css">
 </head>
+
 <body>
-  <div class="navbar">
-    <ul>
-      <li><a href="#categories">Catégories</a></li>
-      <li><a href="#comments">Commentaires</a></li>
-    </ul>
-  </div>
+    <header>
+        <div class="container">
+            <h1>Formation vidéos</h1>
+            <p>Explorez nos formations sur les animaux de ferme</p>
+        </div>
 
-  <section id="categories">
-    <h2>Nos Catégories de Formation</h2>
-    <div class="categories-list">
-      <div class="category-item">
-        <img src="image-poule.jpg" alt="Poule">
-        <h3>Poule</h3>
-        <a href="#video-poule">Voir les vidéos</a>
-      </div>
-      <div class="category-item">
-        <img src="image-mouton.jpg" alt="Mouton">
-        <h3>Mouton</h3>
-        <a href="#video-mouton">Voir les vidéos</a>
-      </div>
-    </div>
-  </section>
+        <nav>
+            <ul class="nav-list">
+                <li><a href="Acceuil.html">Accueil</a></li>
+                <li><a href="Visiteur.html">Visiter</a></li>
+                <li><a href="Produit.html">Acheter</a></li>
+            </ul>
+        </nav>
 
-  <section id="video-poule">
-    <h2>Formation en Poule</h2>
-    <div class="video-container">
-      <!-- Vidéo 1 -->
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/WDmoKIRmbbM?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      <h3>Vidéo 1: Introduction à l'élevage de poules</h3>
-      <!-- Vidéo 2 -->
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/WDmoKIRmbbM?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      <h3>Vidéo 2: Soins des poules en élevage</h3>
-    </div>
-  </section>
+    </header>
 
-  <section id="video-mouton">
-    <h2>Formation en Mouton</h2>
-    <div class="video-container">
-      <!-- Vidéo 3 -->
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/WDmoKIRmbbM?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      <h3>Vidéo 3: Introduction à l'élevage de moutons</h3>
-      <!-- Vidéo 4 -->
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/WDmoKIRmbbM?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      <h3>Vidéo 4: Soins et alimentation des moutons</h3>
-    </div>
-  </section>
+    <main>
+        <div class="animal-categories">
+            <div class="category" id="poulet">
+                <img src="img/poulet.jpg" alt="Poulet" onclick="showVideos('poulet-videos')" style="cursor: pointer;">
+                <p>Poulets</p>
+            </div>
+            <div class="category" id="mouton">
+                <img src="img/moutons.jpg" alt="Mouton" onclick="showVideos('mouton-videos')" style="cursor: pointer;">
+                <p>Moutons</p>
+            </div>
+            <div class="category" id="chevre">
+                <img src="img/chevres.jpg" alt="Chèvre" onclick="showVideos('chevre-videos')" style="cursor: pointer;">
+                <p>Chèvres</p>
+            </div>
+            <div class="category" id="boeuf">
+                <img src="img/beouf.jpg" alt="Boeuf" onclick="showVideos('boeuf-videos')" style="cursor: pointer;">
+                <p>Bœufs</p>
+            </div>
+            <div class="category" id="lapin">
+                <img src="img/lapins.jpg" alt="Lapin" onclick="showVideos('lapin-videos')" style="cursor: pointer;">
+                <p>Lapins</p>
+            </div>
+            <div class="category" id="autre">
+                <img src="img/autre.jpg" alt="Autres" onclick="showVideos('autre-videos')" style="cursor: pointer;">
+                <p>Autres Animaux</p>
+            </div>
+        </div>
 
-  <section id="comments">
-    <h2>Commentaires</h2>
-    <div id="comment-section">
-      <div class="comment-box">
-        <textarea id="comment-input" placeholder="Laissez un commentaire..."></textarea>
-        <button id="post-comment">Publier</button>
-      </div>
-      <div id="comments-list">
-        <!-- Les commentaires s'afficheront ici après l'envoi -->
-      </div>
-    </div>
-  </section>
+        <!-- Section des vidéos de formation -->
+        <div id="videos" class="videos-container">
+            <div id="poulet-videos" class="video-section" style="display: none;">
+                <h2>Vidéo de Formation: Poulets</h2>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/Qe0VmPy5ct4?si=kXasK3Lz2NnLABbD&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/FPtZ0aMHLvE?si=LIJ7L3PP6pPZ5k33&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/KlinaPtPJQs?si=VhhFBU-vi6ARhm8m&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/WDmoKIRmbbM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/GLLhsWeFcQU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        
+            </div>
+            <div id="mouton-videos" class="video-section" style="display: none;">
+                <h2>Vidéo de Formation: Moutons</h2>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/icrUw0XTRNY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/G76UxhqnIX0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        
+            </div>
+            <div id="chevre-videos" class="video-section" style="display: none;">
+                <h2>Vidéo de Formation: Chèvres</h2>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/ksUq9WZgQQE?si=PUg53OtKbDVtYOAG&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/De76qCmCcIs?si=uTumKmPXuJ-qGaNu&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        
+            </div>
+            <div id="boeuf-videos" class="video-section" style="display: none;">
+                <h2>Vidéo de Formation: Bœufs</h2>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/-_tfhYzNlH0?si=Ae2wHnabfSCPXyoI&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/u-iATMvst4Q?si=gLGCQpWqswOHpFBW&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>     
+        
+            </div>
+            <div id="lapin-videos" class="video-section" style="display: none;">
+                <h2>Vidéo de Formation: Lapins</h2>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/S2NeRfBUAYQ?si=WBf4CEsxYnOJWSjL&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/a1qJK0c1oMY?si=04nP4TkaZRT8hJOE&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/D0hovNlsVG0?si=0hPGoR-EKXutCaEv&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> 
+        
+            </div>
+            <div id="autre-videos" class="video-section" style="display: none;">
+                <h2>Vidéo de Formation: Autres Animaux</h2>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/EfgX1tyl-Xk?si=mmcxKE_nJnL0Qfol&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/Q7kdnCbUV3g?si=RzBe-FEL75gyUcbg&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>     
+        
+            </div>
+        </div>
+    </main>
 
-  <div id="chat-container">
-    <h3>Chat en Direct</h3>
-    <div id="chat-box">
-      <div id="chat-messages"></div>
-      <input type="text" id="chat-input" placeholder="Posez une question..." />
-      <button id="send-chat">Envoyer</button>
-    </div>
-  </div>
+    <footer>
+        <p>&copy; 2024 Formation Animale - Tous droits réservés</p>
+    </footer>
 
-  <script src="Formation.js"></script>
+    <script src="Formation.js"></script>
 </body>
+
 </html>
