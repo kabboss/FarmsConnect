@@ -168,6 +168,15 @@ loginForm.addEventListener("submit", async (event) => {
 function closeAlert() {
     document.getElementById("customAlert").classList.add("hidden");
 }
+
+
+
+document.addEventListener('deviceready', function() {
+    setTimeout(function() {
+        navigator.splashscreen.hide(); // Masque le splash screen après 4 secondes
+    }, 4000); // 4000 ms = 4 secondes
+}, false);
+
 </script>
 
 <script src="apropo.js"></script>
