@@ -1,83 +1,82 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const animalsList = document.getElementById('animals-list');
+// Fonction pour traiter la soumission du formulaire d'achat
+document.getElementById('acheter-form').addEventListener('submit', async (event) => {
+    event.preventDefault(); // Empêche l'envoi par défaut du formulaire
 
-    // Fonction pour calculer la distance entre deux points géographiques
-    function calculateDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371;
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
-    }
+    // Récupération des informations de l'acheteur
+    const acheteur = {
+        nomAcheteur: document.getElementById('nom-acheteur').value,
+        emailAcheteur: document.getElementById('email-acheteur').value,
+        contactAcheteur: document.getElementById('contact-acheteur').value,
+        messageAcheteur: document.getElementById('message-acheteur').value
+    };
 
-    // Obtenir la localisation de l'utilisateur et les annonces
-    navigator.geolocation.getCurrentPosition(position => {
-        const userLatitude = position.coords.latitude;
-        const userLongitude = position.coords.longitude;
+    // Récupération de la position géographique de l'acheteur
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            const { latitude, longitude } = position.coords;
 
-        fetch('/api/annonces')
-            .then(response => response.json())
-            .then(annonces => {
-                annonces.forEach(animal => {
-                    if (animal.location) {
-                        animal.distance = calculateDistance(
-                            userLatitude,
-                            userLongitude,
-                            animal.location.latitude,
-                            animal.location.longitude
-                        );
-                    } else {
-                        animal.distance = Infinity;
-                    }
-                });
+            // Récupérer les coordonnées du vendeur depuis le localStorage
+            const vendeurLatitude = window.localStorage.getItem('latitude');
+            const vendeurLongitude = window.localStorage.getItem('longitude');
 
-                annonces.sort((a, b) => a.distance - b.distance);
+            if (vendeurLatitude && vendeurLongitude) {
+                // Calcul de la distance entre l'acheteur et le vendeur
+                const distance = await calculateDistance(latitude, longitude, vendeurLatitude, vendeurLongitude);
 
-                annonces.forEach(animal => {
-                    const animalCard = document.createElement('div');
-                    animalCard.classList.add('animal-card');
-                    animalCard.innerHTML = `
-                        <h3>${animal.nom} (${animal.categorie})</h3>
-                        <p>Nombre : ${animal.nombre}</p>
-                        <p>Poids par animal : ${animal.poids} kg</p>
-                        <p>Prix unitaire : ${animal.prix} FCFA</p>
-                        <p>Code du vendeur : ${animal.codeVendeur}</p>
-                        <p>Distance : ${animal.distance !== Infinity ? animal.distance.toFixed(2) + " km" : "Inconnue"}</p>
-                        <div class="images-section">
-                            ${animal.images.map(img => `<img src="${img}" alt="Image de l'animal" />`).join('')}
-                        </div>
-                        <button class="buy-button" data-animal='${JSON.stringify(animal)}'>Acheter ce produit</button>
-                    `;
-                    animalsList.appendChild(animalCard);
-                });
+                // Création du contenu du message
+                const emailContent = `
+                    Un acheteur a manifesté son intérêt pour votre animal !
+                    Nom: ${acheteur.nomAcheteur}
+                    Email: ${acheteur.emailAcheteur}
+                    Contact: ${acheteur.contactAcheteur}
+                    Message: ${acheteur.messageAcheteur}
+                    Distance de l'acheteur: ${distance} km
+                `;
 
-                document.querySelectorAll('.buy-button').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const animal = JSON.parse(this.getAttribute('data-animal'));
-                        handlePurchase(animal);
+                try {
+                    // Envoi de l'email au vendeur
+                    const response = await fetch('/api/send-email', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ emailContent })
                     });
-                });
-            })
-            .catch(error => showAlert("Erreur lors du chargement des annonces : " + error.message));
-    }, function(error) {
-        showAlert("La localisation est nécessaire pour trier les annonces par proximité.");
-    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        alert('Votre demande a été envoyée avec succès !');
+                        document.getElementById('acheter-form').reset(); // Réinitialise le formulaire
+                    } else {
+                        alert('Erreur lors de l\'envoi de la demande: ' + data.message);
+                    }
+                } catch (error) {
+                    alert('Erreur lors de la communication avec le serveur: ' + error.message);
+                }
+            } else {
+                alert('Les coordonnées du vendeur ne sont pas disponibles.');
+            }
+        }, (error) => {
+            alert('Impossible de récupérer la géolocalisation: ' + error.message);
+        });
+    } else {
+        alert('La géolocalisation n\'est pas supportée par votre navigateur.');
+    }
 });
 
-// Fonction pour afficher une alerte personnalisée
-function showAlert(message) {
-    const alertBox = document.getElementById("customAlert");
-    const alertMessage = document.getElementById("alertMessage");
+// Fonction pour calculer la distance entre deux points (latitude, longitude)
+async function calculateDistance(lat1, lon1, lat2, lon2) {
+    const rad = Math.PI / 180;
+    const R = 6371; // Rayon de la Terre en km
+    const dLat = (lat2 - lat1) * rad;
+    const dLon = (lon2 - lon1) * rad;
 
-    alertMessage.textContent = message;
-    alertBox.classList.remove("hidden");
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * rad) * Math.cos(lat2 * rad) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
-    setTimeout(() => closeAlert(), 10000);
-}
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
 
-function closeAlert() {
-    document.getElementById("customAlert").classList.add("hidden");
+    return distance.toFixed(2); // Retourne la distance en km avec 2 décimales
 }

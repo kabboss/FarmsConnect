@@ -32,82 +32,111 @@
         <!-- Les informations sur les animaux à vendre s'afficheront ici -->
     </section>
 
-<script>
 
-function handlePurchase(animal) {
-    const visitorInfo = {
-        username: prompt('Entrez votre nom d’utilisateur :'),
-        contact: prompt('Entrez votre numéro de contact :'),
-        email: prompt('Entrez votre e-mail :'),
-        quantity: prompt('Combien d\'unités souhaitez-vous acheter ?'),
-        budget: prompt('Quel est votre budget pour l\'achat d\'une unité ?'),
-        buyerLocation: {} // Ajout d'un objet pour stocker la localisation de l'acheteur
-    };
-
-    // Récupération de la localisation de l'acheteur
-    navigator.geolocation.getCurrentPosition(function(position) {
-        visitorInfo.buyerLocation.latitude = position.coords.latitude;
-        visitorInfo.buyerLocation.longitude = position.coords.longitude;
-
-        // Calculer la distance (exemple avec une fonction de calcul de distance)
-        const distance = calculateDistance(animal.location.latitude, animal.location.longitude, visitorInfo.buyerLocation.latitude, visitorInfo.buyerLocation.longitude);
-
-        const emailContent = `
-            Détails de l'achat :
-            Nom de l'animal : ${animal.nom}
-            Catégorie : ${animal.categorie}
-            Prix unitaire : ${animal.prix} FCFA
-            Code du vendeur : ${animal.codeVendeur}
-            Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? ` (secondaire : ${animal.contactSecondaire})` : ''}
-            
-            Informations sur le visiteur :
-            Nom d'utilisateur : ${visitorInfo.username}
-            Contact : ${visitorInfo.contact}
-            E-mail : ${visitorInfo.email}
-            Nombre souhaité : ${visitorInfo.quantity}
-            Budget pour l'achat d'une unité : ${visitorInfo.budget} FCFA
-            Distance au vendeur : ${distance.toFixed(2)} km 
-
-        `;
-
-        sendEmail(emailContent);
-    }, function(error) {
-        showAlert("Erreur lors de la récupération de la localisation. L'email ne peut pas être envoyé sans cette information.");
-    });
-}
-
-// Fonction pour calculer la distance entre deux coordonnées (latitude et longitude)
-// Utilisation de la formule de Haversine
-function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Rayon de la Terre en kilomètres
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLon = (lon2 - lon1) * (Math.PI / 180);
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-              Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // Distance en kilomètres
-}
-
-function sendEmail(content) {
-    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content })
-    })
-    .then(response => {
-        if (response.ok) {
-            showAlert("Merci pour votre commande !\n\nNous l'avons bien reçue et nous vous contacterons prochainement pour organiser la livraison. Notez que chaque produit passe par un contrôle sanitaire rigoureux pour garantir sa qualité.\n\nÀ très bientôt !");
-        } else {
-            showAlert("Erreur lors de l'envoi de l'email.");
+    <script>
+        // Fonction principale de gestion de l'achat
+        document.getElementById('purchase-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+    
+            const animal = {
+                nom: document.getElementById('animal-name').value.trim(),
+                prix: parseInt(document.getElementById('animal-price').value.trim(), 10),
+                categorie: document.getElementById('animal-category').value.trim(),
+                location: { latitude: 12.9716, longitude: 77.5946 } // Exemple de coordonnées du vendeur
+            };
+    
+            // Vérification des champs avant de continuer
+            if (!animal.nom || isNaN(animal.prix) || !animal.categorie) {
+                alert('Veuillez remplir tous les champs correctement.');
+                return;
+            }
+    
+            handlePurchase(animal);
+        });
+    
+        function handlePurchase(animal) {
+            const visitorInfo = {
+                username: prompt('Entrez votre nom d’utilisateur :').trim(),
+                contact: prompt('Entrez votre numéro de contact :').trim(),
+                email: prompt('Entrez votre e-mail :').trim(),
+                quantity: prompt('Combien d\'unités souhaitez-vous acheter ?').trim(),
+                budget: prompt('Quel est votre budget pour l\'achat d\'une unité ?').trim(),
+                buyerLocation: {} // Stocke la localisation de l'acheteur
+            };
+    
+            // Validation des informations du visiteur
+            if (!visitorInfo.username || !visitorInfo.contact || !visitorInfo.email || !visitorInfo.quantity || !visitorInfo.budget) {
+                alert('Veuillez remplir toutes les informations demandées.');
+                return;
+            }
+    
+            // Récupérer la localisation de l'acheteur
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    visitorInfo.buyerLocation.latitude = position.coords.latitude;
+                    visitorInfo.buyerLocation.longitude = position.coords.longitude;
+    
+                    // Calculer la distance entre le vendeur et l'acheteur
+                    const distance = calculateDistance(animal.location.latitude, animal.location.longitude, visitorInfo.buyerLocation.latitude, visitorInfo.buyerLocation.longitude);
+    
+                    const emailContent = `
+                        Détails de l'achat :
+                        Nom de l'animal : ${animal.nom}
+                        Catégorie : ${animal.categorie}
+                        Prix unitaire : ${animal.prix} FCFA
+                        Quantité souhaitée : ${visitorInfo.quantity}
+                        Budget pour l'achat : ${visitorInfo.budget} FCFA
+                        Distance du vendeur : ${distance.toFixed(2)} km
+    
+                        Informations sur le visiteur :
+                        Nom d'utilisateur : ${visitorInfo.username}
+                        Contact : ${visitorInfo.contact}
+                        E-mail : ${visitorInfo.email}
+                    `;
+    
+                    // Envoi du contenu par email
+                    sendEmail(emailContent);
+                }, function(error) {
+                    alert("Erreur lors de la récupération de la localisation. L'email ne peut pas être envoyé sans cette information.");
+                });
+            } else {
+                alert("La géolocalisation n'est pas disponible sur votre appareil.");
+            }
         }
-    })
-   
-}
-
-
-
-</script>
+    
+        // Fonction pour calculer la distance entre deux points (latitude, longitude)
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Rayon de la Terre en kilomètres
+            const dLat = (lat2 - lat1) * (Math.PI / 180);
+            const dLon = (lon2 - lon1) * (Math.PI / 180);
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c; // Distance en kilomètres
+        }
+    
+        // Fonction d'envoi d'email
+        function sendEmail(content) {
+            fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Merci pour votre commande ! Nous vous contacterons prochainement.");
+                } else {
+                    alert("Erreur lors de l'envoi de l'email.");
+                }
+            })
+            .catch(error => {
+                alert("Erreur de connexion. L'email n'a pas pu être envoyé.");
+                console.error('Erreur:', error);
+            });
+        }
+    </script>
+    
 
     <script src="js/script_Visiter.js"></script>
 

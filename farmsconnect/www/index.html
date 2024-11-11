@@ -179,7 +179,53 @@ document.addEventListener('deviceready', function() {
     }, 4000); // 4000 ms = 4 secondes
 }, false);
 
+
 </script>
+
+
+<script>
+    // Demander la permission d'accès à la géolocalisation
+    function requestPermission() {
+        cordova.plugins.permissions.requestPermission(
+            cordova.plugins.permissions.ACCESS_FINE_LOCATION,
+            function(success) {
+                console.log("Permission accordée");
+                getLocation(); // Si la permission est donnée, récupérer la géolocalisation
+            },
+            function(error) {
+                console.log("Permission refusée");
+                alert('La permission d\'accès à la géolocalisation est requise.');
+            }
+        );
+    }
+
+    // Récupérer la position de l'utilisateur
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+                    console.log("Latitude: " + latitude + ", Longitude: " + longitude);
+                    // Enregistrez ou utilisez les coordonnées ici
+                    window.localStorage.setItem('latitude', latitude);
+                    window.localStorage.setItem('longitude', longitude);
+                },
+                function(error) {
+                    alert("Erreur de géolocalisation : " + error.message);
+                }
+            );
+        } else {
+            alert("La géolocalisation n'est pas supportée par ce navigateur.");
+        }
+    }
+
+    // Appeler la fonction de permission dès que l'application est prête
+    document.addEventListener("deviceready", function() {
+        requestPermission();
+    }, false);
+</script>
+
 
 <script src="js/apropo.js"></script>
 

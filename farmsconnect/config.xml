@@ -10,6 +10,8 @@
     <allow-intent href="https://*/*" />
     <access origin="*" />
     <allow-navigation href="https://farmsconnect-b084ddb02391.herokuapp.com" />
+    <allow-intent href="geo:*" />
+    <preference name="GeolocationEnabled" value="true" />
 
     <platform name="android">
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
