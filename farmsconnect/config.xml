@@ -5,7 +5,7 @@
     <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
         Apache Cordova Team
     </author>
-    <content src="https://farmsconnect-b084ddb02391.herokuapp.com" />
+    <content src="https://farmsconnect-b084ddb02391.herokuapp.com/" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <platform name="android">
@@ -16,12 +16,8 @@
         <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
         <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/splash.png" />
+        <preference name="SplashMaintainAspectRatio" value="false" />
         <preference name="AndroidWindowSplashScreenDuration" value="3000" />
-        <preference name="AndroidWindowSplashScreen" value="screen" />
-        <preference name="AndroidWindowSplashMaintainAspectRatio" value="false" /> <!-- Empêcher l'aspect ratio, pour que l'image remplisse tout l'écran -->
-        <preference name="AndroidWindowFadeSplashScreenDuration" value="500" /> <!-- Durée de l'animation de fondu -->
-        <preference name="AndroidWindowShowSplashScreenSpinner" value="false" /> <!-- Désactiver le spinner -->
-
     </platform>
     <platform name="ios">
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
