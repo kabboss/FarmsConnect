@@ -1,0 +1,196 @@
+/* Style de base */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Style de l'en-tête */
+header {
+    background: linear-gradient(137deg, #86eb12, #0858ec); /* Dégradé de couleurs vertes naturelles */
+    padding: 40px 20px; /* Espacement interne */
+    text-align: center; /* Centre le texte */
+    position: relative; /* Pour l'animation */
+    overflow: hidden; /* Évite les débordements */
+    opacity: 0; /* Commence invisible */
+    animation: fadeIn 1s forwards; /* Animation d'apparition */
+}
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+    from {
+        opacity: 0; /* Commence totalement transparent */
+        transform: translateY(-20px); /* Légère montée */
+    }
+    to {
+        opacity: 1; /* Finit totalement opaque */
+        transform: translateY(0); /* Retourne à sa position d'origine */
+    }
+}
+
+/* Style du titre */
+h1 {
+    font-size: 3em; /* Taille de la police */
+    color: #ffffff; /* Couleur marron foncé */
+    margin: 0 0 20px; /* Espacement */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Ombre pour le texte */
+}
+
+/* Style de la navigation */
+nav {
+    margin-top: 20px; /* Espacement supérieur */
+}
+
+/* Liste de navigation */
+.nav-list {
+    list-style: none; /* Supprime les puces */
+    display: flex; /* Aligne horizontalement */
+    justify-content: center; /* Centre les éléments */
+    padding: 0; /* Supprime le padding */
+    margin: -5px; /* Supprime la marge */
+}
+
+/* Style des éléments de la liste */
+.nav-list li {
+    margin: 8px 15px; /* Espacement entre les éléments */
+}
+
+/* Style des liens de navigation */
+.nav-list li a {
+    text-decoration: none; /* Supprime le soulignement */
+    color: #fff; /* Couleur blanche */
+    font-weight: bold; /* Texte en gras */
+    padding: 10px 20px; /* Espacement interne */
+    border-radius: 30px; /* Bords arrondis */
+    background-color: rgba(0, 0, 0, 0.2); /* Fond semi-transparent */
+    transition: background-color 0.3s ease; /* Transition fluide */
+}
+
+/* Effet au survol des liens */
+.nav-list li a:hover {
+    background-color: rgba(64, 243, 9, 0.5); /* Couleur de fond plus claire au survol */
+}
+
+
+/* Section des animaux */
+.animals-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* S'adapte automatiquement aux tailles d'écran */
+    gap: 20px;
+    padding: 20px;
+}
+
+.animal-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+}
+
+.animal-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+.animal-card h3 {
+    margin: 15px 0;
+    font-size: 22px;
+    color: #4CAF50;
+}
+
+.animal-card p {
+    color: #666;
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.animal-card .price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.animal-card button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.animal-card button:hover {
+    background-color: #45a049;
+}
+
+
+/* Responsive pour les petits écrans */
+@media (max-width: 480px) {
+    .animals-list {
+        grid-template-columns: 1fr; /* Une seule colonne sur les petits écrans */
+    }
+
+    header h1 {
+        font-size: 24px; /* Réduction de la taille du titre */
+    }
+
+    .animal-card h3 {
+        font-size: 18px; /* Réduction de la taille des titres */
+    }
+
+    .animal-card p, .animal-card .price {
+        font-size: 14px; /* Réduction de la taille du texte */
+    }
+
+    .nav-list {
+        flex-direction: column; /* Navigation en colonne pour petits écrans */
+        align-items: center;
+    }
+
+    .nav-list a {
+        font-size: 16px; /* Taille de la police réduite */
+        padding: 8px 15px; /* Ajustement du padding */
+    }
+}
+
+
+.alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; /* Largeur ajustable selon tes préférences */
+    max-width: 600px; /* Limite maximale de la largeur */
+    background-color: #21f02c;
+    color: white;
+    padding: 30px; /* Plus d’espace pour agrandir l’alerte */
+    font-size: 20px; /* Augmente la taille du texte */
+    text-align: center; /* Centrer le texte */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+.alert.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.alert button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px; /* Augmente la taille du bouton de fermeture */
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
