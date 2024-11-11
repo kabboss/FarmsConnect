@@ -30,7 +30,7 @@ app.use(express.static('public'));
 
 // Configuration CORS pour permettre les requêtes provenant de l'origine spécifiée
 app.use(cors({
-    origin: 'https://farmsconnect-b084ddb02391.herokuapp.com',
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 
