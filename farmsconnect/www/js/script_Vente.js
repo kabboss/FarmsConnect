@@ -15,44 +15,54 @@ document.getElementById('vente-form').addEventListener('submit', async (event) =
 
     // Récupération des fichiers image et conversion en base64
     const files = document.getElementById('images').files;
+    const imagePromises = [];
     for (let file of files) {
         const reader = new FileReader();
-        reader.onloadend = () => {
-            animal.images.push(reader.result);
-        };
-        reader.readAsDataURL(file);
+        const imagePromise = new Promise((resolve, reject) => {
+            reader.onloadend = () => {
+                animal.images.push(reader.result);
+                resolve();
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+        imagePromises.push(imagePromise);
     }
 
+    // Attendre que toutes les images soient lues avant de continuer
+    await Promise.all(imagePromises);
+
     // Récupération de la position géographique du vendeur
-    const latitude = window.localStorage.getItem('latitude');
-    const longitude = window.localStorage.getItem('longitude');
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            animal.vendeurLatitude = position.coords.latitude;
+            animal.vendeurLongitude = position.coords.longitude;
 
-    if (latitude && longitude) {
-        animal.vendeurLatitude = latitude;
-        animal.vendeurLongitude = longitude;
+            try {
+                // Envoi des données via une requête POST
+                const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/vente', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(animal)
+                });
 
-        try {
-            // Envoi des données via une requête POST
-            const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/vente', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(animal)
-            });
-
-            // Vérification de la réponse
-            const data = await response.json();
-            if (response.ok) {
-                alert('Annonce ajoutée avec succès !');
-                document.getElementById('vente-form').reset(); // Réinitialise le formulaire
-            } else {
-                alert('Erreur lors de l\'ajout de l\'annonce: ' + data.message);
+                // Vérification de la réponse
+                const data = await response.json();
+                if (response.ok) {
+                    alert('Annonce ajoutée avec succès !');
+                    document.getElementById('vente-form').reset(); // Réinitialise le formulaire
+                } else {
+                    alert('Erreur lors de l\'ajout de l\'annonce: ' + data.message);
+                }
+            } catch (error) {
+                alert('Erreur lors de la communication avec le serveur: ' + error.message);
             }
-        } catch (error) {
-            alert('Erreur lors de la communication avec le serveur: ' + error.message);
-        }
+        }, function(error) {
+            alert("La géolocalisation est nécessaire pour ajouter une annonce. Erreur: " + error.message);
+        });
     } else {
-        alert('Impossible de récupérer la géolocalisation du vendeur.');
+        alert("La géolocalisation n'est pas disponible sur ce navigateur.");
     }
 });
