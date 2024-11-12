@@ -17,10 +17,7 @@ const annonceSchema = new mongoose.Schema({
   contactSecondaire: { type: String },
   emailVendeur: { type: String, required: true },
   codeVendeur: { type: String, required: true, index: true },
-  location: {
-    latitude: { type: Number, required: true },
-    longitude: { type: Number, required: true },
-  },
+  
   dateAjout: { type: Date, default: Date.now },
 });
 
