@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(annonces => {
             annonces.forEach(animal => {
-                // Traitement des annonces sans géolocalisation
+                animal.distance = "Inconnue"; // Pas de calcul de distance sans géolocalisation
+
                 const animalCard = document.createElement('div');
                 animalCard.classList.add('animal-card');
                 animalCard.innerHTML = `
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p>Poids par animal : ${animal.poids} kg</p>
                     <p>Prix unitaire : ${animal.prix} FCFA</p>
                     <p>Code du vendeur : ${animal.codeVendeur}</p>
+                    <p>Distance : ${animal.distance}</p>
                     <div class="images-section">
                         ${animal.images.map(img => `<img src="${img}" alt="Image de l'animal" />`).join('')}
                     </div>

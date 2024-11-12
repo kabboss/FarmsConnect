@@ -30,56 +30,53 @@
         <!-- Les informations sur les animaux à vendre s'afficheront ici -->
     </section>
 
-<script>
+    <script>
 
-function handlePurchase(animal) {
-    const visitorInfo = {
-        username: prompt('Entrez votre nom d’utilisateur :'),
-        contact: prompt('Entrez votre numéro de contact :'),
-        email: prompt('Entrez votre e-mail :'),
-        quantity: prompt('Combien d\'unités souhaitez-vous acheter ?'),
-        budget: prompt('Quel est votre budget pour l\'achat d\'une unité ?'),
-    };
-
-    const emailContent = `
-        Détails de l'achat :
-        Nom de l'animal : ${animal.nom}
-        Catégorie : ${animal.categorie}
-        Prix unitaire : ${animal.prix} FCFA
-        Code du vendeur : ${animal.codeVendeur}
-        Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? ` (secondaire : ${animal.contactSecondaire})` : ''}
+        function handlePurchase(animal) {
+            const visitorInfo = {
+                username: prompt('Entrez votre nom d’utilisateur :'),
+                contact: prompt('Entrez votre numéro de contact :'),
+                email: prompt('Entrez votre e-mail :'),
+                quantity: prompt('Combien d\'unités souhaitez-vous acheter ?'),
+                budget: prompt('Quel est votre budget pour l\'achat d\'une unité ?')
+            };
         
-        Informations sur le visiteur :
-        Nom d'utilisateur : ${visitorInfo.username}
-        Contact : ${visitorInfo.contact}
-        E-mail : ${visitorInfo.email}
-        Nombre souhaité : ${visitorInfo.quantity}
-        Budget pour l'achat d'une unité : ${visitorInfo.budget} FCFA
-    `;
-
-    sendEmail(emailContent);
-}
-
-
-function sendEmail(content) {
-    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content })
-    })
-    .then(response => {
-        if (response.ok) {
-            showAlert("Merci pour votre commande !\n\nNous l'avons bien reçue et nous vous contacterons prochainement pour organiser la livraison. Notez que chaque produit passe par un contrôle sanitaire rigoureux pour garantir sa qualité.\n\nÀ très bientôt !");
-        } else {
-            showAlert("Erreur lors de l'envoi de l'email.");
+            const emailContent = `
+                Détails de l'achat :
+                Nom de l'animal : ${animal.nom}
+                Catégorie : ${animal.categorie}
+                Prix unitaire : ${animal.prix} FCFA
+                Code du vendeur : ${animal.codeVendeur}
+                Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? ` (secondaire : ${animal.contactSecondaire})` : ''}
+                
+                Informations sur le visiteur :
+                Nom d'utilisateur : ${visitorInfo.username}
+                Contact : ${visitorInfo.contact}
+                E-mail : ${visitorInfo.email}
+                Nombre souhaité : ${visitorInfo.quantity}
+                Budget pour l'achat d'une unité : ${visitorInfo.budget} FCFA
+            `;
+        
+            sendEmail(emailContent);
         }
-    })
-   
-}
-
-
-
-</script>
+        
+        function sendEmail(content) {
+            fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content })
+            })
+            .then(response => {
+                if (response.ok) {
+                    showAlert("Merci pour votre commande !\n\nNous l'avons bien reçue et nous vous contacterons prochainement pour organiser la livraison. Notez que chaque produit passe par un contrôle sanitaire rigoureux pour garantir sa qualité.\n\nÀ très bientôt !");
+                } else {
+                    showAlert("Erreur lors de l'envoi de l'email.");
+                }
+            })
+        }
+        
+        </script>
+        
 
     <script src="script_Visiter.js"></script>
 
