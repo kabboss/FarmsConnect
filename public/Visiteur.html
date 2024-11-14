@@ -34,11 +34,11 @@
 
         function handlePurchase(animal) {
             const visitorInfo = {
-                username: prompt('Entrez votre nom d’utilisateur :'),
+                username: prompt('Nom et Prénom :'),
                 contact: prompt('Entrez votre numéro de contact :'),
                 email: prompt('Entrez votre e-mail :'),
-                quantity: prompt('Combien d\'unités souhaitez-vous acheter ?'),
-                budget: prompt('Quel est votre budget pour l\'achat d\'une unité ?')
+                quantity: prompt('Combien d\'unités de ce produit souhaitez-vous acheter ?'),
+                quartier: prompt('Quel est votre Quartier ?')
             };
         
             const emailContent = `
@@ -54,7 +54,7 @@
                 Contact : ${visitorInfo.contact}
                 E-mail : ${visitorInfo.email}
                 Nombre souhaité : ${visitorInfo.quantity}
-                Budget pour l'achat d'une unité : ${visitorInfo.budget} FCFA
+                Quartier de l'acheteur : ${visitorInfo.quartier}
             `;
         
             sendEmail(emailContent);
