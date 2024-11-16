@@ -1,0 +1,194 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #a0c6f8;
+    color: #333;
+}
+
+/* Style de l'en-tête */
+header {
+    background: linear-gradient(135deg, #00e239, #6d81f1); /* Dégradé pour un look sophistiqué */
+    padding: 40px; /* Espacement intérieur */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Ombre portée douce */
+    text-align: center; /* Centre le texte */
+    position: relative; /* Position pour l'animation */
+    overflow: hidden; /* Pour gérer l'animation */
+}
+
+/* Style du titre */
+h1 {
+    font-size: 3em; /* Grande taille de texte */
+    color: #ffffff; /* Couleur blanche */
+    margin-bottom: 20px; /* Espacement en bas */
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2); /* Ombre pour le titre */
+}
+
+/* Style de la navigation */
+nav {
+    width: 100%; /* Prend toute la largeur */
+}
+
+/* Liste de navigation */
+nav ul {
+    list-style: none; /* Supprime les puces */
+    display: flex; /* Aligne les éléments horizontalement */
+    justify-content: center; /* Centre horizontalement */
+    padding: 0; /* Supprime le padding */
+    margin: 0; /* Supprime la marge */
+}
+
+/* Style des éléments de la liste */
+nav ul li {
+    margin: 0 30px; /* Espacement entre les éléments */
+}
+
+/* Style des liens de navigation */
+nav ul li a {
+    text-decoration: none; /* Supprime le soulignement */
+    color: #ffffff; /* Couleur du texte */
+    font-weight: bold; /* Met le texte en gras */
+    padding: 10px 20px; /* Espacement intérieur */
+    border-radius: 30px; /* Bords arrondis */
+    background-color: rgba(107, 176, 240, 0.747); /* Couleur de fond semi-transparente */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Effets de transition */
+}
+
+/* Effet au survol des liens */
+nav ul li a:hover {
+    background-color: rgb(78, 243, 28); /* Couleur de fond plus claire */
+    transform: scale(1.1); /* Légère augmentation de la taille */
+}
+
+/* Animation d'apparition */
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Application de l'animation à l'en-tête */
+header {
+    animation: slideIn 0.8s ease forwards; /* Animation d'apparition */
+}
+
+/* Section de formulaire */
+.form-section {
+    background-color: #fff;
+    max-width: 100%; /* Prend la largeur totale sur petits écrans */
+    margin: 50px auto;
+    padding: 20px; /* Réduit le padding pour petits écrans */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin: 10px 0 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+form input, form select, form button {
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+
+/* Media Queries pour l'adaptation */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 28px; /* Réduction de la taille du titre */
+    }
+
+    nav ul {
+        gap: 30px; /* Réduit l'espacement entre les éléments du menu */
+    }
+
+    nav ul li a {
+        font-size: 16px; /* Taille de police réduite pour petits écrans */
+    }
+
+    .form-section {
+        padding: 15px; /* Réduit l'espacement interne pour les petits écrans */
+    }
+
+    form input, form select, form button {
+        padding: 8px; /* Ajustement de la taille des champs pour petits écrans */
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    nav ul {
+        flex-direction: column; /* Les éléments du menu s'empilent verticalement sur très petits écrans */
+        gap: 20px; /* Espace réduit entre les liens */
+    }
+
+    nav ul li a {
+        font-size: 14px; /* Réduit la taille du texte pour très petits écrans */
+    }
+
+    .form-section {
+        margin: 30px auto; /* Réduction de la marge sur les petits écrans */
+        padding: 10px; /* Moins de padding pour économiser l'espace */
+    }
+}
+
+.alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; /* Largeur ajustable selon tes préférences */
+    max-width: 600px; /* Limite maximale de la largeur */
+    background-color: #21f02c;
+    color: white;
+    padding: 30px; /* Plus d’espace pour agrandir l’alerte */
+    font-size: 20px; /* Augmente la taille du texte */
+    text-align: center; /* Centrer le texte */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+.alert.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.alert button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px; /* Augmente la taille du bouton de fermeture */
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}

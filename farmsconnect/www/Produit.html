@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmsConnect Marketplace</title>
+    <link rel="icon" type="image/png" href="img/FarmsConnect.jpg"> <!-- Chemin vers votre image -->
+    <link rel="stylesheet" href="css/Produit.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h2>Produits</h2>
+        <nav>
+            <ul>
+                <li><a href="Acceuil.html">Accueil</a></li>
+                <li><a href="Visiteur.html">Visiter les produits mis en vente</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+<section class="categories">
+    <div class="category-list">
+        <button onclick="showCategory('volailles')">Volailles</button>
+        <button onclick="showCategory('mammals')">Petit Ruminants</button>
+    </div>
+</section>
+
+<section class="products" id="product-display">
+    <div class="product-list" id="product-list">
+        <div class="product volailles">
+            <img src="img/poule.jpg" alt="Poule">
+            <h3>Poule fermière</h3>
+            <p id="price-poule">Prix: 5000 FCFA</p> <!-- Affichage initial du prix unitaire -->
+            <label for="quantity-poule">Quantité:</label>
+            <input type="number" id="quantity-poule" min="1" value="1" onchange="updatePrice('Poule fermière', 5000, 'quantity-poule', 'weight-poule')">
+            <label for="weight-poule">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-poule" min="0.1" step="0.1" value="1" onchange="updatePrice('Poule fermière', 5000, 'quantity-poule', 'weight-poule')">
+            <button onclick="acheterProduit('Poule fermière', 5000, 'quantity-poule', 'weight-poule')">Acheter</button>
+        </div>
+        
+        <div class="product volailles">
+            <img src="img/coq.jpg" alt="Coq">
+            <h3>Coq</h3>
+            <p id="price-coq">Prix: 5000 FCFA</p> <!-- Affichage initial du prix unitaire -->
+            <label for="quantity-coq">Quantité:</label>
+            <input type="number" id="quantity-coq" min="1" value="1" onchange="updatePrice('Coq', 5000, 'quantity-coq', 'weight-coq')">
+            <label for="weight-coq">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-coq" min="0.1" step="0.1" value="1" onchange="updatePrice('Coq', 5000, 'quantity-coq', 'weight-coq')">
+            <button onclick="acheterProduit('Coq', 5000, 'quantity-coq', 'weight-coq')">Acheter</button>
+        </div>
+        
+        <div class="product volailles">
+            <img src="img/dinde.jpg" alt="Dinde de Noël">
+            <h3>Dinde de Noël</h3>
+            <p id="price-dinde">Prix: 15 000 FCFA</p> <!-- Affichage initial du prix unitaire -->
+            <label for="quantity-dinde">Quantité:</label>
+            <input type="number" id="quantity-dinde" min="1" value="1" onchange="updatePrice('Dinde de Noël', 15000, 'quantity-dinde', 'weight-dinde')">
+            <label for="weight-dinde">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-dinde" min="0.1" step="0.1" value="1" onchange="updatePrice('Dinde de Noël', 15000, 'quantity-dinde', 'weight-dinde')">
+            <button onclick="acheterProduit('Dinde de Noël', 15000, 'quantity-dinde', 'weight-dinde')">Acheter</button>
+        </div>
+        
+        <div class="product volailles">
+            <img src="img/canard.jpg" alt="Canard de Pékin">
+            <h3>Canard de Pékin</h3>
+            <p id="price-canard">Prix: 10 000 FCFA</p> <!-- Affichage initial du prix unitaire -->
+            <label for="quantity-canard">Quantité:</label>
+            <input type="number" id="quantity-canard" min="1" value="1" onchange="updatePrice('Canard de Pékin', 10000, 'quantity-canard', 'weight-canard')">
+            <label for="weight-canard">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-canard" min="0.1" step="0.1" value="1" onchange="updatePrice('Canard de Pékin', 10000, 'quantity-canard', 'weight-canard')">
+            <button onclick="acheterProduit('Canard de Pékin', 10000, 'quantity-canard', 'weight-canard')">Acheter</button>
+        </div>
+        
+        <div class="product volailles">
+            <img src="img/oie.jpg" alt="Oie Grasse">
+            <h3>Oie Grasse</h3>
+            <p id="price-oie">Prix: 25 000 FCFA</p> <!-- Affichage initial du prix unitaire -->
+            <label for="quantity-oie">Quantité:</label>
+            <input type="number" id="quantity-oie" min="1" value="1" onchange="updatePrice('Oie Grasse', 25000, 'quantity-oie', 'weight-oie')">
+            <label for="weight-oie">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-oie" min="0.1" step="0.1" value="1" onchange="updatePrice('Oie Grasse', 25000, 'quantity-oie', 'weight-oie')">
+            <button onclick="acheterProduit('Oie Grasse', 25000, 'quantity-oie', 'weight-oie')">Acheter</button>
+        </div>
+        
+        <div class="product volailles">
+            <img src="img/pintade.jpg" alt="Pintade">
+            <h3>Pintade</h3>
+            <p id="price-pintade">Prix: 8 000 FCFA</p> <!-- Affichage initial du prix unitaire -->
+            <label for="quantity-pintade">Quantité:</label>
+            <input type="number" id="quantity-pintade" min="1" value="1" onchange="updatePrice('Pintade', 8000, 'quantity-pintade', 'weight-pintade')">
+            <label for="weight-pintade">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-pintade" min="0.1" step="0.1" value="1" onchange="updatePrice('Pintade', 8000, 'quantity-pintade', 'weight-pintade')">
+            <button onclick="acheterProduit('Pintade', 8000, 'quantity-pintade', 'weight-pintade')">Acheter</button>
+        </div>
+    </div>
+</section>
+
+<section class="products" id="mammals-list">
+    <div class="product-list" id="mammals-list-items">
+        
+        <div class="product mammals">
+            <img src="img/mouton.jpg" alt="Mouton">
+            <h3>Mouton</h3>
+            <p id="price-mouton">Prix: 150 000 FCFA</p> <!-- Affichage initial du prix unitaire -->
+            <label for="quantity-mouton">Quantité:</label>
+            <input type="number" id="quantity-mouton" min="1" value="1" onchange="updatePrice('Mouton', 150000, 'quantity-mouton', 'weight-mouton')">
+            <label for="weight-mouton">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-mouton" min="0.1" step="0.1" value="1" onchange="updatePrice('Mouton', 150000, 'quantity-mouton', 'weight-mouton')">
+            <button onclick="acheterProduit('Mouton', 150000, 'quantity-mouton', 'weight-mouton')">Acheter</button>
+        </div>
+        
+        <div class="product mammals">
+            <img src="img/chevre.jpg" alt="Chèvre">
+            <h3>Chèvre</h3>
+            <p id="price-chevre">Prix: 80 000 FCFA</p> <!-- Affichage initial du prix unitaire -->
+            <label for="quantity-chevre">Quantité:</label>
+            <input type="number" id="quantity-chevre" min="1" value="1" onchange="updatePrice('Chèvre', 80000, 'quantity-chevre', 'weight-chevre')">
+            <label for="weight-chevre">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-chevre" min="0.1" step="0.1" value="1" onchange="updatePrice('Chèvre', 80000, 'quantity-chevre', 'weight-chevre')">
+            <button onclick="acheterProduit('Chèvre', 80000, 'quantity-chevre', 'weight-chevre')">Acheter</button>
+        </div>
+        
+    <!-- Produit Cochon -->
+    <div class="product mammals">
+        <img src="img/cochon.jpg" alt="Cochon">
+        <h3>Cochon</h3>
+        <p id="price-cochon">Prix: 120 000 FCFA</p> <!-- Affichage initial du prix unitaire -->
+        <label for="quantity-cochon">Quantité:</label>
+        <input type="number" id="quantity-cochon" min="1" value="1" onchange="updatePrice('Cochon', 120000, 'quantity-cochon', 'weight-cochon')">
+        <label for="weight-cochon">Poids (kg) pas obligatoire:</label>
+        <input type="number" id="weight-cochon" min="0.1" step="0.1" value="1" onchange="updatePrice('Cochon', 120000, 'quantity-cochon', 'weight-cochon')">
+        <button onclick="acheterProduit('Cochon', 120000, 'quantity-cochon', 'weight-cochon')">Acheter</button>
+    </div>
+    
+</div>
+</section>
+
+
+<!-- Alert Box -->
+<div id="alert-box" class="alert hidden">
+    <span id="alert-message"></span>
+    <button id="close-alert" onclick="closeAlert()">×</button>
+</div>
+
+
+<script>
+    function updatePrice(nomProduit, prixUnitaire, quantityId, weightId) {
+    const quantityElement = document.getElementById(quantityId);
+    const weightElement = document.getElementById(weightId);
+
+    const quantity = parseInt(quantityElement.value);
+    const weight = parseFloat(weightElement.value);
+
+    if (isNaN(quantity) || isNaN(weight)) {
+        console.error('Valeurs invalides pour la quantité ou le poids');
+        alert('Erreur : veuillez entrer des valeurs valides.');
+        return;
+    }
+
+    // Calcul du prix total avant remise
+    let total = quantity * prixUnitaire * weight;
+
+    // Appliquer une remise en fonction de la quantité
+    if (quantity >= 20) {
+        total *= 0.80; // 20% de remise pour 20 articles ou plus
+    } else if (quantity >= 10) {
+        total *= 0.90; // 10% de remise pour 10 à 19 articles
+    }
+
+    // Mettre à jour le prix affiché sur la page
+    document.getElementById('price-' + nomProduit.toLowerCase()).textContent = `Prix: ${total.toFixed(2)} FCFA`;
+}
+
+function acheterProduit(nomProduit, prix, quantityId, weightId) {
+    const username = localStorage.getItem('username');
+    const email = localStorage.getItem('email');
+    const contact = localStorage.getItem('contact');
+
+    if (!username || !email) {
+        console.error('Nom d\'utilisateur ou e-mail non spécifié dans le localStorage');
+        alert('Veuillez vous connecter pour passer une commande.');
+        return;
+    }
+
+    const quantityElement = document.getElementById(quantityId);
+    const weightElement = document.getElementById(weightId);
+
+    if (!quantityElement || !weightElement) {
+        console.error('Les éléments pour la quantité ou le poids sont introuvables');
+        alert('Erreur : éléments introuvables.');
+        return;
+    }
+
+    const quantity = parseInt(quantityElement.value);
+    const weight = parseFloat(weightElement.value);
+
+    if (isNaN(quantity) || isNaN(weight)) {
+        console.error('Valeurs de quantité ou de poids invalides');
+        alert('Erreur : veuillez entrer des valeurs valides.');
+        return;
+    }
+
+    // Calcul du prix total avant remise
+    let total = quantity * prix * weight;
+
+    // Appliquer une remise pour les grandes quantités
+    if (quantity >= 20) {
+        total *= 0.80; // 20% de remise pour 20 articles ou plus
+    } else if (quantity >= 10) {
+        total *= 0.90; // 10% de remise pour 10 à 19 articles
+    }
+
+    const poidsTotal = quantity * weight;
+
+    const orderDetails = {
+        username: username,
+        email: email,
+        quantity: quantity,
+        weight: poidsTotal,
+        price: total.toFixed(2), // Arrondir le prix total à deux décimales
+        contact: contact,
+        Produit: nomProduit
+    };
+
+    console.log('Order Data:', orderDetails);
+
+    // Envoyer la requête POST à l'API
+    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/order', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(orderDetails)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.text();
+        } else {
+            throw new Error('Erreur lors de la commande');
+        }
+    })
+    .then(data => {
+        alert('Commande passée avec succès! Nous vous avons envoyé un mail contenant les détails de votre commande.');
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Erreur lors de la commande :', error);
+        alert('Erreur lors de la commande.');
+    });
+}
+
+    </script>
+    
+
+<script>
+    function showAlert(message) {
+    const alertBox = document.getElementById('alert-box');
+    const alertMessage = document.getElementById('alert-message');
+    
+    alertMessage.textContent = message; // Définir le message de l'alerte
+    alertBox.classList.remove('hidden'); // Afficher l'alerte
+
+    // Masquer l'alerte après 5 secondes (facultatif)
+    setTimeout(closeAlert, 10000);
+}
+
+function closeAlert() {
+    const alertBox = document.getElementById('alert-box');
+    alertBox.classList.add('hidden'); // Masquer l'alerte
+}
+
+</script>
+
+
+<section class="about">
+    <h2>À propos de FarmsConnect</h2>
+    <p>FarmsConnect est une plateforme innovante dédiée aux éleveurs et au particuliers au Burkina Faso, permettant l'échange et la vente de produits d'élevage. Notre mission est de soutenir les agriculteurs et eleveurs en particuliers et d'améliorer leur revenu grâce à des outils modernes.</p>
+</section>
+
+<section class="testimonials">
+    <h2>Avis de nos utilisateurs</h2>
+    <div class="testimonial">
+        <p>"FarmsConnect a transformé ma façon de vendre mes animaux. La plateforme est facile à utiliser et j'ai trouvé de nouveaux clients rapidement!"</p>
+        <cite>- Éleveur local</cite>
+    </div>
+    <div class="testimonial">
+        <p>"Les conseils et la formation offerts par FarmsConnect m'ont aidé à améliorer ma production!"</p>
+        <cite>- Agriculteur heureux</cite>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2024 FarmsConnect. Tous droits réservés.</p>
+</footer>
+
+<script src="js/script_Acceuil.js"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animaux à Vendre - FarmsConnect</title>
+    <link rel="icon" type="image/png" href="img/FarmsConnect.jpg"> <!-- Chemin vers votre image -->
+    <link rel="stylesheet" href="css/style_Visiter.css">
+</head>
+<body>
+    <header>
+        <h1>Animaux Disponibles</h1>
+        <nav>
+            <ul class="nav-list">
+                <li><a href="Acceuil.html">Accueil</a></li>
+                <li><a href="Vente.html">Vendre</a></li>
+                <li><a href="apropo.html">À Propos</a></li>
+
+                
+
+            </ul>
+        </nav>
+    </header>
+    
+    <div id="animal-list">
+        <!-- Les animaux ajoutés seront affichés ici -->
+    </div>
+    
+    <section class="animals-list" id="animals-list">
+        <!-- Les informations sur les animaux à vendre s'afficheront ici -->
+    </section>
+
+    <script>
+
+        function handlePurchase(animal) {
+            const visitorInfo = {
+                username: prompt('Nom et Prénom :'),
+                contact: prompt('Entrez votre numéro de contact :'),
+                email: prompt('Entrez votre e-mail :'),
+                quantity: prompt('Combien d\'unités de ce produit souhaitez-vous acheter ?'),
+                quartier: prompt('Quel est votre Quartier ?')
+            };
+        
+            const emailContent = `
+                Détails de l'achat :
+                Nom de l'animal : ${animal.nom}
+                Catégorie : ${animal.categorie}
+                Prix unitaire : ${animal.prix} FCFA
+                Code du vendeur : ${animal.codeVendeur}
+                Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? ` (secondaire : ${animal.contactSecondaire})` : ''}
+                
+                Informations sur le visiteur :
+                Nom d'utilisateur : ${visitorInfo.username}
+                Contact : ${visitorInfo.contact}
+                E-mail : ${visitorInfo.email}
+                Nombre souhaité : ${visitorInfo.quantity}
+                Quartier de l'acheteur : ${visitorInfo.quartier}
+            `;
+        
+            sendEmail(emailContent);
+        }
+        
+        function sendEmail(content) {
+            fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content })
+            })
+            .then(response => {
+                if (response.ok) {
+                    showAlert("Merci pour votre commande !\n\nNous l'avons bien reçue et nous vous contacterons prochainement pour organiser la livraison. Notez que chaque produit passe par un contrôle sanitaire rigoureux pour garantir sa qualité.\n\nÀ très bientôt !");
+                } else {
+                    showAlert("Erreur lors de l'envoi de l'email.");
+                }
+            })
+        }
+        
+        </script>
+        
+
+    <script src="js/script_Visiter.js"></script>
+
+    <div class="alert hidden" id="customAlert">
+        <button onclick="closeAlert()">×</button>
+        <p id="alertMessage"></p>
+    </div>
+
+</body>
+</html>
