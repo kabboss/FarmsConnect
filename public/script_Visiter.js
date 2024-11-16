@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const animalCard = document.createElement('div');
             animalCard.classList.add('animal-card');
             animalCard.innerHTML = `
-                <h3>${animal.nom} (${animal.categorie})</h3>
+                <h3>(${animal.categorie})</h3>
                 <p>Nombre : ${animal.nombre}</p>
                 <p>Poids par animal : ${animal.poids} kg</p>
                 <p>Prix unitaire : ${animal.prix} FCFA</p>
@@ -48,3 +48,33 @@ function showAlert(message) {
 function closeAlert() {
     document.getElementById("customAlert").classList.add("hidden");
 }
+
+
+
+
+
+
+
+
+
+// Sélectionne les éléments
+const modalVisitor = document.getElementById('modal-visitor');
+const openModalButtonVisitor = document.querySelector('.open-modal-button');
+const closeButtonVisitor = document.querySelector('.close-button');
+
+// Ouvre la fenêtre modale pour les visiteurs
+openModalButtonVisitor.addEventListener('click', function() {
+    modalVisitor.classList.add('visible');
+});
+
+// Ferme la fenêtre modale pour les visiteurs
+closeButtonVisitor.addEventListener('click', function() {
+    modalVisitor.classList.remove('visible');
+});
+
+// Ferme la fenêtre modale si l'utilisateur clique en dehors de celle-ci
+window.addEventListener('click', function(event) {
+    if (event.target === modalVisitor) {
+        modalVisitor.classList.remove('visible');
+    }
+});

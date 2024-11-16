@@ -12,6 +12,7 @@ const multer = require('multer');
 const path = require('path');
 const Grid = require('gridfs-stream');
 const { GridFsStorage } = require('multer-gridfs-storage');
+const twilio = require('twilio');
 
 // Modèles
 const User = require('./models/User');
@@ -22,6 +23,16 @@ const Annonce = require('./models/Annonce');
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
+
+
+// Vos informations Twilio (remplacez par vos propres identifiants)
+const accountSid = 'AC771d70236f0f77f857b17485bf666a25'; // Votre SID
+const authToken = '164aa330aa2c403404ea836d04171c71';   // Votre Auth Token
+const twilioPhoneNumber = '+14803604670'; // Votre numéro Twilio
+
+// Créer un client Twilio
+const twilioClient = new twilio(accountSid, authToken);
+
 
 // Middleware pour gérer les fichiers JSON et statiques
 app.use(express.json({ limit: '20mb' }));
@@ -322,9 +333,33 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
 
 
 
+// Route pour gérer l'achat
+app.post('/acheter', async (req, res) => {
+    const { annonceId } = req.body;
 
+    try {
+        // Trouver l'annonce correspondant à l'ID
+        const annonce = await Annonce.findById(annonceId);
 
+        if (!annonce) {
+            return res.status(404).json({ success: false, message: "Annonce non trouvée" });
+        }
 
+        // Envoi du SMS
+        await twilioClient.messages.create({
+            body: `Un client est intéressé par votre annonce "${annonce.nom}" (${annonce.categorie}). FarmsConnect vous contactera pour organiser l'expédition.`,
+            from: twilioPhoneNumber, // Votre numéro Twilio
+            to: annonce.contactPrincipal // Contact du vendeur
+        });
+
+        res.json({ success: true, message: "Le vendeur a été informé par SMS." });
+    } catch (error) {
+        console.error("Erreur lors de l'envoi du SMS :", error);
+        res.status(500).json({ success: false, message: "Erreur serveur." });
+    }
+});
+
+  
 
 
 

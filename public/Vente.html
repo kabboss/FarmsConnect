@@ -9,11 +9,11 @@
 </head>
 <body>
     <header>
-        <h1>Vendre un Animal</h1>
+        <h1>Vendre des poulets </h1>
         <nav>
             <ul>
                 <li><a href="Acceuil.html">Accueil</a></li>
-                <li><a href="Visiteur.html">Animaux mis en Vente</a></li>
+                <li><a href="Visiteur.html">Poulet mis en Vente</a></li>
                 <li><a href="apropo.html">À Propos</a></li>
 
             </ul>
@@ -22,27 +22,32 @@
 
     <section class="form-section">
         <form id="vente-form">
-            <label for="categorie">Catégorie d'Animal :</label>
+            <label for="categorie">Catégorie :</label>
             <select id="categorie" name="categorie">
-                <option value="volaille">Volailles</option>
-                <option value="ruminants">Ruminants</option>
+                <option value="volaille">Poulet local</option>
+                <option value="volaille">Poulet de chair</option>
+                <option value="volaille">Poulet Ameliorer</option>
+                <option value="volaille">Poule Pondeuse</option>
+                <div class="invalid-feedback">Veuillez choisir une catégorie.</div>
+
             </select>
-    
-            <label for="nom-animal">Nom de l'animal :</label>
-            <input type="text" id="nom-animal" name="nom-animal" required>
     
             <label for="nombre">Nombre :</label>
             <input type="number" id="nombre" name="nombre" min="1" required>
-    
+            <div class="invalid-feedback">Veuillez entrer le nombre.</div>
+
             <label for="poids">Poids par animal (en kg) Pas obligatoire  :</label>
             <input type="number" id="poids" name="poids" step="0.1">
-    
+            <div class="invalid-feedback">Veuillez entrer le poids.</div>
+
             <label for="prix">Prix unitaire (en FCFA) :</label>
             <input type="number" id="prix" name="prix" required>
-    
-            <label for="images">Ajouter des images :</label>
+            <div class="invalid-feedback">Veuillez indiquer un prix.</div>
+
+            <label for="images">Ajouter des images (max 10) :</label>
             <input type="file" id="images" name="images" accept="image/*" multiple>
-    
+            <div class="invalid-feedback">Veuillez ajouter des images.</div>
+
             <label for="contact-principal">Contact principal :</label>
             <input type="tel" id="contact-principal" name="contact-principal" required placeholder="Ex: +22670010101">
     
@@ -52,6 +57,37 @@
             <label for="email-vendeur">E-mail (optionnel) :</label>
             <input type="email" id="email-vendeur" name="email-vendeur" placeholder="Ex: vendeur@example.com">
     
+            <button class="open-modal-button">Note Importante aux Vendeurs</button>
+            <!-- Fenêtre modale -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Note Importante aux Vendeurs</h2>
+            <p><strong>Chers vendeurs,</strong></p>
+            <p>
+                Nous vous remercions de faire partie de la communauté <strong>FarmsConnect</strong>. Voici une information importante sur la gestion des ventes et des certifications sur notre plateforme :
+            </p>
+            <ol>
+                <li>
+                    <strong>Notification lors d'une commande</strong><br>
+                    Lorsqu’un client clique sur votre annonce pour acheter un produit, vous recevrez une notification via votre compte vendeur. Cette notification vous informera qu’une commande est en cours de traitement par FarmsConnect.
+                </li>
+                <li>
+                    <strong>Certification des produits</strong><br>
+                    FarmsConnect se charge de certifier vos produits avant de les livrer au client. Un vétérinaire de notre réseau inspectera les animaux pour garantir leur qualité et leur conformité.
+                </li>
+                <li>
+                    <strong>Livraison au client</strong><br>
+                    Après la certification, FarmsConnect organisera la livraison directement au client. Vous n’aurez pas à vous occuper de la logistique ou du transport.
+                </li>
+            </ol>
+            <p>
+                <strong>Ce processus permet de garantir une qualité optimale pour vos produits et d’établir une relation de confiance avec les clients.</strong>
+            </p>
+            <p>Pour toute question ou assistance, veuillez contacter notre service support.</p>
+            <p class="signature">Cordialement,<br><em>L’équipe FarmsConnect</em></p>
+        </div>
+    </div>
             <button type="submit">Ajouter l'annonce</button>
         </form>
     </section>
