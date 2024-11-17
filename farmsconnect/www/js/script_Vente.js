@@ -89,19 +89,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeModalButton = modal.querySelector('.close-button');
 
     // Ouvrir la fenêtre modale
-    openModalButton.addEventListener('click', () => {
-        modal.classList.add('visible');
+    openModalButton.addEventListener('click', (event) => {
+        event.preventDefault(); // Empêche la soumission du formulaire si le bouton est dans un formulaire
+        modal.classList.add('visible'); // Affiche la modale
     });
 
     // Fermer la fenêtre modale
     closeModalButton.addEventListener('click', () => {
-        modal.classList.remove('visible');
+        modal.classList.remove('visible'); // Cache la modale
     });
 
     // Fermer la fenêtre modale en cliquant à l'extérieur
     modal.addEventListener('click', (event) => {
         if (event.target === modal) {
-            modal.classList.remove('visible');
+            modal.classList.remove('visible'); // Cache la modale si on clique à l'extérieur
         }
     });
 });

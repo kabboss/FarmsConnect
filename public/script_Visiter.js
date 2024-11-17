@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const annonceId = animal._id;
         
                 // Envoi de la requête POST pour l'achat
-                fetch('/acheter', {
+                fetch('https://farmsconnect-b084ddb02391.herokuapp.com/acheter', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -115,17 +115,54 @@ const closeButtonVisitor = document.querySelector('.close-button');
 
 // Ouvre la fenêtre modale pour les visiteurs
 openModalButtonVisitor.addEventListener('click', function() {
-    modalVisitor.classList.add('visible');
+    modalVisitor.classList.add('visible'); // Ajoute la classe 'visible' pour afficher la modale
 });
 
 // Ferme la fenêtre modale pour les visiteurs
 closeButtonVisitor.addEventListener('click', function() {
-    modalVisitor.classList.remove('visible');
+    modalVisitor.classList.remove('visible'); // Retire la classe 'visible' pour masquer la modale
 });
 
 // Ferme la fenêtre modale si l'utilisateur clique en dehors de celle-ci
 window.addEventListener('click', function(event) {
     if (event.target === modalVisitor) {
-        modalVisitor.classList.remove('visible');
+        modalVisitor.classList.remove('visible'); // Masque la modale si on clique en dehors
     }
+});
+
+
+
+document.querySelectorAll('.buy-button').forEach(button => {
+    button.addEventListener('click', function () {
+        // Récupérer les données de l'animal
+        const animal = JSON.parse(this.getAttribute('data-animal'));
+        const annonceId = animal._id;
+
+        // Afficher le chargement
+        showLoading();
+
+        // Envoyer la requête au serveur
+        fetch('/acheter', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ annonceId }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Cacher le chargement
+                hideLoading();
+                if (data.success) {
+                    alert('Le vendeur a été informé par email.');
+                } else {
+                    alert('Une erreur s\'est produite.');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                hideLoading();
+                alert('Une erreur s\'est produite.');
+            });
+    });
 });

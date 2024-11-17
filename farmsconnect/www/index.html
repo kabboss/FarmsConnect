@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FarmsConnect</title>
     <link rel="icon" type="image/png" href="img/FarmsConnect.jpg"> <!-- Chemin vers votre image -->
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
 
@@ -22,28 +22,19 @@
     </ul>
 </nav>
 
+<section class="button-container">
+    <button id="show-login-btn">Se connecter</button>
+    <button id="show-signup-btn">S'inscrire</button>
+</section>
 
-<section class="form-container" id="form-container">
-    
-    <div class="signup-form">
-        <h2>Créer un compte</h2>
-        <form id="signup-form">
-            <input type="text" id="signup-username" name="username" placeholder="Nom d'utilisateur" required>
-            <input type="email" id="signup-email" name="email" placeholder="Email" required>
-            <input type="text" id="signup-contact" name="contact" placeholder="Contact" required>
-            <input type="password" id="signup-password" name="password" placeholder="Mot de passe" required>
-            <select name="userType" required>
-                <option value="Vendeur">Vendeur</option>
-                <option value="Acheteur">Acheteur</option>
-                <option value="Visiteur">Visiteur</option>
-            </select>
-            <button type="submit">S'inscrire</button>
-        </form>
-    </div>
 
-    <div class="login-form">
-        <h1>Connexion</h1>
+<!-- Modale de connexion -->
+<div class="modal" id="login-modal">
+    <div class="modal-content">
+        <span class="close-btn" id="close-login-modal">&times;</span>
+        <h2>Connexion</h2>
         <form id="login-form">
+            <!-- Les champs du formulaire de connexion ici -->
             <input type="text" id="login-username" placeholder="Nom d'utilisateur" required>
             <input type="email" id="login-email" placeholder="Email" required>
             <input type="text" id="login-contact" placeholder="Contact" required>
@@ -51,13 +42,154 @@
             <button type="submit">Se connecter</button>
         </form>
     </div>
-</section>
+</div>
 
+<!-- Modale d'inscription -->
+<div class="modal" id="signup-modal">
+    <div class="modal-content">
+        <span class="close-btn" id="close-signup-modal">&times;</span>
+        <h2>Créer un compte</h2>
+        <form id="signup-form">
+            <!-- Les champs du formulaire d'inscription ici -->
+            <input type="text" id="signup-username" placeholder="Nom d'utilisateur" required>
+            <input type="email" id="signup-email" placeholder="Email" required>
+            <input type="text" id="signup-contact" placeholder="Contact" required>
+            <input type="password" id="signup-password" placeholder="Mot de passe" required>
+            <button type="submit">S'inscrire</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- Animation de chargement globale -->
+<div id="loading-overlay" style="display: none;">
+    <div class="spinner">
+        <!-- Animation (image ou autre élément) -->
+        <img src="img/FarmsConnect.jpg" alt="Chargement...">
+        <p>Veuillez patienter...</p>
+    </div>
+</div>
+
+<script>
+
+// Fonction pour afficher l'animation de chargement
+function showLoading() {
+    document.getElementById('loading-overlay').style.display = 'flex';
+}
+
+// Fonction pour cacher l'animation de chargement
+function hideLoading() {
+    document.getElementById('loading-overlay').style.display = 'none';
+}
+
+// Appliquer à toutes les actions de navigation (facultatif si navigation SPA)
+document.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', function () {
+        showLoading();
+    });
+});
+
+// Exemple d'utilisation pour une action de chargement (AJAX ou fetch)
+function simulateLongProcess() {
+    showLoading();
+    setTimeout(() => {
+        hideLoading();
+        alert("Processus terminé !");
+    }, 3000); // Simule un délai de 3 secondes
+}
+
+
+</script>
+
+
+
+<script>
+
+    // Fonction pour afficher l'animation de chargement
+    function showLoading() {
+        document.getElementById('loading-overlay').style.display = 'flex';
+    }
+
+    // Fonction pour cacher l'animation de chargement
+    function hideLoading() {
+        document.getElementById('loading-overlay').style.display = 'none';
+    }
+
+    // Afficher le chargement au début
+    showLoading();
+
+    // Masquer le chargement après le chargement complet de la page
+    window.addEventListener('load', function () {
+        hideLoading();
+    });
+
+    // Exemple d'ajout d'une animation de chargement à un bouton
+    document.querySelectorAll('.buy-button').forEach(button => {
+        button.addEventListener('click', function () {
+            showLoading(); // Affiche l'animation
+            setTimeout(() => {
+                hideLoading(); // Masque l'animation après un processus simulé
+                alert('Processus terminé');
+            }, 3000); // Simule un délai de 3 secondes
+        });
+    });
+
+</script>
+
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Cibler les boutons
+    const showLoginBtn = document.getElementById('show-login-btn');
+    const showSignupBtn = document.getElementById('show-signup-btn');
+    
+    const loginModal = document.getElementById('login-modal');
+    const signupModal = document.getElementById('signup-modal');
+
+    const closeLoginModal = document.getElementById('close-login-modal');
+    const closeSignupModal = document.getElementById('close-signup-modal');
+
+    // Afficher la modale de connexion
+    showLoginBtn.addEventListener('click', function() {
+        loginModal.style.display = 'flex';
+        signupModal.style.display = 'none'; // Cacher la modale d'inscription
+    });
+
+    // Afficher la modale d'inscription
+    showSignupBtn.addEventListener('click', function() {
+        signupModal.style.display = 'flex';
+        loginModal.style.display = 'none'; // Cacher la modale de connexion
+    });
+
+    // Fermer la modale de connexion
+    closeLoginModal.addEventListener('click', function() {
+        loginModal.style.display = 'none';
+    });
+
+    // Fermer la modale d'inscription
+    closeSignupModal.addEventListener('click', function() {
+        signupModal.style.display = 'none';
+    });
+
+    // Fermer les modales en cliquant en dehors de la boîte de contenu
+    window.addEventListener('click', function(event) {
+        if (event.target === loginModal) {
+            loginModal.style.display = 'none';
+        } else if (event.target === signupModal) {
+            signupModal.style.display = 'none';
+        }
+    });
+});
+
+
+</script>
 
 
 <div class="description">
     <div class="blur-background"></div> <!-- Ajoutez cette ligne pour l'effet de flou -->
-    <p>FarmsConnect est une plateforme innovante qui sert de marketplace pour les produits d'élevage et les services de santé animale. Elle connecte éleveurs, vendeurs, vétérinaires et consommateurs, facilitant l'accès à des produits de qualité. L'objectif de FarmsConnect est de promouvoir un élevage responsable et durable tout en soutenant les communautés rurales au Burkina Faso avec des solutions adaptées.</p>
+    <p>FarmsConnect facilite la mise en relation directe entre les éleveurs et les consommateurs, offrant ainsi aux éleveurs la possibilité de vendre leurs produits à des prix équitables, sans intermédiaires. Grâce à un système de certification vétérinaire, la plateforme garantit aux consommateurs l'accès à des produits de qualité, traçables et sécurisés. En parallèle, FarmsConnect soutient les éleveurs en les aidant à maximiser leur productivité, à réduire les pertes liées aux maladies animales et à améliorer la gestion de leurs exploitations, qu'elles soient petites ou grandes. Cette solution crée un cercle vertueux où consommateurs et éleveurs bénéficient d'un marché transparent, responsable et durable.</p>
 </div>
 
 
@@ -179,7 +311,7 @@ document.addEventListener('deviceready', function() {
 
 </script>
 
-<script src="js/apropo.js"></script>
+<script src="apropo.js"></script>
 
 <div class="alert hidden" id="customAlert">
     <button onclick="closeAlert()">×</button>
