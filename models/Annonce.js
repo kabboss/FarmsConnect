@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const annonceSchema = new mongoose.Schema({
   categorie: { type: String, required: true },
-  nom: { type: String, required: true },
   nombre: { type: Number, required: true, min: 1 },
   poids: { type: Number, required: true, min: 0 },
   prix: { type: Number, required: true, min: 0 },
@@ -10,7 +9,7 @@ const annonceSchema = new mongoose.Schema({
     type: [String],
     validate: {
       validator: (val) => val.length <= 10,
-      message: 'Maximum de 6 images par annonce',
+      message: 'Maximum de 10 images par annonce',
     },
   },
   contactPrincipal: { type: String, required: true },
