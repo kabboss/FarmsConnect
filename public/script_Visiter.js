@@ -36,6 +36,40 @@ document.addEventListener('DOMContentLoaded', function() {
             animalsList.appendChild(animalCard);
         });
 
+
+        document.querySelectorAll('.buy-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Récupérer les informations de l'animal depuis l'attribut 'data-animal'
+                const animal = JSON.parse(this.getAttribute('data-animal'));
+        
+                // Extraire l'ID de l'animal
+                const annonceId = animal._id;
+        
+                // Envoi de la requête POST pour l'achat
+                fetch('/acheter', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ annonceId: annonceId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Le vendeur a été informé par email.');
+                    } else {
+                        alert('Une erreur s\'est produite lors de l\'envoi de l\'email.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur s\'est produite.');
+                });
+            });
+        });
+        
+
+
         document.querySelectorAll('.see-more-button').forEach(button => {
             button.addEventListener('click', function() {
                 const animal = JSON.parse(this.getAttribute('data-animal'));
@@ -69,10 +103,6 @@ function showAlert(message) {
 function closeAlert() {
     document.getElementById("customAlert").classList.add("hidden");
 }
-
-
-
-
 
 
 

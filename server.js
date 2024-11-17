@@ -356,10 +356,6 @@ app.post('/acheter', async (req, res) => {
   
 
 
-
-
-
-
 // Configuration du serveur
 const PORT = process.env.PORT || 3002;
 server.listen(PORT, () => {
