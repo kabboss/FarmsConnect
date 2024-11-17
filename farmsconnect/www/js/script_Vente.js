@@ -3,7 +3,6 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
 
     const animal = {
         categorie: document.getElementById('categorie').value,
-        nom: document.getElementById('nom-animal').value,
         nombre: document.getElementById('nombre').value,
         poids: document.getElementById('poids').value,
         prix: document.getElementById('prix').value,
@@ -76,3 +75,33 @@ function showAlert(message) {
 function closeAlert() {
     document.getElementById("customAlert").classList.add("hidden");
 }
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('modal');
+    const openModalButton = document.querySelector('.open-modal-button');
+    const closeModalButton = modal.querySelector('.close-button');
+
+    // Ouvrir la fenêtre modale
+    openModalButton.addEventListener('click', () => {
+        modal.classList.add('visible');
+    });
+
+    // Fermer la fenêtre modale
+    closeModalButton.addEventListener('click', () => {
+        modal.classList.remove('visible');
+    });
+
+    // Fermer la fenêtre modale en cliquant à l'extérieur
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.classList.remove('visible');
+        }
+    });
+});

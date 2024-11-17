@@ -6,22 +6,77 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(response => response.json())
     .then(annonces => {
         annonces.forEach(animal => {
-            // Suppression de la géolocalisation, donc pas besoin de distance
             const animalCard = document.createElement('div');
             animalCard.classList.add('animal-card');
+            
+            // Sélection de l'image principale
+            const mainImage = animal.images[0];
+
+            // Création du bouton "Voir plus"
+            const seeMoreButton = animal.images.length > 1 ? 
+                `<button class="see-more-button" data-animal='${JSON.stringify(animal)}'>Voir plus</button>` : '';
+
+            // Construction du contenu de la carte de l'animal
             animalCard.innerHTML = `
-                <h3>${animal.nom} (${animal.categorie})</h3>
+                <h3>(${animal.categorie})</h3>
                 <p>Nombre : ${animal.nombre}</p>
                 <p>Poids par animal : ${animal.poids} kg</p>
                 <p>Prix unitaire : ${animal.prix} FCFA</p>
                 <p>Code du vendeur : ${animal.codeVendeur}</p>
-                <!-- Suppression de la distance -->
                 <div class="images-section">
-                    ${animal.images.map(img => `<img src="${img}" alt="Image de l'animal" />`).join('')}
+                    <img src="${mainImage}" alt="Image de l'animal" class="main-image"/>
+                    <div class="additional-images hidden">
+                        ${animal.images.slice(1).map(img => `<img src="${img}" alt="Image supplémentaire" class="additional-image" />`).join('')}
+                    </div>
+                    ${seeMoreButton}
                 </div>
                 <button class="buy-button" data-animal='${JSON.stringify(animal)}'>Acheter ce produit</button>
             `;
+
             animalsList.appendChild(animalCard);
+        });
+
+
+        document.querySelectorAll('.buy-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Récupérer les informations de l'animal depuis l'attribut 'data-animal'
+                const animal = JSON.parse(this.getAttribute('data-animal'));
+        
+                // Extraire l'ID de l'animal
+                const annonceId = animal._id;
+        
+                // Envoi de la requête POST pour l'achat
+                fetch('/acheter', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ annonceId: annonceId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Le vendeur a été informé par email.');
+                    } else {
+                        alert('Une erreur s\'est produite lors de l\'envoi de l\'email.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur s\'est produite.');
+                });
+            });
+        });
+        
+
+
+        document.querySelectorAll('.see-more-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const animal = JSON.parse(this.getAttribute('data-animal'));
+                const additionalImages = this.previousElementSibling; // Sélectionner la section d'images supplémentaires
+                additionalImages.classList.toggle('hidden');
+                this.textContent = additionalImages.classList.contains('hidden') ? 'Voir plus' : 'Voir moins';
+            });
         });
 
         document.querySelectorAll('.buy-button').forEach(button => {
@@ -48,3 +103,29 @@ function showAlert(message) {
 function closeAlert() {
     document.getElementById("customAlert").classList.add("hidden");
 }
+
+
+
+
+
+// Sélectionne les éléments
+const modalVisitor = document.getElementById('modal-visitor');
+const openModalButtonVisitor = document.querySelector('.open-modal-button');
+const closeButtonVisitor = document.querySelector('.close-button');
+
+// Ouvre la fenêtre modale pour les visiteurs
+openModalButtonVisitor.addEventListener('click', function() {
+    modalVisitor.classList.add('visible');
+});
+
+// Ferme la fenêtre modale pour les visiteurs
+closeButtonVisitor.addEventListener('click', function() {
+    modalVisitor.classList.remove('visible');
+});
+
+// Ferme la fenêtre modale si l'utilisateur clique en dehors de celle-ci
+window.addEventListener('click', function(event) {
+    if (event.target === modalVisitor) {
+        modalVisitor.classList.remove('visible');
+    }
+});

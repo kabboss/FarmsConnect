@@ -340,7 +340,7 @@ app.post('/acheter', async (req, res) => {
             from: 'kaboreabwa2020@gmail.com', // Adresse email de l'expéditeur
             to: annonce.emailVendeur,    // Adresse email du vendeur
             subject: 'Intérêt pour votre annonce',
-            text: `Un client est intéressé par votre annonce "${annonce.nom}" dans la catégorie "${annonce.categorie}". FarmsConnect vous contactera bientôt pour organiser l'expédition.`,
+            text: `Un client est intéressé par votre annonce dans la catégorie "${annonce.categorie}". FarmsConnect vous contactera bientôt pour organiser l'expédition.`,
         };
 
         // Envoyer l'email

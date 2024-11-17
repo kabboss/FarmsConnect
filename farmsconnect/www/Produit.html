@@ -14,129 +14,108 @@
         <nav>
             <ul>
                 <li><a href="Acceuil.html">Accueil</a></li>
-                <li><a href="Visiteur.html">Visiter les produits mis en vente</a></li>
+                <li><a href="Visiteur.html">Visiter les poulets mis en vente</a></li>
             </ul>
         </nav>
     </header>
 
 
-<section class="categories">
-    <div class="category-list">
-        <button onclick="showCategory('volailles')">Volailles</button>
-        <button onclick="showCategory('mammals')">Petit Ruminants</button>
-    </div>
-</section>
+    <section class="categories">
+        <div class="category-list">
+            <button onclick="showCategory('poulet-local')">Poulet Local</button>
+            <button onclick="showCategory('poulet-chair')">Poulet de Chair</button>
+            <button onclick="showCategory('poulet-ameliore')">Poulet Amélioré</button>
+            <button onclick="showCategory('poule-pondeuse')">Poule Pondeuse</button>
+            <!-- Ajoutez ici d'autres catégories si nécessaire -->
+        </div>
+    </section>
 
-<section class="products" id="product-display">
-    <div class="product-list" id="product-list">
-        <div class="product volailles">
-            <img src="img/poule.jpg" alt="Poule">
-            <h3>Poule fermière</h3>
-            <p id="price-poule">Prix: 5000 FCFA</p> <!-- Affichage initial du prix unitaire -->
-            <label for="quantity-poule">Quantité:</label>
-            <input type="number" id="quantity-poule" min="1" value="1" onchange="updatePrice('Poule fermière', 5000, 'quantity-poule', 'weight-poule')">
-            <label for="weight-poule">Poids (kg) pas obligatoire:</label>
-            <input type="number" id="weight-poule" min="0.1" step="0.1" value="1" onchange="updatePrice('Poule fermière', 5000, 'quantity-poule', 'weight-poule')">
-            <button onclick="acheterProduit('Poule fermière', 5000, 'quantity-poule', 'weight-poule')">Acheter</button>
-        </div>
-        
-        <div class="product volailles">
-            <img src="img/coq.jpg" alt="Coq">
-            <h3>Coq</h3>
-            <p id="price-coq">Prix: 5000 FCFA</p> <!-- Affichage initial du prix unitaire -->
-            <label for="quantity-coq">Quantité:</label>
-            <input type="number" id="quantity-coq" min="1" value="1" onchange="updatePrice('Coq', 5000, 'quantity-coq', 'weight-coq')">
-            <label for="weight-coq">Poids (kg) pas obligatoire:</label>
-            <input type="number" id="weight-coq" min="0.1" step="0.1" value="1" onchange="updatePrice('Coq', 5000, 'quantity-coq', 'weight-coq')">
-            <button onclick="acheterProduit('Coq', 5000, 'quantity-coq', 'weight-coq')">Acheter</button>
-        </div>
-        
-        <div class="product volailles">
-            <img src="img/dinde.jpg" alt="Dinde de Noël">
-            <h3>Dinde de Noël</h3>
-            <p id="price-dinde">Prix: 15 000 FCFA</p> <!-- Affichage initial du prix unitaire -->
-            <label for="quantity-dinde">Quantité:</label>
-            <input type="number" id="quantity-dinde" min="1" value="1" onchange="updatePrice('Dinde de Noël', 15000, 'quantity-dinde', 'weight-dinde')">
-            <label for="weight-dinde">Poids (kg) pas obligatoire:</label>
-            <input type="number" id="weight-dinde" min="0.1" step="0.1" value="1" onchange="updatePrice('Dinde de Noël', 15000, 'quantity-dinde', 'weight-dinde')">
-            <button onclick="acheterProduit('Dinde de Noël', 15000, 'quantity-dinde', 'weight-dinde')">Acheter</button>
-        </div>
-        
-        <div class="product volailles">
-            <img src="img/canard.jpg" alt="Canard de Pékin">
-            <h3>Canard de Pékin</h3>
-            <p id="price-canard">Prix: 10 000 FCFA</p> <!-- Affichage initial du prix unitaire -->
-            <label for="quantity-canard">Quantité:</label>
-            <input type="number" id="quantity-canard" min="1" value="1" onchange="updatePrice('Canard de Pékin', 10000, 'quantity-canard', 'weight-canard')">
-            <label for="weight-canard">Poids (kg) pas obligatoire:</label>
-            <input type="number" id="weight-canard" min="0.1" step="0.1" value="1" onchange="updatePrice('Canard de Pékin', 10000, 'quantity-canard', 'weight-canard')">
-            <button onclick="acheterProduit('Canard de Pékin', 10000, 'quantity-canard', 'weight-canard')">Acheter</button>
-        </div>
-        
-        <div class="product volailles">
-            <img src="img/oie.jpg" alt="Oie Grasse">
-            <h3>Oie Grasse</h3>
-            <p id="price-oie">Prix: 25 000 FCFA</p> <!-- Affichage initial du prix unitaire -->
-            <label for="quantity-oie">Quantité:</label>
-            <input type="number" id="quantity-oie" min="1" value="1" onchange="updatePrice('Oie Grasse', 25000, 'quantity-oie', 'weight-oie')">
-            <label for="weight-oie">Poids (kg) pas obligatoire:</label>
-            <input type="number" id="weight-oie" min="0.1" step="0.1" value="1" onchange="updatePrice('Oie Grasse', 25000, 'quantity-oie', 'weight-oie')">
-            <button onclick="acheterProduit('Oie Grasse', 25000, 'quantity-oie', 'weight-oie')">Acheter</button>
-        </div>
-        
-        <div class="product volailles">
-            <img src="img/pintade.jpg" alt="Pintade">
-            <h3>Pintade</h3>
-            <p id="price-pintade">Prix: 8 000 FCFA</p> <!-- Affichage initial du prix unitaire -->
-            <label for="quantity-pintade">Quantité:</label>
-            <input type="number" id="quantity-pintade" min="1" value="1" onchange="updatePrice('Pintade', 8000, 'quantity-pintade', 'weight-pintade')">
-            <label for="weight-pintade">Poids (kg) pas obligatoire:</label>
-            <input type="number" id="weight-pintade" min="0.1" step="0.1" value="1" onchange="updatePrice('Pintade', 8000, 'quantity-pintade', 'weight-pintade')">
-            <button onclick="acheterProduit('Pintade', 8000, 'quantity-pintade', 'weight-pintade')">Acheter</button>
-        </div>
-    </div>
-</section>
+    <button class="open-modal-button">Note Importante aux Acheteurs</button>
 
-<section class="products" id="mammals-list">
-    <div class="product-list" id="mammals-list-items">
-        
-        <div class="product mammals">
-            <img src="img/mouton.jpg" alt="Mouton">
-            <h3>Mouton</h3>
-            <p id="price-mouton">Prix: 150 000 FCFA</p> <!-- Affichage initial du prix unitaire -->
-            <label for="quantity-mouton">Quantité:</label>
-            <input type="number" id="quantity-mouton" min="1" value="1" onchange="updatePrice('Mouton', 150000, 'quantity-mouton', 'weight-mouton')">
-            <label for="weight-mouton">Poids (kg) pas obligatoire:</label>
-            <input type="number" id="weight-mouton" min="0.1" step="0.1" value="1" onchange="updatePrice('Mouton', 150000, 'quantity-mouton', 'weight-mouton')">
-            <button onclick="acheterProduit('Mouton', 150000, 'quantity-mouton', 'weight-mouton')">Acheter</button>
-        </div>
-        
-        <div class="product mammals">
-            <img src="img/chevre.jpg" alt="Chèvre">
-            <h3>Chèvre</h3>
-            <p id="price-chevre">Prix: 80 000 FCFA</p> <!-- Affichage initial du prix unitaire -->
-            <label for="quantity-chevre">Quantité:</label>
-            <input type="number" id="quantity-chevre" min="1" value="1" onchange="updatePrice('Chèvre', 80000, 'quantity-chevre', 'weight-chevre')">
-            <label for="weight-chevre">Poids (kg) pas obligatoire:</label>
-            <input type="number" id="weight-chevre" min="0.1" step="0.1" value="1" onchange="updatePrice('Chèvre', 80000, 'quantity-chevre', 'weight-chevre')">
-            <button onclick="acheterProduit('Chèvre', 80000, 'quantity-chevre', 'weight-chevre')">Acheter</button>
-        </div>
-        
-    <!-- Produit Cochon -->
-    <div class="product mammals">
-        <img src="img/cochon.jpg" alt="Cochon">
-        <h3>Cochon</h3>
-        <p id="price-cochon">Prix: 120 000 FCFA</p> <!-- Affichage initial du prix unitaire -->
-        <label for="quantity-cochon">Quantité:</label>
-        <input type="number" id="quantity-cochon" min="1" value="1" onchange="updatePrice('Cochon', 120000, 'quantity-cochon', 'weight-cochon')">
-        <label for="weight-cochon">Poids (kg) pas obligatoire:</label>
-        <input type="number" id="weight-cochon" min="0.1" step="0.1" value="1" onchange="updatePrice('Cochon', 120000, 'quantity-cochon', 'weight-cochon')">
-        <button onclick="acheterProduit('Cochon', 120000, 'quantity-cochon', 'weight-cochon')">Acheter</button>
+<!-- Fenêtre modale -->
+<div id="modal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Note Importante aux Acheteurs</h2>
+        <p><strong>Chers acheteurs,</strong></p>
+        <p>
+            Nous vous remercions pour votre confiance et pour acheter sur <strong>FarmsConnect</strong>. Voici une information importante concernant la certification et la livraison des produits :
+        </p>
+        <ol>
+            <li>
+                <strong>Certification vétérinaire des produits</strong><br>
+                Avant chaque livraison, nos produits passent par une inspection rigoureuse réalisée par un vétérinaire agréé afin de garantir leur qualité et leur sécurité.
+            </li>
+            <li>
+                <strong>Contrôles de qualité</strong><br>
+                Nos vétérinaires vérifient la santé des animaux et la conformité des produits avant qu'ils ne soient envoyés à votre adresse.
+            </li>
+            <li>
+                <strong>Livraison</strong><br>
+                Une fois la certification réalisée, nous nous chargeons de la livraison des produits directement chez vous.
+            </li>
+        </ol>
+        <p>
+            <strong>Nous mettons un point d'honneur à vous fournir des produits de qualité, tout en garantissant votre sécurité.</strong>
+        </p>
+        <p>Pour toute question, notre service client est à votre disposition.</p>
+        <p class="signature">Cordialement,<br><em>L’équipe FarmsConnect</em></p>
     </div>
-    
 </div>
-</section>
 
+      
+    <section class="products" id="product-display">
+        <div class="product-list" id="product-list">
+            <!-- Poulet Local -->
+            <div class="product poulet-local">
+                <img src="img/poulet-local.jpg" alt="Poulet Local">
+                <h3>Poulet Local</h3>
+                <p id="price-poulet-local">Prix: 5 000 FCFA</p>
+                <label for="quantity-poulet-local">Quantité:</label>
+                <input type="number" id="quantity-poulet-local" min="1" value="1" onchange="updatePrice('Poulet Local', 5000, 'quantity-poulet-local', 'weight-poulet-local')">
+                <label for="weight-poulet-local">Poids (kg) pas obligatoire:</label>
+                <input type="number" id="weight-poulet-local" min="0.1" step="0.1" value="1" onchange="updatePrice('Poulet Local', 5000, 'quantity-poulet-local', 'weight-poulet-local')">
+                <button onclick="acheterProduit('Poulet Local', 5000, 'quantity-poulet-local', 'weight-poulet-local')">Acheter</button>
+            </div>
+    
+            <!-- Poulet de Chair -->
+            <div class="product poulet-chair">
+                <img src="img/poulet-chair.jpg" alt="Poulet de Chair">
+                <h3>Poulet de Chair</h3>
+                <p id="price-poulet-chair">Prix: 6 000 FCFA</p>
+                <label for="quantity-poulet-chair">Quantité:</label>
+                <input type="number" id="quantity-poulet-chair" min="1" value="1" onchange="updatePrice('Poulet de Chair', 6000, 'quantity-poulet-chair', 'weight-poulet-chair')">
+                <label for="weight-poulet-chair">Poids (kg) pas obligatoire:</label>
+                <input type="number" id="weight-poulet-chair" min="0.1" step="0.1" value="1" onchange="updatePrice('Poulet de Chair', 6000, 'quantity-poulet-chair', 'weight-poulet-chair')">
+                <button onclick="acheterProduit('Poulet de Chair', 6000, 'quantity-poulet-chair', 'weight-poulet-chair')">Acheter</button>
+            </div>
+    
+            <!-- Poulet Amélioré -->
+            <div class="product poulet-ameliore">
+                <img src="img/poulet-ameliore.jpg" alt="Poulet Amélioré">
+                <h3>Poulet Amélioré</h3>
+                <p id="price-poulet-ameliore">Prix: 7 500 FCFA</p>
+                <label for="quantity-poulet-ameliore">Quantité:</label>
+                <input type="number" id="quantity-poulet-ameliore" min="1" value="1" onchange="updatePrice('Poulet Amélioré', 7500, 'quantity-poulet-ameliore', 'weight-poulet-ameliore')">
+                <label for="weight-poulet-ameliore">Poids (kg) pas obligatoire:</label>
+                <input type="number" id="weight-poulet-ameliore" min="0.1" step="0.1" value="1" onchange="updatePrice('Poulet Amélioré', 7500, 'quantity-poulet-ameliore', 'weight-poulet-ameliore')">
+                <button onclick="acheterProduit('Poulet Amélioré', 7500, 'quantity-poulet-ameliore', 'weight-poulet-ameliore')">Acheter</button>
+            </div>
+    
+            <!-- Poule Pondeuse -->
+            <div class="product poule-pondeuse">
+                <img src="img/poule-pondeuse.jpg" alt="Poule Pondeuse">
+                <h3>Poule Pondeuse</h3>
+                <p id="price-poule-pondeuse">Prix: 4 500 FCFA</p>
+                <label for="quantity-poule-pondeuse">Quantité:</label>
+                <input type="number" id="quantity-poule-pondeuse" min="1" value="1" onchange="updatePrice('Poule Pondeuse', 4500, 'quantity-poule-pondeuse', 'weight-poule-pondeuse')">
+                <label for="weight-poule-pondeuse">Poids (kg) pas obligatoire:</label>
+                <input type="number" id="weight-poule-pondeuse" min="0.1" step="0.1" value="1" onchange="updatePrice('Poule Pondeuse', 4500, 'quantity-poule-pondeuse', 'weight-poule-pondeuse')">
+                <button onclick="acheterProduit('Poule Pondeuse', 4500, 'quantity-poule-pondeuse', 'weight-poule-pondeuse')">Acheter</button>
+            </div>
+        </div>
+    </section>
+    
 
 <!-- Alert Box -->
 <div id="alert-box" class="alert hidden">
@@ -266,10 +245,43 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
     setTimeout(closeAlert, 10000);
 }
 
+
+
 function closeAlert() {
     const alertBox = document.getElementById('alert-box');
     alertBox.classList.add('hidden'); // Masquer l'alerte
 }
+
+
+
+
+
+// Sélectionne les éléments
+const modal = document.getElementById('modal');
+const openModalButton = document.querySelector('.open-modal-button');
+const closeButton = document.querySelector('.close-button');
+
+// Ouvre la fenêtre modale
+openModalButton.addEventListener('click', function() {
+    modal.classList.add('visible');
+});
+
+// Ferme la fenêtre modale
+closeButton.addEventListener('click', function() {
+    modal.classList.remove('visible');
+});
+
+// Ferme la fenêtre modale si l'utilisateur clique en dehors de celle-ci
+window.addEventListener('click', function(event) {
+    if (event.target === modal) {
+        modal.classList.remove('visible');
+    }
+});
+
+
+
+
+
 
 </script>
 

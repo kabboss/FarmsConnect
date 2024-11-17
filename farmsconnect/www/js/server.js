@@ -23,6 +23,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
+
 // Middleware pour gérer les fichiers JSON et statiques
 app.use(express.json({ limit: '20mb' }));
 app.use(bodyParser.json());
@@ -322,13 +323,37 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
 
 
 
+// Route pour gérer l'achat
+app.post('/acheter', async (req, res) => {
+    const { annonceId } = req.body;
 
+    try {
+        // Trouver l'annonce correspondant à l'ID
+        const annonce = await Annonce.findById(annonceId);
 
+        if (!annonce) {
+            return res.status(404).json({ success: false, message: 'Annonce non trouvée' });
+        }
 
+        // Préparer le contenu de l'email
+        const mailOptions = {
+            from: 'kaboreabwa2020@gmail.com', // Adresse email de l'expéditeur
+            to: annonce.emailVendeur,    // Adresse email du vendeur
+            subject: 'Intérêt pour votre annonce',
+            text: `Un client est intéressé par votre annonce dans la catégorie "${annonce.categorie}". FarmsConnect vous contactera bientôt pour organiser l'expédition.`,
+        };
 
+        // Envoyer l'email
+        await transporter.sendMail(mailOptions);
 
+        res.json({ success: true, message: 'Le vendeur a été informé par email.' });
+    } catch (error) {
+        console.error('Erreur lors de l\'envoi de l\'email :', error);
+        res.status(500).json({ success: false, message: 'Erreur serveur.' });
+    }
+});
 
-
+  
 
 
 // Configuration du serveur
