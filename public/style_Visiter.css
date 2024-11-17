@@ -281,3 +281,37 @@ nav {
     opacity: 1;
 }
 
+
+
+
+/* Masquer les images supplémentaires par défaut */
+.hidden {
+    display: none;
+}
+
+/* Style des images supplémentaires */
+.additional-images img {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Style de l'image principale */
+.main-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Style du bouton "Voir plus" */
+.see-more-button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.see-more-button:hover {
+    background-color: #0056b3;
+}
