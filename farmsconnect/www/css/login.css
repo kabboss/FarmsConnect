@@ -40,7 +40,7 @@ header {
     margin: 20px;
     text-align: center;
     opacity: 0; /* Initialement invisible */
-    animation: apparaitre 2s ease-out forwards; /* Durée de l'animation et activation */
+    animation: apparaitre 4s ease-out forwards; /* Durée de l'animation et activation */
 }
 
 /* Style du texte de bienvenue */
@@ -55,42 +55,60 @@ header {
 }
 
 
-/* Style de la navigation */
+/* Style général de la barre de navigation */
 nav {
     display: flex;
-    justify-content: center;
-    margin: 10px 0;
-    padding: 10px 20px;
-    background-color: rgba(255, 255, 255, 0.85);
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    justify-content: center;      /* Centre les éléments horizontalement */
+    align-items: center;          /* Centre verticalement les éléments */
+    background-color: #2c3e50;    /* Couleur de fond sombre */
+    padding: 20px 0;              /* Espacement vertical */
+    border-radius: 12px;          /* Bordure arrondie */
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1); /* Ombre portée pour effet 3D */
 }
 
+/* Liste des éléments de navigation */
 nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: 20px;
+    list-style: none;             /* Supprime les puces de liste */
+    padding: 0;                   /* Enlève le padding par défaut */
+    margin: 0;                    /* Enlève la marge par défaut */
+    display: flex;                /* Disposition horizontale */
+    gap: 30px;                    /* Espace entre les éléments */
 }
 
+/* Style des liens */
 nav ul li a {
-    font-size: 1.2em;
-    font-weight: 600;
-    color: #333;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-    background: linear-gradient(to right, #43cea2, #185a9d);
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-size: 1.2em;             /* Taille du texte */
+    font-weight: bold;            /* Texte en gras */
+    color: #fff;                  /* Texte blanc */
+    text-decoration: none;        /* Supprime le soulignement */
+    padding: 10px 20px;           /* Espacement autour du texte */
+    border-radius: 20px;          /* Coins arrondis */
+    background: linear-gradient(135deg, #ff7e5f, #feb47b); /* Dégradé de couleur élégant */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); /* Ombre douce sous les boutons */
+    transition: all 0.3s ease;    /* Transition pour l'effet au survol */
 }
 
+/* Changement de couleur au survol */
 nav ul li a:hover {
-    background: linear-gradient(to right, #185a9d, #43cea2);
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #feb47b, #ff7e5f); /* Inverse le dégradé */
+    transform: translateY(-3px);    /* Effet de levée */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
 }
+
+/* Style de l'élément actif (lien surligné) */
+nav ul li.active a {
+    background: linear-gradient(135deg, #43cea2, #185a9d); /* Dégradé coloré pour l'actif */
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2); /* Ombre plus forte */
+}
+
+/* Ajout d'un effet au survol de l'élément actif */
+nav ul li.active a:hover {
+    background: linear-gradient(135deg, #185a9d, #43cea2); /* Inverse le dégradé */
+    transform: translateY(-5px);    /* Légère élévation */
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3); /* Ombre plus accentuée */
+}
+
+
 
 /* Style responsive pour les petits écrans */
 @media (max-width: 768px) {

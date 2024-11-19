@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
+const schedule = require('node-schedule');
 const http = require('http');
 const socketIo = require('socket.io');
 const multer = require('multer');
@@ -323,36 +324,38 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
 
 
 
-// Route pour gérer l'achat
-app.post('/acheter', async (req, res) => {
-    const { annonceId } = req.body;
-
-    try {
-        // Trouver l'annonce correspondant à l'ID
-        const annonce = await Annonce.findById(annonceId);
-
-        if (!annonce) {
-            return res.status(404).json({ success: false, message: 'Annonce non trouvée' });
-        }
-
-        // Préparer le contenu de l'email
-        const mailOptions = {
-            from: 'kaboreabwa2020@gmail.com', // Adresse email de l'expéditeur
-            to: annonce.emailVendeur,    // Adresse email du vendeur
-            subject: 'Intérêt pour votre annonce',
-            text: `Un client est intéressé par votre annonce dans la catégorie "${annonce.categorie}". FarmsConnect vous contactera bientôt pour organiser l'expédition.`,
-        };
-
-        // Envoyer l'email
-        await transporter.sendMail(mailOptions);
-
-        res.json({ success: true, message: 'Le vendeur a été informé par email.' });
-    } catch (error) {
-        console.error('Erreur lors de l\'envoi de l\'email :', error);
-        res.status(500).json({ success: false, message: 'Erreur serveur.' });
-    }
-});
-
+  
+  
+  
+  // Route pour planifier l'email
+  app.post('/api/schedule-email', async (req, res) => {
+      const { purchaseDetails, delay } = req.body;
+  
+      // Calculer l'heure de planification (par exemple, 24 heures après l'achat)
+      const scheduledTime = new Date();
+      scheduledTime.setMinutes(scheduledTime.getMinutes() + delay);
+  
+      // Préparer l'email pour le client
+      const mailOptionsClient = {
+          from: 'kaboreabwa2020@gmail.com',
+          to: purchaseDetails.email,    // Email du client
+          subject: 'Merci pour votre achat !',
+          text: `Bonjour ${purchaseDetails.username},\n\nMerci pour votre achat ! Nous vous envoyons ce lien pour un feedback sur votre expérience d'achat :\n\nhttps://ee.kobotoolbox.org/x/uhCnWFCN\n\nFarmsConnect vous contactera bientôt pour organiser la livraison.`
+      };
+  
+      // Planifier l'envoi de l'email au client après le délai spécifié (24h)
+      schedule.scheduleJob(scheduledTime, async () => {
+          try {
+              await transporter.sendMail(mailOptionsClient);
+              console.log('Email envoyé au client après 24h');
+          } catch (error) {
+              console.error('Erreur lors de l\'envoi de l\'email au client :', error);
+          }
+      });
+  
+      res.json({ success: true, message: 'Email planifié pour le client dans 24h.' });
+  });
+  
   
 
 
