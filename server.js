@@ -328,7 +328,7 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
   
   
   // Route pour planifier l'email
-  app.post('/api/schedule-email', async (req, res) => {
+  app.post('https://farmsconnect-b084ddb02391.herokuapp.com/api/schedule-email', async (req, res) => {
       const { purchaseDetails, delay } = req.body;
   
       // Calculer l'heure de planification (par exemple, 24 heures après l'achat)
@@ -340,7 +340,7 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
           from: 'kaboreabwa2020@gmail.com',
           to: purchaseDetails.email,    // Email du client
           subject: 'Merci pour votre achat !',
-          text: `Bonjour ${purchaseDetails.username},\n\nMerci pour votre achat ! Nous vous envoyons ce lien pour un feedback sur votre expérience d'achat :\n\nhttps://ee.kobotoolbox.org/x/uhCnWFCN\n\nFarmsConnect vous contactera bientôt pour organiser la livraison.`
+          text: `Bonjour ${purchaseDetails.username},\n\nMerci pour votre achat ! Nous vous envoyons ce lien pour un feedback sur votre expérience d'achat :\n\nhttps://ee.kobotoolbox.org/x/uhCnWFCN.`
       };
   
       // Planifier l'envoi de l'email au client après le délai spécifié (24h)

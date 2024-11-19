@@ -88,9 +88,8 @@ function handlePurchase(animal) {
         Un client est intéressé par votre annonce :
         Catégorie : ${animal.categorie}
         Quantité demandée : ${visitorInfo.quantity}
-        Contact client : ${visitorInfo.contact} 
         Nom : ${visitorInfo.username}
-        E-mail : ${visitorInfo.email}
+        \n\nFarmsConnect vous contactera bientôt pour organiser la livraison
     `;
     sendEmailVendeur(emailContentVendeur, animal.emailVendeur);
 
