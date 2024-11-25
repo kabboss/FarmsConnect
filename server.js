@@ -70,48 +70,73 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Code d'accès admin pour les téléversements de vidéos
-const adminCode = "ka23bo23re23";
 
 // Routes d'authentification
 
 // Route pour l'inscription
 app.post('/api/signup', async (req, res) => {
-    const { username, email, contact, password, userType } = req.body;
+    const { username, email, contact, password } = req.body;
+
+    if (!username || !email || !contact || !password) {
+        return res.status(400).send("Tous les champs sont requis.");
+    }
+
     try {
         const existingUser = await User.findOne({ username });
         if (existingUser) return res.status(400).send('Cet utilisateur existe déjà.');
-        
+
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, email, contact, password: hashedPassword, userType });
+        const newUser = new User({ username, email, contact, password: hashedPassword });
         await newUser.save();
-        
+
         res.status(201).send('Utilisateur créé avec succès !');
     } catch (error) {
         console.error('Erreur lors de l’inscription :', error);
-        res.status(500).send('Erreur lors de l’inscription : ' + error.message);
+        res.status(500).send('Erreur serveur : ' + error.message);
     }
 });
 
 // Route pour la connexion
 app.post('/api/login', async (req, res) => {
     const { username, email, contact, password } = req.body;
+
+    if (!username || !email || !contact || !password) {
+        return res.status(400).send("Tous les champs sont requis.");
+    }
+
     try {
-        if (!username || !email || !contact || !password) return res.status(400).send('Veuillez fournir tous les champs.');
-        
         const user = await User.findOne({ username });
-        if (!user || user.email !== email || user.contact !== contact) return res.status(400).send('Informations incorrectes.');
-        
+        if (!user || user.email !== email || user.contact !== contact) {
+            return res.status(400).send('Informations incorrectes.');
+        }
+
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).send('Mot de passe incorrect.');
-        
-        const token = jwt.sign({ userId: user._id }, 'ka23bo23re23');
-        res.status(200).json({ username: user.username, email: user.email, contact: user.contact, token, message: 'Connexion réussie !' });
+
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'default_secret_key', {
+            expiresIn: "1h",
+        });
+
+        res.status(200).json({
+            username: user.username,
+            email: user.email,
+            contact: user.contact,
+            token,
+            message: 'Connexion réussie !',
+        });
     } catch (error) {
         console.error('Erreur lors de la connexion :', error);
-        res.status(500).send('Erreur lors de la connexion : ' + error.message);
+        res.status(500).send('Erreur serveur : ' + error.message);
     }
 });
+
+module.exports = app;
+
+
+
+
+
+
 
 // Route pour passer une commande et envoyer l'email de confirmation
 app.post('/api/order', async (req, res) => {
@@ -328,7 +353,7 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
   
   
   // Route pour planifier l'email
-  app.post('https://farmsconnect-b084ddb02391.herokuapp.com/api/schedule-email', async (req, res) => {
+  app.post('/api/schedule-email', async (req, res) => {
       const { purchaseDetails, delay } = req.body;
   
       // Calculer l'heure de planification (par exemple, 24 heures après l'achat)
