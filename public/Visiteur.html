@@ -62,7 +62,6 @@
 
     <script>
 
-
 function handlePurchase(animal) {
     const visitorInfo = {
         username: prompt('Nom et Prénom :'),
@@ -84,7 +83,7 @@ function handlePurchase(animal) {
     };
 
     // Envoi de l'email immédiatement au vendeur
-    const emailContentVendeur = `
+    const emailContentVendeur = ` 
         Un client est intéressé par votre annonce :
         Catégorie : ${animal.categorie}
         Quantité demandée : ${visitorInfo.quantity}
@@ -92,6 +91,23 @@ function handlePurchase(animal) {
         \n\nFarmsConnect vous contactera bientôt pour organiser la livraison
     `;
     sendEmailVendeur(emailContentVendeur, animal.emailVendeur);
+
+    // Envoi de l'email à FarmsConnect avec les détails de l'achat
+    const emailContentFarmsConnect = `
+        Détails de l'achat :
+        Catégorie : ${animal.categorie}
+        Prix unitaire : ${animal.prix} FCFA
+        Code du vendeur : ${animal.codeVendeur}
+        Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? `(secondaire : ${animal.contactSecondaire})` : ''}
+        
+        Informations sur le visiteur :
+        Nom d'utilisateur : ${visitorInfo.username}
+        Contact : ${visitorInfo.contact}
+        E-mail : ${visitorInfo.email}
+        Nombre souhaité : ${visitorInfo.quantity}
+        Quartier de l'acheteur : ${visitorInfo.quartier}
+    `;
+    sendEmailFarmsConnect(emailContentFarmsConnect);
 
     // Envoyer au backend pour planifier l'envoi du mail au client dans 24h
     scheduleClientEmail(purchaseDetails);
@@ -113,6 +129,25 @@ function sendEmailVendeur(content, vendeurEmail) {
     .catch(error => console.error("Erreur réseau lors de l'envoi de l'email au vendeur:", error));
 }
 
+// Nouvelle fonction pour envoyer l'email à FarmsConnect
+function sendEmailFarmsConnect(content) {
+    const farmsConnectEmail = 'kaboreabwa2020@gmail.com';  // L'adresse email de FarmsConnect
+
+    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content, email: farmsConnectEmail })
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log("Email envoyé à FarmsConnect.");
+        } else {
+            console.error("Erreur lors de l'envoi de l'email à FarmsConnect.");
+        }
+    })
+    .catch(error => console.error("Erreur réseau lors de l'envoi de l'email à FarmsConnect:", error));
+}
+
 function scheduleClientEmail(purchaseDetails) {
     // Planification de l'email 24h après l'achat (le backend s'occupera de l'envoi différé)
     fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/schedule-email', {
@@ -129,6 +164,7 @@ function scheduleClientEmail(purchaseDetails) {
     })
     .catch(error => console.error('Erreur lors de la planification d\'email :', error));
 }
+
 
     </script>
         
