@@ -4,17 +4,21 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        unique: true // Assurez-vous que chaque nom d'utilisateur est unique
+        unique: true, // Assure que chaque nom d'utilisateur est unique
+        index: true // Ajout d'un index explicite pour optimiser les requêtes
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        minlength: 6, // Longueur minimale pour le mot de passe
+        maxlength: 100 // Longueur maximale pour le mot de passe
     },
     email: {
         type: String,
         required: true,
-        unique: true // Assurez-vous que chaque email est unique
-        match: [/^\S+@\S+\.\S+$/, 'Veuillez entrer une adresse email valide.']
+        unique: true, // Assure que chaque email est unique
+        index: true, // Ajout d'un index explicite pour optimiser les requêtes
+        match: [/^\S+@\S+\.\S+$/, 'Veuillez entrer une adresse email valide.'] // Validation de format pour les emails
     },
     contact: {
         type: String,
@@ -23,14 +27,15 @@ const userSchema = new mongoose.Schema({
     userType: { 
         type: String, 
         required: true, 
-        enum: ["vendeur", "visiteur", "veterinaire", "eleveur"], // Valeurs autorisées
+        enum: ["vendeur", "visiteur", "veterinaire", "eleveur"] // Liste des valeurs autorisées
     },
     createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now // Valeur par défaut : date et heure actuelles
     }
 });
 
+// Création du modèle utilisateur
 const User = mongoose.model('User', userSchema);
 
-module.exports = User; // Assurez-vous que cela est présent
+module.exports = User; // Export du modèle pour une utilisation dans d'autres fichiers
