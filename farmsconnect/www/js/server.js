@@ -73,12 +73,19 @@ const transporter = nodemailer.createTransport({
 
 // Routes d'authentification
 
-// Route pour l'inscription
+// Route pour l'inscription 
 app.post('/api/signup', async (req, res) => {
-    const { username, email, contact, password } = req.body;
+    const { username, email, contact, password, userType } = req.body;
 
-    if (!username || !email || !contact || !password) {
+    // Vérification que tous les champs sont fournis
+    if (!username || !email || !contact || !password || !userType) {
         return res.status(400).send("Tous les champs sont requis.");
+    }
+
+    // Vérification que userType est valide
+    const validUserTypes = ["vendeur", "visiteur", "veterinaire", "eleveur"];
+    if (!validUserTypes.includes(userType)) {
+        return res.status(400).send("Type d'utilisateur invalide.");
     }
 
     try {
@@ -86,7 +93,7 @@ app.post('/api/signup', async (req, res) => {
         if (existingUser) return res.status(400).send('Cet utilisateur existe déjà.');
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, email, contact, password: hashedPassword });
+        const newUser = new User({ username, email, contact, password: hashedPassword, userType });
         await newUser.save();
 
         res.status(201).send('Utilisateur créé avec succès !');

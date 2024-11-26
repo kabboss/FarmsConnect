@@ -14,15 +14,16 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true // Assurez-vous que chaque email est unique
+        match: [/^\S+@\S+\.\S+$/, 'Veuillez entrer une adresse email valide.']
     },
     contact: {
         type: String,
         required: true
     },
-    userType: {
-        type: String,
-        enum: ['Vendeur', 'Acheteur', 'Visiteur'], // Options pour le type d'utilisateur
-        required: true
+    userType: { 
+        type: String, 
+        required: true, 
+        enum: ["vendeur", "visiteur", "veterinaire", "eleveur"], // Valeurs autorisées
     },
     createdAt: {
         type: Date,

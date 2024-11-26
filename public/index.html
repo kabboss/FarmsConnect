@@ -51,12 +51,22 @@
         <span class="close-btn" id="close-signup-modal">&times;</span>
         <h2>Créer un compte</h2>
         <form id="signup-form">
-            <input type="text" id="signup-username" placeholder="Nom d'utilisateur" required>
-            <input type="email" id="signup-email" placeholder="Email" required>
-            <input type="text" id="signup-contact" placeholder="Contact" required>
-            <input type="password" id="signup-password" placeholder="Mot de passe" required>
+            <input type="text" id="signup-username" name="username" placeholder="Nom d'utilisateur" required>
+            <input type="email" id="signup-email" name="email" placeholder="Email" required>
+            <input type="text" id="signup-contact" name="contact" placeholder="Contact" required>
+            <input type="password" id="signup-password" name="password" placeholder="Mot de passe" required>
+            
+            <select id="signup-userType" name="userType" required>
+                <option value="" disabled selected>Type d'utilisateur</option>
+                <option value="vendeur">Vendeur</option>
+                <option value="visiteur">Visiteur</option>
+                <option value="veterinaire">Vétérinaire</option>
+                <option value="eleveur">Éleveur</option>
+            </select>
+            
             <button type="submit">S'inscrire</button>
         </form>
+              
     </div>
 </div>
 
