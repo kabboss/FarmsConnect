@@ -4,7 +4,6 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        unique: true, // Assure que chaque nom d'utilisateur est unique
         index: true // Ajout d'un index explicite pour optimiser les requêtes
     },
     password: {

@@ -37,80 +37,77 @@
     };
 
     // Fonction pour obtenir et envoyer la localisation
-
-// Fonction pour obtenir et envoyer la localisation
-const getLocation = () => {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(saveLocation, showError);
-    } else {
-        alert("La géolocalisation n'est pas supportée par votre navigateur.");
-    }
-};
-
-// Sauvegarder la localisation
-const saveLocation = (position) => {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
-    const userId = localStorage.getItem('userId');  // Assurez-vous que l'ID de l'utilisateur est dans le localStorage
-
-    if (!userId) {
-        alert("Utilisateur non authentifié.");
-        return;
-    }
-
-    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ userId, latitude, longitude }),
-    })
-    .then((response) => {
-        console.log("Réponse du serveur : ", response); // Log de la réponse
-        if (!response.ok) {
-            throw new Error("Erreur lors de l'enregistrement.");
+    const getLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(saveLocation, showError);
+        } else {
+            alert("La géolocalisation n'est pas supportée par votre navigateur.");
         }
-        return response.json();
-    })
-    .then((data) => {
-        alert("Votre localisation a été enregistrée avec succès !");
-        window.location.href = "Acceuil.html"; // Redirection après confirmation
-    })
-    .catch((error) => {
-        console.error("Erreur : ", error); // Log détaillé de l'erreur
-        alert("Erreur : " + error.message);
-    });
-};
+    };
 
+    // Sauvegarder la localisation
+    const saveLocation = (position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        
+        // Récupérer l'email de l'utilisateur à partir du localStorage
+        const email = localStorage.getItem('email');  // Assurez-vous que l'email est stocké lors de la connexion
 
+        if (!email) {
+            alert("Utilisateur non authentifié.");
+            return;
+        }
 
+        // Effectuer une requête pour enregistrer la localisation
+        fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`, // Inclure le token pour authentifier l'utilisateur
+            },
+            body: JSON.stringify({ email, latitude, longitude }),  // Passer l'email et la localisation au serveur
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Erreur lors de l'enregistrement.");
+            }
+            return response.json();
+        })
+        .then((data) => {
+            alert("Votre localisation a été enregistrée avec succès !");
+            window.location.href = "Acceuil.html"; // Redirection après confirmation
+        })
+        .catch((error) => {
+            console.error("Erreur : ", error); // Log détaillé de l'erreur
+            alert("Erreur : " + error.message);
+        });
+    };
 
     // Gérer les erreurs de géolocalisation
     const showError = (error) => {
-      switch (error.code) {
-        case error.PERMISSION_DENIED:
-          alert("Vous avez refusé de partager votre localisation.");
-          break;
-        case error.POSITION_UNAVAILABLE:
-          alert("La position est indisponible.");
-          break;
-        case error.TIMEOUT:
-          alert("La demande de géolocalisation a expiré.");
-          break;
-        default:
-          alert("Une erreur inconnue s'est produite.");
-      }
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                alert("Vous avez refusé de partager votre localisation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("La position est indisponible.");
+                break;
+            case error.TIMEOUT:
+                alert("La demande de géolocalisation a expiré.");
+                break;
+            default:
+                alert("Une erreur inconnue s'est produite.");
+        }
     };
 
-    // Gestion des clics
+    // Gestion des clics sur les boutons
     acceptBtn.onclick = () => {
-      getLocation(); // Récupérer la localisation
+        getLocation(); // Récupérer la localisation
     };
 
     declineBtn.onclick = () => {
-      alert("Vous avez refusé de partager votre localisation.");
-      window.location.href = "Acceuil.html"; // Redirection
+        alert("Vous avez refusé de partager votre localisation.");
+        window.location.href = "Acceuil.html"; // Redirection
     };
   </script>
 

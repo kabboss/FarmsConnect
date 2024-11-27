@@ -126,7 +126,7 @@ app.post('/api/login', async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).send('Mot de passe incorrect.');
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'default_secret_key', {
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'ka23bo23re23', {
             expiresIn: "1h",
         });
 
@@ -477,43 +477,36 @@ app.post('/api/questions', async (req, res) => {
 // Exporter l'application Express
 module.exports = app;
 
-  
 
-
+const Location = require('./models/Location'); // Importer le modèle Location
 
 // Route pour enregistrer la localisation de l'utilisateur
 app.post('/api/save-location', async (req, res) => {
-    const { userId, latitude, longitude } = req.body;
+    const { email, latitude, longitude } = req.body;
 
-    console.log("Données reçues :", req.body); // Log les données reçues
+    // Vérifier que tous les champs sont présents
+    if (!email || !latitude || !longitude) {
+        return res.status(400).send("Tous les champs sont requis.");
+    }
 
     try {
-        // Vérifier si l'utilisateur existe
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).send('Utilisateur non trouvé');
-        }
-
-        // Créer une nouvelle entrée de localisation
+        // Créer un nouvel enregistrement de localisation
         const newLocation = new Location({
-            userId,
+            email,
             latitude,
-            longitude
+            longitude,
+            date: new Date(),
         });
 
-        // Sauvegarder la localisation
+        // Enregistrer la localisation dans la base de données
         await newLocation.save();
 
-        // Réponse de succès
-        res.status(200).send('Localisation enregistrée avec succès');
-    } catch (err) {
-        console.error("Erreur serveur :", err);
-        res.status(500).send('Erreur serveur lors de l\'enregistrement de la localisation');
+        res.status(201).send("Localisation enregistrée avec succès !");
+    } catch (error) {
+        console.error('Erreur lors de l\'enregistrement de la localisation :', error);
+        res.status(500).send("Erreur serveur : " + error.message);
     }
 });
-
-
-
 
 
 
