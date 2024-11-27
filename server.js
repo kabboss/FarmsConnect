@@ -19,7 +19,7 @@ const router = express.Router();
 const User = require('./models/User');
 const Message = require('./models/message');
 const Annonce = require('./models/Annonce');
-const CollecteDonnees = require('../models/collecteDonnees');
+const CollecteDonnees = require('./models/collecteDonnees');
 
 
 // Créer une instance de l'application Express et du serveur HTTP
