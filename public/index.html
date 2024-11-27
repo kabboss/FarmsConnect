@@ -218,70 +218,72 @@
 
 
 <script>
-    // Ouverture de la modale d'autorisation
-document.getElementById("continue-registration").addEventListener("click", function () {
-    document.getElementById("signup-modal").style.display = "none";
-    document.getElementById("consent-modal").style.display = "block";
-});
-
-// Gestion du consentement
-document.getElementById("accept-consent").addEventListener("click", function () {
-    document.getElementById("consent-modal").style.display = "none";
-    document.getElementById("extra-questions-modal").style.display = "block";
-});
-
-document.getElementById("decline-consent").addEventListener("click", function () {
-    document.getElementById("consent-modal").style.display = "none";
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    // Obtenir les éléments des modals
-    const consentModal = document.getElementById("consent-modal");
-    const signupModal = document.getElementById("signup-modal");
-    const extraQuestionsModal = document.getElementById("extra-questions-modal"); // Modal de questions supplémentaires
-
-    // Obtenir les boutons de la modal de consentement
-    const acceptConsentButton = document.getElementById("accept-consent");
-    const declineConsentButton = document.getElementById("decline-consent");
-
-    // Lorsque l'utilisateur clique sur "Non" (refuser le consentement)
-    declineConsentButton.addEventListener("click", function () {
-        // Masquer la modal de consentement
-        consentModal.style.display = "none";
-
-        // Afficher la modal d'inscription
-        signupModal.style.display = "block";
+    // Ouverture de la modale d'autorisation lors du clic sur "continue-registration"
+    document.getElementById("continue-registration").addEventListener("click", function () {
+        document.getElementById("signup-modal").style.display = "none";
+        document.getElementById("consent-modal").style.display = "block";
     });
-});
 
-// Soumission des questions supplémentaires
-document.getElementById("submit-questions").addEventListener("click", function () {
-    const extraQuestionsForm = document.getElementById("extra-questions-form");
-    const formData = new FormData(extraQuestionsForm);
+    // Gestion du consentement : acceptation du consentement
+    document.getElementById("accept-consent").addEventListener("click", function () {
+        document.getElementById("consent-modal").style.display = "none";
+        document.getElementById("extra-questions-modal").style.display = "block";
+    });
 
-    // Convertir FormData en un objet JavaScript
-    const formDataJson = {};
+    // Gestion du consentement : refus du consentement
+    document.getElementById("decline-consent").addEventListener("click", function () {
+        document.getElementById("consent-modal").style.display = "none";
+    });
 
-    // Parcourir toutes les entrées de FormData
-    formData.forEach((value, key) => {
-        // Si la clé représente des cases à cocher (par exemple 'defis'), nous stockons plusieurs valeurs dans un tableau
-        if (key === 'defis') {
-            if (!formDataJson[key]) {
-                formDataJson[key] = [];
+    // Code exécuté lorsque le contenu de la page est entièrement chargé
+    document.addEventListener("DOMContentLoaded", function () {
+        // Obtenir les éléments des modals
+        const consentModal = document.getElementById("consent-modal");
+        const signupModal = document.getElementById("signup-modal");
+        const extraQuestionsModal = document.getElementById("extra-questions-modal"); // Modal des questions supplémentaires
+
+        // Obtenir les boutons de la modal de consentement
+        const acceptConsentButton = document.getElementById("accept-consent");
+        const declineConsentButton = document.getElementById("decline-consent");
+
+        // Lorsque l'utilisateur clique sur "Non" (refuser le consentement)
+        declineConsentButton.addEventListener("click", function () {
+            // Masquer la modal de consentement
+            consentModal.style.display = "none";
+
+            // Afficher la modal d'inscription pour continuer l'inscription
+            signupModal.style.display = "block";
+        });
+    });
+
+    // Soumission des questions supplémentaires lorsque l'utilisateur clique sur "submit-questions"
+    document.getElementById("submit-questions").addEventListener("click", function () {
+        const extraQuestionsForm = document.getElementById("extra-questions-form");
+        const formData = new FormData(extraQuestionsForm);
+
+        // Convertir FormData en un objet JavaScript
+        const formDataJson = {};
+
+        // Parcourir toutes les entrées de FormData et les ajouter au JSON
+        formData.forEach((value, key) => {
+            // Si la clé représente des cases à cocher (par exemple 'defis'), nous stockons plusieurs valeurs dans un tableau
+            if (key === 'defis') {
+                if (!formDataJson[key]) {
+                    formDataJson[key] = [];
+                }
+                formDataJson[key].push(value);
+            } else {
+                // Pour les autres champs, nous stockons la valeur directement
+                formDataJson[key] = value;
             }
-            formDataJson[key].push(value);
-        } else {
-            // Pour les autres champs, nous stockons la valeur directement
-            formDataJson[key] = value;
-        }
-    });
+        });
 
-    // Faire la requête POST avec les données du formulaire
-    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/questions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formDataJson), // Convertir en JSON
-    })
+        // Faire la requête POST avec les données du formulaire
+        fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/questions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formDataJson), // Convertir les données en JSON
+        })
         .then((response) => {
             if (response.ok) {
                 alert("Merci pour vos réponses !");
@@ -298,9 +300,7 @@ document.getElementById("submit-questions").addEventListener("click", function (
             console.error("Erreur réseau : ", error);
             alert("Une erreur réseau est survenue.");
         });
-});
-
-
+    });
 </script>
 
 
