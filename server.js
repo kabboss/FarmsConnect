@@ -14,7 +14,6 @@ const path = require('path');
 const Grid = require('gridfs-stream');
 const { GridFsStorage } = require('multer-gridfs-storage');
 const router = express.Router();
-const collecteDonneesRoute = require('./routes/collecteDonnees');
 
 // Modèles
 const User = require('./models/User');
