@@ -51,11 +51,20 @@
     <div class="modal-content">
         <span class="close-btn" id="close-signup-modal">&times;</span>
         <h2>Créer un compte</h2>
-        <form id="signup-form">
+        <form id="signup-form" action="#" method="POST">
+            <label for="signup-username">Nom d'utilisateur</label>
             <input type="text" id="signup-username" name="username" placeholder="Nom d'utilisateur" required>
+
+            <label for="signup-email">Email</label>
             <input type="email" id="signup-email" name="email" placeholder="Email" required>
+
+            <label for="signup-contact">Contact</label>
             <input type="text" id="signup-contact" name="contact" placeholder="Contact" required>
+
+            <label for="signup-password">Mot de passe</label>
             <input type="password" id="signup-password" name="password" placeholder="Mot de passe" required>
+
+            <label for="signup-userType">Type d'utilisateur</label>
             <select id="signup-userType" name="userType" required>
                 <option value="" disabled selected>Type d'utilisateur</option>
                 <option value="vendeur">Vendeur</option>
@@ -63,6 +72,7 @@
                 <option value="veterinaire">Vétérinaire</option>
                 <option value="eleveur">Éleveur</option>
             </select>
+
             <button type="button" id="continue-registration">Continuer l'inscription</button>
         </form>
     </div>
@@ -86,7 +96,7 @@
 </div>
 
 <!-- Questions supplémentaires -->
-<div class="modal" id="extra-questions-modal" style="display: none;">
+<div class="modal" id="extra-questions-modal">
     <div class="modal-content">
         <h2>Questions supplémentaires</h2>
         <form id="extra-questions-form">
@@ -268,7 +278,32 @@ function toggleModal(modalId, show) {
         modal.classList.remove("active");
     }
 }
+</script>
 
+<script>
+    // Obtenir la modale et le bouton de fermeture
+    const modal = document.querySelector('.modal');
+    const closeButton = document.querySelector('.close-btn');
+
+    // Fonction pour fermer la modale
+    function closeModal() {
+        modal.classList.remove('active');
+    }
+
+    // Fermer la modale lorsque l'utilisateur clique sur le bouton de fermeture
+    closeButton.addEventListener('click', closeModal);
+
+    // Fermer la modale lorsque l'utilisateur clique en dehors de la modale (sur le fond)
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Fonction pour ouvrir la modale
+    function openModal() {
+        modal.classList.add('active');
+    }
 </script>
 
 
