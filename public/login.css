@@ -403,163 +403,164 @@ body {
     color: #333;
 }
 
-/* Modale */
+/* Style global pour toutes les modales */
 .modal {
-    display: none;
+    display: none; /* Cacher les modales par défaut */
     position: fixed;
-    z-index: 1000;
-    left: 0;
+    z-index: 1050;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
+    overflow: auto; /* Activer le défilement si nécessaire */
+    background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent sombre */
+    backdrop-filter: blur(5px); /* Effet de flou pour un style plus élégant */
 }
 
+/* Contenu de la modale */
 .modal-content {
-    background: linear-gradient(145deg, #ffffff, #f3f3f3);
+    background: linear-gradient(145deg, #ffffff, #f0f0f0); /* Dégradé subtil */
+    margin: 10% auto;
+    padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    max-width: 600px;
     width: 90%;
-    padding: 20px;
-    animation: fadeIn 0.3s ease-in-out;
-    position: relative;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Ombre plus profonde */
+    animation: slideDown 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    transform-origin: top center;
 }
 
-.modal-content h2 {
-    font-size: 1.8rem;
-    color: #444;
-    margin-bottom: 15px;
-}
-
-.modal-content h3 {
-    font-size: 1.4rem;
-    color: #555;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-
-.modal-content form label {
-    display: block;
-    font-size: 0.95rem;
-    color: #555;
-    margin-bottom: 5px;
-}
-
-.modal-content form input,
-.modal-content form select,
-.modal-content form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 1rem;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.modal-content form input:focus,
-.modal-content form select:focus,
-.modal-content form textarea:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
-}
-
-.modal-content form button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.modal-content form button:hover {
-    background-color: #0056b3;
+/* Animation de transition pour l'apparition */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 /* Bouton de fermeture */
 .close-btn {
+    color: #888;
+    font-size: 20px;
+    font-weight: bold;
     position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: transparent;
-    color: #555;
-    font-size: 1.5rem;
-    border: none;
+    top: 15px;
+    right: 15px;
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .close-btn:hover {
-    color: #ff0000;
+    color: #ff5a5f;
+    transform: rotate(90deg);
 }
 
-button {
-    margin: 10px;
-    padding: 10px 20px;
+/* Titres */
+.modal-content h2 {
+    margin-top: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.modal-content h3 {
+    font-size: 20px;
+    color: #555;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+/* Formulaire */
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espacement entre les champs */
+}
+
+.modal-content label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Champs de formulaire */
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #fafafa;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    outline: none;
+}
+
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Boutons */
+.modal-content button {
+    padding: 12px;
+    background: linear-gradient(145deg, #007BFF, #0056b3); /* Dégradé élégant */
+    color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
     cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
 }
 
-#accept-consent {
-    background-color: #4caf50;
-    color: white;
+.modal-content button:hover {
+    background: linear-gradient(145deg, #0056b3, #007BFF);
+    transform: translateY(-3px);
 }
 
-#decline-consent {
-    background-color: #f44336;
-    color: white;
+.modal-content button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
 }
 
-/* Animation d'apparition */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+/* Checkbox */
+.modal-content input[type="checkbox"] {
+    accent-color: #007BFF; /* Style natif pour une apparence moderne */
+    margin-right: 10px;
 }
 
-/* Checkbox et options */
-.modal-content form div {
-    margin-bottom: 15px;
-}
-
-.modal-content form input[type="checkbox"] + label {
-    display: inline-block;
-    font-size: 0.95rem;
-    color: #444;
-    cursor: pointer;
-    padding-left: 10px;
-}
-
-.modal-content form textarea {
-    resize: none;
-    height: 80px;
-}
-
-/* Pour les grandes fenêtres */
-@media screen and (min-width: 768px) {
+/* Responsivité */
+@media (min-width: 768px) {
     .modal-content {
-        padding: 30px;
+        margin: 5% auto;
+        padding: 40px;
+        width: 70%;
     }
+}
 
-    .modal-content h2 {
-        font-size: 2rem;
+@media (min-width: 1024px) {
+    .modal-content {
+        width: 50%;
     }
+}
 
-    .modal-content h3 {
-        font-size: 1.6rem;
-    }
+/* Transition subtile au survol des champs */
+.modal-content input:hover,
+.modal-content select:hover,
+.modal-content textarea:hover {
+    border-color: #0056b3;
 }
