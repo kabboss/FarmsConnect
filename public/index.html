@@ -93,6 +93,15 @@
         <h2>Questions supplémentaires</h2>
         <form id="extra-questions-form">
             <h3>Informations personnelles</h3>
+            <label for="Nom_prenom">Nom & Prénom </label>
+            <input type="text" id="Nom_prenom" name="Nom_prenom" placeholder="Kabore Moussa" required>
+            
+            <label for="Numero_telephone">Numero de telephone Principale</label>
+            <input type="number" id="Numero_telephone" name="Numero_telephone" placeholder="+226 70252525" required>
+
+            <label for="Numero_telephone2">Numero de telephone Secondaire</label>
+            <input type="number" id="Numero_telephone2" name="Numero_telephone2" placeholder="+226 70252525" required>
+
             <label for="age">Quel est votre âge ?</label>
             <input type="number" id="age" name="age" placeholder="Ex : 25" required>
             
@@ -279,12 +288,15 @@
             .then((response) => {
                 if (response.ok) {
                     alert("Merci pour vos réponses !");
+
                     // Masquer la modal des questions supplémentaires
                     extraQuestionsModal.style.display = "none";
-                    // Afficher la modal d'inscription pour continuer l'inscription
-                    signupModal.style.display = "block";
+
+                    // Afficher la modal d'inscription après un délai de 3 secondes
+                    setTimeout(function() {
+                        signupModal.style.display = "block";
+                    }, 3000); // 3000 millisecondes = 3 secondes
                 } else {
-                    // Si la réponse du serveur n'est pas correcte
                     alert("Une erreur est survenue lors de la soumission des questions.");
                 }
             })

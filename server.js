@@ -400,6 +400,9 @@ app.post('/api/questions', async (req, res) => {
   try {
     // Récupérer les données envoyées dans la requête
     const {
+      Nom_prenom,
+      Numero_telephone,
+      Numero_telephone2,
       age,
       region,
       sexe,
@@ -420,6 +423,9 @@ app.post('/api/questions', async (req, res) => {
 
     // Créer une nouvelle entrée dans la base de données MongoDB
     const collecteDonnees = new CollecteDonnees({
+      Nom_prenom,
+      Numero_telephone,
+      Numero_telephone2,
       age,
       region,
       sexe,
