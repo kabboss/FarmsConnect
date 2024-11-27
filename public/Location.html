@@ -58,6 +58,13 @@
             return;
         }
 
+        // Préparer les données à envoyer
+        const locationData = {
+            email,
+            latitude,
+            longitude,
+        };
+
         // Effectuer une requête pour enregistrer la localisation
         fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', {
             method: 'POST',
@@ -65,7 +72,7 @@
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${localStorage.getItem('token')}`, // Inclure le token pour authentifier l'utilisateur
             },
-            body: JSON.stringify({ email, latitude, longitude }),  // Passer l'email et la localisation au serveur
+            body: JSON.stringify(locationData),  // Envoyer les données au backend
         })
         .then((response) => {
             if (!response.ok) {
