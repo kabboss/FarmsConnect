@@ -394,64 +394,71 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
   
   
  
-  
-  // Route pour enregistrer les données collectées
-  app.post('/api/questions', async (req, res) => {
-    try {
-      const {
-        age,
-        region,
-        sexe,
-        education,
-        type_elevage,
-        nombre_animaux,
-        surface_elevage,
-        revenus_elevage,
-        mode_alimentation,
-        acces_eau,
-        defis,
-        dechets_animaux,
-        biodiversite,
-        financement,
-        besoin_financier,
-        plan_futur
-      } = req.body;
-  
-      // Créer une nouvelle entrée dans la base de données MongoDB
-      const collecteDonnees = new CollecteDonnees({
-        age,
-        region,
-        sexe,
-        education,
-        type_elevage,
-        nombre_animaux,
-        surface_elevage,
-        revenus_elevage,
-        mode_alimentation,
-        acces_eau,
-        defis, // Liste des défis sélectionnés
-        dechets_animaux,
-        biodiversite,
-        financement,
-        besoin_financier,
-        plan_futur
-      });
-  
-      // Sauvegarder dans la base de données
-      await collecteDonnees.save();
-  
-      // Réponse en cas de succès
-      res.status(201).json({
-        message: 'Données collectées avec succès.',
-        collecteDonnees,
-      });
-    } catch (error) {
-      console.error('Erreur lors de l\'enregistrement des données:', error);
-      res.status(500).json({ message: 'Une erreur est survenue lors de l\'enregistrement des données.' });
-    }
-  });
-  
-  module.exports = router;
+
+// Route pour enregistrer les données collectées
+app.post('/api/questions', async (req, res) => {
+  try {
+    // Récupérer les données envoyées dans la requête
+    const {
+      age,
+      region,
+      sexe,
+      education,
+      type_elevage,
+      nombre_animaux,
+      surface_elevage,
+      revenus_elevage,
+      mode_alimentation,
+      acces_eau,
+      defis,
+      dechets_animaux,
+      biodiversite,
+      financement,
+      besoin_financier,
+      plan_futur
+    } = req.body;
+
+    // Créer une nouvelle entrée dans la base de données MongoDB
+    const collecteDonnees = new CollecteDonnees({
+      age,
+      region,
+      sexe,
+      education,
+      type_elevage,
+      nombre_animaux,
+      surface_elevage,
+      revenus_elevage,
+      mode_alimentation,
+      acces_eau,
+      defis, // Liste des défis sélectionnés
+      dechets_animaux,
+      biodiversite,
+      financement,
+      besoin_financier,
+      plan_futur
+    });
+
+    // Sauvegarder les données dans la base de données MongoDB
+    await collecteDonnees.save();
+
+    // Réponse en cas de succès
+    res.status(201).json({
+      message: 'Données collectées avec succès.',
+      collecteDonnees,
+    });
+  } catch (error) {
+    // En cas d'erreur, loguer l'erreur et renvoyer une réponse d'erreur
+    console.error('Erreur lors de l\'enregistrement des données:', error);
+    res.status(500).json({
+      message: 'Une erreur est survenue lors de l\'enregistrement des données.',
+      error: error.message, // Ajoutez l'erreur pour plus de détails
+    });
+  }
+});
+
+// Exporter l'application Express
+module.exports = app;
+
   
 
 
