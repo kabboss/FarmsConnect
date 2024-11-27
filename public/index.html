@@ -106,7 +106,25 @@
             <input type="number" id="age" name="age" placeholder="Ex : 25" required>
             
             <label for="region">Dans quelle région vivez-vous ?</label>
-            <input type="text" id="region" name="region" placeholder="Ex : Nord" required>
+<select id="region" name="region" required onchange="toggleRegionInput(this)">
+  <option value="">-- Sélectionnez une région --</option>
+  <option value="Boucle du Mouhoun">Boucle du Mouhoun</option>
+  <option value="Cascades">Cascades</option>
+  <option value="Centre">Centre</option>
+  <option value="Centre-Est">Centre-Est</option>
+  <option value="Centre-Nord">Centre-Nord</option>
+  <option value="Centre-Ouest">Centre-Ouest</option>
+  <option value="Centre-Sud">Centre-Sud</option>
+  <option value="Est">Est</option>
+  <option value="Hauts-Bassins">Hauts-Bassins</option>
+  <option value="Nord">Nord</option>
+  <option value="Plateau-Central">Plateau-Central</option>
+  <option value="Sahel">Sahel</option>
+  <option value="Sud-Ouest">Sud-Ouest</option>
+</select>
+
+            <label for="Localite">Quartier</label>
+            <input type="text" id="Localite" name="Localite" placeholder="Nagrin , Bendogo , Karpala" required>
 
             <label for="sexe">Sexe :</label>
             <select id="sexe" name="sexe" required>
@@ -125,22 +143,26 @@
             </select>
 
             <h3>Informations sur l’élevage</h3>
-            <label for="type-elevage">Quel type d'élevage pratiquez-vous ?</label>
-            <select id="type-elevage" name="type_elevage" required>
-                <option value="" disabled selected>Choisissez</option>
-                <option value="bovins">Bovins</option>
-                <option value="ovins">Ovins</option>
-                <option value="caprins">Caprins</option>
-                <option value="volaille">Volaille</option>
-                <option value="porcins">Porcins</option>
-                <option value="autres">Autres</option>
-            </select>
-
+            <p>Quel type d'élevage pratiquez-vous ? (vous pouvez choisir plusieurs options)</p>
+            <div>
+              <input type="checkbox" id="bovins" name="type_elevage" value="bovins">
+              <label for="bovins">Bovins</label><br>
+            
+              <input type="checkbox" id="ovins" name="type_elevage" value="ovins">
+              <label for="ovins">Ovins</label><br>
+            
+              <input type="checkbox" id="caprins" name="type_elevage" value="caprins">
+              <label for="caprins">Caprins</label><br>
+            
+              <input type="checkbox" id="volaille" name="type_elevage" value="volaille">
+              <label for="volaille">Volaille</label><br>
+            
+              <input type="checkbox" id="porcins" name="type_elevage" value="porcins">
+              <label for="porcins">Porcins</label><br>
+            </div>
+            
             <label for="nombre-animaux">Combien d’animaux possédez-vous ?</label>
             <input type="number" id="nombre-animaux" name="nombre_animaux" placeholder="Ex : 50" required>
-
-            <label for="surface-elevage">Quelle est la surface de votre exploitation (en hectares) ?</label>
-            <input type="number" id="surface-elevage" name="surface_elevage" placeholder="Ex : 10">
 
             <label for="revenus-elevage">Quel pourcentage de vos revenus provient de l’élevage ?</label>
             <select id="revenus-elevage" name="revenus_elevage" required>
@@ -153,10 +175,14 @@
 
             <label for="mode-alimentation">Comment nourrissez-vous vos animaux ?</label>
             <select id="mode-alimentation" name="mode_alimentation" required>
-                <option value="" disabled selected>Choisissez</option>
-                <option value="aliments-industriels">Aliments industriels</option>
-                <option value="pâturage">Pâturage</option>
-                <option value="mixte">Mixte (industriel et pâturage)</option>
+              <option value="" disabled selected>Choisissez</option>
+              <option value="aliments-industriels">Aliments industriels</option>
+              <option value="paturage">Pâturage</option>
+              <option value="mixte">Mixte (industriel et pâturage)</option>
+              <option value="residus-agricoles">Résidus agricoles</option>
+              <option value="autoproduction">Autoproduction (fourrage, cultures)</option>
+              <option value="poules-liberte">Poules en liberté (nourries naturellement)</option> <!-- Nouvelle option -->
+              <option value="autres">Autres</option>
             </select>
 
             <label for="acces-eau">Vos animaux ont-ils un accès régulier à l’eau ?</label>
@@ -169,56 +195,91 @@
             <h3>Problématiques rencontrées</h3>
             <label for="principaux-defis">Quels sont vos principaux défis dans l’élevage ? (Cochez tout ce qui s'applique)</label>
             <div>
-                <input type="checkbox" id="sante-animaux" name="defis" value="sante-animaux">
-                <label for="sante-animaux">Santé des animaux</label>
+              <input type="checkbox" id="sante-animaux" name="defis" value="sante-animaux">
+              <label for="sante-animaux">Santé des animaux</label>
             </div>
             <div>
-                <input type="checkbox" id="manque-eau" name="defis" value="manque-eau">
-                <label for="manque-eau">Manque d'eau</label>
+              <input type="checkbox" id="manque-eau" name="defis" value="manque-eau">
+              <label for="manque-eau">Manque d'eau</label>
             </div>
             <div>
-                <input type="checkbox" id="alimentation-animaux" name="defis" value="alimentation-animaux">
-                <label for="alimentation-animaux">Alimentation des animaux</label>
+              <input type="checkbox" id="alimentation-animaux" name="defis" value="alimentation-animaux">
+              <label for="alimentation-animaux">Alimentation des animaux</label>
             </div>
             <div>
-                <input type="checkbox" id="acces-marche" name="defis" value="acces-marche">
-                <label for="acces-marche">Accès aux marchés</label>
+              <input type="checkbox" id="acces-marche" name="defis" value="acces-marche">
+              <label for="acces-marche">Accès aux marchés</label>
             </div>
             <div>
-                <input type="checkbox" id="autres-defis" name="defis" value="autres">
-                <label for="autres-defis">Autres</label>
+              <input type="checkbox" id="autres-defis" name="defis" value="autres">
+              <label for="autres-defis">Autres</label>
             </div>
+            
+            <!-- Champ texte pour l'option "Autres" -->
+            <div id="autres-defis-input" style="display: none;">
+              <label for="autres-text-defis">Précisez vos autres défis :</label>
+              <input type="text" id="autres-text-defis" name="autres_defis">
+            </div>
+            
+            <script>
+              // Afficher le champ texte si "Autres" est sélectionné
+              const autresDefisCheckbox = document.getElementById("autres-defis");
+              const autresDefisInput = document.getElementById("autres-defis-input");
+            
+              autresDefisCheckbox.addEventListener("change", function () {
+                if (this.checked) {
+                  autresDefisInput.style.display = "block";
+                } else {
+                  autresDefisInput.style.display = "none";
+                }
+              });
+            </script>
+            
 
-            <h3>Pratiques environnementales</h3>
-            <label for="dechets-animaux">Comment gérez-vous les déchets animaux ?</label>
-            <select id="dechets-animaux" name="dechets_animaux">
-                <option value="" disabled selected>Choisissez</option>
-                <option value="compostage">Compostage</option>
-                <option value="évacuation">Évacuation</option>
-                <option value="autres">Autres</option>
-            </select>
+<h3>Financement et besoins</h3>
+<label for="financement">Avez-vous accès à des financements pour votre activité ?</label>
+<select id="financement" name="financement" required>
+    <option value="" disabled selected>Choisissez</option>
+    <option value="oui">Oui</option>
+    <option value="non">Non</option>
+</select>
 
-            <label for="biodiversite">Contribuez-vous à la préservation de la biodiversité (pâturage durable, zones protégées, etc.) ?</label>
-            <select id="biodiversite" name="biodiversite">
-                <option value="" disabled selected>Choisissez</option>
-                <option value="oui">Oui</option>
-                <option value="non">Non</option>
-            </select>
+<label for="besoin-financier">Si non, quels seraient vos besoins financiers ?</label>
+<textarea id="besoin-financier" name="besoin_financier" placeholder="Ex : Crédits, subventions, microfinance Ect...."></textarea>
 
-            <h3>Financement et besoins</h3>
-            <label for="financement">Avez-vous accès à des financements pour votre activité ?</label>
-            <select id="financement" name="financement" required>
-                <option value="" disabled selected>Choisissez</option>
-                <option value="oui">Oui</option>
-                <option value="non">Non</option>
-            </select>
+<h3>Perspectives futures</h3>
+<label for="plan-futur">Quels sont vos projets pour l’avenir de votre exploitation ?</label>
+<textarea id="plan-futur" name="plan_futur" placeholder="Ex : Augmenter le cheptel, investir dans de nouvelles technologies Ect..."></textarea>
 
-            <label for="besoin-financier">Si non, quels seraient vos besoins financiers ?</label>
-            <textarea id="besoin-financier" name="besoin_financier" placeholder="Ex : Crédits, subventions, microfinance"></textarea>
 
-            <h3>Perspectives futures</h3>
-            <label for="plan-futur">Quels sont vos projets pour l’avenir de votre exploitation ?</label>
-            <textarea id="plan-futur" name="plan_futur" placeholder="Ex : Augmenter le cheptel, investir dans de nouvelles technologies"></textarea>
+<h3>Technologies et innovations</h3>
+<label for="utilisation-technologie">Utilisez-vous des technologies modernes dans votre exploitation ?</label>
+<select id="utilisation-technologie" name="utilisation_technologie">
+    <option value="" disabled selected>Choisissez</option>
+    <option value="oui">Oui</option>
+    <option value="non">Non</option>
+</select>
+
+<!-- Si oui, permettre de spécifier -->
+<div id="technologie-details" style="display:none;">
+    <label for="technologie-details">Précisez les technologies utilisées :</label>
+    <textarea id="technologies-utilisees" name="technologies_utilisees" placeholder="Ex : Équipements modernes, systèmes de suivi numérique, etc."></textarea>
+</div>
+
+<h3>Accès à la formation</h3>
+<label for="acces-formation">Avez-vous accès à des formations sur l'élevage ?</label>
+<select id="acces-formation" name="acces_formation">
+    <option value="" disabled selected>Choisissez</option>
+    <option value="oui">Oui</option>
+    <option value="non">Non</option>
+</select>
+
+<!-- Si oui, permettre de spécifier -->
+<div id="formation-details" style="display:none;">
+    <label for="formation-details">Quel type de formation avez-vous reçu ?</label>
+    <textarea id="type-formation" name="type_formation" placeholder="Ex : Gestion d'élevage, santé animale, techniques de production, etc."></textarea>
+</div>
+
 
             <button type="button" id="submit-questions">Soumettre</button>
         </form>
