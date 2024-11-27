@@ -477,9 +477,6 @@ app.post('/api/questions', async (req, res) => {
 // Exporter l'application Express
 module.exports = app;
 
-
-const Location = require('./models/Location'); // Importer le modèle Location
-
 // Route pour enregistrer la localisation de l'utilisateur
 app.post('/api/save-location', async (req, res) => {
     const { email, latitude, longitude } = req.body;
