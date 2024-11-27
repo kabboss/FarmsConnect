@@ -13,7 +13,6 @@ const multer = require('multer');
 const path = require('path');
 const Grid = require('gridfs-stream');
 const { GridFsStorage } = require('multer-gridfs-storage');
-const router = express.Router();
 
 // Modèles
 const User = require('./models/User');
@@ -394,12 +393,10 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
   });
   
   
-
-
  
   
   // Route pour enregistrer les données collectées
-  router.post('/api/questions', async (req, res) => {
+  app.post('/api/questions', async (req, res) => {
     try {
       const {
         age,
