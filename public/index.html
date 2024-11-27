@@ -237,21 +237,15 @@
 
     // Code exécuté lorsque le contenu de la page est entièrement chargé
     document.addEventListener("DOMContentLoaded", function () {
-        // Obtenir les éléments des modals
         const consentModal = document.getElementById("consent-modal");
         const signupModal = document.getElementById("signup-modal");
-        const extraQuestionsModal = document.getElementById("extra-questions-modal"); // Modal des questions supplémentaires
+        const extraQuestionsModal = document.getElementById("extra-questions-modal");
 
-        // Obtenir les boutons de la modal de consentement
         const acceptConsentButton = document.getElementById("accept-consent");
         const declineConsentButton = document.getElementById("decline-consent");
 
-        // Lorsque l'utilisateur clique sur "Non" (refuser le consentement)
         declineConsentButton.addEventListener("click", function () {
-            // Masquer la modal de consentement
             consentModal.style.display = "none";
-
-            // Afficher la modal d'inscription pour continuer l'inscription
             signupModal.style.display = "block";
         });
     });
@@ -264,16 +258,13 @@
         // Convertir FormData en un objet JavaScript
         const formDataJson = {};
 
-        // Parcourir toutes les entrées de FormData et les ajouter au JSON
         formData.forEach((value, key) => {
-            // Si la clé représente des cases à cocher (par exemple 'defis'), nous stockons plusieurs valeurs dans un tableau
             if (key === 'defis') {
                 if (!formDataJson[key]) {
                     formDataJson[key] = [];
                 }
                 formDataJson[key].push(value);
             } else {
-                // Pour les autres champs, nous stockons la valeur directement
                 formDataJson[key] = value;
             }
         });
@@ -282,27 +273,27 @@
         fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/questions', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formDataJson), // Convertir les données en JSON
+            body: JSON.stringify(formDataJson),
         })
         .then((response) => {
             if (response.ok) {
                 alert("Merci pour vos réponses !");
                 // Masquer la modal des questions supplémentaires
-                extraQuestionsModal.style.display = "none"; 
-
+                extraQuestionsModal.style.display = "none";
                 // Afficher la modal d'inscription pour continuer l'inscription
-                signupModal.style.display = "block"; 
+                signupModal.style.display = "block";
             } else {
+                // Si la réponse du serveur n'est pas correcte
                 alert("Une erreur est survenue lors de la soumission des questions.");
             }
         })
         .catch((error) => {
+            // Gestion des erreurs réseau
             console.error("Erreur réseau : ", error);
             alert("Une erreur réseau est survenue.");
         });
     });
 </script>
-
 
 
 
