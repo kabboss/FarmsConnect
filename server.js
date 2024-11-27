@@ -13,11 +13,15 @@ const multer = require('multer');
 const path = require('path');
 const Grid = require('gridfs-stream');
 const { GridFsStorage } = require('multer-gridfs-storage');
+const router = express.Router();
+const collecteDonneesRoute = require('./routes/collecteDonnees');
 
 // Modèles
 const User = require('./models/User');
 const Message = require('./models/message');
 const Annonce = require('./models/Annonce');
+const CollecteDonnees = require('../models/collecteDonnees');
+
 
 // Créer une instance de l'application Express et du serveur HTTP
 const app = express();
@@ -391,6 +395,75 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
   });
   
   
+
+
+ 
+  
+  // Route pour enregistrer les données collectées
+  router.post('/api/questions', async (req, res) => {
+    try {
+      const {
+        age,
+        region,
+        sexe,
+        education,
+        type_elevage,
+        nombre_animaux,
+        surface_elevage,
+        revenus_elevage,
+        mode_alimentation,
+        acces_eau,
+        defis,
+        dechets_animaux,
+        biodiversite,
+        financement,
+        besoin_financier,
+        plan_futur
+      } = req.body;
+  
+      // Créer une nouvelle entrée dans la base de données MongoDB
+      const collecteDonnees = new CollecteDonnees({
+        age,
+        region,
+        sexe,
+        education,
+        type_elevage,
+        nombre_animaux,
+        surface_elevage,
+        revenus_elevage,
+        mode_alimentation,
+        acces_eau,
+        defis, // Liste des défis sélectionnés
+        dechets_animaux,
+        biodiversite,
+        financement,
+        besoin_financier,
+        plan_futur
+      });
+  
+      // Sauvegarder dans la base de données
+      await collecteDonnees.save();
+  
+      // Réponse en cas de succès
+      res.status(201).json({
+        message: 'Données collectées avec succès.',
+        collecteDonnees,
+      });
+    } catch (error) {
+      console.error('Erreur lors de l\'enregistrement des données:', error);
+      res.status(500).json({ message: 'Une erreur est survenue lors de l\'enregistrement des données.' });
+    }
+  });
+  
+  module.exports = router;
+  
+
+
+
+
+
+
+
 
 
 // Configuration du serveur

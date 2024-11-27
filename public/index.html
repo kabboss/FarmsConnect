@@ -69,7 +69,7 @@
 </div>
 
 
-<button type="button" id="continue-registration">Continuer l'inscription</button>
+<button type="button" id="continue-registration">Repondre au questions de FarmConnect</button>
 <!-- Modale d'autorisation -->
 <div class="modal" id="consent-modal">
     <div class="modal-content">
@@ -82,7 +82,7 @@
         <p>Souhaitez-vous répondre à ces questions ?</p>
         <div>
             <button id="accept-consent">Je comprends et j'accepte</button>
-            <button id="decline-consent">Non, continuer l'inscription</button>
+            <button id="decline-consent">Non</button>
         </div>
     </div>
 </div>
@@ -238,14 +238,33 @@ document.getElementById("decline-consent").addEventListener("click", function ()
 });
 
 // Soumission des questions supplémentaires
+
 document.getElementById("submit-questions").addEventListener("click", function () {
     const extraQuestionsForm = document.getElementById("extra-questions-form");
     const formData = new FormData(extraQuestionsForm);
 
+    // Convertir FormData en un objet JavaScript
+    const formDataJson = {};
+
+    // Parcourir toutes les entrées de FormData
+    formData.forEach((value, key) => {
+        // Si la clé représente des cases à cocher (par exemple 'defis'), nous stockons plusieurs valeurs dans un tableau
+        if (key === 'defis') {
+            if (!formDataJson[key]) {
+                formDataJson[key] = [];
+            }
+            formDataJson[key].push(value);
+        } else {
+            // Pour les autres champs, nous stockons la valeur directement
+            formDataJson[key] = value;
+        }
+    });
+
+    // Faire la requête POST avec les données du formulaire
     fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/questions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(Object.fromEntries(formData)),
+        body: JSON.stringify(formDataJson), // Convertir en JSON
     })
         .then((response) => {
             if (response.ok) {
@@ -262,6 +281,7 @@ document.getElementById("submit-questions").addEventListener("click", function (
             alert("Une erreur réseau est survenue.");
         });
 });
+
 
 </script>
 
