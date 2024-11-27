@@ -75,11 +75,11 @@ const transporter = nodemailer.createTransport({
 
 // Route pour l'inscription 
 app.post('/api/signup', async (req, res) => {
-    const { username, email, contact, password, userType, age, region, sexe, education, type_elevage, nombre_animaux, surface_elevage, revenus_elevage, mode_alimentation, acces_eau, defis, dechets_animaux, biodiversite, financement, besoin_financier, plan_futur } = req.body;
+    const { username, email, contact, password, userType } = req.body;
 
-    // Vérification que tous les champs obligatoires sont fournis
+    // Vérification que tous les champs sont fournis
     if (!username || !email || !contact || !password || !userType) {
-        return res.status(400).send("Tous les champs obligatoires sont requis.");
+        return res.status(400).send("Tous les champs sont requis.");
     }
 
     // Vérification que userType est valide
@@ -89,40 +89,11 @@ app.post('/api/signup', async (req, res) => {
     }
 
     try {
-        // Vérification si l'utilisateur existe déjà
         const existingUser = await User.findOne({ username });
         if (existingUser) return res.status(400).send('Cet utilisateur existe déjà.');
 
-        // Hash du mot de passe avant de le sauvegarder
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Création d'un nouvel utilisateur
-        const newUser = new User({
-            username,
-            email,
-            contact,
-            password: hashedPassword,
-            userType,
-            // Stockage des informations supplémentaires (non obligatoires)
-            age,
-            region,
-            sexe,
-            education,
-            type_elevage,
-            nombre_animaux,
-            surface_elevage,
-            revenus_elevage,
-            mode_alimentation,
-            acces_eau,
-            defis,
-            dechets_animaux,
-            biodiversite,
-            financement,
-            besoin_financier,
-            plan_futur
-        });
-
-        // Sauvegarde de l'utilisateur dans la base de données
+        const newUser = new User({ username, email, contact, password: hashedPassword, userType });
         await newUser.save();
 
         res.status(201).send('Utilisateur créé avec succès !');
@@ -150,7 +121,7 @@ app.post('/api/login', async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).send('Mot de passe incorrect.');
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'ka23bo23re23', {
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'default_secret_key', {
             expiresIn: "1h",
         });
 
@@ -433,69 +404,4 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('Utilisateur déconnecté');
     });
-});
-
-
-
-// Route pour récupérer les informations supplémentaires
-app.post('/api/questions', async (req, res) => {
-    const {
-        age,
-        region,
-        sexe,
-        education,
-        type_elevage,
-        nombre_animaux,
-        surface_elevage,
-        revenus_elevage,
-        mode_alimentation,
-        acces_eau,
-        defis,
-        dechets_animaux,
-        biodiversite,
-        financement,
-        besoin_financier,
-        plan_futur
-    } = req.body;
-
-    // Vérification que les informations sont présentes (vous pouvez adapter selon vos besoins)
-    if (!age || !region || !sexe || !education) {
-        return res.status(400).send("Tous les champs obligatoires doivent être remplis.");
-    }
-
-    try {
-        // Trouver l'utilisateur par son ID ou par son username (selon ce que vous utilisez)
-        const userId = req.user._id; // Par exemple, en supposant que vous ayez un middleware d'authentification
-        const user = await User.findById(userId);
-        
-        if (!user) {
-            return res.status(404).send("Utilisateur non trouvé.");
-        }
-
-        // Mise à jour des informations supplémentaires de l'utilisateur
-        user.age = age;
-        user.region = region;
-        user.sexe = sexe;
-        user.education = education;
-        user.type_elevage = type_elevage;
-        user.nombre_animaux = nombre_animaux;
-        user.surface_elevage = surface_elevage;
-        user.revenus_elevage = revenus_elevage;
-        user.mode_alimentation = mode_alimentation;
-        user.acces_eau = acces_eau;
-        user.defis = defis;
-        user.dechets_animaux = dechets_animaux;
-        user.biodiversite = biodiversite;
-        user.financement = financement;
-        user.besoin_financier = besoin_financier;
-        user.plan_futur = plan_futur;
-
-        // Sauvegarder les nouvelles informations dans la base de données
-        await user.save();
-
-        res.status(200).send("Les informations ont été mises à jour avec succès.");
-    } catch (error) {
-        console.error("Erreur lors de la mise à jour des informations supplémentaires :", error);
-        res.status(500).send("Erreur serveur : " + error.message);
-    }
 });
