@@ -481,6 +481,40 @@ module.exports = app;
 
 
 
+// Route pour enregistrer la localisation de l'utilisateur
+app.post('/save-location', async (req, res) => {
+    const { username, latitude, longitude } = req.body;
+
+    try {
+        // Trouver l'utilisateur par son nom d'utilisateur
+        const user = await User.findOne({ username });
+
+        if (!user) {
+            return res.status(404).send('Utilisateur non trouvé');
+        }
+
+        // Mettre à jour la localisation de l'utilisateur
+        user.location = { latitude, longitude };
+        await user.save();
+
+        // Réponse de succès
+        res.status(200).send('Localisation enregistrée avec succès');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Erreur serveur lors de l\'enregistrement de la localisation');
+    }
+});
+
+module.exports = app;
+
+
+
+
+
+
+
+
+
 
 
 

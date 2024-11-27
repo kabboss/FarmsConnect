@@ -599,3 +599,229 @@ body {
     resize: vertical;
     min-height: 100px;
 }
+
+
+
+
+
+
+
+
+
+/* Style général de la section */
+h3 {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 26px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    font-size: 18px;
+    color: #34495e;
+    margin-bottom: 30px;
+  }
+  
+  /* Conteneur des cases à cocher */
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px 0;
+    justify-content: center; /* Centre les cases à cocher */
+  }
+  
+  /* Masquer les cases à cocher natives */
+  .checkbox {
+    display: none;
+  }
+  
+  /* Style des labels personnalisés */
+  .checkbox-label {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 18px;
+    padding: 15px 30px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #3498db, #8e44ad);
+    color: #fff;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transform: scale(1);
+  }
+  
+  /* Icône de coche personnalisé dans le label */
+  .checkbox-label::before {
+    content: "";
+    position: absolute;
+    left: -9px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background-color: transparent;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Effet visuel lorsque la case est cochée */
+  .checkbox:checked + .checkbox-label {
+    background: linear-gradient(135deg, #2ecc71, #1abc9c);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.3);
+    transform: scale(1.05);
+  }
+  
+  .checkbox:checked + .checkbox-label::before {
+    background-color: #fff;
+    border-color: #1abc9c;
+    content: "✔";
+    color: #1abc9c;
+    font-size: 18px;
+    border-radius: 50%;
+  }
+  
+  /* Effet au survol de l'élément */
+  .checkbox-label:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
+  
+  .checkbox-label:hover::before {
+    border-color: #3498db;
+    background-color: #fff;
+  }
+  
+  /* Ajout d'un focus clair lors de l'interaction */
+  .checkbox:focus + .checkbox-label,
+  .checkbox-label:focus {
+    outline: none;
+    border: 2px solid #8e44ad;
+    box-shadow: 0 0 10px rgba(142, 68, 173, 0.5);
+  }
+  
+
+
+
+
+
+
+  /* Style général de la section */
+h3 {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 26px;
+    color: #5a8abb;
+    margin-bottom: 20px;
+  }
+  
+  .main-label {
+    font-size: 18px;
+    color: #34495e;
+    margin-bottom: 20px;
+    display: block;
+    margin-top: 10px;
+  }
+  
+  /* Conteneur des cases à cocher */
+  .defis-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0;
+    justify-content: flex-start;
+  }
+  
+  /* Élément individuel pour chaque défi */
+  .defi-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  /* Masquer les cases à cocher natives */
+  .checkbox {
+    display: none;
+  }
+  
+  /* Style des labels personnalisés */
+  .checkbox-label {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #3498db, #8e44ad);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    display: inline-block;
+    margin-left: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transform: scale(1);
+  }
+  
+  /* Effet visuel lorsque la case est cochée */
+  .checkbox:checked + .checkbox-label {
+    background: linear-gradient(135deg, #2ecc71, #1abc9c);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.3);
+    transform: scale(1.05);
+  }
+  
+  .checkbox:checked + .checkbox-label::before {
+    background-color: #fff;
+    border-color: #1abc9c;
+    content: "✔";
+    color: #1abc9c;
+    font-size: 18px;
+    border-radius: 50%;
+  }
+  
+  /* Effet au survol de l'élément */
+  .checkbox-label:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
+  
+  .checkbox-label:hover::before {
+    border-color: #3498db;
+    background-color: #fff;
+  }
+  
+  /* Champ texte dynamique pour "Autres" */
+  .other-input {
+    display: none;
+    margin-top: 20px;
+  }
+  
+  .text-input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .text-input:focus {
+    border-color: #3498db;
+    outline: none;
+  }
+  
+  /* Ajout d'un focus clair lors de l'interaction */
+  .checkbox:focus + .checkbox-label,
+  .checkbox-label:focus {
+    outline: none;
+    border: 2px solid #8e44ad;
+    box-shadow: 0 0 10px rgba(142, 68, 173, 0.5);
+  }
+  

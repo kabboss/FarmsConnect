@@ -144,21 +144,21 @@
 
             <h3>Informations sur l’élevage</h3>
             <p>Quel type d'élevage pratiquez-vous ? (vous pouvez choisir plusieurs options)</p>
-            <div>
-              <input type="checkbox" id="bovins" name="type_elevage" value="bovins">
-              <label for="bovins">Bovins</label><br>
+            <div class="checkbox-group">
+              <input type="checkbox" id="bovins" name="type_elevage" value="bovins" class="checkbox">
+              <label for="bovins" class="checkbox-label">Bovins</label>
             
-              <input type="checkbox" id="ovins" name="type_elevage" value="ovins">
-              <label for="ovins">Ovins</label><br>
+              <input type="checkbox" id="ovins" name="type_elevage" value="ovins" class="checkbox">
+              <label for="ovins" class="checkbox-label">Ovins</label>
             
-              <input type="checkbox" id="caprins" name="type_elevage" value="caprins">
-              <label for="caprins">Caprins</label><br>
+              <input type="checkbox" id="caprins" name="type_elevage" value="caprins" class="checkbox">
+              <label for="caprins" class="checkbox-label">Caprins</label>
             
-              <input type="checkbox" id="volaille" name="type_elevage" value="volaille">
-              <label for="volaille">Volaille</label><br>
+              <input type="checkbox" id="volaille" name="type_elevage" value="volaille" class="checkbox">
+              <label for="volaille" class="checkbox-label">Volaille</label>
             
-              <input type="checkbox" id="porcins" name="type_elevage" value="porcins">
-              <label for="porcins">Porcins</label><br>
+              <input type="checkbox" id="porcins" name="type_elevage" value="porcins" class="checkbox">
+              <label for="porcins" class="checkbox-label">Porcins</label>
             </div>
             
             <label for="nombre-animaux">Combien d’animaux possédez-vous ?</label>
@@ -192,35 +192,44 @@
                 <option value="non">Non</option>
             </select>
 
+
             <h3>Problématiques rencontrées</h3>
-            <label for="principaux-defis">Quels sont vos principaux défis dans l’élevage ? (Cochez tout ce qui s'applique)</label>
-            <div>
-              <input type="checkbox" id="sante-animaux" name="defis" value="sante-animaux">
-              <label for="sante-animaux">Santé des animaux</label>
-            </div>
-            <div>
-              <input type="checkbox" id="manque-eau" name="defis" value="manque-eau">
-              <label for="manque-eau">Manque d'eau</label>
-            </div>
-            <div>
-              <input type="checkbox" id="alimentation-animaux" name="defis" value="alimentation-animaux">
-              <label for="alimentation-animaux">Alimentation des animaux</label>
-            </div>
-            <div>
-              <input type="checkbox" id="acces-marche" name="defis" value="acces-marche">
-              <label for="acces-marche">Accès aux marchés</label>
-            </div>
-            <div>
-              <input type="checkbox" id="autres-defis" name="defis" value="autres">
-              <label for="autres-defis">Autres</label>
+            <label for="principaux-defis" class="main-label">Quels sont vos principaux défis dans l’élevage ? (Cochez tout ce qui s'applique)</label>
+            <div class="defis-group">
+              <div class="defi-item">
+                <input type="checkbox" id="sante-animaux" name="defis" value="sante-animaux" class="checkbox">
+                <label for="sante-animaux" class="checkbox-label">Santé des animaux</label>
+              </div>
+              
+              <div class="defi-item">
+                <input type="checkbox" id="manque-eau" name="defis" value="manque-eau" class="checkbox">
+                <label for="manque-eau" class="checkbox-label">Manque d'eau</label>
+              </div>
+              
+              <div class="defi-item">
+                <input type="checkbox" id="alimentation-animaux" name="defis" value="alimentation-animaux" class="checkbox">
+                <label for="alimentation-animaux" class="checkbox-label">Alimentation des animaux</label>
+              </div>
+              
+              <div class="defi-item">
+                <input type="checkbox" id="acces-marche" name="defis" value="acces-marche" class="checkbox">
+                <label for="acces-marche" class="checkbox-label">Accès aux marchés</label>
+              </div>
+              
+              <div class="defi-item">
+                <input type="checkbox" id="autres-defis" name="defis" value="autres" class="checkbox" onclick="toggleAutresInput()">
+                <label for="autres-defis" class="checkbox-label">Autres</label>
+              </div>
             </div>
             
             <!-- Champ texte pour l'option "Autres" -->
-            <div id="autres-defis-input" style="display: none;">
+            <div id="autres-defis-input" class="other-input" style="display: none;">
               <label for="autres-text-defis">Précisez vos autres défis :</label>
-              <input type="text" id="autres-text-defis" name="autres_defis">
+              <input type="text" id="autres-text-defis" name="autres_defis" class="text-input">
             </div>
-            
+             
+
+
             <script>
               // Afficher le champ texte si "Autres" est sélectionné
               const autresDefisCheckbox = document.getElementById("autres-defis");
@@ -233,6 +242,19 @@
                   autresDefisInput.style.display = "none";
                 }
               });
+
+
+
+
+              function toggleAutresInput() {
+  var autresDefisInput = document.getElementById('autres-defis-input');
+  var autresCheckbox = document.getElementById('autres-defis');
+  if (autresCheckbox.checked) {
+    autresDefisInput.style.display = 'block';
+  } else {
+    autresDefisInput.style.display = 'none';
+  }
+}
             </script>
             
 
@@ -546,7 +568,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (response.ok) {
                 showAlert('Inscription réussie !');
-                window.location.href = 'Acceuil.html'; // Redirection
+                window.location.href = 'Location.html'; // Redirection
             } else {
                 const message = await response.text();
                 showAlert('Erreur lors de l\'inscription : ' + message);
@@ -586,7 +608,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 localStorage.setItem('contact', data.contact);
 
                 showAlert('Connexion réussie !');
-                window.location.href = 'Acceuil.html'; // Redirection
+                window.location.href = 'Location.html'; // Redirection
             } else {
                 const errorMessage = await response.text();
                 showAlert('Erreur : ' + errorMessage);

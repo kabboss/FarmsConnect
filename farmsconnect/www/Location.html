@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demande de localisation</title>
+  <link rel="stylesheet" href="css/Location.css">
+</head>
+<body>
+
+  <!-- Fenêtre modale pour demander la localisation -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Pourquoi avons-nous besoin de votre localisation ?</h3>
+      <p>Nous avons besoin de connaître votre position géographique pour des raisons de livraison et de coordination de services. Cela nous permettra de vous fournir des services plus efficaces et adaptés à votre emplacement.</p>
+      <button id="acceptBtn">Accepter</button>
+      <button id="declineBtn">Refuser</button>
+    </div>
+  </div>
+
+  <script>
+    // Variables pour la modale et les boutons
+    const modal = document.getElementById("myModal");
+    const closeBtn = document.getElementsByClassName("close")[0];
+    const acceptBtn = document.getElementById("acceptBtn");
+    const declineBtn = document.getElementById("declineBtn");
+
+    // Afficher la modale
+    window.onload = () => {
+      modal.style.display = "block";
+    };
+
+    // Fermer la modale
+    closeBtn.onclick = () => {
+      modal.style.display = "none";
+    };
+
+    // Fonction pour obtenir et envoyer la localisation
+    const getLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(saveLocation, showError);
+      } else {
+        alert("La géolocalisation n'est pas supportée par votre navigateur.");
+      }
+    };
+
+    // Sauvegarder la localisation
+    const saveLocation = (position) => {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      fetch('https://farmsconnect-b084ddb02391.herokuapp.com/save-location', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Ajouter un token d'utilisateur
+        },
+        body: JSON.stringify({ latitude, longitude }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Erreur lors de l'enregistrement.");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          alert("Votre localisation a été enregistrée avec succès !");
+          window.location.href = "Acceuil.html"; // Redirection
+        })
+        .catch((error) => {
+          alert("Erreur : " + error.message);
+        });
+    };
+
+    // Gérer les erreurs de géolocalisation
+    const showError = (error) => {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          alert("Vous avez refusé de partager votre localisation.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          alert("La position est indisponible.");
+          break;
+        case error.TIMEOUT:
+          alert("La demande de géolocalisation a expiré.");
+          break;
+        default:
+          alert("Une erreur inconnue s'est produite.");
+      }
+    };
+
+    // Gestion des clics
+    acceptBtn.onclick = () => {
+      getLocation(); // Récupérer la localisation
+    };
+
+    declineBtn.onclick = () => {
+      alert("Vous avez refusé de partager votre localisation.");
+      window.location.href = "Acceuil.html"; // Redirection
+    };
+  </script>
+
+</body>
+</html>
