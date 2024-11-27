@@ -232,10 +232,33 @@ document.getElementById("accept-consent").addEventListener("click", function () 
 
 document.getElementById("decline-consent").addEventListener("click", function () {
     document.getElementById("consent-modal").style.display = "none";
-    alert("Inscription terminée sans répondre aux questions supplémentaires !");
-    // Ici, vous pouvez soumettre le formulaire d'inscription principal
-    document.getElementById("signup-form").submit();
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Obtenir les éléments des modals
+    const consentModal = document.getElementById("consent-modal");
+    const signupModal = document.getElementById("signup-modal");
+
+    // Obtenir les boutons de la modal de consentement
+    const acceptConsentButton = document.getElementById("accept-consent");
+    const declineConsentButton = document.getElementById("decline-consent");
+
+    // Lorsque l'utilisateur clique sur "Non" (refuser le consentement)
+    declineConsentButton.addEventListener("click", function () {
+        // Masquer la modal de consentement
+        consentModal.style.display = "none";
+
+        // Afficher la modal d'inscription
+        signupModal.style.display = "block";
+    });
+
+
+});
+
+
+
+
+
 
 // Soumission des questions supplémentaires
 
