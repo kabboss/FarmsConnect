@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Demande de localisation</title>
-  <link rel="stylesheet" href="Location.css">
-
+  <link rel="stylesheet" href="css/Location.css">
 </head>
 <body>
 
@@ -21,93 +20,74 @@
   </div>
 
   <script>
-    // Fonction pour afficher la modale
-    window.onload = function() {
-      showModal(); // Afficher la modale dès que la page est chargée
-    }
-
-    var modal = document.getElementById("myModal");
-    var span = document.getElementsByClassName("close")[0];
-    var acceptBtn = document.getElementById("acceptBtn");
-    var declineBtn = document.getElementById("declineBtn");
-    var content = document.getElementById("content");
+    // Variables pour la modale et les boutons
+    const modal = document.getElementById("myModal");
+    const closeBtn = document.getElementsByClassName("close")[0];
+    const acceptBtn = document.getElementById("acceptBtn");
+    const declineBtn = document.getElementById("declineBtn");
 
     // Afficher la modale
-    function showModal() {
-      modal.style.display = "block"; 
-    }
+    window.onload = () => {
+      modal.style.display = "block";
+    };
 
-    // Quand l'utilisateur clique sur "X", fermer la modale
-    span.onclick = function() {
+    // Fermer la modale
+    closeBtn.onclick = () => {
       modal.style.display = "none";
-      showPageContent();
-    }
+    };
 
-    // Si l'utilisateur accepte la localisation
-    acceptBtn.onclick = function() {
-      modal.style.display = "none"; // Fermer la modale
-      getLocation(); // Récupérer la localisation
-      showPageContent(); // Afficher le contenu de la page
-    }
+    // Fonction pour obtenir et envoyer la localisation
 
-    // Si l'utilisateur refuse la localisation
-    declineBtn.onclick = function() {
-      modal.style.display = "none"; // Fermer la modale
-      alert("Vous avez refusé de partager votre localisation.");
-      showPageContent(); // Afficher le contenu de la page
-    }
-
-    // Fonction pour récupérer la localisation
-    function getLocation() {
-      if (navigator.geolocation) {
+// Fonction pour obtenir et envoyer la localisation
+const getLocation = () => {
+    if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(saveLocation, showError);
-      } else {
+    } else {
         alert("La géolocalisation n'est pas supportée par votre navigateur.");
-      }
+    }
+};
+
+// Sauvegarder la localisation
+const saveLocation = (position) => {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    const userId = localStorage.getItem('userId');  // Assurez-vous que l'ID de l'utilisateur est dans le localStorage
+
+    if (!userId) {
+        alert("Utilisateur non authentifié.");
+        return;
     }
 
-    // Fonction pour sauvegarder la localisation
-    function saveLocation(position) {
-      var latitude = position.coords.latitude;
-      var longitude = position.coords.longitude;
-
-      // Stocker les coordonnées dans une variable dynamique
-      var userId = User._id;  // Utiliser l'ID de l'utilisateur
-      var locationKey = "location_" + userId;
-      var locationData = { latitude: latitude, longitude: longitude };
-
-      // Log des données pour vérifier
-      console.log(locationKey, locationData);
-
-      // Envoi des données au serveur via AJAX (Remplacez l'URL avec celle de votre serveur)
-      sendLocationToServer(locationKey, locationData);
-    }
-
-    // Fonction pour envoyer la localisation au serveur
-function sendLocationToServer(locationKey, locationData) {
-  fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      username: locationKey,  // Utilisez l'identifiant de l'utilisateur
-      latitude: locationData.latitude,
-      longitude: locationData.longitude
+    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ userId, latitude, longitude }),
     })
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log('Localisation envoyée:', data);
-    alert('Votre localisation a été envoyée avec succès !');
-  })
-  .catch(error => {
-    console.error('Erreur lors de l\'envoi de la localisation:', error);
-  });
-}
+    .then((response) => {
+        console.log("Réponse du serveur : ", response); // Log de la réponse
+        if (!response.ok) {
+            throw new Error("Erreur lors de l'enregistrement.");
+        }
+        return response.json();
+    })
+    .then((data) => {
+        alert("Votre localisation a été enregistrée avec succès !");
+        window.location.href = "Acceuil.html"; // Redirection après confirmation
+    })
+    .catch((error) => {
+        console.error("Erreur : ", error); // Log détaillé de l'erreur
+        alert("Erreur : " + error.message);
+    });
+};
 
-    // Fonction pour afficher un message d'erreur si la localisation échoue
-    function showError(error) {
+
+
+
+    // Gérer les erreurs de géolocalisation
+    const showError = (error) => {
       switch (error.code) {
         case error.PERMISSION_DENIED:
           alert("Vous avez refusé de partager votre localisation.");
@@ -118,16 +98,20 @@ function sendLocationToServer(locationKey, locationData) {
         case error.TIMEOUT:
           alert("La demande de géolocalisation a expiré.");
           break;
-        case error.UNKNOWN_ERROR:
-          alert("Erreur inconnue lors de la récupération de la localisation.");
-          break;
+        default:
+          alert("Une erreur inconnue s'est produite.");
       }
-    }
+    };
 
-    // Afficher le contenu de la page après la réponse
-    function showPageContent() {
-      content.style.display = "block"; // Afficher le contenu
-    }
+    // Gestion des clics
+    acceptBtn.onclick = () => {
+      getLocation(); // Récupérer la localisation
+    };
+
+    declineBtn.onclick = () => {
+      alert("Vous avez refusé de partager votre localisation.");
+      window.location.href = "Acceuil.html"; // Redirection
+    };
   </script>
 
 </body>

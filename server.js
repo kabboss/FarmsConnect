@@ -19,6 +19,8 @@ const User = require('./models/User');
 const Message = require('./models/message');
 const Annonce = require('./models/Annonce');
 const CollecteDonnees = require('./models/collecteDonnees');
+const Location = require('./models/Location');  // Importer le modèle Location
+
 
 
 // Créer une instance de l'application Express et du serveur HTTP
@@ -479,33 +481,36 @@ module.exports = app;
 
 
 
-
-
 // Route pour enregistrer la localisation de l'utilisateur
-app.post('/save-location', async (req, res) => {
-    const { username, latitude, longitude } = req.body;
+app.post('/api/save-location', async (req, res) => {
+    const { userId, latitude, longitude } = req.body;
+
+    console.log("Données reçues :", req.body); // Log les données reçues
 
     try {
-        // Trouver l'utilisateur par son nom d'utilisateur
-        const user = await User.findOne({ username });
-
+        // Vérifier si l'utilisateur existe
+        const user = await User.findById(userId);
         if (!user) {
             return res.status(404).send('Utilisateur non trouvé');
         }
 
-        // Mettre à jour la localisation de l'utilisateur
-        user.location = { latitude, longitude };
-        await user.save();
+        // Créer une nouvelle entrée de localisation
+        const newLocation = new Location({
+            userId,
+            latitude,
+            longitude
+        });
+
+        // Sauvegarder la localisation
+        await newLocation.save();
 
         // Réponse de succès
         res.status(200).send('Localisation enregistrée avec succès');
     } catch (err) {
-        console.error(err);
+        console.error("Erreur serveur :", err);
         res.status(500).send('Erreur serveur lors de l\'enregistrement de la localisation');
     }
 });
-
-module.exports = app;
 
 
 

@@ -37,41 +37,54 @@
     };
 
     // Fonction pour obtenir et envoyer la localisation
-    const getLocation = () => {
-      if (navigator.geolocation) {
+
+// Fonction pour obtenir et envoyer la localisation
+const getLocation = () => {
+    if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(saveLocation, showError);
-      } else {
+    } else {
         alert("La géolocalisation n'est pas supportée par votre navigateur.");
-      }
-    };
+    }
+};
 
-    // Sauvegarder la localisation
-    const saveLocation = (position) => {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
+// Sauvegarder la localisation
+const saveLocation = (position) => {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    const userId = localStorage.getItem('userId');  // Assurez-vous que l'ID de l'utilisateur est dans le localStorage
 
-      fetch('https://farmsconnect-b084ddb02391.herokuapp.com/save-location', {
+    if (!userId) {
+        alert("Utilisateur non authentifié.");
+        return;
+    }
+
+    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Ajouter un token d'utilisateur
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify({ latitude, longitude }),
-      })
-        .then((response) => {
-          if (!response.ok) {
+        body: JSON.stringify({ userId, latitude, longitude }),
+    })
+    .then((response) => {
+        console.log("Réponse du serveur : ", response); // Log de la réponse
+        if (!response.ok) {
             throw new Error("Erreur lors de l'enregistrement.");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          alert("Votre localisation a été enregistrée avec succès !");
-          window.location.href = "Acceuil.html"; // Redirection
-        })
-        .catch((error) => {
-          alert("Erreur : " + error.message);
-        });
-    };
+        }
+        return response.json();
+    })
+    .then((data) => {
+        alert("Votre localisation a été enregistrée avec succès !");
+        window.location.href = "Acceuil.html"; // Redirection après confirmation
+    })
+    .catch((error) => {
+        console.error("Erreur : ", error); // Log détaillé de l'erreur
+        alert("Erreur : " + error.message);
+    });
+};
+
+
+
 
     // Gérer les erreurs de géolocalisation
     const showError = (error) => {

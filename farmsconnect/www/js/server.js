@@ -13,12 +13,15 @@ const multer = require('multer');
 const path = require('path');
 const Grid = require('gridfs-stream');
 const { GridFsStorage } = require('multer-gridfs-storage');
+const router = express.Router();
 
 // Modèles
 const User = require('./models/User');
 const Message = require('./models/message');
 const Annonce = require('./models/Annonce');
 const CollecteDonnees = require('./models/collecteDonnees');
+const Location = require('./models/Location');  // Importer le modèle Location
+
 
 
 // Créer une instance de l'application Express et du serveur HTTP
@@ -476,6 +479,43 @@ app.post('/api/questions', async (req, res) => {
 module.exports = app;
 
   
+
+
+
+// Route pour enregistrer la localisation de l'utilisateur
+app.post('/api/save-location', async (req, res) => {
+    const { userId, latitude, longitude } = req.body;
+
+    console.log("Données reçues :", req.body); // Log les données reçues
+
+    try {
+        // Vérifier si l'utilisateur existe
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send('Utilisateur non trouvé');
+        }
+
+        // Créer une nouvelle entrée de localisation
+        const newLocation = new Location({
+            userId,
+            latitude,
+            longitude
+        });
+
+        // Sauvegarder la localisation
+        await newLocation.save();
+
+        // Réponse de succès
+        res.status(200).send('Localisation enregistrée avec succès');
+    } catch (err) {
+        console.error("Erreur serveur :", err);
+        res.status(500).send('Erreur serveur lors de l\'enregistrement de la localisation');
+    }
+});
+
+
+
+
 
 
 
