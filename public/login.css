@@ -412,9 +412,11 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Activer le défilement si nécessaire */
+    overflow-y: auto; /* Défilement vertical activé */
     background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent sombre */
     backdrop-filter: blur(5px); /* Effet de flou pour un style plus élégant */
+    padding: 20px 0; /* Espacement pour éviter que le contenu ne touche le haut ou le bas */
+    box-sizing: border-box; /* Inclure les marges et les bordures dans les dimensions */
 }
 
 .modal.active {
@@ -424,7 +426,7 @@ body {
 /* Contenu de la modale */
 .modal-content {
     background: linear-gradient(145deg, #ffffff, #f0f0f0); /* Dégradé subtil */
-    margin: 10% auto;
+    margin: 20px auto; /* Centrer la modale avec un espacement du haut et du bas */
     padding: 30px;
     border-radius: 12px;
     width: 90%;
@@ -432,6 +434,9 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Ombre plus profonde */
     animation: slideDown 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     transform-origin: top center;
+    max-height: 90vh; /* Limiter la hauteur maximale à 90% de la fenêtre */
+    overflow-y: auto; /* Activer le défilement interne si le contenu dépasse */
+    box-sizing: border-box; /* Gérer les bordures et paddings correctement */
 }
 
 /* Animation de transition pour l'apparition */
