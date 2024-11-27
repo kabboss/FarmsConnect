@@ -104,6 +104,7 @@ app.post('/api/signup', async (req, res) => {
 });
 
 
+
 // Route pour la connexion
 app.post('/api/login', async (req, res) => {
     const { username, email, contact, password } = req.body;
