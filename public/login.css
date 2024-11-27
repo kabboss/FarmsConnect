@@ -413,37 +413,50 @@ body {
     width: 100%;
     height: 100%;
     overflow-y: auto; /* Défilement vertical activé */
-    background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent sombre */
-    backdrop-filter: blur(5px); /* Effet de flou pour un style plus élégant */
+    background-color: rgba(0, 0, 0, 0.8); /* Fond plus sombre pour accentuer l'effet */
+    backdrop-filter: blur(8px); /* Augmenter le flou pour un effet plus élégant */
     padding: 20px 0; /* Espacement pour éviter que le contenu ne touche le haut ou le bas */
     box-sizing: border-box; /* Inclure les marges et les bordures dans les dimensions */
+    transition: all 0.3s ease; /* Ajout d'une transition fluide pour l'apparition */
 }
 
+/* Modale active - apparition */
 .modal.active {
     display: flex;
+    animation: fadeIn 0.5s ease-out;
 }
 
 /* Contenu de la modale */
 .modal-content {
-    background: linear-gradient(145deg, #ffffff, #f0f0f0); /* Dégradé subtil */
-    margin: 20px auto; /* Centrer la modale avec un espacement du haut et du bas */
-    padding: 30px;
+    background: linear-gradient(145deg, #ffffff, #f8f8f8); /* Dégradé moderne */
+    margin: 20px auto;
+    padding: 40px;
     border-radius: 12px;
     width: 90%;
     max-width: 600px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Ombre plus profonde */
-    animation: slideDown 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Ombre plus douce */
+    animation: slideDown 0.5s ease-out;
     transform-origin: top center;
-    max-height: 90vh; /* Limiter la hauteur maximale à 90% de la fenêtre */
-    overflow-y: auto; /* Activer le défilement interne si le contenu dépasse */
-    box-sizing: border-box; /* Gérer les bordures et paddings correctement */
+    max-height: 90vh; /* Limiter la hauteur maximale */
+    overflow-y: auto; /* Activer le défilement interne si nécessaire */
+    box-sizing: border-box;
+    border: 1px solid #ddd; /* Bordure subtile */
 }
 
 /* Animation de transition pour l'apparition */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 @keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateY(-50px) scale(0.9);
+        transform: translateY(-50px) scale(0.95);
     }
     to {
         opacity: 1;
@@ -454,13 +467,13 @@ body {
 /* Bouton de fermeture */
 .close-btn {
     color: #888;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
     position: absolute;
     top: 15px;
     right: 15px;
     cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease;
+    transition: transform 0.2s ease, color 0.3s ease;
 }
 
 .close-btn:hover {
@@ -471,19 +484,21 @@ body {
 /* Titres */
 .modal-content h2 {
     margin-top: 0;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 700;
     color: #333;
     text-align: center;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
 }
 
+/* Sous-titres */
 .modal-content h3 {
     font-size: 20px;
     color: #555;
     margin-bottom: 20px;
     text-align: left;
+    font-weight: 600;
 }
 
 /* Formulaire */
@@ -493,12 +508,12 @@ body {
     gap: 15px; /* Espacement entre les champs */
 }
 
+/* Labels */
 .modal-content label {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
-    color: #666;
+    color: #444;
     margin-bottom: 5px;
-    display: block;
 }
 
 /* Champs de formulaire */
@@ -506,15 +521,17 @@ body {
 .modal-content select,
 .modal-content textarea {
     width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ddd;
+    padding: 14px 16px;
+    border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 16px;
     background-color: #fafafa;
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
     outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtile ombre pour les champs */
 }
 
+/* Focus sur les champs de formulaire */
 .modal-content input:focus,
 .modal-content select:focus,
 .modal-content textarea:focus {
@@ -524,8 +541,8 @@ body {
 
 /* Boutons */
 .modal-content button {
-    padding: 12px;
-    background: linear-gradient(145deg, #007BFF, #0056b3); /* Dégradé élégant */
+    padding: 14px;
+    background: linear-gradient(145deg, #007BFF, #0056b3);
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -533,12 +550,14 @@ body {
     font-weight: bold;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.3s ease;
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .modal-content button:hover {
     background: linear-gradient(145deg, #0056b3, #007BFF);
     transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 .modal-content button:disabled {
@@ -548,7 +567,7 @@ body {
 
 /* Checkbox */
 .modal-content input[type="checkbox"] {
-    accent-color: #007BFF; /* Style natif pour une apparence moderne */
+    accent-color: #007BFF;
     margin-right: 10px;
 }
 
@@ -572,4 +591,10 @@ body {
 .modal-content select:hover,
 .modal-content textarea:hover {
     border-color: #0056b3;
+}
+
+/* Effet subtil de défilement */
+.modal-content textarea {
+    resize: vertical;
+    min-height: 100px;
 }

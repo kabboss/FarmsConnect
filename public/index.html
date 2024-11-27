@@ -278,7 +278,32 @@ function toggleModal(modalId, show) {
         modal.classList.remove("active");
     }
 }
+</script>
 
+<script>
+    // Obtenir la modale et le bouton de fermeture
+    const modal = document.querySelector('.modal');
+    const closeButton = document.querySelector('.close-btn');
+
+    // Fonction pour fermer la modale
+    function closeModal() {
+        modal.classList.remove('active');
+    }
+
+    // Fermer la modale lorsque l'utilisateur clique sur le bouton de fermeture
+    closeButton.addEventListener('click', closeModal);
+
+    // Fermer la modale lorsque l'utilisateur clique en dehors de la modale (sur le fond)
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Fonction pour ouvrir la modale
+    function openModal() {
+        modal.classList.add('active');
+    }
 </script>
 
 
