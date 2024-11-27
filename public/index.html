@@ -56,7 +56,6 @@
             <input type="email" id="signup-email" name="email" placeholder="Email" required>
             <input type="text" id="signup-contact" name="contact" placeholder="Contact" required>
             <input type="password" id="signup-password" name="password" placeholder="Mot de passe" required>
-            
             <select id="signup-userType" name="userType" required>
                 <option value="" disabled selected>Type d'utilisateur</option>
                 <option value="vendeur">Vendeur</option>
@@ -64,14 +63,13 @@
                 <option value="veterinaire">Vétérinaire</option>
                 <option value="eleveur">Éleveur</option>
             </select>
-            
             <button type="button" id="continue-registration">Continuer l'inscription</button>
         </form>
     </div>
 </div>
 
 <!-- Modale d'autorisation -->
-<div class="modal" id="consent-modal" style="display: none;">
+<div class="modal" id="consent-modal">
     <div class="modal-content">
         <h2>Autorisation de collecte de données supplémentaires</h2>
         <p>
@@ -218,23 +216,22 @@
 
 
 <script>
-    // Ouverture de la modale d'autorisation
+    // Gestion de la navigation modale
 document.getElementById("continue-registration").addEventListener("click", function () {
-    document.getElementById("signup-modal").style.display = "none";
-    document.getElementById("consent-modal").style.display = "block";
+    toggleModal("signup-modal", false); // Fermer l'inscription
+    toggleModal("consent-modal", true); // Ouvrir l'autorisation
 });
 
 // Gestion du consentement
 document.getElementById("accept-consent").addEventListener("click", function () {
-    document.getElementById("consent-modal").style.display = "none";
-    document.getElementById("extra-questions-modal").style.display = "block";
+    toggleModal("consent-modal", false); // Fermer l'autorisation
+    toggleModal("extra-questions-modal", true); // Afficher questions
 });
 
 document.getElementById("decline-consent").addEventListener("click", function () {
-    document.getElementById("consent-modal").style.display = "none";
+    toggleModal("consent-modal", false); // Fermer l'autorisation
     alert("Inscription terminée sans répondre aux questions supplémentaires !");
-    // Ici, vous pouvez soumettre le formulaire d'inscription principal
-    document.getElementById("signup-form").submit();
+    document.getElementById("signup-form").submit(); // Soumission
 });
 
 // Soumission des questions supplémentaires
@@ -242,7 +239,7 @@ document.getElementById("submit-questions").addEventListener("click", function (
     const extraQuestionsForm = document.getElementById("extra-questions-form");
     const formData = new FormData(extraQuestionsForm);
 
-    fetch('https://votre-serveur/api/questions', {
+    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/questions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(Object.fromEntries(formData)),
@@ -250,9 +247,8 @@ document.getElementById("submit-questions").addEventListener("click", function (
         .then((response) => {
             if (response.ok) {
                 alert("Merci pour vos réponses !");
-                document.getElementById("extra-questions-modal").style.display = "none";
-                // Soumettre le formulaire principal après avoir répondu
-                document.getElementById("signup-form").submit();
+                toggleModal("extra-questions-modal", false); // Fermer questions
+                document.getElementById("signup-form").submit(); // Soumettre formulaire principal
             } else {
                 alert("Une erreur est survenue lors de la soumission des questions.");
             }
@@ -262,6 +258,16 @@ document.getElementById("submit-questions").addEventListener("click", function (
             alert("Une erreur réseau est survenue.");
         });
 });
+
+// Fonction utilitaire pour gérer les modales
+function toggleModal(modalId, show) {
+    const modal = document.getElementById(modalId);
+    if (show) {
+        modal.classList.add("active");
+    } else {
+        modal.classList.remove("active");
+    }
+}
 
 </script>
 
