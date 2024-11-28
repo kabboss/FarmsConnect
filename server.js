@@ -532,10 +532,10 @@ app.post('/api/save-location', verifyToken, async (req, res) => {
 
         // Sauvegarder la localisation dans la base de données
         await location.save();
-        res.status(200).send("Localisation enregistrée avec succès.");
+        res.status(200).json({ message: "Localisation enregistrée avec succès." });
     } catch (error) {
         console.error("Erreur lors de l'enregistrement de la localisation :", error.message);
-        res.status(500).send("Erreur serveur lors de l'enregistrement de la localisation.");
+        res.status(500).json({ error: "Erreur serveur lors de l'enregistrement de la localisation." });
     }
 });
 
