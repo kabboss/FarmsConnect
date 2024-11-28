@@ -5,112 +5,120 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
-  <link rel="stylesheet" href="map.css">
   <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  
   <style>
     #map {
-      height: 500px;
+      height: 600px;
       width: 100%;
+    }
+    .legend {
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      z-index: 1000;
+    }
+    .legend h4 {
+      margin: 0;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-  <h3>Localisation des vendeurs, éleveurs et vétérinaires</h3>
-  <div id="map" style="height: 500px;"></div>
+  <h2>Carte des Vendeurs, Éleveurs et Vétérinaires</h2>
+  <div id="map"></div>
 
   <script>
-    const map = L.map('map').setView([12.3404288, -1.5106048], 13); // Vue initiale
+    const map = L.map('map').setView([12.3404288, -1.5106048], 13);
 
-    // Charger la carte avec OpenStreetMap
+    // Charger la carte
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Initialiser une couche pour l'itinéraire
-    let routeControl;
+    let userMarker, routeControl;
+    let userLat, userLng;
 
-    // Obtenir la position de l'utilisateur
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        const userLat = position.coords.latitude;
-        const userLng = position.coords.longitude;
+    // Icônes personnalisées
+    const userIcons = {
+      vendeur: L.icon({ iconUrl: 'seller-icon.png', iconSize: [30, 30] }),
+      eleveur: L.icon({ iconUrl: 'breeder-icon.png', iconSize: [30, 30] }),
+      veterinaire: L.icon({ iconUrl: 'vet-icon.png', iconSize: [30, 30] }),
+      utilisateur: L.icon({ iconUrl: 'user-icon.png', iconSize: [30, 30] })
+    };
 
-        // Ajouter un marqueur pour la position de l'utilisateur
-        L.marker([userLat, userLng], { icon: L.icon({ iconUrl: 'user-icon.png', iconSize: [30, 30] }) })
-          .addTo(map)
-          .bindPopup('Vous êtes ici')
-          .openPopup();
+    // Fonction pour mettre à jour la position de l'utilisateur
+    function updateUserLocation() {
+      navigator.geolocation.watchPosition(
+        position => {
+          userLat = position.coords.latitude;
+          userLng = position.coords.longitude;
 
-        // Charger les données depuis l'API
-        axios.get('/api/map')
-          .then(response => {
-            const data = response.data;
-            const displayedEmails = new Set(); // Pour éviter les doublons
+          if (!userMarker) {
+            userMarker = L.marker([userLat, userLng], { icon: userIcons.utilisateur })
+              .addTo(map)
+              .bindPopup('Vous êtes ici');
+          } else {
+            userMarker.setLatLng([userLat, userLng]);
+          }
+          map.setView([userLat, userLng], 13);
 
-            data.forEach(user => {
-              const { username, email, userType, location } = user;
-              if (location && !displayedEmails.has(email)) {
-    const [lng, lat] = location.coordinates;
+          if (routeControl) {
+            calculateRoute(userLat, userLng, routeControl.getWaypoints()[1].latLng.lat, routeControl.getWaypoints()[1].latLng.lng);
+          }
+        },
+        err => console.error('Erreur de géolocalisation:', err),
+        { enableHighAccuracy: true }
+      );
+    }
 
-    // Ajouter un marqueur pour chaque utilisateur
-    const marker = L.marker([lat, lng]).addTo(map);
-    marker.bindPopup(`
-      <b>${username}</b><br>${userType}<br>
-      <button onclick="calculateRoute(${userLat}, ${userLng}, ${lat}, ${lng})">Voir l'itinéraire</button>
-      <button onclick="clearRoute()">Réinitialiser l'itinéraire</button>
+    updateUserLocation();
 
-    `);
+    // Charger les utilisateurs depuis l'API
+    axios.get('/api/map')
+      .then(response => {
+        const data = response.data;
+        const displayedEmails = new Set();
 
-    // Ajouter l'email au Set pour éviter les doublons
-    displayedEmails.add(email);
-}
+        data.forEach(user => {
+          const { username, email, userType, location } = user;
+          if (location && !displayedEmails.has(email)) {
+            const [lng, lat] = location.coordinates;
 
-            });
-          })
-          .catch(err => console.error('Erreur lors du chargement des données :', err));
-      },
-      err => {
-        console.error('Erreur de géolocalisation :', err);
-        alert('Impossible de récupérer votre position.');
-      }
-    );
+            const marker = L.marker([lat, lng], { icon: userIcons[userType] }).addTo(map);
+            marker.bindPopup(`
+              <b>${username}</b><br>${userType}<br>
+              <button onclick="calculateRoute(${userLat}, ${userLng}, ${lat}, ${lng})">Voir l'itinéraire</button>
+              <button onclick="clearRoute()">Réinitialiser l'itinéraire</button>
+            `);
 
-    // Fonction pour calculer et afficher l'itinéraire
-    function calculateRoute(userLat, userLng, destLat, destLng) {
-      if (routeControl) {
-        map.removeControl(routeControl); // Supprime l'itinéraire précédent
-      }
+            displayedEmails.add(email);
+          }
+        });
+      })
+      .catch(err => console.error('Erreur lors du chargement des données:', err));
+
+    // Calculer l'itinéraire
+    function calculateRoute(startLat, startLng, destLat, destLng) {
+      if (routeControl) map.removeControl(routeControl);
+
       routeControl = L.Routing.control({
-        waypoints: [
-          L.latLng(userLat, userLng),  // Point de départ : position de l'utilisateur
-          L.latLng(destLat, destLng)  // Point d'arrivée : position de l'utilisateur sélectionné
-        ],
-        routeWhileDragging: true
+        waypoints: [L.latLng(startLat, startLng), L.latLng(destLat, destLng)],
+        routeWhileDragging: true,
+        showAlternatives: true
       }).addTo(map);
     }
 
-
-
-    const userIcons = {
-  vendeur: L.icon({ iconUrl: 'seller-icon.png', iconSize: [30, 30] }),
-  eleveur: L.icon({ iconUrl: 'breeder-icon.png', iconSize: [30, 30] }),
-  veterinaire: L.icon({ iconUrl: 'vet-icon.png', iconSize: [30, 30] }),
-};
-
-// Choisir une icône en fonction du type d'utilisateur
-const marker = L.marker([lat, lng], { icon: userIcons[userType] }).addTo(map);
-
-
-
-function clearRoute() {
-  if (routeControl) {
-    map.removeControl(routeControl);
-    routeControl = null; // Réinitialiser le contrôle
-  }
-}
-
+    function clearRoute() {
+      if (routeControl) {
+        map.removeControl(routeControl);
+        routeControl = null;
+      }
+    }
   </script>
 </body>
 </html>
