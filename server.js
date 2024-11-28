@@ -131,15 +131,12 @@ app.post('/api/login', async (req, res) => {
         });
 
 
-       // Vérifier si on est en HTTPS (production)
-       const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
-
-       // Configurer le cookie HTTP uniquement avec `secure` basé sur HTTPS
+       // Stocker le token dans un cookie
        res.cookie('token', token, {
-           httpOnly: true,  // Pas accessible via JavaScript
-           secure: isSecure,  // Ne fonctionnera que sur HTTPS
-           maxAge: 3600000, // Durée de vie du cookie (1h ici)
-       });
+        httpOnly: true, // Assurer que le cookie est inaccessible via JavaScript
+        secure: process.env.NODE_ENV === 'production', // Utiliser HTTPS en production
+        maxAge: 3600000, // 1 heure
+    });
 
         
         res.status(200).json({
