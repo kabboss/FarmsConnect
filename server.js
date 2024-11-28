@@ -477,44 +477,70 @@ app.post('/api/questions', async (req, res) => {
 // Exporter l'application Express
 module.exports = app;
 
-// Route pour enregistrer la localisation de l'utilisateur
-app.post('/api/save-location', async (req, res) => {
-    const { email, latitude, longitude } = req.body;
 
-    // Vérifier que tous les champs sont présents
-    if (!email || !latitude || !longitude) {
-        return res.status(400).send("Tous les champs sont requis.");
+
+
+
+
+
+
+
+
+const verifyToken = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        console.error("En-tête d'authentification manquant.");
+        return res.status(401).send("En-tête d'authentification manquant.");
+    }
+
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+        console.error("Token JWT manquant.");
+        return res.status(401).send("Token JWT manquant.");
     }
 
     try {
-        // Vérification de l'authentification de l'utilisateur avec le token
-        const token = req.headers.authorization.split(" ")[1];
-        const decoded = jwt.verify(token, 'ka23bo23re23'); // Remplacez par votre clé secrète
-        const user = await User.findOne({ email: decoded.email });
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'ka23bo23re23');
+        console.log("Token décodé avec succès :", decoded); // Log du token décodé
+        req.user = decoded;
+        next();
+    } catch (error) {
+        console.error("Erreur lors de la vérification du token :", error.message);
+        return res.status(401).send(`Token JWT invalide : ${error.message}`);
+    }
+};
 
-        if (!user) {
-            return res.status(401).send("Utilisateur non trouvé.");
-        }
 
-        // Créer un nouvel enregistrement de localisation
-        const newLocation = new Location({
-            email,
+// Route pour enregistrer la localisation de l'utilisateur
+app.post('/api/save-location', verifyToken, async (req, res) => {
+    const { latitude, longitude } = req.body;
+    const email = req.user.email; // Ajoutez l'email extrait du token
+
+
+    console.log("Requête reçue :");
+    console.log("Headers:", req.headers);
+    console.log("Body:", req.body);
+
+    if (!latitude || !longitude) {
+        return res.status(400).send("Coordonnées manquantes.");
+    }
+
+    try {
+        const location = new Location({
+            userId: req.user.userId, // Utilisateur identifié par le token
+            email, // Inclure l'email si nécessaire
             latitude,
             longitude,
-            userId: user._id, // Assurez-vous que l'ID de l'utilisateur est stocké
-            timestamp: new Date(),
         });
 
-        // Enregistrer la localisation dans la base de données
-        await newLocation.save();
-
-        res.status(201).send("Localisation enregistrée avec succès !");
+        await location.save();
+        res.status(200).send("Localisation enregistrée avec succès.");
     } catch (error) {
-        console.error('Erreur lors de l\'enregistrement de la localisation :', error);
-        res.status(500).send("Erreur serveur : " + error.message);
+        console.error("Erreur lors de l'enregistrement :", error.message);
+        res.status(500).send("Erreur serveur.");
     }
 });
-
 
 
 

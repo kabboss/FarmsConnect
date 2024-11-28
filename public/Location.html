@@ -46,49 +46,45 @@
     };
 
     // Sauvegarder la localisation
-    const saveLocation = (position) => {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        
-        // Récupérer l'email de l'utilisateur à partir du localStorage
-        const email = localStorage.getItem('email');  // Assurez-vous que l'email est stocké lors de la connexion
+    async function saveLocation(position) {
+    const token = localStorage.getItem('token'); // Récupérer le token JWT depuis le localStorage
+    if (!token) {
+        alert("Erreur : Vous devez être connecté pour sauvegarder votre localisation.");
+        console.error("Utilisateur non authentifié : token introuvable.");
+        return;
+    }
 
-        if (!email) {
-            alert("Utilisateur non authentifié.");
-            return;
-        }
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
 
-        // Préparer les données à envoyer
-        const locationData = {
-            email,
-            latitude,
-            longitude,
-        };
-
-        // Effectuer une requête pour enregistrer la localisation
-        fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', {
+    try {
+        // Effectuer la requête POST pour enregistrer la localisation
+        const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('token')}`, // Inclure le token pour authentifier l'utilisateur
+                'Authorization': `Bearer ${token}`, // Inclure le token JWT pour authentifier
             },
-            body: JSON.stringify(locationData),  // Envoyer les données au backend
-        })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Erreur lors de l'enregistrement.");
-            }
-            return response.json();
-        })
-        .then((data) => {
-            alert("Votre localisation a été enregistrée avec succès !");
-            window.location.href = "Acceuil.html"; // Redirection après confirmation
-        })
-        .catch((error) => {
-            console.error("Erreur : ", error); // Log détaillé de l'erreur
-            alert("Erreur : " + error.message);
+            body: JSON.stringify({ latitude, longitude }), // Envoyer les coordonnées
         });
-    };
+
+        if (!response.ok) {
+            const errorText = await response.text(); // Lire le message d'erreur du backend
+            throw new Error(`Erreur lors de l'enregistrement : ${errorText}`);
+        }
+
+        const data = await response.json(); // Lire la réponse JSON
+        alert("Votre localisation a été enregistrée avec succès !");
+        console.log("Localisation enregistrée :", data);
+        
+        // Rediriger ou effectuer une autre action après succès
+        window.location.href = "Acceuil.html";
+    } catch (error) {
+        // Gérer les erreurs côté client ou serveur
+        console.error("Erreur lors de l'enregistrement de la localisation :", error.message);
+        alert("Erreur : " + error.message);
+    }
+}
 
     // Gérer les erreurs de géolocalisation
     const showError = (error) => {
