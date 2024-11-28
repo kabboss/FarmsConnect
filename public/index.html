@@ -568,7 +568,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (response.ok) {
                 showAlert('Inscription réussie !');
-                window.location.href = 'Location.html'; // Redirection
+                showLoginModal();
             } else {
                 const message = await response.text();
                 showAlert('Erreur lors de l\'inscription : ' + message);
@@ -577,6 +577,34 @@ document.addEventListener("DOMContentLoaded", function() {
             showAlert('Erreur réseau : ' + error.message);
         }
     });
+
+
+// Fonction pour afficher la modal de connexion
+function showLoginModal() {
+    const modal = document.getElementById("login-modal");
+    modal.style.display = "block"; // Afficher la modal
+
+    // Fermer la modal lorsque l'utilisateur clique sur le bouton de fermeture
+    document.getElementById("close-login-modal").addEventListener("click", function() {
+        modal.style.display = "none"; // Cacher la modal
+    });
+
+    // Fermer la modal si l'utilisateur clique en dehors de celle-ci
+    window.addEventListener("click", function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none"; // Cacher la modal si clic en dehors
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
 
     // Gestion de la connexion
     document.getElementById("login-form").addEventListener("submit", async function (event) {
