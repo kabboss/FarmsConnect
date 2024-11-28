@@ -525,7 +525,7 @@ app.post('/api/save-location', verifyToken, async (req, res) => {
         // Créer un nouvel objet Location
         const location = new Location({
             userId: req.user.userId, // Utilisateur identifié par le token
-            email,  // Ajouter l'email au modèle
+            email: req.user.email,  // Ajouter l'email au modèle
             latitude,
             longitude,
         });
