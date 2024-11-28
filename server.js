@@ -556,38 +556,46 @@ app.post('/api/save-location', verifyToken, async (req, res) => {
 
 app.get('/api/map', async (req, res) => {
     try {
-        // Récupérer les utilisateurs filtrés (vendeurs, éleveurs, vétérinaires)
+        // Récupérer tous les utilisateurs sauf les visiteurs
         const users = await User.find(
-            { userType: { $in: ['vendeur', 'eleveur', 'veterinaire'] } },
-            'userType username email' // Récupérer uniquement les champs nécessaires
+            { userType: { $ne: 'visiteur' } }, // Exclure les visiteurs
+            'userType username email' // Champs nécessaires
         );
-        
-        // Récupérer toutes les localisations correspondantes aux utilisateurs
-        const locations = await Location.find(
-            { userId: { $in: users.map(user => user._id) } }, // Filtrer par userId
-            'userId latitude longitude' // Récupérer les coordonnées de localisation
-        );
-        
-        // Fusionner les données des utilisateurs avec leurs localisations
-        const mapData = users.map(user => {
-            // Trouver la localisation correspondant à chaque utilisateur
-            const location = locations.find(loc => loc.userId.toString() === user._id.toString());
-            
-            return {
-                username: user.username,
-                email: user.email,
-                userType: user.userType,
-                location: location ? { type: 'Point', coordinates: [location.longitude, location.latitude] } : null
-            };
-        });
-        
-        res.json(mapData); // Renvoyer les données fusionnées
+
+        // Récupérer les dernières localisations pour chaque utilisateur
+        const locations = await Location.aggregate([
+            { $match: { userId: { $in: users.map(user => user._id) } } }, // Filtrer par userId
+            {
+                $group: {
+                    _id: "$userId",
+                    latitude: { $last: "$latitude" }, // Dernière latitude enregistrée
+                    longitude: { $last: "$longitude" } // Dernière longitude enregistrée
+                }
+            }
+        ]);
+
+        // Fusionner les utilisateurs avec leurs localisations
+        const mapData = users
+        .map(user => {
+            const location = locations.find(loc => loc._id.toString() === user._id.toString());
+            if (location) {
+                return {
+                    username: user.username,
+                    email: user.email,
+                    userType: user.userType,
+                    location: { type: 'Point', coordinates: [location.longitude, location.latitude] }
+                };
+            }
+            return null; // Exclure si pas de localisation
+        })
+        .filter(user => user !== null); // Supprimer les utilisateurs sans localisation
+    
+        res.json(mapData); // Envoyer les données au frontend
     } catch (err) {
         console.error('Erreur lors de la récupération des données de la map :', err.message);
         res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
     }
 });
-
 
 
 
