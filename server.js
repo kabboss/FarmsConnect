@@ -118,7 +118,7 @@ app.post('/api/login', async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).send('Mot de passe incorrect.');
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'ka23bo23re23', {
+        const token = jwt.sign({ userId: user._id ,  email: user.email }, process.env.JWT_SECRET || 'ka23bo23re23', {
             expiresIn: "1h",
         });
 
