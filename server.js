@@ -9,10 +9,8 @@ const nodemailer = require('nodemailer');
 const schedule = require('node-schedule');
 const http = require('http');
 const socketIo = require('socket.io');
-const multer = require('multer');
 const path = require('path');
 const Grid = require('gridfs-stream');
-const { GridFsStorage } = require('multer-gridfs-storage');
 const cookieParser = require('cookie-parser');
 
 
@@ -58,16 +56,6 @@ conn.once('open', () => {
     gfs.collection('uploads');
 });
 
-// Configuration du stockage GridFS avec multer pour le téléversement de fichiers
-const storage = new GridFsStorage({
-    url: mongoURI,
-    options: { useNewUrlParser: true, useUnifiedTopology: true },
-    file: (req, file) => ({
-        filename: `file_${Date.now()}${path.extname(file.originalname)}`,
-        bucketName: 'uploads'
-    })
-});
-const upload = multer({ storage });
 
 // Configuration du transporteur Nodemailer
 const transporter = nodemailer.createTransport({
