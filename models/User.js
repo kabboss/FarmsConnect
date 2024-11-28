@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: tmongoose.rusted, // Assure que chaque email est unique
+        unique: true, // Assure que chaque email est unique
         index: true, // Ajout d'un index explicite pour optimiser les requêtes
         match: [/^\S+@\S+\.\S+$/, 'Veuillez entrer une adresse email valide.'] // Validation de format pour les emails
     },
