@@ -159,6 +159,9 @@
             
               <input type="checkbox" id="porcins" name="type_elevage" value="porcins" class="checkbox">
               <label for="porcins" class="checkbox-label">Porcins</label>
+
+              <input type="checkbox" id="Aucun" name="type_elevage" value="Aucun" class="checkbox">
+              <label for="Aucun" class="checkbox-label">Aucun</label>
             </div>
             
             <label for="nombre-animaux">Combien d’animaux possédez-vous ?</label>
@@ -219,6 +222,10 @@
               <div class="defi-item">
                 <input type="checkbox" id="autres-defis" name="defis" value="autres" class="checkbox" onclick="toggleAutresInput()">
                 <label for="autres-defis" class="checkbox-label">Autres</label>
+
+                <input type="checkbox" id="Aucun" name="defis" value="Aucun" class="checkbox">
+                <label for="Aucun" class="checkbox-label">Aucun</label>
+  
               </div>
             </div>
             
@@ -568,7 +575,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (response.ok) {
                 showAlert('Inscription réussie !');
-                showLoginModal();
+                window.location.href = 'index.html?showLoginModal=true';  // Redirige vers index.html avec un paramètre
             } else {
                 const message = await response.text();
                 showAlert('Erreur lors de l\'inscription : ' + message);
@@ -578,13 +585,19 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
+    // Vérifier si le paramètre showLoginModal est présent dans l'URL
+window.addEventListener('DOMContentLoaded', (event) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const showLoginModal = urlParams.get('showLoginModal');
 
-
-
-
-
-
-
+    // Si le paramètre est vrai, afficher la modale
+    if (showLoginModal === 'true') {
+        const modal = document.getElementById('login-modal');
+        if (modal) {
+            modal.style.display = 'block';  // Affiche la modale
+        }
+    }
+});
 
 
     // Gestion de la connexion
