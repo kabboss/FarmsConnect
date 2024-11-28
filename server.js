@@ -487,12 +487,22 @@ app.post('/api/save-location', async (req, res) => {
     }
 
     try {
+        // Vérification de l'authentification de l'utilisateur avec le token
+        const token = req.headers.authorization.split(" ")[1];
+        const decoded = jwt.verify(token, 'ka23bo23re23'); // Remplacez par votre clé secrète
+        const user = await User.findOne({ email: decoded.email });
+
+        if (!user) {
+            return res.status(401).send("Utilisateur non trouvé.");
+        }
+
         // Créer un nouvel enregistrement de localisation
         const newLocation = new Location({
             email,
             latitude,
             longitude,
-            date: new Date(),
+            userId: user._id, // Assurez-vous que l'ID de l'utilisateur est stocké
+            timestamp: new Date(),
         });
 
         // Enregistrer la localisation dans la base de données
@@ -504,8 +514,6 @@ app.post('/api/save-location', async (req, res) => {
         res.status(500).send("Erreur serveur : " + error.message);
     }
 });
-
-
 
 
 
