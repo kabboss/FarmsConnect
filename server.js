@@ -13,6 +13,8 @@ const multer = require('multer');
 const path = require('path');
 const Grid = require('gridfs-stream');
 const { GridFsStorage } = require('multer-gridfs-storage');
+const cookieParser = require('cookie-parser');
+
 
 // Modèles
 const User = require('./models/User');
@@ -33,6 +35,8 @@ const io = socketIo(server);
 app.use(express.json({ limit: '20mb' }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
+app.use(cookieParser());  // Ajoutez cette ligne avant votre middleware `verifyToken`
+
 
 // Configuration CORS pour permettre les requêtes provenant de l'origine spécifiée
 app.use(cors({
