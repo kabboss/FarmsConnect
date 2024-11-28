@@ -545,6 +545,62 @@ app.post('/api/save-location', verifyToken, async (req, res) => {
 
 
 
+
+
+//Map 
+
+
+
+// API - Récupérer les utilisateurs avec leurs localisations
+
+
+app.get('/api/map', async (req, res) => {
+    try {
+        // Récupérer les utilisateurs filtrés (vendeurs, éleveurs, vétérinaires)
+        const users = await User.find(
+            { userType: { $in: ['vendeur', 'eleveur', 'veterinaire'] } },
+            'userType username email' // Récupérer uniquement les champs nécessaires
+        );
+        
+        // Récupérer toutes les localisations correspondantes aux utilisateurs
+        const locations = await Location.find(
+            { userId: { $in: users.map(user => user._id) } }, // Filtrer par userId
+            'userId latitude longitude' // Récupérer les coordonnées de localisation
+        );
+        
+        // Fusionner les données des utilisateurs avec leurs localisations
+        const mapData = users.map(user => {
+            // Trouver la localisation correspondant à chaque utilisateur
+            const location = locations.find(loc => loc.userId.toString() === user._id.toString());
+            
+            return {
+                username: user.username,
+                email: user.email,
+                userType: user.userType,
+                location: location ? { type: 'Point', coordinates: [location.longitude, location.latitude] } : null
+            };
+        });
+        
+        res.json(mapData); // Renvoyer les données fusionnées
+    } catch (err) {
+        console.error('Erreur lors de la récupération des données de la map :', err.message);
+        res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Configuration du serveur
 const PORT = process.env.PORT || 3002;
 server.listen(PORT, () => {
@@ -558,3 +614,12 @@ io.on('connection', (socket) => {
         console.log('Utilisateur déconnecté');
     });
 });
+
+
+
+
+
+
+
+
+

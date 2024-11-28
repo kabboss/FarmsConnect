@@ -32,16 +32,7 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now // Valeur par défaut : date et heure actuelles
     },
-    location: { // Ajout d'un champ pour la localisation
-        latitude: {
-            type: Number,
-            required: false // Ce champ est facultatif au début
-        },
-        longitude: {
-            type: Number,
-            required: false // Ce champ est facultatif au début
-        }
-    }
+    
 });
 
 // Création du modèle utilisateur

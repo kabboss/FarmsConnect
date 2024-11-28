@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Carte des Utilisateurs</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <style>
+    #map {
+      height: 500px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h3>Localisation des vendeurs, éleveurs et vétérinaires</h3>
+  <div id="map" style="height: 500px;"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const map = L.map('map').setView([12.3404288, -1.5106048], 13); // Vue initiale
+
+    // Charger la carte avec OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Charger les données depuis l'API
+    axios.get('/api/map')
+  .then(response => {
+    const data = response.data;
+    console.log(data);  // Pour vérifier les données renvoyées par l'API
+    
+    data.forEach(user => {
+      const { username, userType, location } = user;
+      if (location) {
+        const [lng, lat] = location.coordinates;
+        
+        // Ajouter un marqueur pour chaque utilisateur
+        L.marker([lat, lng])
+          .addTo(map)
+          .bindPopup(`<b>${username}</b><br>${userType}`);
+      }
+    });
+  })
+  .catch(err => console.error('Erreur lors du chargement des données :', err));
+
+  </script>
+</body>
+</html>
