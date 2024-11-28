@@ -130,6 +130,18 @@ app.post('/api/login', async (req, res) => {
             expiresIn: "1h",
         });
 
+
+       // Vérifier si on est en HTTPS (production)
+       const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
+
+       // Configurer le cookie HTTP uniquement avec `secure` basé sur HTTPS
+       res.cookie('token', token, {
+           httpOnly: true,  // Pas accessible via JavaScript
+           secure: isSecure,  // Ne fonctionnera que sur HTTPS
+           maxAge: 3600000, // Durée de vie du cookie (1h ici)
+       });
+
+        
         res.status(200).json({
             username: user.username,
             email: user.email,
@@ -487,22 +499,17 @@ module.exports = app;
 
 
 const verifyToken = (req, res, next) => {
-    const authHeader = req.headers.authorization;
+    // Récupérer le token du cookie
+    const token = req.cookies.token;
 
-    if (!authHeader) {
-        console.error("En-tête d'authentification manquant.");
-        return res.status(401).send("En-tête d'authentification manquant.");
-    }
-
-    const token = authHeader.split(' ')[1];
     if (!token) {
-        console.error("Token JWT manquant.");
+        console.error("Token JWT manquant dans les cookies.");
         return res.status(401).send("Token JWT manquant.");
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET || 'ka23bo23re23');
-        console.log("Token décodé avec succès :", decoded); // Log du token décodé
+        console.log("Token décodé avec succès :", decoded);
         req.user = decoded;
         next();
     } catch (error) {
