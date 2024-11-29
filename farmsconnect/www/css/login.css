@@ -607,7 +607,6 @@ body {
 
 
 
-
 /* Style général de la section */
 h3 {
     font-family: 'Helvetica Neue', sans-serif;
@@ -714,11 +713,15 @@ h3 {
 
 
 
+
+
+
+
   /* Style général de la section */
 h3 {
     font-family: 'Helvetica Neue', sans-serif;
     font-size: 26px;
-    color: #5a8abb;
+    color: #2c3e50;
     margin-bottom: 20px;
   }
   

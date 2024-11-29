@@ -16,12 +16,6 @@
     <h2 class="Bienvenue">Bienvenue sur FarmsConnect Burkina</h2>
 </header>
 
-<nav >
-    <ul>
-        <li class="active"><a href="apropo.html">À propos</a></li>
-        <li><a href="contact.html">Contact</a></li>
-    </ul>
-</nav>
 
 <section class="button-container">
     <button id="show-login-btn">Se connecter</button>
@@ -159,8 +153,10 @@
             
               <input type="checkbox" id="porcins" name="type_elevage" value="porcins" class="checkbox">
               <label for="porcins" class="checkbox-label">Porcins</label>
+
+              <input type="checkbox" id="Aucun" name="type_elevage" value="Aucun" class="checkbox">
+              <label for="Aucun" class="checkbox-label">Aucun</label>
             </div>
-            
             
             <label for="nombre-animaux">Combien d’animaux possédez-vous ?</label>
             <input type="number" id="nombre-animaux" name="nombre_animaux" placeholder="Ex : 50" required>
@@ -194,7 +190,6 @@
             </select>
 
 
-            
             <h3>Problématiques rencontrées</h3>
             <label for="principaux-defis" class="main-label">Quels sont vos principaux défis dans l’élevage ? (Cochez tout ce qui s'applique)</label>
             <div class="defis-group">
@@ -221,6 +216,10 @@
               <div class="defi-item">
                 <input type="checkbox" id="autres-defis" name="defis" value="autres" class="checkbox" onclick="toggleAutresInput()">
                 <label for="autres-defis" class="checkbox-label">Autres</label>
+
+                <input type="checkbox" id="Aucun" name="defis" value="Aucun" class="checkbox">
+                <label for="Aucun" class="checkbox-label">Aucun</label>
+  
               </div>
             </div>
             
@@ -229,7 +228,7 @@
               <label for="autres-text-defis">Précisez vos autres défis :</label>
               <input type="text" id="autres-text-defis" name="autres_defis" class="text-input">
             </div>
-            
+             
 
 
             <script>
@@ -248,7 +247,6 @@
 
 
 
-
               function toggleAutresInput() {
   var autresDefisInput = document.getElementById('autres-defis-input');
   var autresCheckbox = document.getElementById('autres-defis');
@@ -258,7 +256,6 @@
     autresDefisInput.style.display = 'none';
   }
 }
-
             </script>
             
 
@@ -526,7 +523,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <div class="description">
     <div class="blur-background"></div> <!-- Ajoutez cette ligne pour l'effet de flou -->
-    <p>FarmsConnect facilite la mise en relation directe entre les éleveurs et les consommateurs, offrant ainsi aux éleveurs la possibilité de vendre leurs produits à des prix équitables, sans intermédiaires. Grâce à un système de certification vétérinaire, la plateforme garantit aux consommateurs l'accès à des produits de qualité, traçables et sécurisés. En parallèle, FarmsConnect soutient les éleveurs en les aidant à maximiser leur productivité, à réduire les pertes liées aux maladies animales et à améliorer la gestion de leurs exploitations, qu'elles soient petites ou grandes. Cette solution crée un cercle vertueux où consommateurs et éleveurs bénéficient d'un marché transparent, responsable et durable.</p>
+    <p>Bienvenue sur FarmsConnect !
+
+        Imaginez un Burkina Faso où les éleveurs, souvent isolés et confrontés à de nombreux défis, peuvent accéder en un clic à un marché national et international. Avec FarmsConnect, vendre un bétail ou une poule n’a jamais été aussi simple et transparent !
+        
+        Fini les négociations interminables et les intermédiaires qui réduisent les profits des éleveurs. FarmsConnect, c’est une plateforme moderne, conçue pour connecter les éleveurs directement aux acheteurs, aux vétérinaires, et aux fournisseurs. C’est le supermarché digital de l’élevage où chacun trouve son compte :
+        
+        Pour les éleveurs : Une opportunité unique de vendre leurs produits à un prix juste, peu importe leur localisation.
+        Pour les consommateurs : L’accès à des produits certifiés, traçables, et de qualité.
+        Pour tous les acteurs : Un écosystème numérique qui simplifie les transactions et valorise l’élevage, pilier de notre économie.
+        Grâce à des outils modernes, FarmsConnect permet aussi aux éleveurs de mieux gérer leurs ressources, surveiller la santé de leurs animaux, et optimiser leurs ventes. C’est une révolution pour l’élevage au Burkina Faso : plus connecté, plus efficace, et durable.
+        
+        Rejoignez-nous pour construire un avenir où éleveurs et consommateurs grandissent ensemble, et où la technologie se met au service de notre tradition.
+        
+        FarmsConnect : connectons des opportunités pour une transformation durable !.</p>
 </div>
 
 
@@ -572,7 +582,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (response.ok) {
                 showAlert('Inscription réussie !');
-                window.location.href = 'Location.html'; // Redirection
+                window.location.href = 'index.html?showLoginModal=true';  // Redirige vers index.html avec un paramètre
             } else {
                 const message = await response.text();
                 showAlert('Erreur lors de l\'inscription : ' + message);
@@ -581,6 +591,21 @@ document.addEventListener("DOMContentLoaded", function() {
             showAlert('Erreur réseau : ' + error.message);
         }
     });
+
+    // Vérifier si le paramètre showLoginModal est présent dans l'URL
+window.addEventListener('DOMContentLoaded', (event) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const showLoginModal = urlParams.get('showLoginModal');
+
+    // Si le paramètre est vrai, afficher la modale
+    if (showLoginModal === 'true') {
+        const modal = document.getElementById('login-modal');
+        if (modal) {
+            modal.style.display = 'block';  // Affiche la modale
+        }
+    }
+});
+
 
     // Gestion de la connexion
     document.getElementById("login-form").addEventListener("submit", async function (event) {

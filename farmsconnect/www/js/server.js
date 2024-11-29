@@ -9,11 +9,10 @@ const nodemailer = require('nodemailer');
 const schedule = require('node-schedule');
 const http = require('http');
 const socketIo = require('socket.io');
-const multer = require('multer');
 const path = require('path');
 const Grid = require('gridfs-stream');
-const { GridFsStorage } = require('multer-gridfs-storage');
-const router = express.Router();
+const cookieParser = require('cookie-parser');
+
 
 // Modèles
 const User = require('./models/User');
@@ -34,6 +33,8 @@ const io = socketIo(server);
 app.use(express.json({ limit: '20mb' }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
+app.use(cookieParser());  // Ajoutez cette ligne avant votre middleware `verifyToken`
+
 
 // Configuration CORS pour permettre les requêtes provenant de l'origine spécifiée
 app.use(cors({
@@ -55,16 +56,6 @@ conn.once('open', () => {
     gfs.collection('uploads');
 });
 
-// Configuration du stockage GridFS avec multer pour le téléversement de fichiers
-const storage = new GridFsStorage({
-    url: mongoURI,
-    options: { useNewUrlParser: true, useUnifiedTopology: true },
-    file: (req, file) => ({
-        filename: `file_${Date.now()}${path.extname(file.originalname)}`,
-        bucketName: 'uploads'
-    })
-});
-const upload = multer({ storage });
 
 // Configuration du transporteur Nodemailer
 const transporter = nodemailer.createTransport({
@@ -127,10 +118,19 @@ app.post('/api/login', async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).send('Mot de passe incorrect.');
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'default_secret_key', {
+        const token = jwt.sign({ userId: user._id ,  email: user.email }, process.env.JWT_SECRET || 'ka23bo23re23', {
             expiresIn: "1h",
         });
 
+
+       // Stocker le token dans un cookie
+       res.cookie('token', token, {
+        httpOnly: true, // Assurer que le cookie est inaccessible via JavaScript
+        secure: process.env.NODE_ENV === 'production', // Utiliser HTTPS en production
+        maxAge: 3600000, // 1 heure
+    });
+
+        
         res.status(200).json({
             username: user.username,
             email: user.email,
@@ -478,38 +478,122 @@ app.post('/api/questions', async (req, res) => {
 // Exporter l'application Express
 module.exports = app;
 
-  
 
+
+
+
+
+
+
+
+
+const verifyToken = (req, res, next) => {
+    const token = req.cookies.token;
+
+    if (!token) {
+        console.error("Token JWT manquant dans les cookies.");
+        return res.status(401).send("Token JWT manquant.");
+    }
+
+    try {
+        // Vérification du token avec un secret
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'ka23bo23re23');
+        console.log("Token décodé avec succès :", decoded);
+        req.user = decoded;  // Attacher l'utilisateur au request
+        next();  // Passer à la prochaine fonction
+    } catch (error) {
+        console.error("Erreur lors de la vérification du token :", error.message);
+        return res.status(401).send(`Token JWT invalide : ${error.message}`);
+    }
+};
 
 
 // Route pour enregistrer la localisation de l'utilisateur
-app.post('/api/save-location', async (req, res) => {
-    const { userId, latitude, longitude } = req.body;
+app.post('/api/save-location', verifyToken, async (req, res) => {
+    const { latitude, longitude } = req.body;
+    const email = req.user.email; // Extraire l'email du token
 
-    console.log("Données reçues :", req.body); // Log les données reçues
+    console.log("Requête reçue pour l'enregistrement de la localisation.");
+    console.log("Utilisateur identifié : ", req.user);
+
+    // Vérifier si les coordonnées sont présentes
+    if (!latitude || !longitude) {
+        return res.status(400).send("Coordonnées manquantes.");
+    }
 
     try {
-        // Vérifier si l'utilisateur existe
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).send('Utilisateur non trouvé');
-        }
-
-        // Créer une nouvelle entrée de localisation
-        const newLocation = new Location({
-            userId,
+        // Créer un nouvel objet Location
+        const location = new Location({
+            userId: req.user.userId, // Utilisateur identifié par le token
+            email: req.user.email,  // Ajouter l'email au modèle
             latitude,
-            longitude
+            longitude,
         });
 
-        // Sauvegarder la localisation
-        await newLocation.save();
+        // Sauvegarder la localisation dans la base de données
+        await location.save();
+        res.status(200).json({ message: "Localisation enregistrée avec succès." });
+    } catch (error) {
+        console.error("Erreur lors de l'enregistrement de la localisation :", error.message);
+        res.status(500).json({ error: "Erreur serveur lors de l'enregistrement de la localisation." });
+    }
+});
 
-        // Réponse de succès
-        res.status(200).send('Localisation enregistrée avec succès');
+
+
+
+
+
+
+
+
+//Map 
+
+
+
+// API - Récupérer les utilisateurs avec leurs localisations
+
+
+app.get('/api/map', async (req, res) => {
+    try {
+        // Récupérer tous les utilisateurs sauf les visiteurs
+        const users = await User.find(
+            { userType: { $ne: 'visiteur' } }, // Exclure les visiteurs
+            'userType username email' // Champs nécessaires
+        );
+
+        // Récupérer les dernières localisations pour chaque utilisateur
+        const locations = await Location.aggregate([
+            { $match: { userId: { $in: users.map(user => user._id) } } }, // Filtrer par userId
+            {
+                $group: {
+                    _id: "$userId",
+                    latitude: { $last: "$latitude" }, // Dernière latitude enregistrée
+                    longitude: { $last: "$longitude" } // Dernière longitude enregistrée
+                }
+            }
+        ]);
+
+        // Fusionner les utilisateurs avec leurs localisations
+        const mapData = users
+        .map(user => {
+            const location = locations.find(loc => loc._id.toString() === user._id.toString());
+            if (location) {
+                return {
+                    username: user.username,
+                    email: user.email,
+                    userType: user.userType,
+                    location: { type: 'Point', coordinates: [location.longitude, location.latitude] }
+                };
+            }
+            return null; // Exclure si pas de localisation
+        })
+        .filter(user => user !== null); // Supprimer les utilisateurs sans localisation
+    
+        res.json(mapData); // Envoyer les données au frontend
     } catch (err) {
-        console.error("Erreur serveur :", err);
-        res.status(500).send('Erreur serveur lors de l\'enregistrement de la localisation');
+        console.error('Erreur lors de la récupération des données de la map :', err.message);
+        res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
     }
 });
 
@@ -538,3 +622,12 @@ io.on('connection', (socket) => {
         console.log('Utilisateur déconnecté');
     });
 });
+
+
+
+
+
+
+
+
+
