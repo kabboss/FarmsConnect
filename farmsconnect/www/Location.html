@@ -41,13 +41,17 @@
     };
 
     // Fonction pour obtenir et envoyer la localisation
- const getLocation = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(saveLocation, showError);
-        } else {
-            alert("La géolocalisation n'est pas supportée par votre navigateur.");
-        }
-    };
+    const getLocation = () => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(saveLocation, showError, {
+            enableHighAccuracy: true,  // Demander une localisation plus précise (GPS)
+            timeout: 10000,            // Timeout de 10 secondes
+            maximumAge: 0              // Ne pas utiliser une position mise en cache
+        });
+    } else {
+        alert("La géolocalisation n'est pas supportée par votre navigateur.");
+    }
+};
 
     // Sauvegarder la localisation
 
@@ -86,20 +90,22 @@
 
     // Gérer les erreurs de géolocalisation
     const showError = (error) => {
-        switch (error.code) {
-            case error.PERMISSION_DENIED:
-                alert("Vous avez refusé de partager votre localisation.");
-                break;
-            case error.POSITION_UNAVAILABLE:
-                alert("La position est indisponible.");
-                break;
-            case error.TIMEOUT:
-                alert("La demande de géolocalisation a expiré.");
-                break;
-            default:
-                alert("Une erreur inconnue s'est produite.");
-        }
-    };
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            alert("Vous avez refusé de partager votre localisation.");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("La position est indisponible. Vérifiez vos paramètres de géolocalisation , activer la localisation et votre connexion GPS.");
+            break;
+        case error.TIMEOUT:
+            alert("La demande de géolocalisation a expiré. Essayez à nouveau.");
+            break;
+        default:
+            alert("Une erreur inconnue s'est produite. Code d'erreur: " + error.code);
+            break;
+    }
+    console.error("Code d'erreur de géolocalisation : " + error.code);
+};
 
     // Gestion des clics sur les boutons
     acceptBtn.onclick = () => {

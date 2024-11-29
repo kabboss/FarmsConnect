@@ -358,38 +358,66 @@ nav ul li a:hover {
 
 
 
-/* Overlay de chargement */
+/* Superposition de l'animation */
 #loading-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    background-color: rgba(0, 0, 0, 0.8); /* Fond semi-transparent */
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* Toujours au-dessus des autres éléments */
+    z-index: 9999; /* Au-dessus de tout */
 }
 
-/* Style du spinner */
-.spinner img {
+/* Conteneur de la spinner */
+.spinner {
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Style pour l'image */
+.rotating-image {
     width: 100px;
     height: 100px;
+    border-radius: 50%; /* Rendre l'image ronde */
+    border: 4px solid #fff; /* Ajouter une bordure blanche */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Effet lumineux */
+    animation: spin 1.5s linear infinite; /* Animation de rotation */
 }
 
+/* Texte sous l'image */
 .spinner p {
-    color: white;
+    margin-top: 20px;
     font-size: 18px;
-    margin-top: 10px;
-    text-align: center;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
 }
 
-/* Animation de rotation (facultatif) */
+/* Animation de rotation */
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
 
 
 
@@ -411,19 +439,22 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: auto;
     overflow-y: auto; /* Défilement vertical activé */
     background-color: rgba(0, 0, 0, 0.8); /* Fond plus sombre pour accentuer l'effet */
     backdrop-filter: blur(8px); /* Augmenter le flou pour un effet plus élégant */
     padding: 20px 0; /* Espacement pour éviter que le contenu ne touche le haut ou le bas */
     box-sizing: border-box; /* Inclure les marges et les bordures dans les dimensions */
     transition: all 0.3s ease; /* Ajout d'une transition fluide pour l'apparition */
+
 }
 
 /* Modale active - apparition */
 .modal.active {
     display: flex;
     animation: fadeIn 0.5s ease-out;
+    justify-content: center; /* Centrer le contenu */
+    align-items: center; /* Centrer verticalement */
 }
 
 /* Contenu de la modale */
@@ -441,6 +472,7 @@ body {
     overflow-y: auto; /* Activer le défilement interne si nécessaire */
     box-sizing: border-box;
     border: 1px solid #ddd; /* Bordure subtile */
+    overflow-x: hidden; /* Empêcher le défilement horizontal */
 }
 
 /* Animation de transition pour l'apparition */
@@ -466,20 +498,61 @@ body {
 
 /* Bouton de fermeture */
 .close-btn {
-    color: #888;
-    font-size: 20px;
-    font-weight: bold;
     position: absolute;
     top: 15px;
     right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    background: #f2f2f2;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .close-btn:hover {
-    color: #ff5a5f;
-    transform: rotate(90deg);
+    background: #e74c3c; /* Couleur rouge moderne */
+    color: #fff;
+    transform: scale(1.1); /* Agrandissement subtil au survol */
+    border-color: #e74c3c;
 }
+
+
+/* Croix de fermeture */
+.close-button1 {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    background: #f2f2f2;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close-button1:hover {
+    background: #e74c3c; /* Couleur rouge moderne */
+    color: #fff;
+    transform: scale(1.1); /* Agrandissement subtil au survol */
+    border-color: #e74c3c;
+}
+
 
 
 /* Titres */
@@ -573,6 +646,38 @@ body {
 }
 
 /* Responsivité */
+@media (max-width: 768px) {
+    /* Modale */
+    .modal-content {
+        margin: 10px 5%;
+        padding: 30px;
+        width: 90%;
+    }
+
+    /* Boutons */
+    .modal-content button {
+        font-size: 14px;
+    }
+
+    /* Champs de formulaire */
+    .modal-content input,
+    .modal-content select,
+    .modal-content textarea {
+        font-size: 14px;
+        padding: 12px;
+    }
+    
+    /* Titres */
+    .modal-content h2 {
+        font-size: 24px;
+    }
+
+    /* Sous-titres */
+    .modal-content h3 {
+        font-size: 18px;
+    }
+}
+
 @media (min-width: 768px) {
     .modal-content {
         margin: 5% auto;
@@ -601,6 +706,45 @@ body {
 }
 
 
+
+
+
+
+/* Conteneur pour centrer le bouton */
+.button-container1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto; /* Centre verticalement sur toute la hauteur de l'écran */
+    margin-top: 50px;
+}
+
+/* Style du bouton */
+.open-modal-button {
+    padding: 20px 40px; /* Augmenter la taille du bouton */
+    font-size: 24px; /* Texte plus grand */
+    font-weight: bold; /* Mettre en valeur le texte */
+    color: #fff; /* Couleur du texte */
+    background: linear-gradient(45deg, #6a11cb, #2575fc); /* Dégradé moderne */
+    border: none;
+    border-radius: 50px; /* Forme ovale */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Ombre élégante */
+    cursor: pointer;
+    transition: all 0.3s ease; /* Transition douce pour les interactions */
+}
+
+/* Effets au survol */
+.open-modal-button:hover {
+    transform: scale(1.1); /* Légère augmentation de taille */
+    background: linear-gradient(45deg, #2575fc, #6a11cb); /* Inverse le dégradé */
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3); /* Accentue l'ombre */
+}
+
+/* Effets lors d'un clic */
+.open-modal-button:active {
+    transform: scale(1.05); /* Réduction légère */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Réduction de l'ombre */
+}
 
 
 
@@ -828,3 +972,62 @@ h3 {
     box-shadow: 0 0 10px rgba(142, 68, 173, 0.5);
   }
   
+
+
+
+
+
+
+
+
+
+  /* Conteneur principal */
+  .home-container {
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center;    /* Centre verticalement */
+    width: 50px;            /* Largeur égale à la taille de l'image */
+    height: 50px;           /* Hauteur égale à la taille de l'image */
+    margin: 0 auto;         /* Centre horizontalement sur la page */
+    background: linear-gradient(to bottom right, #df132e, #634ce6); /* Fond discret */
+    border-radius: 50%;     /* Rendre le conteneur circulaire */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ajouter une ombre élégante */
+    margin-top: 30px;
+}
+/* Image ronde et petite */
+.home-image {
+    width: 100px;            /* Taille de l'image (largeur) */
+    height: 100px;           /* Taille de l'image (hauteur) */
+    border-radius: 50%;      /* Image circulaire */
+    border: 3px solid #007bff; /* Bordure fine et colorée */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre subtile */
+    object-fit: cover;       /* Ajuste l'image pour qu'elle s'adapte parfaitement */
+    animation: fadeIn 1s ease-in-out; /* Animation d'apparition */
+}
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8); /* Taille réduite au départ */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);   /* Retour à la taille normale */
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -16,6 +16,9 @@
     <h2 class="Bienvenue">Bienvenue sur FarmsConnect Burkina</h2>
 </header>
 
+<div class="home-container">
+    <img src="img/FarmsConnect.jpg" alt="Bienvenue sur FarmsConnect" class="home-image">
+</div>
 
 <section class="button-container">
     <button id="show-login-btn">Se connecter</button>
@@ -75,7 +78,7 @@
         </p>
         <p>Souhaitez-vous répondre à ces questions ?</p>
         <div>
-            <button id="accept-consent">Je comprends et j'accepte</button>
+            <button id="accept-consent">J'accepte</button>
             <button id="decline-consent">Non</button>
         </div>
     </div>
@@ -84,6 +87,7 @@
 <!-- Questions supplémentaires -->
 <div class="modal" id="extra-questions-modal" style="display: none;">
     <div class="modal-content">
+        <span class="close-button1" onclick="closeExtraModal()">×</span>
         <h2>Questions supplémentaires</h2>
         <form id="extra-questions-form">
             <h3>Informations personnelles</h3>
@@ -309,6 +313,12 @@
     </div>
 </div>
 
+<script>
+    function closeExtraModal() {
+    document.getElementById("extra-questions-modal").style.display = "none";
+}
+</script>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -395,14 +405,16 @@
 
 
 
-<!-- Animation de chargement globale -->
+<!-- Animation de chargement avancée -->
 <div id="loading-overlay" style="display: none;">
     <div class="spinner">
-        <!-- Animation (image ou autre élément) -->
-        <img src="img/FarmsConnect.jpg" alt="Chargement...">
+        <img src="img/FarmsConnect.jpg" alt="Chargement..." class="rotating-image">
         <p>Veuillez patienter...</p>
     </div>
 </div>
+
+
+
 
 <script>
 
@@ -438,35 +450,32 @@ function simulateLongProcess() {
 
 
 <script>
+// Fonction pour afficher l'animation de chargement
+function showLoading() {
+    document.getElementById('loading-overlay').style.display = 'flex';
+}
 
-    // Fonction pour afficher l'animation de chargement
-    function showLoading() {
-        document.getElementById('loading-overlay').style.display = 'flex';
-    }
+// Fonction pour cacher l'animation de chargement
+function hideLoading() {
+    document.getElementById('loading-overlay').style.display = 'none';
+}
 
-    // Fonction pour cacher l'animation de chargement
-    function hideLoading() {
-        document.getElementById('loading-overlay').style.display = 'none';
-    }
+// Afficher le chargement au début
+showLoading();
 
-    // Afficher le chargement au début
+// Masquer le chargement après le chargement complet de la page
+window.addEventListener('load', function () {
+    hideLoading();
+});
+
+// Exemple d'utilisation avec un processus simulé
+function simulateLongProcess() {
     showLoading();
-
-    // Masquer le chargement après le chargement complet de la page
-    window.addEventListener('load', function () {
+    setTimeout(() => {
         hideLoading();
-    });
-
-    // Exemple d'ajout d'une animation de chargement à un bouton
-    document.querySelectorAll('.buy-button').forEach(button => {
-        button.addEventListener('click', function () {
-            showLoading(); // Affiche l'animation
-            setTimeout(() => {
-                hideLoading(); // Masque l'animation après un processus simulé
-                alert('Processus terminé');
-            }, 3000); // Simule un délai de 3 secondes
-        });
-    });
+        alert("Processus terminé !");
+    }, 3000); // Simule un délai de 3 secondes
+}
 
 </script>
 
@@ -521,23 +530,49 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 
-<div class="description">
-    <div class="blur-background"></div> <!-- Ajoutez cette ligne pour l'effet de flou -->
-    <p>Bienvenue sur FarmsConnect !
-
-        Imaginez un Burkina Faso où les éleveurs, souvent isolés et confrontés à de nombreux défis, peuvent accéder en un clic à un marché national et international. Avec FarmsConnect, vendre un bétail ou une poule n’a jamais été aussi simple et transparent !
-        
-        Fini les négociations interminables et les intermédiaires qui réduisent les profits des éleveurs. FarmsConnect, c’est une plateforme moderne, conçue pour connecter les éleveurs directement aux acheteurs, aux vétérinaires, et aux fournisseurs. C’est le supermarché digital de l’élevage où chacun trouve son compte :
-        
-        Pour les éleveurs : Une opportunité unique de vendre leurs produits à un prix juste, peu importe leur localisation.
-        Pour les consommateurs : L’accès à des produits certifiés, traçables, et de qualité.
-        Pour tous les acteurs : Un écosystème numérique qui simplifie les transactions et valorise l’élevage, pilier de notre économie.
-        Grâce à des outils modernes, FarmsConnect permet aussi aux éleveurs de mieux gérer leurs ressources, surveiller la santé de leurs animaux, et optimiser leurs ventes. C’est une révolution pour l’élevage au Burkina Faso : plus connecté, plus efficace, et durable.
-        
-        Rejoignez-nous pour construire un avenir où éleveurs et consommateurs grandissent ensemble, et où la technologie se met au service de notre tradition.
-        
-        FarmsConnect : connectons des opportunités pour une transformation durable !.</p>
+ <!-- Bouton -->
+<div class="button-container1">
+    <button class="open-modal-button" onclick="openModal()">En savoir plus sur FarmsConnect</button>
 </div>
+
+
+ <!-- Fenêtre modale -->
+ <div class="modal" id="farmsConnectModal">
+     <div class="modal-content">
+         <span class="close-button1" onclick="closeModal()">×</span>
+         <div class="description">
+             <div class="blur-background"></div>
+             <p>
+                <strong>Bienvenue sur FarmsConnect !<br><br></strong>
+                 
+                 Imaginez un Burkina Faso où les éleveurs, souvent isolés et confrontés à de nombreux défis, peuvent accéder en un clic à un marché national et international. Avec FarmsConnect, vendre un bétail ou une poule n’a jamais été aussi simple et transparent !<br><br>
+                 
+                 Fini les négociations interminables et les intermédiaires qui réduisent les profits des éleveurs. FarmsConnect, c’est une plateforme moderne, conçue pour connecter les éleveurs directement aux acheteurs, aux vétérinaires, et aux fournisseurs. C’est le supermarché digital de l’élevage où chacun trouve son compte :<br><br>
+                 
+                 <strong>Pour les éleveurs :</strong> Une opportunité unique de vendre leurs produits à un prix juste, peu importe leur localisation.<br>
+                 <strong>Pour les consommateurs :</strong> L’accès à des produits certifiés, traçables, et de qualité.<br>
+                 <strong>Pour tous les acteurs :</strong> Un écosystème numérique qui simplifie les transactions et valorise l’élevage, pilier de notre économie.<br><br>
+                 
+                 Grâce à des outils modernes, FarmsConnect permet aussi aux éleveurs de mieux gérer leurs ressources, surveiller la santé de leurs animaux, et optimiser leurs ventes. C’est une révolution pour l’élevage au Burkina Faso : plus connecté, plus efficace, et durable.<br><br>
+                 
+                 Rejoignez-nous pour construire un avenir où éleveurs et consommateurs grandissent ensemble, et où la technologie se met au service de notre tradition.<br><br>
+                 
+                 <strong>FarmsConnect :</strong> connectons des opportunités pour une transformation durable !
+             </p>
+         </div>
+     </div>
+ </div>
+
+ <script>
+    function openModal() {
+    document.getElementById("farmsConnectModal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("farmsConnectModal").style.display = "none";
+}
+
+ </script>
 
 
 <script>
