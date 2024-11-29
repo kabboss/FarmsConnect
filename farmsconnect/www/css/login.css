@@ -1021,6 +1021,39 @@ h3 {
 
 
 
+/* Conteneur centré avec une taille réduite */
+.terms-container {
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center;    /* Centre verticalement */
+    height: auto;          /* Pleine hauteur de l'écran */
+    background: linear-gradient(to bottom right, #f0f0f0, #d9d9d9); /* Fond léger */
+    margin-top: 40px;
+}
+
+/* Bouton plus petit et élégant */
+.terms-button {
+    display: inline-block;
+    padding: 10px 20px;              /* Espacement interne plus petit */
+    font-size: 14px;                 /* Taille du texte réduite */
+    font-weight: normal;             /* Moins accentué en gras */
+    text-transform: none;            /* Garder le texte tel quel */
+    color: #ffffff;                  /* Couleur du texte */
+    text-decoration: none;           /* Supprime le soulignement */
+    background: linear-gradient(45deg, #007bff, #0056b3); /* Dégradé élégant */
+    border: none;                    /* Pas de bordure */
+    border-radius: 20px;             /* Coins arrondis modérés */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); /* Ombre subtile */
+    transition: all 0.3s ease-in-out; /* Transition fluide */
+    cursor: pointer;                 /* Curseur pointer */
+}
+
+/* Effet au survol */
+.terms-button:hover {
+    background: linear-gradient(45deg, #0056b3, #003d80); /* Couleur plus foncée au survol */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Accentuation de l'ombre */
+    transform: scale(1.05); /* Légère augmentation de taille */
+}
 
 
 

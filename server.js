@@ -150,27 +150,53 @@ module.exports = app;
 
 
 
-
-
-// Route pour passer une commande et envoyer l'email de confirmation
+// Route pour passer une commande et envoyer les emails de confirmation
 app.post('/api/order', async (req, res) => {
     const { username, email, contact, price, quantity, weight, Produit: nomproduit } = req.body;
+    
     try {
-        const mailOptions = {
+        // Email de confirmation envoyé au client
+        const mailOptionsClient = {
             from: 'kaboreabwa2020@gmail.com',
             to: email,
             subject: 'Confirmation de commande',
             text: `Merci, ${username}, pour votre commande ! Détails :\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n\nNous vous contacterons au ${contact} pour valider la commande.`
         };
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) return res.status(500).send('Erreur lors de l\'envoi de l\'e-mail : ' + error.message);
-            res.status(200).send('Commande passée avec succès et e-mail envoyé !');
+
+        transporter.sendMail(mailOptionsClient, (error, info) => {
+            if (error) {
+                console.error('Erreur lors de l\'envoi de l\'email au client :', error);
+                return res.status(500).send('Erreur lors de l\'envoi de l\'email au client : ' + error.message);
+            }
         });
+
+        // Email de confirmation envoyé à Farmsconnect (kaboreabwa2020@gmail.com)
+        const mailOptionsFarmsconnect = {
+            from: 'kaboreabwa2020@gmail.com',
+            to: 'kaboreabwa2020@gmail.com',  // Destinataire: Farmsconnect
+            subject: 'Nouvelle commande reçue',
+            text: `Nouvelle commande reçue !\n\nDétails de la commande :\n- Client : ${username}\n- Email : ${email}\n- Contact : ${contact}\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n\nMerci de traiter cette commande.`
+        };
+
+        transporter.sendMail(mailOptionsFarmsconnect, (error, info) => {
+            if (error) {
+                console.error('Erreur lors de l\'envoi de l\'email à Farmsconnect :', error);
+                return res.status(500).send('Erreur lors de l\'envoi de l\'email à Farmsconnect : ' + error.message);
+            }
+            res.status(200).send('Commande passée avec succès, e-mails envoyés !');
+        });
+
     } catch (error) {
         console.error('Erreur lors de la commande :', error);
         res.status(500).send('Erreur lors de la commande : ' + error.message);
     }
 });
+
+
+
+
+
+
 
 //Ajout
 
