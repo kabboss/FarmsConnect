@@ -198,16 +198,16 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
     const poidsTotal = quantity * weight;
 
     const orderDetails = {
-            username: username,
-            email: email,
-            contact: contact,
-            price: price,
-            quantity: quantity,
-            weight: weight,
-            Produit: nomproduit,
-            latitude: latitude,  // Coordonnées GPS
-            longitude: longitude  // Coordonnées GPS
-        };
+        username: username,
+        email: email,
+        quantity: quantity,
+        weight: poidsTotal,
+        price: total.toFixed(2), // Arrondir le prix total à deux décimales
+        contact: contact,
+        Produit: nomProduit
+        
+    };
+
     console.log('Order Data:', orderDetails);
 
     // Envoyer la requête POST à l'API
