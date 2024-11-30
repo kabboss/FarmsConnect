@@ -38,7 +38,7 @@ app.use(cookieParser());  // Ajoutez cette ligne avant votre middleware `verifyT
 
 // Configuration CORS pour permettre les requêtes provenant de l'origine spécifiée
 const corsOptions = {
-    origin: 'https://farmsconnect-b084ddb02391.herokuapp.com', // Remplacez par l'URL de votre frontend (application mobile ou web)
+    origin: 'null', // Remplacez par l'URL de votre frontend (application mobile ou web)
     methods: 'GET,POST', // Ajoutez d'autres méthodes si nécessaire
     allowedHeaders: 'Content-Type',
     credentials: true,  // Permet l'utilisation des credentials (cookies, authentification)
