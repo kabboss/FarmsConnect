@@ -58,32 +58,43 @@
     };
 
 // Sauvegarder la localisation sur le serveur avec le plugin avancé HTTP
-async function saveLocation(position) {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
+  document.addEventListener('deviceready', function () {
+    // Votre fonction saveLocation à l'intérieur de l'événement deviceready
+    async function saveLocation(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
 
-    // Préparez les données
-    const data = { latitude, longitude };
+        // Préparez les données
+        const data = { latitude, longitude };
 
-    try {
-        // Envoi de la requête POST
-        const response = await cordova.plugin.http.post(
-            'https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', // URL du serveur
-            data, // Données à envoyer
-            { 'Content-Type': 'application/json' } // En-têtes
-        );
-        
-        // Succès
-        alert("Votre localisation a été enregistrée avec succès !");
-        console.log("Localisation enregistrée :", JSON.parse(response.data));
-        window.location.href = "Acceuil.html"; // Redirection
-    } catch (error) {
-        // Erreur
-        console.error("Erreur lors de l'enregistrement de la localisation :", error);
-        alert("Erreur : " + (error.error || "Une erreur s'est produite."));
+        try {
+            // Envoi de la requête POST
+            const response = await cordova.plugin.http.post(
+                'https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', // URL du serveur
+                data, // Données à envoyer
+                { 'Content-Type': 'application/json' } // En-têtes
+            );
+            
+            // Succès
+            alert("Votre localisation a été enregistrée avec succès !");
+            console.log("Localisation enregistrée :", JSON.parse(response.data));
+            window.location.href = "Acceuil.html"; // Redirection
+        } catch (error) {
+            // Erreur
+            console.error("Erreur lors de l'enregistrement de la localisation :", error);
+            alert("Erreur : " + (error.error || "Une erreur s'est produite."));
+        }
     }
-}
 
+    // Exemple d'appel à saveLocation avec une position simulée
+    // Assurez-vous que vous obtenez les coordonnées avant d'appeler saveLocation
+    navigator.geolocation.getCurrentPosition(saveLocation, (error) => {
+        console.error("Erreur de géolocalisation :", error);
+    });
+
+  });
+
+  
     // Gestion des erreurs de géolocalisation
     const showError = (error) => {
       switch (error.code) {
