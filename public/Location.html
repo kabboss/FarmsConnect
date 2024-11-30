@@ -44,8 +44,8 @@
     const getLocation = () => {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(saveLocation, showError, {
-            enableHighAccuracy: true,  // Demander une localisation plus précise (GPS)
-            timeout: 10000,            // Timeout de 10 secondes
+            enableHighAccuracy: false,  // Demander une localisation plus précise (GPS)
+            timeout: 40000,            // Timeout de 10 secondes
             maximumAge: 0              // Ne pas utiliser une position mise en cache
         });
     } else {
