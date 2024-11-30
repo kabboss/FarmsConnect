@@ -10,6 +10,26 @@
 </head>
 <body>
 
+    <script>
+document.addEventListener('deviceready', function () {
+    // Vérifiez si le plugin est chargé correctement
+    if (cordova && cordova.plugin && cordova.plugin.http) {
+        console.log('Plugin avancé HTTP chargé avec succès.');
+
+        // Configuration globale
+        cordova.plugin.http.setDataSerializer('json');
+        cordova.plugin.http.setServerTrustMode('nocheck', function () {
+            console.log('Configuration de confiance serveur : success');
+        }, function () {
+            console.error('Configuration de confiance serveur : failed');
+        });
+    } else {
+        console.error('Plugin avancé HTTP non disponible.');
+    }
+});
+
+    </script>
+
 <div class="blur-background"></div> <!-- Couche floue en arrière-plan -->
 
 <header>

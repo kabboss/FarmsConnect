@@ -40,21 +40,28 @@ app.use(cookieParser());  // Ajoutez cette ligne avant votre middleware `verifyT
 // Configuration CORS
 const corsOptions = {
     origin: function (origin, callback) {
-      // Accepter l'origine 'null' (par exemple, pour les fichiers locaux ou les applications natives)
-      if (!origin || origin === 'null' || origin === 'https://farmsconnect-b084ddb02391.herokuapp.com') {
-        callback(null, true); // Autorise l'origine 'null' et les autres
-      } else {
-        callback(new Error('Not allowed by CORS')); // Rejette les autres origines
-      }
-    },
-    methods: 'GET, POST',
-    allowedHeaders: 'Content-Type',
-    credentials: true,  // Autorise les cookies et l'authentification
-  };
-  
-  app.use(cors(corsOptions));  // Applique la configuration CORS sur toutes les routes
+        // Autoriser l'origine 'null' et celles définies explicitement
+        const allowedOrigins = [
+            'null', // Pour les fichiers locaux ou applications natives
+            'https://farmsconnect-b084ddb02391.herokuapp.com', // Votre domaine spécifique
+            'http://localhost:3000', // (Optionnel) Pour le développement local
+        ];
 
-  
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true); // Autorise l'origine
+        } else {
+            callback(new Error('Not allowed by CORS')); // Rejette les autres origines
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Autoriser plus de méthodes si nécessaire
+    allowedHeaders: ['Content-Type', 'Authorization'], // Ajoutez 'Authorization' si vous utilisez des tokens Bearer
+    credentials: true, // Permet les cookies et l'authentification
+};
+
+// Appliquer la configuration CORS
+app.use(cors(corsOptions));
+
+
   // Connexion à MongoDB
 const mongoURI = 'mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority';
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
