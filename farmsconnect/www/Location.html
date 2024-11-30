@@ -39,97 +39,123 @@
       modal.style.display = "none";
     };
 
-    // Fonction pour obtenir la localisation
-    const getLocation = () => {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          console.log("Position obtenue :", position.coords);
-          await saveLocation(position);
-        },
-        (error) => {
-          showError(error);
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 40000,
-          maximumAge: 0,
+
+
+
+
+    document.addEventListener('deviceready', function () {
+    // Vérifiez si le plugin est chargé correctement
+    if (cordova && cordova.plugin && cordova.plugin.http) {
+        console.log('Plugin avancé HTTP chargé avec succès.');
+
+        // Vérification de la permission de géolocalisation
+        cordova.plugins.diagnostic.requestLocationAuthorization(function(status) {
+            if (status === cordova.plugins.diagnostic.permissionStatus.GRANTED) {
+                console.log("Permission de géolocalisation accordée.");
+            } else {
+                console.log("Permission de géolocalisation refusée.");
+            }
+        }, function(error) {
+            console.error("Erreur lors de la demande de permission : ", error);
+        });
+
+        // Configuration du plugin HTTP
+        cordova.plugin.http.setDataSerializer('json');
+        cordova.plugin.http.setServerTrustMode('nocheck', function () {
+            console.log('Configuration de confiance serveur : succès');
+        }, function () {
+            console.error('Échec de la configuration de confiance serveur.');
+        });
+
+        // Fonction pour obtenir la localisation
+        const getLocation = () => {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    console.log("Position obtenue :", position.coords);
+                    await saveLocation(position);  // Appel de la fonction saveLocation
+                },
+                (error) => {
+                    showError(error);  // Affichage de l'erreur en cas d'échec
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 40000,
+                    maximumAge: 0,
+                }
+            );
+        };
+
+        // Fonction pour enregistrer la localisation
+        async function saveLocation(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Préparez les données à envoyer
+            const data = { latitude, longitude };
+
+            try {
+                // Envoi de la requête POST avec le plugin avancé HTTP
+                const response = await cordova.plugin.http.post(
+                    'https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', // URL du serveur
+                    data, // Données à envoyer
+                    { 'Content-Type': 'application/json' } // En-têtes
+                );
+                
+                // Si la requête est réussie, afficher un message et rediriger
+                alert("Votre localisation a été enregistrée avec succès !");
+                console.log("Localisation enregistrée :", JSON.parse(response.data));
+                
+                // Redirection vers la page d'accueil
+                window.location.href = "Acceuil.html"; // Redirection
+            } catch (error) {
+                // Erreur de sauvegarde
+                console.error("Erreur lors de l'enregistrement de la localisation :", error);
+                alert("Erreur : " + (error.error || "Une erreur s'est produite."));
+            }
         }
-      );
-    };
 
-// Sauvegarder la localisation sur le serveur avec le plugin avancé HTTP
+        // Ajoutez l'écouteur d'événements pour le bouton "acceptBtn"
+        const acceptBtn = document.getElementById('acceptBtn');
+        if (acceptBtn) {
+            acceptBtn.addEventListener('click', function () {
+                console.log("Le bouton a été cliqué !");
+                getLocation();  // Récupérer la localisation lorsque le bouton est cliqué
+            });
+        }
 
-  // Fonction pour enregistrer la localisation
-  async function saveLocation(position) {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-
-      // Préparez les données
-      const data = { latitude, longitude };
-
-      try {
-          // Envoi de la requête POST avec le plugin avancé HTTP
-          const response = await cordova.plugin.http.post(
-              'https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', // URL du serveur
-              data, // Données à envoyer
-              { 'Content-Type': 'application/json' } // En-têtes
-          );
-          
-          // Si la requête est réussie, afficher un message et rediriger
-          alert("Votre localisation a été enregistrée avec succès !");
-          console.log("Localisation enregistrée :", JSON.parse(response.data));
-          
-          // Redirection vers la page d'accueil
-          window.location.href = "Acceuil.html"; // Redirection
-      } catch (error) {
-          // Erreur
-          console.error("Erreur lors de l'enregistrement de la localisation :", error);
-          alert("Erreur : " + (error.error || "Une erreur s'est produite."));
-      }
-  }
-
-  // Lorsque l'appareil est prêt, obtenez la position de l'utilisateur
-  document.addEventListener('deviceready', function () {
-      navigator.geolocation.getCurrentPosition(
-          function(position) {
-              console.log("Position obtenue :", position);
-              saveLocation(position); // Appelez la fonction pour sauvegarder la localisation
-          },
-          function(error) {
-              console.error("Erreur de géolocalisation :", error);
-              alert("Erreur de géolocalisation : " + error.message);
-          }
-      );
-  });
+        // Ajoutez l'écouteur d'événements pour le bouton "declineBtn"
+        const declineBtn = document.getElementById('declineBtn');
+        if (declineBtn) {
+            declineBtn.addEventListener('click', function () {
+                alert("Vous avez refusé de partager votre localisation.");
+                window.location.href = "Acceuil.html"; // Redirection en cas de refus
+            });
+        }
+    } else {
+        console.error('Plugin avancé HTTP non disponible.');
+    }
+});
   
-    // Gestion des erreurs de géolocalisation
-    const showError = (error) => {
-      switch (error.code) {
-        case error.PERMISSION_DENIED:
-          alert("Vous avez refusé de partager votre localisation.");
-          break;
-        case error.POSITION_UNAVAILABLE:
-          alert("La position est indisponible. Vérifiez vos paramètres de géolocalisation, activez la localisation et votre connexion GPS.");
-          break;
-        case error.TIMEOUT:
-          alert("La demande de géolocalisation a expiré. Essayez à nouveau.");
-          break;
-        default:
-          alert("Une erreur inconnue s'est produite. Code d'erreur: " + error.code);
-          break;
-      }
-      console.error("Code d'erreur de géolocalisation : " + error.code);
-    };
-
-    // Gestion des clics sur les boutons
-    acceptBtn.onclick = () => {
-      getLocation();
-    };
-
-    declineBtn.onclick = () => {
+// Gestion des erreurs de géolocalisation
+const showError = (error) => {
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
       alert("Vous avez refusé de partager votre localisation.");
-      window.location.href = "Acceuil.html";
-    };
-  </script>
+      break;
+    case error.POSITION_UNAVAILABLE:
+      alert("La position est indisponible. Vérifiez vos paramètres de géolocalisation, activez la localisation et votre connexion GPS.");
+      break;
+    case error.TIMEOUT:
+      alert("La demande de géolocalisation a expiré. Essayez à nouveau.");
+      break;
+    default:
+      alert("Une erreur inconnue s'est produite. Code d'erreur: " + error.code);
+      break;
+  }
+  console.error("Code d'erreur de géolocalisation : " + error.code);
+};
+
+
+</script>
 </body>
 </html>

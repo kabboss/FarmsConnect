@@ -5,29 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FarmsConnect</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="img/FarmsConnect.jpg"> <!-- Chemin vers votre image -->
+    <link rel="icon" type="image/png" href="img/FarmsConnect.jpg">
     <link rel="stylesheet" href="css/login.css">
+    <!-- Cordova.js -->
+    <script src="cordova.js"></script> <!-- Vérifiez que ce fichier existe dans votre projet -->
 </head>
 <body>
-
     <script>
-document.addEventListener('deviceready', function () {
-    // Vérifiez si le plugin est chargé correctement
-    if (cordova && cordova.plugin && cordova.plugin.http) {
-        console.log('Plugin avancé HTTP chargé avec succès.');
+        document.addEventListener('deviceready', function () {
+            // Vérifiez si le plugin est chargé correctement
+            if (cordova && cordova.plugin && cordova.plugin.http) {
+                console.log('Plugin avancé HTTP chargé avec succès.');
 
-        // Configuration globale
-        cordova.plugin.http.setDataSerializer('json');
-        cordova.plugin.http.setServerTrustMode('nocheck', function () {
-            console.log('Configuration de confiance serveur : success');
-        }, function () {
-            console.error('Configuration de confiance serveur : failed');
+                // Configuration globale
+                cordova.plugin.http.setDataSerializer('json');
+                cordova.plugin.http.setServerTrustMode('nocheck', function () {
+                    console.log('Configuration de confiance serveur : success');
+                }, function () {
+                    console.error('Configuration de confiance serveur : failed');
+                });
+            } else {
+                console.error('Plugin avancé HTTP non disponible.');
+            }
         });
-    } else {
-        console.error('Plugin avancé HTTP non disponible.');
-    }
-});
-
     </script>
 
 <div class="blur-background"></div> <!-- Couche floue en arrière-plan -->
