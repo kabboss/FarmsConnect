@@ -601,50 +601,47 @@ app.post('/api/save-location', verifyToken, async (req, res) => {
 
 app.get('/api/map', async (req, res) => {
     try {
-        // Récupérer tous les utilisateurs sauf les visiteurs
-        const users = await User.find(
-            { userType: { $ne: 'visiteur' } }, // Exclure les visiteurs
-            'userType username email' // Champs nécessaires
-        );
-
-        // Récupérer les dernières localisations pour chaque utilisateur
-        const locations = await Location.aggregate([
-            { $match: { userId: { $in: users.map(user => user._id) } } }, // Filtrer par userId
-            {
-                $group: {
-                    _id: "$userId",
-                    latitude: { $last: "$latitude" }, // Dernière latitude enregistrée
-                    longitude: { $last: "$longitude" } // Dernière longitude enregistrée
-                }
-            }
-        ]);
-
-        // Fusionner les utilisateurs avec leurs localisations
-        const mapData = users
+      // Récupérer tous les utilisateurs sauf les visiteurs
+      const users = await User.find(
+        { userType: { $ne: 'visiteur' } },  // Exclure les visiteurs
+        'userType username email _id'  // Champs nécessaires
+      );
+  
+      // Récupérer les dernières localisations pour chaque utilisateur
+      const locations = await Location.aggregate([
+        { $match: { userId: { $in: users.map(user => user._id) } } },
+        {
+          $group: {
+            _id: "$userId",
+            latitude: { $last: "$latitude" },
+            longitude: { $last: "$longitude" }
+          }
+        }
+      ]);
+  
+      // Fusionner les utilisateurs avec leurs localisations
+      const mapData = users
         .map(user => {
-            const location = locations.find(loc => loc._id.toString() === user._id.toString());
-            if (location) {
-                return {
-                    username: user.username,
-                    email: user.email,
-                    userType: user.userType,
-                    location: { type: 'Point', coordinates: [location.longitude, location.latitude] }
-                };
-            }
-            return null; // Exclure si pas de localisation
+          const location = locations.find(loc => loc._id.toString() === user._id.toString());
+          if (location) {
+            return {
+              username: user.username,
+              email: user.email,
+              userType: user.userType,
+              location: { type: 'Point', coordinates: [location.longitude, location.latitude] }
+            };
+          }
+          return null; // Exclure si pas de localisation
         })
         .filter(user => user !== null); // Supprimer les utilisateurs sans localisation
-    
-        res.json(mapData); // Envoyer les données au frontend
+  
+      res.json(mapData);  // Retourner les données au frontend
     } catch (err) {
-        console.error('Erreur lors de la récupération des données de la map :', err.message);
-        res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
+      console.error('Erreur lors de la récupération des données de la map :', err.message);
+      res.status(500).json({ error: 'Erreur lors de la récupération des données.' });
     }
-});
-
-
-
-
+  });
+  
 
 
 
