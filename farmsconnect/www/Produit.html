@@ -122,9 +122,12 @@
     
 
 <!-- Alert Box -->
-<div id="alert-box" class="alert hidden">
-    <span id="alert-message"></span>
-    <button id="close-alert" onclick="closeAlert()">×</button>
+<div class="alert hidden" id="customAlert">
+    <div class="alert-content">
+        <img src="img/FarmsConnect.jpg" alt="FarmsConnect Logo" class="alert-image">
+        <p id="alertMessage"></p>
+        <button class="alert-close-button" onclick="closeAlert()">×</button>
+    </div>
 </div>
 
 
@@ -225,7 +228,7 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
         }
     })
     .then(data => {
-        alert('Commande passée avec succès! Nous vous avons envoyé un mail contenant les détails de votre commande.');
+        showAlert('Commande passée avec succès! Nous vous avons envoyé un mail contenant les détails de votre commande.');
         console.log(data);
     })
     .catch(error => {
@@ -238,22 +241,20 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
     
 
 <script>
-    function showAlert(message) {
-    const alertBox = document.getElementById('alert-box');
-    const alertMessage = document.getElementById('alert-message');
-    
-    alertMessage.textContent = message; // Définir le message de l'alerte
-    alertBox.classList.remove('hidden'); // Afficher l'alerte
+function showAlert(message) {
+    const alertBox = document.getElementById("customAlert");
+    const alertMessage = document.getElementById("alertMessage");
 
-    // Masquer l'alerte après 5 secondes (facultatif)
-    setTimeout(closeAlert, 10000);
+    alertMessage.textContent = message;
+    alertBox.classList.add("visible"); // Ajoute la classe pour afficher l'alerte
+
+    // Masque automatiquement après 5 secondes
+    setTimeout(() => closeAlert(), 10000);
 }
 
-
-
 function closeAlert() {
-    const alertBox = document.getElementById('alert-box');
-    alertBox.classList.add('hidden'); // Masquer l'alerte
+    const alertBox = document.getElementById("customAlert");
+    alertBox.classList.remove("visible");
 }
 
 

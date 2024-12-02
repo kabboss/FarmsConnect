@@ -692,21 +692,20 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
 
-    function showAlert(message) {
+function showAlert(message) {
     const alertBox = document.getElementById("customAlert");
     const alertMessage = document.getElementById("alertMessage");
 
     alertMessage.textContent = message;
-    alertBox.classList.remove("hidden");
+    alertBox.classList.add("visible"); // Ajoute la classe pour afficher l'alerte
 
-    // Masquer l'alerte après un certain temps (facultatif)
-    setTimeout(() => {
-        closeAlert();
-    }, 10000); // Masquer après 5 secondes
+    // Masque automatiquement après 5 secondes
+    setTimeout(() => closeAlert(), 10000);
 }
 
 function closeAlert() {
-    document.getElementById("customAlert").classList.add("hidden");
+    const alertBox = document.getElementById("customAlert");
+    alertBox.classList.remove("visible");
 }
 
 
@@ -722,9 +721,13 @@ document.addEventListener('deviceready', function() {
 <script src="apropo.js"></script>
 
 <div class="alert hidden" id="customAlert">
-    <button onclick="closeAlert()">×</button>
-    <p id="alertMessage"></p>
+    <div class="alert-content">
+        <img src="img/FarmsConnect.jpg" alt="FarmsConnect Logo" class="alert-image">
+        <p id="alertMessage"></p>
+        <button class="alert-close-button" onclick="closeAlert()">×</button>
+    </div>
 </div>
+
 
 </body>
 </html>

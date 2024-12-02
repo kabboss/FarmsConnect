@@ -196,38 +196,55 @@ button:hover {
 }
 
 /* Alertes */
+
+
+
 .alert {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%;
-    max-width: 500px;
-    background-color: #21f02c;
-    color: white;
+    width: 90%;
+    max-width: 400px;
     padding: 20px;
-    font-size: 18px;
-    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    background-color: #ffffff;
     z-index: 1000;
-    transition: opacity 0.5s;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
-.alert.hidden {
-    display: none;
+.alert.visible {
+    opacity: 1;
+    visibility: visible;
 }
 
-.alert button {
+.alert-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.alert-image {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+}
+
+.alert-close-button {
     background: none;
     border: none;
-    color: white;
-    font-size: 18px;
+    font-size: 1.5rem;
+    color: #333;
     cursor: pointer;
-    position: absolute;
-    top: 10px;
-    right: 15px;
+    margin-top: 10px;
 }
+
+
+
 
 nav ul li a:hover {
     text-decoration: underline;

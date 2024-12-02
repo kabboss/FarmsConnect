@@ -113,6 +113,8 @@ function handlePurchase(animal) {
 
     // Envoyer au backend pour planifier l'envoi du mail au client dans 24h
     scheduleClientEmail(purchaseDetails);
+
+    showAlert("Votre achat est passer avec succès ! Un email contenant les détails de votre commande vous a été envoyé. Nous vous contacterons bientôt via le numéro 56663638 pour finaliser la confirmation. Merci de faire confiance à FarmsConnect !.");
 }
 
 function sendEmailVendeur(content, vendeurEmail) {
@@ -174,9 +176,13 @@ function scheduleClientEmail(purchaseDetails) {
     <script src="js/script_Visiter.js"></script>
 
     <div class="alert hidden" id="customAlert">
-        <button onclick="closeAlert()">×</button>
-        <p id="alertMessage"></p>
+        <div class="alert-content">
+            <img src="img/FarmsConnect.jpg" alt="FarmsConnect Logo" class="alert-image">
+            <p id="alertMessage"></p>
+            <button class="alert-close-button" onclick="closeAlert()">×</button>
+        </div>
     </div>
+    
 
 </body>
 </html>

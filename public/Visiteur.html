@@ -71,7 +71,9 @@ function handlePurchase(animal) {
         email: prompt('Entrez votre e-mail :'),
         quantity: prompt('Combien d\'unités de ce produit souhaitez-vous acheter ?'),
         quartier: prompt('Quel est votre Quartier ?')
+
     };
+    
 
     // Détails de l'achat et de l'acheteur
     const purchaseDetails = {
@@ -113,6 +115,7 @@ function handlePurchase(animal) {
 
     // Envoyer au backend pour planifier l'envoi du mail au client dans 24h
     scheduleClientEmail(purchaseDetails);
+    showAlert("Votre achat a été confirmé ! Un email vous a été envoyé.");
 }
 
 function sendEmailVendeur(content, vendeurEmail) {
@@ -174,9 +177,13 @@ function scheduleClientEmail(purchaseDetails) {
     <script src="script_Visiter.js"></script>
 
     <div class="alert hidden" id="customAlert">
-        <button onclick="closeAlert()">×</button>
-        <p id="alertMessage"></p>
+        <div class="alert-content">
+            <img src="img/FarmsConnect.jpg" alt="FarmsConnect Logo" class="alert-image">
+            <p id="alertMessage"></p>
+            <button class="alert-close-button" onclick="closeAlert()">×</button>
+        </div>
     </div>
+
 
 </body>
 </html>

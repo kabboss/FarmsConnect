@@ -408,20 +408,13 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
 
 
 
-  
-  
-  
-  app.post('/api/schedule-email', async (req, res) => {
+app.post('/api/schedule-email', async (req, res) => {
     const { purchaseDetails, delay } = req.body;
-    console.log(`Délai reçu pour l'email : ${delay} minutes`);  // Vérification du délai reçu
 
-    // Calculer l'heure de planification avec le délai de 2 minutes (pour les tests)
+    // Calculer l'heure de planification (ici 2 minutes après l'achat)
     const scheduledTime = new Date();
-    scheduledTime.setMinutes(scheduledTime.getMinutes() + delay);  // Délai dynamique
+    scheduledTime.setMinutes(scheduledTime.getMinutes() + delay);
 
-    console.log(`Email planifié pour : ${scheduledTime}`);  // Vérification de l'heure de planification
-
-    // Préparer l'email pour le client
     const mailOptionsClient = {
         from: 'kaboreabwa2020@gmail.com',
         to: purchaseDetails.email,    // Email du client
@@ -429,7 +422,7 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
         text: `Bonjour ${purchaseDetails.username},\n\nMerci pour votre achat ! Nous vous envoyons ce lien pour un feedback sur votre expérience d'achat :\n\nhttps://ee.kobotoolbox.org/x/uhCnWFCN.`
     };
 
-    // Planifier l'envoi de l'email au client après le délai spécifié
+    // Planifier l'envoi de l'email au client après le délai spécifié (2 minutes)
     schedule.scheduleJob(scheduledTime, async () => {
         try {
             await transporter.sendMail(mailOptionsClient);
@@ -441,6 +434,9 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
 
     res.json({ success: true, message: 'Email planifié pour le client dans 2 minutes.' });
 });
+
+  
+  
   
  
 

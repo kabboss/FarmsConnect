@@ -158,41 +158,50 @@ form button:hover {
     }
 }
 
+
 .alert {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%; /* Largeur ajustable selon tes préférences */
-    max-width: 600px; /* Limite maximale de la largeur */
-    background-color: #21f02c;
-    color: white;
-    padding: 30px; /* Plus d’espace pour agrandir l’alerte */
-    font-size: 20px; /* Augmente la taille du texte */
-    text-align: center; /* Centrer le texte */
+    width: 90%;
+    max-width: 400px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    background-color: #ffffff;
     z-index: 1000;
-    opacity: 1;
-    transition: opacity 0.5s;
-}
-
-.alert.hidden {
     opacity: 0;
-    pointer-events: none;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
-.alert button {
+.alert.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.alert-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.alert-image {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+}
+
+.alert-close-button {
     background: none;
     border: none;
-    color: white;
-    font-size: 22px; /* Augmente la taille du bouton de fermeture */
+    font-size: 1.5rem;
+    color: #333;
     cursor: pointer;
-    position: absolute;
-    top: 10px;
-    right: 15px;
+    margin-top: 10px;
 }
-
 
 
 

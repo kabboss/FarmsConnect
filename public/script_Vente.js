@@ -67,13 +67,15 @@ function showAlert(message) {
     const alertMessage = document.getElementById("alertMessage");
 
     alertMessage.textContent = message;
-    alertBox.classList.remove("hidden");
+    alertBox.classList.add("visible"); // Ajoute la classe pour afficher l'alerte
 
+    // Masque automatiquement après 5 secondes
     setTimeout(() => closeAlert(), 10000);
 }
 
 function closeAlert() {
-    document.getElementById("customAlert").classList.add("hidden");
+    const alertBox = document.getElementById("customAlert");
+    alertBox.classList.remove("visible");
 }
 
 

@@ -410,39 +410,33 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
 
 
   
-  
-  // Route pour planifier l'email
   app.post('/api/schedule-email', async (req, res) => {
-    const { purchaseDetails, delay } = req.body;
-    console.log(`Délai reçu pour l'email : ${delay} minutes`);  // Vérification du délai reçu
-
-    // Calculer l'heure de planification avec le délai de 2 minutes (pour les tests)
-    const scheduledTime = new Date();
-    scheduledTime.setMinutes(scheduledTime.getMinutes() + delay);  // Délai dynamique
-
-    console.log(`Email planifié pour : ${scheduledTime}`);  // Vérification de l'heure de planification
-
-    // Préparer l'email pour le client
-    const mailOptionsClient = {
-        from: 'kaboreabwa2020@gmail.com',
-        to: purchaseDetails.email,    // Email du client
-        subject: 'Merci pour votre achat !',
-        text: `Bonjour ${purchaseDetails.username},\n\nMerci pour votre achat ! Nous vous envoyons ce lien pour un feedback sur votre expérience d'achat :\n\nhttps://ee.kobotoolbox.org/x/uhCnWFCN.`
-    };
-
-    // Planifier l'envoi de l'email au client après le délai spécifié
-    schedule.scheduleJob(scheduledTime, async () => {
-        try {
-            await transporter.sendMail(mailOptionsClient);
-            console.log('Email envoyé au client après 2 minutes');
-        } catch (error) {
-            console.error('Erreur lors de l\'envoi de l\'email au client :', error);
-        }
-    });
-
-    res.json({ success: true, message: 'Email planifié pour le client dans 2 minutes.' });
-});
+      const { purchaseDetails, delay } = req.body;
   
+      // Calculer l'heure de planification (ici 2 minutes après l'achat)
+      const scheduledTime = new Date();
+      scheduledTime.setMinutes(scheduledTime.getMinutes() + delay);
+  
+      const mailOptionsClient = {
+          from: 'kaboreabwa2020@gmail.com',
+          to: purchaseDetails.email,    // Email du client
+          subject: 'Merci pour votre achat !',
+          text: `Bonjour ${purchaseDetails.username},\n\nMerci pour votre achat ! Nous vous envoyons ce lien pour un feedback sur votre expérience d'achat :\n\nhttps://ee.kobotoolbox.org/x/uhCnWFCN.`
+      };
+  
+      // Planifier l'envoi de l'email au client après le délai spécifié (2 minutes)
+      schedule.scheduleJob(scheduledTime, async () => {
+          try {
+              await transporter.sendMail(mailOptionsClient);
+              console.log('Email envoyé au client après 2 minutes');
+          } catch (error) {
+              console.error('Erreur lors de l\'envoi de l\'email au client :', error);
+          }
+      });
+  
+      res.json({ success: true, message: 'Email planifié pour le client dans 2 minutes.' });
+  });
+    
   
  
 

@@ -129,7 +129,7 @@ document.addEventListener('deviceready', function () {
                 );
                 
                 // Si la requête est réussie, afficher un message et rediriger
-                alert("Votre localisation a été enregistrée avec succès !");
+                showAlert("Votre localisation a été enregistrée avec succès !");
                 console.log("Localisation enregistrée :", JSON.parse(response.data));
                 
                 // Redirection vers la page d'accueil
@@ -493,7 +493,7 @@ document.addEventListener('deviceready', function () {
             })
             .then((response) => {
                 if (response.ok) {
-                    alert("Merci pour vos réponses !");
+                    showAlert("Merci pour vos réponses !");
 
                     // Masquer la modal des questions supplémentaires
                     extraQuestionsModal.style.display = "none";
@@ -704,23 +704,23 @@ document.addEventListener("DOMContentLoaded", function() {
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Fonction générique pour afficher des alertes utilisateur
-        function showAlert(message) {
-            const alertBox = document.getElementById("customAlert");
-            const alertMessage = document.getElementById("alertMessage");
-    
-            alertMessage.textContent = message;
-            alertBox.classList.remove("hidden");
-    
-            // Masquer l'alerte après 5 secondes
-            setTimeout(() => closeAlert(), 10000);
-        }
-    
-        // Fonction pour fermer l'alerte
-        function closeAlert() {
-            document.getElementById("customAlert").classList.add("hidden");
-        }
-    
-        // Fonction pour afficher la modale de connexion si nécessaire
+function showAlert(message) {
+    const alertBox = document.getElementById("customAlert");
+    const alertMessage = document.getElementById("alertMessage");
+
+    alertMessage.textContent = message;
+    alertBox.classList.add("visible"); // Ajoute la classe pour afficher l'alerte
+
+    // Masque automatiquement après 5 secondes
+    setTimeout(() => closeAlert(), 10000);
+}
+
+function closeAlert() {
+    const alertBox = document.getElementById("customAlert");
+    alertBox.classList.remove("visible");
+}
+
+// Fonction pour afficher la modale de connexion si nécessaire
         function checkLoginModalParam() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('showLoginModal') === 'true') {
@@ -880,9 +880,13 @@ function showAlert(message) {
 <script src="js/apropo.js"></script>
 
 <div class="alert hidden" id="customAlert">
-    <button onclick="closeAlert()">×</button>
-    <p id="alertMessage"></p>
+    <div class="alert-content">
+        <img src="img/FarmsConnect.jpg" alt="FarmsConnect Logo" class="alert-image">
+        <p id="alertMessage"></p>
+        <button class="alert-close-button" onclick="closeAlert()">×</button>
+    </div>
 </div>
+
 
 </body>
 </html>
