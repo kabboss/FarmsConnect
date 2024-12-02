@@ -1136,7 +1136,7 @@ h3 {
 /* Animation de rotation */
 .spinner {
     border: 5px solid #f3f3f3; /* Couleur de fond */
-    border-top: 5px solid #00bcd4; /* Couleur principale */
+    border-top: 5px solid #3d16eb; /* Couleur principale */
     border-radius: 50%;
     width: 40px;
     height: 40px;

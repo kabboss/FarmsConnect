@@ -119,7 +119,58 @@
             </div>
         </div>
     </section>
-    
+
+
+
+
+<!-- Message de chargement -->
+<div id="loadingMessage" class="hidden">
+    <div class="spinner-container">
+        <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
+        <div class="spinner"></div>
+    </div>
+    <p class="loading-text">Traitement de votre commande, veuillez patienter...</p>
+</div>
+
+  
+
+<script>
+    // Afficher le message de patience
+function showLoadingMessage() {
+    const loadingMessage = document.getElementById("loadingMessage");
+    loadingMessage.classList.remove("hidden");
+}
+
+// Masquer le message de patience
+function hideLoadingMessage() {
+    const loadingMessage = document.getElementById("loadingMessage");
+    loadingMessage.classList.add("hidden");
+}
+
+// Gestion du clic sur le bouton Acheter
+function acheterProduit() {
+    showLoadingMessage(); // Afficher le message de chargement
+
+    // Simuler une requête serveur avec setTimeout
+    setTimeout(() => {
+        const serverResponse = Math.random() > 0.2; // Simule une réponse avec succès ou échec (80% de succès)
+
+        if (serverResponse) {
+            alert("Achat réussi ! Merci pour votre confiance.");
+        } else {
+            alert("Échec de l'achat. Veuillez réessayer.");
+        }
+
+        hideLoadingMessage(); // Cacher le message de chargement
+    }, 3000); // Temps simulé : 3 secondes
+}
+
+</script>
+
+
+
+
+
 
 <!-- Alert Box -->
 <div class="alert hidden" id="customAlert">
