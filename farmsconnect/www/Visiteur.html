@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animaux à Vendre - FarmsConnect</title>
     <link rel="icon" type="image/png" href="img/FarmsConnect.jpg"> <!-- Chemin vers votre image -->
-    <link rel="stylesheet" href="style_Visiter.css">
+    <link rel="stylesheet" href="css/style_Visiter.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 </head>
@@ -68,7 +68,7 @@ function handlePurchase(animal) {
     const visitorInfo = {
         username: prompt('Nom et Prénom :'),
         contact: prompt('Entrez votre numéro de contact :'),
-        email: prompt('Entrez votre e-mail :'),
+        email: prompt('veuillez ecrire un mail valide  (🚨TRES IMPORTANT ):'),
         quantity: prompt('Combien d\'unités de ce produit souhaitez-vous acheter ?'),
         quartier: prompt('Quel est votre Quartier ?')
 
@@ -96,6 +96,20 @@ function handlePurchase(animal) {
     `;
     sendEmailVendeur(emailContentVendeur, animal.emailVendeur);
 
+    // Envoi de l'email de confirmation a l'acheteur
+    const emailContentAcheteur = ` 
+        Merci ${visitorInfo.username} nous avons bien reçu votre achat et voici les details de votre commande :
+        Catégorie : ${animal.categorie}
+        Quantité demandée : ${visitorInfo.quantity}
+        Code du vendeur : ${animal.codeVendeur}
+        Votre Quartier de residense est : ${visitorInfo.quartier}
+
+        Vous voullez nous contactez ? veuillez cliquer sur ce lien vous serrez Rediriger sur  Whatssap pour nous laisser un message : https://wa.me/+22656663638
+
+        \n\nFarmsConnect vous contactera bientôt pour organiser la livraison
+    `;
+    sendEmailVendeur(emailContentAcheteur, visitorInfo.email);
+
     // Envoi de l'email à FarmsConnect avec les détails de l'achat
     const emailContentFarmsConnect = `
         Détails de l'achat :
@@ -115,7 +129,7 @@ function handlePurchase(animal) {
 
     // Envoyer au backend pour planifier l'envoi du mail au client dans 24h
     scheduleClientEmail(purchaseDetails);
-    showAlert("Votre achat a été confirmé ! Un email vous a été envoyé.");
+    showAlert("Votre achat a été confirmé ! Un email contenant les details de votre/vos achat (s) vous a été envoyé.");
 }
 
 function sendEmailVendeur(content, vendeurEmail) {
@@ -133,6 +147,26 @@ function sendEmailVendeur(content, vendeurEmail) {
     })
     .catch(error => console.error("Erreur réseau lors de l'envoi de l'email au vendeur:", error));
 }
+
+
+function sendEmailAcheteur(content, ) {
+    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content, email: visitorInfo.email })
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log("Email envoyé a L'acheteur.");
+        } else {
+            console.error("Erreur lors de l'envoi de l'email a l'acheteur.");
+        }
+    })
+    .catch(error => console.error("Erreur réseau lors de l'envoi de l'email a l'acheteur:", error));
+}
+
+
+
 
 // Nouvelle fonction pour envoyer l'email à FarmsConnect
 function sendEmailFarmsConnect(content) {
@@ -174,7 +208,7 @@ function scheduleClientEmail(purchaseDetails) {
     </script>
         
 
-    <script src="script_Visiter.js"></script>
+    <script src="js/script_Visiter.js"></script>
 
     <div class="alert hidden" id="customAlert">
         <div class="alert-content">

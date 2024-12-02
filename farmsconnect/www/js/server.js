@@ -216,8 +216,6 @@ app.post('/api/order', async (req, res) => {
 
 
 
-
-
 //Ajout
 
 // Route pour servir le fichier users.html
