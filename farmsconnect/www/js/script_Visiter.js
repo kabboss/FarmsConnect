@@ -60,17 +60,15 @@ document.addEventListener('DOMContentLoaded', function() {
 function showAlert(message) {
     const alertBox = document.getElementById("customAlert");
     const alertMessage = document.getElementById("alertMessage");
-
     alertMessage.textContent = message;
-    alertBox.classList.add("visible"); // Ajoute la classe pour afficher l'alerte
-
-    // Masque automatiquement après 5 secondes
-    setTimeout(() => closeAlert(), 10000);
+    alertBox.classList.remove("hidden");
+    alertBox.classList.add("visible");
 }
 
 function closeAlert() {
     const alertBox = document.getElementById("customAlert");
     alertBox.classList.remove("visible");
+    alertBox.classList.add("hidden");
 }
 
 

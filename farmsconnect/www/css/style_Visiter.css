@@ -205,14 +205,9 @@ nav {
 }
 
 
-
-
-
 /* Style du bouton d'ouverture */
 .open-modal-button {
-    padding: 10px 20px;
     font-size: 16px;
-    color: #fff;
     background-color: #4980e6; /* Couleur bleue pour le bouton */
     border: none;
     border-radius: 5px;
@@ -306,7 +301,6 @@ nav {
         width: 90%; /* Ajuste la largeur de la modale pour les petits écrans */
     }
 }
-
 
 
 
