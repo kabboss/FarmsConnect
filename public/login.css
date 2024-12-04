@@ -198,6 +198,7 @@ button:hover {
 /* Alertes */
 
 
+
 .alert {
     position: fixed;
     top: 50%;
@@ -241,7 +242,6 @@ button:hover {
     cursor: pointer;
     margin-top: 10px;
 }
-
 
 
 
@@ -1038,22 +1038,6 @@ h3 {
 
 
 
-
-/* Conteneur centré */
-.terms-container {
-    display: flex;
-    justify-content: center; /* Centrer horizontalement */
-    align-items: center;    /* Centrer verticalement */
-    height: 100vh;          /* Pleine hauteur de l'écran */
-    background: linear-gradient(to bottom right, #f0f0f0, #d9d9d9); /* Fond léger */
-}
-
-
-
-
-
-
-
 /* Conteneur centré avec une taille réduite */
 .terms-container {
     display: flex;
@@ -1087,9 +1071,6 @@ h3 {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Accentuation de l'ombre */
     transform: scale(1.05); /* Légère augmentation de taille */
 }
-
-
-
 
 
 
@@ -1148,6 +1129,7 @@ h3 {
     font-size: 16px;
     font-family: 'Arial', sans-serif;
     margin: 0;
+    color: chartreuse;
 }
 
 /* Animation de rotation */
@@ -1159,6 +1141,41 @@ h3 {
         transform: rotate(360deg);
     }
 }
+
+
+
+/* Styles pour cacher l'alerte */
+.hidden {
+    display: none;
+}
+
+/* Styles pour afficher l'alerte */
+.visible {
+    display: block;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background-color: #4caf50;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Animation pour un effet fluide */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
 
 
 

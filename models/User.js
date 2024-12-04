@@ -9,13 +9,13 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 6, // Longueur minimale pour le mot de passe
+        minlength: 4, // Longueur minimale pour le mot de passe
         maxlength: 100 // Longueur maximale pour le mot de passe
     },
     email: {
         type: String,
         required: true,
-        unique: false, // Assure que chaque email est unique
+        unique: true, // Assure que chaque email est unique
         index: true, // Ajout d'un index explicite pour optimiser les requêtes
         match: [/^\S+@\S+\.\S+$/, 'Veuillez entrer une adresse email valide.'] // Validation de format pour les emails
     },

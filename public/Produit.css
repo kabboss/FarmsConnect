@@ -368,82 +368,6 @@ footer p {
 
 
 
-
-
-
-
-
-
-
-/* Masquer par défaut */
-.hidden {
-    display: none;
-}
-
-/* Conteneur de chargement */
-#loadingMessage {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-    width: 300px;
-}
-
-/* Conteneur de l'animation */
-.spinner-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
-}
-
-/* Style de l'image */
-.spinner-image {
-    width: 50px;
-    height: 50px;
-    margin-right: 15px;
-}
-
-/* Animation de rotation */
-.spinner {
-    border: 5px solid #f3f3f3; /* Couleur de fond */
-    border-top: 5px solid #00bcd4; /* Couleur principale */
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-}
-
-/* Texte */
-.loading-text {
-    font-size: 16px;
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-}
-
-/* Animation de rotation */
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-
-
-
-
-
-
 /* Style du bouton d'ouverture */
 .open-modal-button {
     padding: 10px 20px;
@@ -539,5 +463,92 @@ footer p {
     .modal-content {
         padding: 10px;
         width: 90%; /* Réduire la largeur pour les petits écrans */
+    }
+}
+
+
+
+/* Masquer par défaut */
+.hidden {
+    display: none;
+}
+
+/* Conteneur de chargement */
+#loadingMessage {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    width: 300px;
+}
+
+/* Conteneur de l'animation */
+.spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+/* Style de l'image */
+.spinner-image {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+}
+
+/* Animation de rotation */
+.spinner {
+    border: 5px solid #f3f3f3; /* Couleur de fond */
+    border-top: 5px solid #00bcd4; /* Couleur principale */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+/* Texte */
+.loading-text {
+    font-size: 16px;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+}
+
+/* Animation de rotation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+    animation: fadeIn 0.5s; /* Animation pour un effet fluide */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }

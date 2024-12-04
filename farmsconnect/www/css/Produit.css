@@ -530,3 +530,25 @@ footer p {
         transform: rotate(360deg);
     }
 }
+
+
+
+
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+    animation: fadeIn 0.5s; /* Animation pour un effet fluide */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

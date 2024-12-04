@@ -96,19 +96,48 @@ function handlePurchase(animal) {
     `;
     sendEmailVendeur(emailContentVendeur, animal.emailVendeur);
 
-    // Envoi de l'email de confirmation a l'acheteur
-    const emailContentAcheteur = ` 
-        Merci ${visitorInfo.username} nous avons bien reçu votre achat et voici les details de votre commande :
-        Catégorie : ${animal.categorie}
-        Quantité demandée : ${visitorInfo.quantity}
-        Code du vendeur : ${animal.codeVendeur}
-        Votre Quartier de residense est : ${visitorInfo.quartier}
+// Envoi de l'email de confirmation à l'acheteur
+const emailSubject = "Votre achat a été passé avec succès !";
+const emailContentAcheteur = `
+    Merci ${visitorInfo.username}, nous avons bien reçu votre achat et voici les détails de votre commande :
+    Catégorie : ${animal.categorie}
+    Quantité demandée : ${visitorInfo.quantity}
+    Code du vendeur : ${animal.codeVendeur}
+    Votre Quartier de résidence est : ${visitorInfo.quartier}
 
-        Vous voullez nous contactez ? veuillez cliquer sur ce lien vous serrez Rediriger sur  Whatssap pour nous laisser un message : https://wa.me/+22656663638
+    Vous voulez nous contacter ? Cliquez sur ce lien pour être redirigé sur WhatsApp et nous laisser un message : https://wa.me/+22656663638
 
-        \n\nFarmsConnect vous contactera bientôt pour organiser la livraison
-    `;
-    sendEmailVendeur(emailContentAcheteur, visitorInfo.email);
+    \n\nFarmsConnect vous contactera bientôt pour organiser la livraison.
+`;
+
+// Fonction d'envoi de l'e-mail
+function sendEmailAcheteur(subject, content, email) {
+    const emailData = {
+        subject: subject,    // Sujet de l'e-mail
+        content: content,    // Contenu de l'e-mail
+        email: email         // Destinataire
+    };
+
+    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(emailData)  // Envoi des données
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log("Email envoyé à l'acheteur.");
+        } else {
+            console.error("Erreur lors de l'envoi de l'email à l'acheteur.");
+        }
+    })
+    .catch(error => console.error("Erreur réseau lors de l'envoi de l'email à l'acheteur:", error));
+}
+
+// Envoi de l'e-mail
+sendEmailAcheteur(emailSubject, emailContentAcheteur, visitorInfo.email);
+
+
+
 
     // Envoi de l'email à FarmsConnect avec les détails de l'achat
     const emailContentFarmsConnect = `
@@ -149,21 +178,6 @@ function sendEmailVendeur(content, vendeurEmail) {
 }
 
 
-function sendEmailAcheteur(content, ) {
-    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content, email: visitorInfo.email })
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log("Email envoyé a L'acheteur.");
-        } else {
-            console.error("Erreur lors de l'envoi de l'email a l'acheteur.");
-        }
-    })
-    .catch(error => console.error("Erreur réseau lors de l'envoi de l'email a l'acheteur:", error));
-}
 
 
 

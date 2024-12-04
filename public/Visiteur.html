@@ -68,7 +68,7 @@ function handlePurchase(animal) {
     const visitorInfo = {
         username: prompt('Nom et Prénom :'),
         contact: prompt('Entrez votre numéro de contact :'),
-        email: prompt('Entrez votre e-mail :'),
+        email: prompt('veuillez ecrire un mail valide  (🚨TRES IMPORTANT ):'),
         quantity: prompt('Combien d\'unités de ce produit souhaitez-vous acheter ?'),
         quartier: prompt('Quel est votre Quartier ?')
 
@@ -96,6 +96,49 @@ function handlePurchase(animal) {
     `;
     sendEmailVendeur(emailContentVendeur, animal.emailVendeur);
 
+// Envoi de l'email de confirmation à l'acheteur
+const emailSubject = "Votre achat a été passé avec succès !";
+const emailContentAcheteur = `
+    Merci ${visitorInfo.username}, nous avons bien reçu votre achat et voici les détails de votre commande :
+    Catégorie : ${animal.categorie}
+    Quantité demandée : ${visitorInfo.quantity}
+    Code du vendeur : ${animal.codeVendeur}
+    Votre Quartier de résidence est : ${visitorInfo.quartier}
+
+    Vous voulez nous contacter ? Cliquez sur ce lien pour être redirigé sur WhatsApp et nous laisser un message : https://wa.me/+22656663638
+
+    \n\nFarmsConnect vous contactera bientôt pour organiser la livraison.
+`;
+
+// Fonction d'envoi de l'e-mail
+function sendEmailAcheteur(subject, content, email) {
+    const emailData = {
+        subject: subject,    // Sujet de l'e-mail
+        content: content,    // Contenu de l'e-mail
+        email: email         // Destinataire
+    };
+
+    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(emailData)  // Envoi des données
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log("Email envoyé à l'acheteur.");
+        } else {
+            console.error("Erreur lors de l'envoi de l'email à l'acheteur.");
+        }
+    })
+    .catch(error => console.error("Erreur réseau lors de l'envoi de l'email à l'acheteur:", error));
+}
+
+// Envoi de l'e-mail
+sendEmailAcheteur(emailSubject, emailContentAcheteur, visitorInfo.email);
+
+
+
+
     // Envoi de l'email à FarmsConnect avec les détails de l'achat
     const emailContentFarmsConnect = `
         Détails de l'achat :
@@ -115,7 +158,7 @@ function handlePurchase(animal) {
 
     // Envoyer au backend pour planifier l'envoi du mail au client dans 24h
     scheduleClientEmail(purchaseDetails);
-    showAlert("Votre achat a été confirmé ! Un email vous a été envoyé.");
+    showAlert("Votre achat a été confirmé ! Un email contenant les details de votre/vos achat (s) vous a été envoyé.");
 }
 
 function sendEmailVendeur(content, vendeurEmail) {
@@ -133,6 +176,11 @@ function sendEmailVendeur(content, vendeurEmail) {
     })
     .catch(error => console.error("Erreur réseau lors de l'envoi de l'email au vendeur:", error));
 }
+
+
+
+
+
 
 // Nouvelle fonction pour envoyer l'email à FarmsConnect
 function sendEmailFarmsConnect(content) {
