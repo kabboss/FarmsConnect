@@ -730,7 +730,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 localStorage.setItem('contact', data.contact);
 
                 showAlert('Connexion réussie !');
-                window.location.href = 'Location.html'; // Redirection
+                window.location.href = 'Acceuil.html'; // Redirection
             } else {
                 const errorMessage = await response.text();
                 showAlert('Erreur : ' + errorMessage);
