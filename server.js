@@ -175,22 +175,10 @@ console.log('Type d\'abattage reçu :', typeAbattage);
         // Email de confirmation envoyé au client
         const mailOptionsClient = {
             from: 'kaboreabwa2020@gmail.com',
-            to:  orderDetails.email,
+            to: email,
             subject: 'Confirmation de commande',
-            text: `
-            Bonjour ${orderDetails.username},
-            
-            Merci pour votre commande. Voici les détails :
-            - Produit : ${orderDetails.Produit}
-            - Quantité : ${orderDetails.quantity}
-            - Poids total : ${orderDetails.weight} kg
-            - Prix total : ${orderDetails.price} €
-            - Traitement : ${orderDetails.traitement}
-            - Type d'abattage : ${orderDetails.typeAbattage}
-
-            Nous vous contacterons bientôt pour la livraison.
-        `
-    };
+            text: `Merci, ${username}, pour votre commande ! Détails :\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Type d'abattage : ${typeAbattage}\n\nNous vous contacterons au ${contact} pour valider la commande. Merci pour la confiance 🤝`
+        };
 
         // Envoi de l'email au client
         transporter.sendMail(mailOptionsClient, (error, info) => {
