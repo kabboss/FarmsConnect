@@ -7,6 +7,8 @@
     <link rel="icon" type="image/png" href="img/FarmsConnect.jpg"> <!-- Chemin vers votre image -->
     <link rel="stylesheet" href="css/Produit.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <header>
@@ -64,66 +66,205 @@
 </div>
 
       
-    <section class="products" id="product-display">
-        <div class="product-list" id="product-list">
-            <!-- Poulet Local -->
-            <div class="product poulet-local">
-                <img src="img/local.jpg" alt="Poulet Local">
-                <h3>Poulet Local</h3>
-                <p id="price-poulet-local">Prix: 5 000 FCFA</p>
-                <label for="quantity-poulet-local">Quantité:</label>
-                <input type="number" id="quantity-poulet-local" min="1" value="1" onchange="updatePrice('Poulet Local', 5000, 'quantity-poulet-local', 'weight-poulet-local')">
-                <label for="weight-poulet-local">Poids (kg) pas obligatoire:</label>
-                <input type="number" id="weight-poulet-local" min="0.1" step="0.1" value="1" onchange="updatePrice('Poulet Local', 5000, 'quantity-poulet-local', 'weight-poulet-local')">
-                <button onclick="acheterProduit('Poulet Local', 5000, 'quantity-poulet-local', 'weight-poulet-local')">Acheter</button>
-            </div>
-    
-            <!-- Poulet de Chair -->
-            <div class="product poulet-chair">
-                <img src="img/Chair.jpg" alt="Poulet de Chair">
-                <h3>Poulet de Chair vivant </h3>
-                <p id="price-poulet-chair">Prix: 6 000 FCFA</p>
-                <label for="quantity-poulet-chair">Quantité:</label>
-                <input type="number" id="quantity-poulet-chair" min="1" value="1" onchange="updatePrice('Poulet de Chair', 6000, 'quantity-poulet-chair', 'weight-poulet-chair')">
-                <label for="weight-poulet-chair">Poids (kg) pas obligatoire:</label>
-                <input type="number" id="weight-poulet-chair" min="0.1" step="0.1" value="1" onchange="updatePrice('Poulet de Chair', 6000, 'quantity-poulet-chair', 'weight-poulet-chair')">
-                <button onclick="acheterProduit('Poulet de Chair', 6000, 'quantity-poulet-chair', 'weight-poulet-chair')">Acheter</button>
+<section class="products" id="product-display">
+    <div class="product-list" id="product-list">
+
+        <!-- Poulet Local -->
+        <div class="product poulet-local">
+            <img src="img/local.jpg" alt="Poulet Local">
+            <h3>Poulet Local</h3>
+            <p id="price-poulet-local">Prix: 5 000 FCFA</p>
+            <label for="quantity-poulet-local">Quantité:</label>
+            <input type="number" id="quantity-poulet-local" min="1" value="1">
+            <label for="weight-poulet-local">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-poulet-local" min="0.1" step="0.1" value="1">
+
+            <!-- Options de traitement -->
+            <label for="option-traitement-poulet-local">Traitement:</label>
+            <select id="option-traitement-poulet-local" onchange="updateAbattageOptions('poulet-local')">
+                <option value="vivant">Vivant</option>
+                <option value="abattu">Abattu</option>
+            </select>
+
+            <!-- Options pour l'abattage -->
+            <div id="abattage-options-poulet-local" style="display: none;">
+                <label for="abattage-type-poulet-local">Type d'abattage:</label>
+                <select id="abattage-type-poulet-local">
+                    <option value="halal">Halal</option>
+                    <option value="peu-importe">Sans préférence </option>
+                </select>
             </div>
 
-            
-    
-            <!-- Poulet Amélioré -->
-            <div class="product poulet-ameliore">
-                <img src="img/ameliorer.jpg" alt="Poulet Amélioré">
-                <h3>Poulet local Amélioré</h3>
-                <p id="price-poulet-ameliore">Prix: 7 500 FCFA</p>
-                <label for="quantity-poulet-ameliore">Quantité:</label>
-                <input type="number" id="quantity-poulet-ameliore" min="1" value="1" onchange="updatePrice('Poulet Amélioré', 7500, 'quantity-poulet-ameliore', 'weight-poulet-ameliore')">
-                <label for="weight-poulet-ameliore">Poids (kg) pas obligatoire:</label>
-                <input type="number" id="weight-poulet-ameliore" min="0.1" step="0.1" value="1" onchange="updatePrice('Poulet Amélioré', 7500, 'quantity-poulet-ameliore', 'weight-poulet-ameliore')">
-                <button onclick="acheterProduit('Poulet Amélioré', 7500, 'quantity-poulet-ameliore', 'weight-poulet-ameliore')">Acheter</button>
-            </div>
-    
-            <!-- Poule Pondeuse -->
-            <div class="product poule-pondeuse">
-                <img src="img/pondeuse.jpg" alt="Poule Pondeuse">
-                <h3>Poule Pondeuse</h3>
-                <p id="price-poule-pondeuse">Prix: 4 500 FCFA</p>
-                <label for="quantity-poule-pondeuse">Quantité:</label>
-                <input type="number" id="quantity-poule-pondeuse" min="1" value="1" onchange="updatePrice('Poule Pondeuse', 4500, 'quantity-poule-pondeuse', 'weight-poule-pondeuse')">
-                <label for="weight-poule-pondeuse">Poids (kg) pas obligatoire:</label>
-                <input type="number" id="weight-poule-pondeuse" min="0.1" step="0.1" value="1" onchange="updatePrice('Poule Pondeuse', 4500, 'quantity-poule-pondeuse', 'weight-poule-pondeuse')">
-                <button onclick="acheterProduit('Poule Pondeuse', 4500, 'quantity-poule-pondeuse', 'weight-poule-pondeuse')">Acheter</button>
-            </div>
+            <button onclick="acheterProduit('Poulet Local', 5000, 'quantity-poulet-local', 'weight-poulet-local', 'option-traitement-poulet-local', 'abattage-type-poulet-local')">Acheter</button>
         </div>
-    </section>
+
+        <!-- Poulet de Chair -->
+        <div class="product poulet-chair">
+            <img src="img/Chair.jpg" alt="Poulet de Chair">
+            <h3>Poulet de Chair</h3>
+            <p id="price-poulet-chair">Prix: 6 000 FCFA</p>
+            <label for="quantity-poulet-chair">Quantité:</label>
+            <input type="number" id="quantity-poulet-chair" min="1" value="1">
+            <label for="weight-poulet-chair">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-poulet-chair" min="0.1" step="0.1" value="1">
+
+            <!-- Options de traitement -->
+            <label for="option-traitement-poulet-chair">Traitement:</label>
+            <select id="option-traitement-poulet-chair" onchange="updateAbattageOptions('poulet-chair')">
+                <option value="vivant">Vivant</option>
+                <option value="abattu">Abattu</option>
+            </select>
+
+            <!-- Options pour l'abattage -->
+            <div id="abattage-options-poulet-chair" style="display: none;">
+                <label for="abattage-type-poulet-chair">Type d'abattage:</label>
+                <select id="abattage-type-poulet-chair">
+                    <option value="halal">Halal</option>
+                    <option value="peu-importe">Sans préférence </option>
+                </select>
+            </div>
+
+            <button onclick="acheterProduit('Poulet de Chair', 6000, 'quantity-poulet-chair', 'weight-poulet-chair', 'option-traitement-poulet-chair', 'abattage-type-poulet-chair')">Acheter</button>
+        </div>
+
+        <!-- Poulet Amélioré -->
+        <div class="product poulet-ameliore">
+            <img src="img/ameliorer.jpg" alt="Poulet Amélioré">
+            <h3>Poulet Local Amélioré</h3>
+            <p id="price-poulet-ameliore">Prix: 7 500 FCFA</p>
+            <label for="quantity-poulet-ameliore">Quantité:</label>
+            <input type="number" id="quantity-poulet-ameliore" min="1" value="1">
+            <label for="weight-poulet-ameliore">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-poulet-ameliore" min="0.1" step="0.1" value="1">
+
+            <!-- Options de traitement -->
+            <label for="option-traitement-poulet-ameliore">Traitement:</label>
+            <select id="option-traitement-poulet-ameliore" onchange="updateAbattageOptions('poulet-ameliore')">
+                <option value="vivant">Vivant</option>
+                <option value="abattu">Abattu</option>
+            </select>
+
+            <!-- Options pour l'abattage -->
+            <div id="abattage-options-poulet-ameliore" style="display: none;">
+                <label for="abattage-type-poulet-ameliore">Type d'abattage:</label>
+                <select id="abattage-type-poulet-ameliore">
+                    <option value="halal">Halal</option>
+                    <option value="peu-importe">Sans préférence </option>
+                </select>
+            </div>
+
+            <button onclick="acheterProduit('Poulet Local Amélioré', 7500, 'quantity-poulet-ameliore', 'weight-poulet-ameliore', 'option-traitement-poulet-ameliore', 'abattage-type-poulet-ameliore')">Acheter</button>
+        </div>
+
+        <!-- Poule Pondeuse -->
+        <div class="product poule-pondeuse">
+            <img src="img/pondeuse.jpg" alt="Poule Pondeuse">
+            <h3>Poule Pondeuse</h3>
+            <p id="price-poule-pondeuse">Prix: 4 500 FCFA</p>
+            <label for="quantity-poule-pondeuse">Quantité:</label>
+            <input type="number" id="quantity-poule-pondeuse" min="1" value="1">
+            <label for="weight-poule-pondeuse">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-poule-pondeuse" min="0.1" step="0.1" value="1">
+
+            <!-- Options de traitement -->
+            <label for="option-traitement-poule-pondeuse">Traitement:</label>
+            <select id="option-traitement-poule-pondeuse" onchange="updateAbattageOptions('poule-pondeuse')">
+                <option value="vivant">Vivant</option>
+                <option value="abattu">Abattu</option>
+            </select>
+
+            <!-- Options pour l'abattage -->
+            <div id="abattage-options-poule-pondeuse" style="display: none;">
+                <label for="abattage-type-poule-pondeuse">Type d'abattage:</label>
+                <select id="abattage-type-poule-pondeuse">
+                    <option value="halal">Halal</option>
+                    <option value="peu-importe">Sans préférence </option>
+                </select>
+            </div>
+
+            <button onclick="acheterProduit('Poule Pondeuse', 4500, 'quantity-poule-pondeuse', 'weight-poule-pondeuse', 'option-traitement-poule-pondeuse', 'abattage-type-poule-pondeuse')">Acheter</button>
+        </div>
+
+    </div>
+</section>
+
+
+<script>
+    function updateAbattageOptions(productId) {
+    const traitementSelect = document.getElementById(`option-traitement-${productId}`);
+    const abattageOptionsDiv = document.getElementById(`abattage-options-${productId}`);
+
+    // Afficher ou masquer les options d'abattage en fonction du choix
+    if (traitementSelect.value === "abattu") {
+        abattageOptionsDiv.style.display = "block";
+    } else {
+        abattageOptionsDiv.style.display = "none";
+    }
+}
+
+</script>
+
+
+<!-- Message de chargement -->
+<div id="loadingMessage" class="hidden">
+    <div class="spinner-container">
+        <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
+        <div class="spinner"></div>
+    </div>
+    <p class="loading-text">Traitement de votre commande, veuillez patienter...</p>
+</div>
+
+  
+
+<script>
+    // Afficher le message de patience
+function showLoadingMessage() {
+    const loadingMessage = document.getElementById("loadingMessage");
+    loadingMessage.classList.remove("hidden");
+}
+
+// Masquer le message de patience
+function hideLoadingMessage() {
+    const loadingMessage = document.getElementById("loadingMessage");
+    loadingMessage.classList.add("hidden");
+}
+
+// Gestion du clic sur le bouton Acheter
+function acheterProduit() {
+    showLoadingMessage(); // Afficher le message de chargement
+
+    // Simuler une requête serveur avec setTimeout
+    setTimeout(() => {
+        const serverResponse = Math.random() > 0.2; // Simule une réponse avec succès ou échec (80% de succès)
+
+        if (serverResponse) {
+            alert("Achat réussi ! Merci pour votre confiance.");
+        } else {
+            alert("Échec de l'achat. Veuillez réessayer.");
+        }
+
+        hideLoadingMessage(); // Cacher le message de chargement
+    }, 3000); // Temps simulé : 3 secondes
+}
+
+</script>
+
+
+
+
+
+
     
 
 <!-- Alert Box -->
-<div id="alert-box" class="alert hidden">
-    <span id="alert-message"></span>
-    <button id="close-alert" onclick="closeAlert()">×</button>
+<div class="alert hidden" id="customAlert">
+    <div class="alert-content">
+        <img src="img/FarmsConnect.jpg" alt="FarmsConnect Logo" class="alert-image">
+        <p id="alertMessage"></p>
+        <button class="alert-close-button" onclick="closeAlert()">×</button>
+    </div>
 </div>
+
 
 
 <script>
@@ -153,6 +294,7 @@
     // Mettre à jour le prix affiché sur la page
     document.getElementById('price-' + nomProduit.toLowerCase()).textContent = `Prix: ${total.toFixed(2)} FCFA`;
 }
+
 
 function acheterProduit(nomProduit, prix, quantityId, weightId) {
     const username = localStorage.getItem('username');
@@ -195,6 +337,15 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
 
     const poidsTotal = quantity * weight;
 
+    // Définir la variable traitement avant de l'utiliser
+    const traitement = document.getElementById(`option-traitement-${nomProduit.toLowerCase()}`).value || "Non spécifié";
+    let typeAbattage = null;
+
+    // Vérifier si des options d'abattage sont affichées
+    if (traitement === "abattu") {
+        typeAbattage = document.getElementById(`abattage-type-${nomProduit.toLowerCase()}`).value;
+    }
+
     const orderDetails = {
         username: username,
         email: email,
@@ -202,7 +353,9 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
         weight: poidsTotal,
         price: total.toFixed(2), // Arrondir le prix total à deux décimales
         contact: contact,
-        Produit: nomProduit
+        Produit: nomProduit,
+        traitement: traitement || "Non spécifié", // Par défaut, "Non spécifié" si aucune option n'est choisie
+        typeAbattage: typeAbattage || "Non applicable" // Si pas d'abattage, indiquer "Non applicable"
     };
 
     console.log('Order Data:', orderDetails);
@@ -223,7 +376,7 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
         }
     })
     .then(data => {
-        alert('Commande passée avec succès! Nous vous avons envoyé un mail contenant les détails de votre commande.');
+        showAlert('Commande passée avec succès! Nous vous avons envoyé un mail contenant les détails de votre commande.');
         console.log(data);
     })
     .catch(error => {
@@ -232,28 +385,26 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
     });
 }
 
+
     </script>
     
 
 <script>
-    function showAlert(message) {
-    const alertBox = document.getElementById('alert-box');
-    const alertMessage = document.getElementById('alert-message');
-    
-    alertMessage.textContent = message; // Définir le message de l'alerte
-    alertBox.classList.remove('hidden'); // Afficher l'alerte
+function showAlert(message) {
+    const alertBox = document.getElementById("customAlert");
+    const alertMessage = document.getElementById("alertMessage");
 
-    // Masquer l'alerte après 5 secondes (facultatif)
-    setTimeout(closeAlert, 10000);
+    alertMessage.textContent = message;
+    alertBox.classList.add("visible"); // Ajoute la classe pour afficher l'alerte
+
+    // Masque automatiquement après 5 secondes
+    setTimeout(() => closeAlert(), 10000);
 }
-
-
 
 function closeAlert() {
-    const alertBox = document.getElementById('alert-box');
-    alertBox.classList.add('hidden'); // Masquer l'alerte
+    const alertBox = document.getElementById("customAlert");
+    alertBox.classList.remove("visible");
 }
-
 
 
 

@@ -159,127 +159,83 @@ header {
 }
 
 
-
-
-/* Section des produits */
+/* Style global pour les produits */
 .products {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    gap: 30px;
-    padding: 50px 0;
-    background-color: #f4f4f4;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    background: linear-gradient(135deg, #f3f4f6, #ffffff);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
 }
 
 .product {
-    background-color: #ffffff;
+    background: #ffffff;
     border-radius: 10px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    width: 280px;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     padding: 20px;
-    font-family: 'Helvetica', sans-serif;
-    height: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product:hover {
     transform: translateY(-10px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
+/* Style des images */
 .product img {
     width: 100%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.product h3 {
-    font-size: 1.5rem;
-    color: #333;
-    font-weight: 600;
-    margin: 15px 0;
-    text-transform: uppercase;
-}
-
-.product p {
-    font-size: 1.2rem;
-    color: #28a745;
-    margin-bottom: 20px;
-}
-
-.product label {
-    display: block;
-    font-size: 1rem;
-    color: #495057;
-    margin-bottom: 5px;
-}
-
-.product input {
-    width: calc(100% - 40px);
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 2px solid #ced4da;
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
-.product input:focus {
-    border-color: #28a745;
-    outline: none;
-}
-
-.product button {
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.product button:hover {
-    background-color: #0056b3;
-    transform: translateY(-3px);
-}
-
-.product button:active {
-    background-color: #004085;
-}
-
-.product .product-details {
-    padding: 15px;
-    border-top: 1px solid #e9ecef;
-}
-
-.product .product-details p {
-    font-size: 1rem;
-    color: #6c757d;
+    border-radius: 10px;
     margin-bottom: 10px;
 }
 
-/* Responsivité */
-@media (max-width: 768px) {
-    .products {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .product {
-        width: 90%;
-        margin-bottom: 30px;
-    }
+/* Titres et textes */
+.product h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
+.product p {
+    font-size: 1.1em;
+    color: #666;
+    margin-bottom: 10px;
+    text-align: center;
+}
 
+/* Champs de saisie */
+.product input,
+.product select {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+/* Boutons */
+.product button {
+    width: 100%;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.product button:hover {
+    background: #0056b3;
+}
 
 /* Général */
 label {
@@ -345,13 +301,6 @@ select:focus {
         transform: translateY(0);
     }
 }
-
-
-
-
-
-
-
 
 
 /* Responsive styles */
@@ -496,6 +445,82 @@ footer p {
 
 
 
+
+
+
+
+
+
+
+/* Masquer par défaut */
+.hidden {
+    display: none;
+}
+
+/* Conteneur de chargement */
+#loadingMessage {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    width: 300px;
+}
+
+/* Conteneur de l'animation */
+.spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+/* Style de l'image */
+.spinner-image {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+}
+
+/* Animation de rotation */
+.spinner {
+    border: 5px solid #f3f3f3; /* Couleur de fond */
+    border-top: 5px solid #00bcd4; /* Couleur principale */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+/* Texte */
+.loading-text {
+    font-size: 16px;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+}
+
+/* Animation de rotation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+
+
+
+
 /* Style du bouton d'ouverture */
 .open-modal-button {
     padding: 10px 20px;
@@ -591,92 +616,5 @@ footer p {
     .modal-content {
         padding: 10px;
         width: 90%; /* Réduire la largeur pour les petits écrans */
-    }
-}
-
-
-
-/* Masquer par défaut */
-.hidden {
-    display: none;
-}
-
-/* Conteneur de chargement */
-#loadingMessage {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-    width: 300px;
-}
-
-/* Conteneur de l'animation */
-.spinner-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
-}
-
-/* Style de l'image */
-.spinner-image {
-    width: 50px;
-    height: 50px;
-    margin-right: 15px;
-}
-
-/* Animation de rotation */
-.spinner {
-    border: 5px solid #f3f3f3; /* Couleur de fond */
-    border-top: 5px solid #00bcd4; /* Couleur principale */
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-}
-
-/* Texte */
-.loading-text {
-    font-size: 16px;
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-}
-
-/* Animation de rotation */
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-
-
-
-
-.hidden {
-    display: none;
-}
-
-.visible {
-    display: block;
-    animation: fadeIn 0.5s; /* Animation pour un effet fluide */
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
     }
 }

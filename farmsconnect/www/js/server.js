@@ -156,25 +156,30 @@ module.exports = app;
 
 // Route pour passer une commande et envoyer les emails de confirmation
 app.post('/api/order', async (req, res) => {
-    const { username, email, contact, price, quantity, weight, Produit: nomproduit } = req.body;
+    const { username, email, contact, price, quantity, weight, Produit: nomproduit, traitement } = req.body;
+
+    // Vérifiez si traitement est défini
+    if (!traitement) {
+        console.error("Erreur : La variable 'traitement' est manquante dans la requête.");
+        return res.status(400).json({ error: "L'option de traitement est requise." });
+    }
 
     try {
-        // Récupérer les coordonnées GPS à partir de la collection "Location" via l'email
+        // Récupérer les coordonnées GPS à partir de la collection "Location"
         const locationData = await Location.findOne({ email: email });  // Si tu veux utiliser email, sinon change pour userID
 
         if (!locationData) {
             return res.status(400).send('Localisation non trouvée pour cet utilisateur.');
         }
 
-        // Récupérer les coordonnées GPS
         const { latitude, longitude } = locationData;
 
-        // Email de confirmation envoyé au client
+        // Préparer l'email pour le client
         const mailOptionsClient = {
             from: 'kaboreabwa2020@gmail.com',
             to: email,
             subject: 'Confirmation de commande',
-            text: `Merci, ${username}, pour votre commande ! Détails :\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Localisation : Latitude ${latitude}, Longitude ${longitude}\n\nNous vous contacterons au ${contact} pour valider la commande.`
+            text: `Merci, ${username}, pour votre commande ! Détails :\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Localisation : Latitude ${latitude}, Longitude ${longitude}\n\nNous vous contacterons au ${contact} pour valider la commande.`
         };
 
         // Envoi de l'email au client
@@ -186,12 +191,12 @@ app.post('/api/order', async (req, res) => {
             console.log('Email envoyé au client:', info.response);
         });
 
-        // Email de confirmation envoyé à Farmsconnect
+        // Préparer l'email pour Farmsconnect
         const mailOptionsFarmsconnect = {
             from: 'kaboreabwa2020@gmail.com',
-            to: 'kaboreabwa2020@gmail.com',  // Destinataire: Farmsconnect
+            to: 'kaboreabwa2020@gmail.com', // Destinataire: Farmsconnect
             subject: 'Nouvelle commande reçue',
-            text: `Nouvelle commande reçue !\n\nDétails de la commande :\n- Client : ${username}\n- Email : ${email}\n- Contact : ${contact}\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Localisation : Latitude ${latitude}, Longitude ${longitude}\n\nMerci de traiter cette commande.`
+            text: `Nouvelle commande reçue !\n\nDétails de la commande :\n- Client : ${username}\n- Email : ${email}\n- Contact : ${contact}\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Localisation : Latitude ${latitude}, Longitude ${longitude}\n\nMerci de traiter cette commande.`
         };
 
         // Envoi de l'email à Farmsconnect
@@ -203,9 +208,8 @@ app.post('/api/order', async (req, res) => {
             console.log('Email envoyé à Farmsconnect:', info.response);
         });
 
-        // Si tous les emails sont envoyés avec succès, répondre à la demande
+        // Si tout est OK, répondre à la demande
         res.status(200).send('Commande passée avec succès, e-mails envoyés !');
-
     } catch (error) {
         console.error('Erreur lors de la commande :', error);
         res.status(500).send('Erreur lors de la commande : ' + error.message);
