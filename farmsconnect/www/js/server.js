@@ -75,34 +75,26 @@ const transporter = nodemailer.createTransport({
 
 // Route pour l'inscription 
 app.post('/api/signup', async (req, res) => {
-    console.log("Données reçues :", req.body); // Log des données reçues
-
     const { username, email, contact, password, userType } = req.body;
 
+    // Vérification que tous les champs sont fournis
     if (!username || !email || !contact || !password || !userType) {
-        console.log("Champs manquants");
         return res.status(400).send("Tous les champs sont requis.");
     }
 
+    // Vérification que userType est valide
     const validUserTypes = ["vendeur", "visiteur", "veterinaire", "eleveur"];
     if (!validUserTypes.includes(userType)) {
-        console.log("Type d'utilisateur invalide :", userType);
         return res.status(400).send("Type d'utilisateur invalide.");
     }
 
     try {
         const existingUser = await User.findOne({ username });
-        if (existingUser) {
-            console.log("Utilisateur déjà existant :", username);
-            return res.status(400).send('Cet utilisateur existe déjà.');
-        }
+        if (existingUser) return res.status(400).send('Cet utilisateur existe déjà.');
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        console.log("Mot de passe hashé :", hashedPassword);
-
         const newUser = new User({ username, email, contact, password: hashedPassword, userType });
         await newUser.save();
-        console.log("Utilisateur créé avec succès :", newUser);
 
         res.status(201).send('Utilisateur créé avec succès !');
     } catch (error) {
@@ -164,7 +156,7 @@ module.exports = app;
 
 // Route pour passer une commande et envoyer les emails de confirmation
 app.post('/api/order', async (req, res) => {
-    const { username, email, contact, price, quantity, weight, Produit: nomproduit , traitement, typeAbattage } = req.body;
+    const { username, email, contact, price, quantity, weight, Produit: nomproduit } = req.body;
 
     try {
         // Récupérer les coordonnées GPS à partir de la collection "Location" via l'email
@@ -182,9 +174,9 @@ app.post('/api/order', async (req, res) => {
             from: 'kaboreabwa2020@gmail.com',
             to: email,
             subject: 'Confirmation de commande',
-            text: `Merci, ${username}, pour votre commande ! Détails :\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Type d'abattage : ${typeAbattage}\n\nNous vous contacterons au ${contact} pour valider la commande. Merci pour la confiance 🤝`
+            text: `Merci, ${username}, pour votre commande ! Détails :\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Localisation : Latitude ${latitude}, Longitude ${longitude}\n\nNous vous contacterons au ${contact} pour valider la commande.`
         };
-        
+
         // Envoi de l'email au client
         transporter.sendMail(mailOptionsClient, (error, info) => {
             if (error) {
@@ -199,7 +191,7 @@ app.post('/api/order', async (req, res) => {
             from: 'kaboreabwa2020@gmail.com',
             to: 'kaboreabwa2020@gmail.com',  // Destinataire: Farmsconnect
             subject: 'Nouvelle commande reçue',
-            text: `Nouvelle commande reçue !\n\nDétails de la commande :\n- Client : ${username}\n- Email : ${email}\n- Contact : ${contact}\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Type d'abattage : ${typeAbattage}\n\nMerci de traiter cette commande.`
+            text: `Nouvelle commande reçue !\n\nDétails de la commande :\n- Client : ${username}\n- Email : ${email}\n- Contact : ${contact}\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Localisation : Latitude ${latitude}, Longitude ${longitude}\n\nMerci de traiter cette commande.`
         };
 
         // Envoi de l'email à Farmsconnect
