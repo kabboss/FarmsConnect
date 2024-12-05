@@ -156,6 +156,10 @@ module.exports = app;
 // Route pour passer une commande et envoyer les emails de confirmation
 app.post('/api/order', async (req, res) => {
     const { username, email, contact, price, quantity, weight, Produit: nomproduit,traitement, typeAbattage } = req.body;
+// Vérifiez si les champs sont bien présents
+console.log('Traitement reçu :', traitement);
+console.log('Type d\'abattage reçu :', typeAbattage);
+
 
     try {
         // Récupérer les coordonnées GPS à partir de la collection "Location" via l'email
@@ -171,10 +175,22 @@ app.post('/api/order', async (req, res) => {
         // Email de confirmation envoyé au client
         const mailOptionsClient = {
             from: 'kaboreabwa2020@gmail.com',
-            to: email,
+            to:  orderDetails.email,
             subject: 'Confirmation de commande',
-            text: `Merci, ${username}, pour votre commande ! Détails :\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Type d'abattage : ${typeAbattage}\n\nNous vous contacterons au ${contact} pour valider la commande. Merci pour la confiance 🤝`
-        };
+            text: `
+            Bonjour ${orderDetails.username},
+            
+            Merci pour votre commande. Voici les détails :
+            - Produit : ${orderDetails.Produit}
+            - Quantité : ${orderDetails.quantity}
+            - Poids total : ${orderDetails.weight} kg
+            - Prix total : ${orderDetails.price} €
+            - Traitement : ${orderDetails.traitement}
+            - Type d'abattage : ${orderDetails.typeAbattage}
+
+            Nous vous contacterons bientôt pour la livraison.
+        `
+    };
 
         // Envoi de l'email au client
         transporter.sendMail(mailOptionsClient, (error, info) => {

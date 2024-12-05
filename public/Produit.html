@@ -301,47 +301,41 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
     const contact = localStorage.getItem('contact');
 
     if (!username || !email) {
-        console.error("Nom d'utilisateur ou e-mail non spécifié dans le localStorage");
         alert('Veuillez vous connecter pour passer une commande.');
         return;
     }
 
     const quantityElement = document.getElementById(quantityId);
     const weightElement = document.getElementById(weightId);
+    const traitementElement = document.getElementById(`option-traitement-${nomProduit.toLowerCase()}`);
+    const abattageElement = document.getElementById(`abattage-type-${nomProduit.toLowerCase()}`);
 
-    if (!quantityElement || !weightElement) {
-        console.error('Les éléments pour la quantité ou le poids sont introuvables');
+    if (!quantityElement || !weightElement || !traitementElement) {
         alert('Erreur : éléments introuvables.');
         return;
     }
 
     const quantity = parseInt(quantityElement.value);
     const weight = parseFloat(weightElement.value);
+    const traitement = traitementElement.value;
+    let typeAbattage = null;
+
+    if (traitement === "abattu" && abattageElement) {
+        typeAbattage = abattageElement.value;
+    }
 
     if (isNaN(quantity) || isNaN(weight)) {
-        console.error('Valeurs de quantité ou de poids invalides');
         alert('Erreur : veuillez entrer des valeurs valides.');
         return;
     }
 
-    // Récupérer les options de traitement et d'abattage
-    const traitementElement = document.getElementById(`option-traitement-${nomProduit.toLowerCase()}`);
-    const traitement = traitementElement ? traitementElement.value : "Non spécifié";
-
-    let typeAbattage = null;
-    if (traitement === "abattu") {
-        const abattageElement = document.getElementById(`abattage-type-${nomProduit.toLowerCase()}`);
-        typeAbattage = abattageElement ? abattageElement.value : "Non applicable";
-    }
-
-    // Calcul du prix total avant remise
+    // Calcul du prix total
     let total = quantity * prix * weight;
 
-    // Appliquer une remise pour les grandes quantités
     if (quantity >= 20) {
-        total *= 0.80; // 20% de remise pour 20 articles ou plus
+        total *= 0.80; // 20% de remise
     } else if (quantity >= 10) {
-        total *= 0.90; // 10% de remise pour 10 à 19 articles
+        total *= 0.90; // 10% de remise
     }
 
     const poidsTotal = quantity * weight;
@@ -353,36 +347,34 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
         Produit: nomProduit,
         quantity: quantity,
         weight: poidsTotal,
-        traitement: traitement,
+        price: total.toFixed(2),
+        traitement: traitement || "Non spécifié",
         typeAbattage: typeAbattage || "Non applicable",
-        price: total.toFixed(2) // Arrondir le prix total à deux décimales
     };
 
-    console.log('Order Data:', orderDetails);
+    console.log('Détails de la commande :', orderDetails);
 
-    // Envoyer la requête POST à l'API
+    // Envoi de la commande
     fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/order', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(orderDetails)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderDetails),
     })
-    .then(response => {
-        if (response.ok) {
-            return response.text();
-        } else {
-            throw new Error('Erreur lors de la commande');
-        }
-    })
-    .then(data => {
-        showAlert('Commande passée avec succès! Nous vous avons envoyé un mail contenant les détails de votre commande.');
-        console.log(data);
-    })
-    .catch(error => {
-        console.error('Erreur lors de la commande :', error);
-        alert('Erreur lors de la commande.');
-    });
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw new Error('Erreur lors de la commande');
+            }
+        })
+        .then(data => {
+            showAlert('Commande passée avec succès ! Un mail contenant les détails de la commande vous a été envoyé.');
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Erreur lors de la commande :', error);
+            showAlert('Erreur lors de la commande.');
+        });
 }
     </script>
     
