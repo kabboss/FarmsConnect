@@ -1181,3 +1181,29 @@ h3 {
 
 
 
+.modal.open {
+    display: block;
+    /* Vous pouvez ajouter des animations ou autres effets visuels ici */
+}
+
+
+/* Modal d'inscription */
+.signup-modal {
+    display: none;
+}
+
+.signup-modal.open {
+    display: block;
+}
+
+/* Modal de connexion */
+.login-modal {
+    display: none;
+}
+
+.login-modal.open {
+    display: block;
+}
+
+
+

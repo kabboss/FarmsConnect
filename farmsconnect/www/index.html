@@ -721,9 +721,16 @@ document.getElementById("signup-form").addEventListener("submit", async function
 
         if (response.ok) {
             hideSignupLoadingMessage();
-            showAlert('Inscription réussie !');
+            alert('Inscription réussie !');
+            window.location.href = 'Acceuil.html'; 
+
+
+            document.getElementById("signup-modal").classList.remove("open");
+            document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('open'));
             // Si la connexion est réussie, afficher la modale de connexion
             document.getElementById("login-modal").classList.add("open");
+             // Masquer le modal d'inscription
+
         } else {
             const message = await response.text();
             hideSignupLoadingMessage();
@@ -734,6 +741,7 @@ document.getElementById("signup-form").addEventListener("submit", async function
         showAlert('Erreur réseau : ' + error.message);
     }
 });
+
 
 
 // Afficher le message de chargement pour l'inscription

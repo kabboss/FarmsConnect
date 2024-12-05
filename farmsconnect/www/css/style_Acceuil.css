@@ -1,30 +1,150 @@
-body {
-    font-family: 'Poppins', Arial, sans-serif;
+/* Global styles */
+* {
     margin: 0;
     padding: 0;
-    background-color: #f0f2f5;
-    color: #333;
-    background-image: url(img/FarmsConnect.jpg);
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #1b94e4;
+    background-color: #f5f5f5;
+    overflow-x: hidden;
+}
+
+/* Hero section */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    background-image: url('img/FarmsConnect.jpg'); /* Image de fond */
     background-size: cover;
-}
-
-/* Style de l'en-tête */
-header {
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    padding: 20px;
-    background: linear-gradient(135deg, #14ec4a, #acb6e5); /* Dégradé pour un look sophistiqué */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre subtile */
-    border-bottom: 3px solid #74ebd5;
+    overflow: hidden;
+    animation: gradientShift 15s ease infinite;
 }
 
-header .title {
-    font-size: 2.8em;
-    color: #fff;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
-    margin: 0;
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Ombre sombre pour contraster */
+    z-index: 1;
 }
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Centrer tous les éléments horizontalement */
+    text-align: center; /* Centrer le texte */
+}
+
+/* Hero Title */
+.hero-title {
+    font-size: 4rem;
+    font-weight: 900;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    animation: slideIn 2s ease-out;
+}
+
+/* Hero Subtitle */
+.hero-subtitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    opacity: 0.85;
+    animation: fadeIn 2s ease-in 1s;
+}
+
+
+/* Centrer le bouton et ajouter des animations dynamiques */
+
+.cta-button {
+    background-color: #ffcb05;
+    color: #333;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    display: inline-block;
+    text-decoration: none; /* Enlève le soulignement */
+    text-align: center;
+    animation: bounce 2s ease infinite; /* Animation pour attirer l'attention */
+}
+
+/* Animation pour attirer l'attention */
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px); /* Effet de rebond */
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Couleur au survol */
+.cta-button:hover {
+    transform: translateY(-5px); /* Légère élévation au survol */
+    background-color: #f0a500;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); /* Ombre plus marquée */
+}
+
+/* Effet au clic */
+.cta-button:active {
+    transform: translateY(0); /* Rétablissement de la position initiale */
+    background-color: #d78900;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Centrer le bouton sur la page */
+.hero-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto; /* hauteur totale de la page pour centrer le contenu */
+    flex-direction: column; /* Centrer les éléments verticalement */
+    color: darkturquoise;
+
+}
+
+/* Aide au positionnement du texte pour le bouton */
+.hero-container a {
+    color: inherit; /* Assure que le lien héritera de la couleur du bouton */
+    text-decoration: none; /* Retirer le soulignement */
+}
+
+/* Ajustements pour la version mobile */
+@media (max-width: 768px) {
+    .cta-button {
+        font-size: 1rem;
+        padding: 12px 30px;
+    }
+}
+
+
 
 /* Style de la navigation */
 nav {
