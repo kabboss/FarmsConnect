@@ -37,7 +37,6 @@ app.use(cookieParser());  // Ajoutez cette ligne avant votre middleware `verifyT
 
 
 // Configuration CORS pour permettre les requêtes provenant de l'origine spécifiée
-// Configuration CORS
 const corsOptions = {
     origin: '*', // Remplacez par l'URL de votre frontend (application mobile ou web)
     methods: 'GET,POST', // Ajoutez d'autres méthodes si nécessaire
@@ -153,27 +152,34 @@ module.exports = app;
 
 
 
+
+
 // Route pour passer une commande et envoyer les emails de confirmation
 app.post('/api/order', async (req, res) => {
-    const { username, email, contact, price, quantity, weight, Produit: nomproduit } = req.body;
+    const { username, email, contact, price, quantity, weight, Produit: nomproduit, traitement } = req.body;
+
+    // Vérifiez si traitement est défini
+    if (!traitement) {
+        console.error("Erreur : La variable 'traitement' est manquante dans la requête.");
+        return res.status(400).json({ error: "L'option de traitement est requise." });
+    }
 
     try {
-        // Récupérer les coordonnées GPS à partir de la collection "Location" via l'email
+        // Récupérer les coordonnées GPS à partir de la collection "Location"
         const locationData = await Location.findOne({ email: email });  // Si tu veux utiliser email, sinon change pour userID
 
         if (!locationData) {
             return res.status(400).send('Localisation non trouvée pour cet utilisateur.');
         }
 
-        // Récupérer les coordonnées GPS
         const { latitude, longitude } = locationData;
 
-        // Email de confirmation envoyé au client
+        // Préparer l'email pour le client
         const mailOptionsClient = {
             from: 'kaboreabwa2020@gmail.com',
             to: email,
             subject: 'Confirmation de commande',
-            text: `Merci, ${username}, pour votre commande ! Détails :\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Type d'abattage : ${typeAbattage}\n\nNous vous contacterons au ${contact} pour valider la commande. Merci pour la confiance 🤝`
+            text: `Merci, ${username}, pour votre commande ! Détails :\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Localisation : Latitude ${latitude}, Longitude ${longitude}\n\nNous vous contacterons au ${contact} pour valider la commande.`
         };
 
         // Envoi de l'email au client
@@ -185,12 +191,12 @@ app.post('/api/order', async (req, res) => {
             console.log('Email envoyé au client:', info.response);
         });
 
-        // Email de confirmation envoyé à Farmsconnect
+        // Préparer l'email pour Farmsconnect
         const mailOptionsFarmsconnect = {
             from: 'kaboreabwa2020@gmail.com',
-            to: 'kaboreabwa2020@gmail.com',  // Destinataire: Farmsconnect
+            to: 'kaboreabwa2020@gmail.com', // Destinataire: Farmsconnect
             subject: 'Nouvelle commande reçue',
-            text: `Nouvelle commande reçue !\n\nDétails de la commande :\n- Client : ${username}\n- Email : ${email}\n- Contact : ${contact}\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Type d'abattage : ${typeAbattage}\n\nMerci de traiter cette commande.`
+            text: `Nouvelle commande reçue !\n\nDétails de la commande :\n- Client : ${username}\n- Email : ${email}\n- Contact : ${contact}\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Localisation : Latitude ${latitude}, Longitude ${longitude}\n\nMerci de traiter cette commande.`
         };
 
         // Envoi de l'email à Farmsconnect
@@ -202,16 +208,13 @@ app.post('/api/order', async (req, res) => {
             console.log('Email envoyé à Farmsconnect:', info.response);
         });
 
-        // Si tous les emails sont envoyés avec succès, répondre à la demande
+        // Si tout est OK, répondre à la demande
         res.status(200).send('Commande passée avec succès, e-mails envoyés !');
-
     } catch (error) {
         console.error('Erreur lors de la commande :', error);
         res.status(500).send('Erreur lors de la commande : ' + error.message);
     }
 });
-
-
 
 
 
@@ -408,35 +411,34 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
 
 
 
-app.post('/api/schedule-email', async (req, res) => {
-    const { purchaseDetails, delay } = req.body;
-
-    // Calculer l'heure de planification (ici 2 minutes après l'achat)
-    const scheduledTime = new Date();
-    scheduledTime.setMinutes(scheduledTime.getMinutes() + delay);
-
-    const mailOptionsClient = {
-        from: 'kaboreabwa2020@gmail.com',
-        to: purchaseDetails.email,    // Email du client
-        subject: 'Merci pour votre achat !',
-        text: `Bonjour ${purchaseDetails.username},\n\nMerci pour votre achat ! Nous vous envoyons ce lien pour un feedback sur votre expérience d'achat :\n\nhttps://ee.kobotoolbox.org/x/uhCnWFCN.`
-    };
-
-    // Planifier l'envoi de l'email au client après le délai spécifié (2 minutes)
-    schedule.scheduleJob(scheduledTime, async () => {
-        try {
-            await transporter.sendMail(mailOptionsClient);
-            console.log('Email envoyé au client après 2 minutes');
-        } catch (error) {
-            console.error('Erreur lors de l\'envoi de l\'email au client :', error);
-        }
-    });
-
-    res.json({ success: true, message: 'Email planifié pour le client dans 2 minutes.' });
-});
-
   
+  app.post('/api/schedule-email', async (req, res) => {
+      const { purchaseDetails, delay } = req.body;
   
+      // Calculer l'heure de planification (ici 2 minutes après l'achat)
+      const scheduledTime = new Date();
+      scheduledTime.setMinutes(scheduledTime.getMinutes() + delay);
+  
+      const mailOptionsClient = {
+          from: 'kaboreabwa2020@gmail.com',
+          to: purchaseDetails.email,    // Email du client
+          subject: 'Merci pour votre achat !',
+          text: `Bonjour ${purchaseDetails.username},\n\nMerci pour votre achat ! Nous vous envoyons ce lien pour un feedback sur votre expérience d'achat :\n\nhttps://ee.kobotoolbox.org/x/uhCnWFCN.`
+      };
+  
+      // Planifier l'envoi de l'email au client après le délai spécifié (2 minutes)
+      schedule.scheduleJob(scheduledTime, async () => {
+          try {
+              await transporter.sendMail(mailOptionsClient);
+              console.log('Email envoyé au client après 2 minutes');
+          } catch (error) {
+              console.error('Erreur lors de l\'envoi de l\'email au client :', error);
+          }
+      });
+  
+      res.json({ success: true, message: 'Email planifié pour le client dans 2 minutes.' });
+  });
+    
   
  
 
@@ -639,7 +641,6 @@ app.get('/api/map', async (req, res) => {
     }
   });
   
-
 
 
 
