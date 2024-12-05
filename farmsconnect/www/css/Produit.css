@@ -281,6 +281,74 @@ header {
 
 
 
+/* Général */
+label {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    display: block;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background: #f9f9f9;
+    font-size: 1rem;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+select:hover {
+    border-color: #00aaff;
+    background-color: #e6f7ff;
+}
+
+select:focus {
+    outline: none;
+    border-color: #0077cc;
+    background-color: #cceeff;
+    box-shadow: 0 0 8px rgba(0, 119, 204, 0.5);
+}
+
+/* Conteneur des options d'abattage */
+#abattage-options-poulet-local {
+    padding: 10px;
+    background: #f7f7f7;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    margin-top: 15px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+#abattage-options-poulet-local label {
+    color: #555;
+}
+
+#abattage-options-poulet-local select {
+    border-color: #aaa;
+}
+
+#abattage-options-poulet-local select:hover {
+    border-color: #ff8800;
+}
+
+/* Animation fadeIn */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+
 
 
 

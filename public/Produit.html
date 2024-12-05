@@ -66,60 +66,143 @@
 </div>
 
       
-    <section class="products" id="product-display">
-        <div class="product-list" id="product-list">
-            <!-- Poulet Local -->
-            <div class="product poulet-local">
-                <img src="img/local.jpg" alt="Poulet Local">
-                <h3>Poulet Local</h3>
-                <p id="price-poulet-local">Prix: 5 000 FCFA</p>
-                <label for="quantity-poulet-local">Quantité:</label>
-                <input type="number" id="quantity-poulet-local" min="1" value="1" onchange="updatePrice('Poulet Local', 5000, 'quantity-poulet-local', 'weight-poulet-local')">
-                <label for="weight-poulet-local">Poids (kg) pas obligatoire:</label>
-                <input type="number" id="weight-poulet-local" min="0.1" step="0.1" value="1" onchange="updatePrice('Poulet Local', 5000, 'quantity-poulet-local', 'weight-poulet-local')">
-                <button onclick="acheterProduit('Poulet Local', 5000, 'quantity-poulet-local', 'weight-poulet-local')">Acheter</button>
-            </div>
-    
-            <!-- Poulet de Chair -->
-            <div class="product poulet-chair">
-                <img src="img/Chair.jpg" alt="Poulet de Chair">
-                <h3>Poulet de Chair vivant </h3>
-                <p id="price-poulet-chair">Prix: 6 000 FCFA</p>
-                <label for="quantity-poulet-chair">Quantité:</label>
-                <input type="number" id="quantity-poulet-chair" min="1" value="1" onchange="updatePrice('Poulet de Chair', 6000, 'quantity-poulet-chair', 'weight-poulet-chair')">
-                <label for="weight-poulet-chair">Poids (kg) pas obligatoire:</label>
-                <input type="number" id="weight-poulet-chair" min="0.1" step="0.1" value="1" onchange="updatePrice('Poulet de Chair', 6000, 'quantity-poulet-chair', 'weight-poulet-chair')">
-                <button onclick="acheterProduit('Poulet de Chair', 6000, 'quantity-poulet-chair', 'weight-poulet-chair')">Acheter</button>
+<section class="products" id="product-display">
+    <div class="product-list" id="product-list">
+
+        <!-- Poulet Local -->
+        <div class="product poulet-local">
+            <img src="img/local.jpg" alt="Poulet Local">
+            <h3>Poulet Local</h3>
+            <p id="price-poulet-local">Prix: 5 000 FCFA</p>
+            <label for="quantity-poulet-local">Quantité:</label>
+            <input type="number" id="quantity-poulet-local" min="1" value="1">
+            <label for="weight-poulet-local">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-poulet-local" min="0.1" step="0.1" value="1">
+
+            <!-- Options de traitement -->
+            <label for="option-traitement-poulet-local">Traitement:</label>
+            <select id="option-traitement-poulet-local" onchange="updateAbattageOptions('poulet-local')">
+                <option value="vivant">Vivant</option>
+                <option value="abattu">Abattu</option>
+            </select>
+
+            <!-- Options pour l'abattage -->
+            <div id="abattage-options-poulet-local" style="display: none;">
+                <label for="abattage-type-poulet-local">Type d'abattage:</label>
+                <select id="abattage-type-poulet-local">
+                    <option value="halal">Halal</option>
+                    <option value="peu-importe">Sans préférence </option>
+                </select>
             </div>
 
-            
-    
-            <!-- Poulet Amélioré -->
-            <div class="product poulet-ameliore">
-                <img src="img/ameliorer.jpg" alt="Poulet Amélioré">
-                <h3>Poulet local Amélioré</h3>
-                <p id="price-poulet-ameliore">Prix: 7 500 FCFA</p>
-                <label for="quantity-poulet-ameliore">Quantité:</label>
-                <input type="number" id="quantity-poulet-ameliore" min="1" value="1" onchange="updatePrice('Poulet Amélioré', 7500, 'quantity-poulet-ameliore', 'weight-poulet-ameliore')">
-                <label for="weight-poulet-ameliore">Poids (kg) pas obligatoire:</label>
-                <input type="number" id="weight-poulet-ameliore" min="0.1" step="0.1" value="1" onchange="updatePrice('Poulet Amélioré', 7500, 'quantity-poulet-ameliore', 'weight-poulet-ameliore')">
-                <button onclick="acheterProduit('Poulet Amélioré', 7500, 'quantity-poulet-ameliore', 'weight-poulet-ameliore')">Acheter</button>
-            </div>
-    
-            <!-- Poule Pondeuse -->
-            <div class="product poule-pondeuse">
-                <img src="img/pondeuse.jpg" alt="Poule Pondeuse">
-                <h3>Poule Pondeuse</h3>
-                <p id="price-poule-pondeuse">Prix: 4 500 FCFA</p>
-                <label for="quantity-poule-pondeuse">Quantité:</label>
-                <input type="number" id="quantity-poule-pondeuse" min="1" value="1" onchange="updatePrice('Poule Pondeuse', 4500, 'quantity-poule-pondeuse', 'weight-poule-pondeuse')">
-                <label for="weight-poule-pondeuse">Poids (kg) pas obligatoire:</label>
-                <input type="number" id="weight-poule-pondeuse" min="0.1" step="0.1" value="1" onchange="updatePrice('Poule Pondeuse', 4500, 'quantity-poule-pondeuse', 'weight-poule-pondeuse')">
-                <button onclick="acheterProduit('Poule Pondeuse', 4500, 'quantity-poule-pondeuse', 'weight-poule-pondeuse')">Acheter</button>
-            </div>
+            <button onclick="acheterProduit('Poulet Local', 5000, 'quantity-poulet-local', 'weight-poulet-local', 'option-traitement-poulet-local', 'abattage-type-poulet-local')">Acheter</button>
         </div>
-    </section>
 
+        <!-- Poulet de Chair -->
+        <div class="product poulet-chair">
+            <img src="img/Chair.jpg" alt="Poulet de Chair">
+            <h3>Poulet de Chair</h3>
+            <p id="price-poulet-chair">Prix: 6 000 FCFA</p>
+            <label for="quantity-poulet-chair">Quantité:</label>
+            <input type="number" id="quantity-poulet-chair" min="1" value="1">
+            <label for="weight-poulet-chair">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-poulet-chair" min="0.1" step="0.1" value="1">
+
+            <!-- Options de traitement -->
+            <label for="option-traitement-poulet-chair">Traitement:</label>
+            <select id="option-traitement-poulet-chair" onchange="updateAbattageOptions('poulet-chair')">
+                <option value="vivant">Vivant</option>
+                <option value="abattu">Abattu</option>
+            </select>
+
+            <!-- Options pour l'abattage -->
+            <div id="abattage-options-poulet-chair" style="display: none;">
+                <label for="abattage-type-poulet-chair">Type d'abattage:</label>
+                <select id="abattage-type-poulet-chair">
+                    <option value="halal">Halal</option>
+                    <option value="peu-importe">Sans préférence </option>
+                </select>
+            </div>
+
+            <button onclick="acheterProduit('Poulet de Chair', 6000, 'quantity-poulet-chair', 'weight-poulet-chair', 'option-traitement-poulet-chair', 'abattage-type-poulet-chair')">Acheter</button>
+        </div>
+
+        <!-- Poulet Amélioré -->
+        <div class="product poulet-ameliore">
+            <img src="img/ameliorer.jpg" alt="Poulet Amélioré">
+            <h3>Poulet Local Amélioré</h3>
+            <p id="price-poulet-ameliore">Prix: 7 500 FCFA</p>
+            <label for="quantity-poulet-ameliore">Quantité:</label>
+            <input type="number" id="quantity-poulet-ameliore" min="1" value="1">
+            <label for="weight-poulet-ameliore">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-poulet-ameliore" min="0.1" step="0.1" value="1">
+
+            <!-- Options de traitement -->
+            <label for="option-traitement-poulet-ameliore">Traitement:</label>
+            <select id="option-traitement-poulet-ameliore" onchange="updateAbattageOptions('poulet-ameliore')">
+                <option value="vivant">Vivant</option>
+                <option value="abattu">Abattu</option>
+            </select>
+
+            <!-- Options pour l'abattage -->
+            <div id="abattage-options-poulet-ameliore" style="display: none;">
+                <label for="abattage-type-poulet-ameliore">Type d'abattage:</label>
+                <select id="abattage-type-poulet-ameliore">
+                    <option value="halal">Halal</option>
+                    <option value="peu-importe">Sans préférence </option>
+                </select>
+            </div>
+
+            <button onclick="acheterProduit('Poulet Local Amélioré', 7500, 'quantity-poulet-ameliore', 'weight-poulet-ameliore', 'option-traitement-poulet-ameliore', 'abattage-type-poulet-ameliore')">Acheter</button>
+        </div>
+
+        <!-- Poule Pondeuse -->
+        <div class="product poule-pondeuse">
+            <img src="img/pondeuse.jpg" alt="Poule Pondeuse">
+            <h3>Poule Pondeuse</h3>
+            <p id="price-poule-pondeuse">Prix: 4 500 FCFA</p>
+            <label for="quantity-poule-pondeuse">Quantité:</label>
+            <input type="number" id="quantity-poule-pondeuse" min="1" value="1">
+            <label for="weight-poule-pondeuse">Poids (kg) pas obligatoire:</label>
+            <input type="number" id="weight-poule-pondeuse" min="0.1" step="0.1" value="1">
+
+            <!-- Options de traitement -->
+            <label for="option-traitement-poule-pondeuse">Traitement:</label>
+            <select id="option-traitement-poule-pondeuse" onchange="updateAbattageOptions('poule-pondeuse')">
+                <option value="vivant">Vivant</option>
+                <option value="abattu">Abattu</option>
+            </select>
+
+            <!-- Options pour l'abattage -->
+            <div id="abattage-options-poule-pondeuse" style="display: none;">
+                <label for="abattage-type-poule-pondeuse">Type d'abattage:</label>
+                <select id="abattage-type-poule-pondeuse">
+                    <option value="halal">Halal</option>
+                    <option value="peu-importe">Sans préférence </option>
+                </select>
+            </div>
+
+            <button onclick="acheterProduit('Poule Pondeuse', 4500, 'quantity-poule-pondeuse', 'weight-poule-pondeuse', 'option-traitement-poule-pondeuse', 'abattage-type-poule-pondeuse')">Acheter</button>
+        </div>
+
+    </div>
+</section>
+
+
+<script>
+    function updateAbattageOptions(productId) {
+    const traitementSelect = document.getElementById(`option-traitement-${productId}`);
+    const abattageOptionsDiv = document.getElementById(`abattage-options-${productId}`);
+
+    // Afficher ou masquer les options d'abattage en fonction du choix
+    if (traitementSelect.value === "abattu") {
+        abattageOptionsDiv.style.display = "block";
+    } else {
+        abattageOptionsDiv.style.display = "none";
+    }
+}
+
+</script>
 
 
 <!-- Message de chargement -->
@@ -218,7 +301,7 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
     const contact = localStorage.getItem('contact');
 
     if (!username || !email) {
-        console.error('Nom d\'utilisateur ou e-mail non spécifié dans le localStorage');
+        console.error("Nom d'utilisateur ou e-mail non spécifié dans le localStorage");
         alert('Veuillez vous connecter pour passer une commande.');
         return;
     }
@@ -241,6 +324,16 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
         return;
     }
 
+    // Récupérer les options de traitement et d'abattage
+    const traitementElement = document.getElementById(`option-traitement-${nomProduit.toLowerCase()}`);
+    const traitement = traitementElement ? traitementElement.value : "Non spécifié";
+
+    let typeAbattage = null;
+    if (traitement === "abattu") {
+        const abattageElement = document.getElementById(`abattage-type-${nomProduit.toLowerCase()}`);
+        typeAbattage = abattageElement ? abattageElement.value : "Non applicable";
+    }
+
     // Calcul du prix total avant remise
     let total = quantity * prix * weight;
 
@@ -256,12 +349,13 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
     const orderDetails = {
         username: username,
         email: email,
+        contact: contact,
+        Produit: nomProduit,
         quantity: quantity,
         weight: poidsTotal,
-        price: total.toFixed(2), // Arrondir le prix total à deux décimales
-        contact: contact,
-        Produit: nomProduit
-        
+        traitement: traitement,
+        typeAbattage: typeAbattage || "Non applicable",
+        price: total.toFixed(2) // Arrondir le prix total à deux décimales
     };
 
     console.log('Order Data:', orderDetails);
@@ -290,7 +384,6 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
         alert('Erreur lors de la commande.');
     });
 }
-
     </script>
     
 

@@ -182,9 +182,9 @@ app.post('/api/order', async (req, res) => {
             from: 'kaboreabwa2020@gmail.com',
             to: email,
             subject: 'Confirmation de commande',
-            text: `Merci, ${username}, pour votre commande ! Détails :\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Localisation : Latitude ${latitude}, Longitude ${longitude}\n\nNous vous contacterons au ${contact} pour valider la commande.`
+            text: `Merci, ${username}, pour votre commande ! Détails :\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Type d'abattage : ${typeAbattage}\n\nNous vous contacterons au ${contact} pour valider la commande. Merci pour la confiance 🤝`
         };
-
+        
         // Envoi de l'email au client
         transporter.sendMail(mailOptionsClient, (error, info) => {
             if (error) {
@@ -199,7 +199,7 @@ app.post('/api/order', async (req, res) => {
             from: 'kaboreabwa2020@gmail.com',
             to: 'kaboreabwa2020@gmail.com',  // Destinataire: Farmsconnect
             subject: 'Nouvelle commande reçue',
-            text: `Nouvelle commande reçue !\n\nDétails de la commande :\n- Client : ${username}\n- Email : ${email}\n- Contact : ${contact}\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Localisation : Latitude ${latitude}, Longitude ${longitude}\n\nMerci de traiter cette commande.`
+            text: `Nouvelle commande reçue !\n\nDétails de la commande :\n- Client : ${username}\n- Email : ${email}\n- Contact : ${contact}\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Type d'abattage : ${typeAbattage}\n\nMerci de traiter cette commande.`
         };
 
         // Envoi de l'email à Farmsconnect
