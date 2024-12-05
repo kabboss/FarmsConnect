@@ -155,11 +155,7 @@ module.exports = app;
 
 // Route pour passer une commande et envoyer les emails de confirmation
 app.post('/api/order', async (req, res) => {
-    const { username, email, contact, price, quantity, weight, Produit: nomproduit,traitement, typeAbattage } = req.body;
-// Vérifiez si les champs sont bien présents
-console.log('Traitement reçu :', traitement);
-console.log('Type d\'abattage reçu :', typeAbattage);
-
+    const { username, email, contact, price, quantity, weight, Produit: nomproduit } = req.body;
 
     try {
         // Récupérer les coordonnées GPS à partir de la collection "Location" via l'email
