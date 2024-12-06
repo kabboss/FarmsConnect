@@ -6,71 +6,213 @@ body {
     color: #333;
 }
 
-/* Style de l'en-tête */
-header {
-    background: linear-gradient(135deg, #00e239, #6d81f1); /* Dégradé pour un look sophistiqué */
-    padding: 40px; /* Espacement intérieur */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Ombre portée douce */
-    text-align: center; /* Centre le texte */
-    position: relative; /* Position pour l'animation */
-    overflow: hidden; /* Pour gérer l'animation */
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Style du titre */
-h1 {
-    font-size: 3em; /* Grande taille de texte */
-    color: #ffffff; /* Couleur blanche */
-    margin-bottom: 20px; /* Espacement en bas */
-    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2); /* Ombre pour le titre */
+/* Header Styling */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(135deg, #2e3a87, #6f42c1);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    animation: slideIn 1s ease-out;
+    overflow: hidden;
 }
 
-/* Style de la navigation */
-nav {
-    width: 100%; /* Prend toute la largeur */
+/* Logo Section */
+.logo-container {
+    flex: 1;
+    animation: fadeIn 1.2s ease-in;
 }
 
-/* Liste de navigation */
-nav ul {
-    list-style: none; /* Supprime les puces */
-    display: flex; /* Aligne les éléments horizontalement */
-    justify-content: center; /* Centre horizontalement */
-    padding: 0; /* Supprime le padding */
-    margin: 0; /* Supprime la marge */
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ffd600;
 }
 
-/* Style des éléments de la liste */
-nav ul li {
-    margin: 0 30px; /* Espacement entre les éléments */
+/* Navigation Section */
+.nav {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
 
-/* Style des liens de navigation */
-nav ul li a {
-    text-decoration: none; /* Supprime le soulignement */
-    color: #ffffff; /* Couleur du texte */
-    font-weight: bold; /* Met le texte en gras */
-    padding: 10px 20px; /* Espacement intérieur */
-    border-radius: 30px; /* Bords arrondis */
-    background-color: rgba(107, 176, 240, 0.747); /* Couleur de fond semi-transparente */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Effets de transition */
+.nav-list {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    animation: fadeIn 1.4s ease-in-out;
+    transition: transform 0.3s ease-in-out;
 }
 
-/* Effet au survol des liens */
-nav ul li a:hover {
-    background-color: rgb(78, 243, 28); /* Couleur de fond plus claire */
-    transform: scale(1.1); /* Légère augmentation de la taille */
+.nav-list a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    font-size: 1rem;
+    position: relative;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    transition: all 0.4s ease;
+    background: transparent;
 }
 
-/* Animation d'apparition */
-@keyframes slideIn {
-    0% {
-        opacity: 0;
-        transform: translateY(-30px);
+.nav-list a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive Nav Toggle */
+.menu-toggle {
+    display: none;
+}
+
+.menu-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 2; /* Pour s'assurer que l'icône soit au-dessus du menu */
+}
+
+.menu-icon span {
+    display: block;
+    width: 30px;
+    height: 3px;
+    background: white;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+/* Animation du menu au survol du menu burger */
+.menu-toggle:checked ~ .nav-list {
+    transform: translateY(0); /* On ramène le menu en position visible */
+}
+
+
+/* Style du menu lorsque l'icône burger est activée */
+@media (max-width: 768px) {
+    .menu-icon {
+        display: flex;
+        position: relative;
+        z-index: 3; /* Pour éviter les problèmes de superposition */
     }
-    100% {
+
+    .nav-list {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: auto;
+        height: auto;
+        background: rgba(0, 0, 0, 0.85); /* Fond semi-transparent */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 2rem 0;
+        transform: translateY(-100%); /* Menu caché au départ */
+        transition: transform 0.8s ease-in-out;
+        z-index: 1; /* Pour garantir que le menu soit en dessous de l'icône burger */
+    }
+
+    .nav-list a {
+        color: #FFA500;
+        font-size: 1.1rem;
+        font-weight: 900;
+        text-decoration: none;
+        text-transform:capitalize;
+        letter-spacing: 1px;
+        padding: 10px 15px;
+        border-radius: 30px;
+        transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .nav-list a:hover {
+        background: rgb(24, 127, 245);
+        transform: scale(1.05);
+    }
+
+    /* Animation de l'icône burger */
+    .menu-toggle:checked + .menu-icon span:nth-child(1) {
+        transform: rotate(45deg);
+        position: relative;
+        top: 8px;
+    }
+    .menu-toggle:checked + .menu-icon span:nth-child(2) {
+        opacity: 0;
+    }
+    .menu-toggle:checked + .menu-icon span:nth-child(3) {
+        transform: rotate(-45deg);
+        position: relative;
+        bottom: 8px;
+    }
+}
+
+
+/* Image Section */
+.image-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    animation: fadeIn 1.6s ease;
+}
+
+.header-image {
+    width: 60px; /* Adjust size as needed */
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    object-fit: cover;
+}
+
+.header-image:hover {
+    transform: rotate(360deg) scale(1.2);
+    box-shadow: 0 8px 16px rgba(255, 255, 0, 0.7);
+}
+
+/* Keyframes for Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
         opacity: 1;
         transform: translateY(0);
     }
 }
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
 
 /* Application de l'animation à l'en-tête */
 header {
@@ -158,6 +300,7 @@ form button:hover {
     }
 }
 
+
 .alert {
     position: fixed;
     top: 50%;
@@ -205,7 +348,6 @@ form button:hover {
 
 
 
-
 /* Style du bouton d'ouverture */
 .open-modal-button {
     padding: 10px 20px;
@@ -222,8 +364,58 @@ form button:hover {
     background-color: #0056b3;
 }
 
-/* Style de la modale */
+
+
 .modal {
+    display: none; /* Cache la modale par défaut */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* S'assurer que la modale est au-dessus du contenu */
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 88%;
+    max-width: 600px;
+    max-height: 100%; /* Limite la hauteur de la modale */
+    overflow-y: auto; /* Permet le défilement vertical si le contenu dépasse */
+    text-align: left;
+    animation: fadeIn 0.3s ease-in-out; /* Animation d'ouverture */
+    position: relative; /* Nécessaire pour le bouton de fermeture */
+}
+
+.close-button {
+    font-size: 2rem;
+    color: #000;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+
+
+
+
+/* Spinner d'attente */
+.spinner {
     position: fixed;
     top: 0;
     left: 0;
@@ -233,73 +425,35 @@ form button:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s, opacity 0.3s ease;
+    z-index: 9999;
 }
 
-/* Contenu de la modale */
-.modal-content {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    text-align: left;
-    max-height: 90vh; /* Hauteur maximale pour éviter que le contenu dépasse */
-    overflow-y: auto; /* Activer le défilement si le contenu dépasse la hauteur */
+.spinner-content {
+    text-align: center;
+    color: white;
 }
 
-/* Style pour les titres dans la modale */
-.modal-content h2 {
-    margin-top: 0;
-    color: #333;
-    font-size: 24px;
+.spinner-image {
+    width: 80px; /* Ajustez la taille selon vos besoins */
+    height: auto;
+    margin-bottom: 10px;
 }
 
-/* Style pour le texte dans la modale */
-.modal-content p {
-    line-height: 1.6;
-    color: #555;
+.loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin: 10px auto;
+    animation: spin 1s linear infinite;
 }
 
-/* Liste ordonnée dans la modale */
-.modal-content ol {
-    padding-left: 20px;
-    margin: 10px 0;
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-/* Signature dans la modale */
-.modal-content .signature {
-    text-align: right;
-    font-style: italic;
-    color: #777;
-}
-
-/* Style du bouton de fermeture */
-.close-button {
-    float: right;
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-}
-
-.close-button:hover {
-    color: #ff0000;
-}
-
-/* Apparition de la modale */
-.modal.visible {
-    visibility: visible;
-    opacity: 1;
-}
-
-/* Responsivité pour les petits écrans */
-@media (max-width: 600px) {
-    .modal-content {
-        padding: 10px;
-        width: 90%; /* Réduire la largeur pour les petits écrans */
-    }
+.hidden {
+    display: none;
 }

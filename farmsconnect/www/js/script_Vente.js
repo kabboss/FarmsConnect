@@ -1,19 +1,26 @@
 document.getElementById('vente-form').addEventListener('submit', function(e) {
     e.preventDefault();
 
+    const prixUnitaire = parseFloat(document.getElementById('prix').value);
+    const commission = prixUnitaire * 0.04;
+    const fraisLivraison = 650;
+    const prixFinal = prixUnitaire + commission + fraisLivraison;
+    
     const animal = {
         categorie: document.getElementById('categorie').value,
         nombre: document.getElementById('nombre').value,
         poids: document.getElementById('poids').value,
-        prix: document.getElementById('prix').value,
+        prix: prixUnitaire,
+        prixFinal: prixFinal.toFixed(2), // Inclure le prix final calculé
         images: [],
         contactPrincipal: document.getElementById('contact-principal').value,
         contactSecondaire: document.getElementById('contact-secondaire').value,
         emailVendeur: document.getElementById('email-vendeur').value,
         codeVendeur: 'V' + Date.now(),
     };
-
-    const files = document.getElementById('images').files;
+    
+    console.log(animal);
+        const files = document.getElementById('images').files;
     if (files.length === 0) {
         showAlert("Veuillez sélectionner au moins une image.");
         return;

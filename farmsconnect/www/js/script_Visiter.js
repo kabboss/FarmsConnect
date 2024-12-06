@@ -1,7 +1,7 @@
+
 document.addEventListener('DOMContentLoaded', function() {
     const animalsList = document.getElementById('animals-list');
-
-    // Récupérer les annonces
+    // Récupérer les annonce
     fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/annonces')
     .then(response => response.json())
     .then(annonces => {
@@ -16,12 +16,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const seeMoreButton = animal.images.length > 1 ? 
                 `<button class="see-more-button" data-animal='${JSON.stringify(animal)}'>Voir plus</button>` : '';
 
+
+            const fraissupp = animal.prix*1.04 +650-animal.prix
+
             // Construction du contenu de la carte de l'animal
             animalCard.innerHTML = `
                 <h3>(${animal.categorie})</h3>
                 <p>Nombre : ${animal.nombre}</p>
                 <p>Poids par animal : ${animal.poids} kg</p>
-                <p>Prix unitaire : ${animal.prix} FCFA</p>
+                <p>Prix unitaire : ${animal.prix*1.04 +650} FCFA</p>
                 <p>Code du vendeur : ${animal.codeVendeur}</p>
                 <div class="images-section">
                     <img src="${mainImage}" alt="Image de l'animal" class="main-image"/>
@@ -30,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     ${seeMoreButton}
                 </div>
+
                 <button class="buy-button" data-animal='${JSON.stringify(animal)}'>Acheter ce produit</button>
             `;
 

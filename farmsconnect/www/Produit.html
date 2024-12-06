@@ -11,16 +11,32 @@
 
 </head>
 <body>
-    <header>
-        <h2>Produits</h2>
-        <nav>
-            <ul>
+    <header class="header">
+        <div class="logo-container">
+            <h2 class="logo">Produits</h2>
+        </div>
+        <nav class="nav">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul class="nav-list">
                 <li><a href="Acceuil.html">Accueil</a></li>
-                <li><a href="Visiteur.html">Visiter les poulets mis en vente</a></li>
+                <li><a href="Vente.html">Vendre</a></li>
+                <li><a href="Visiteur.html">Visiter et Acheter (mis en ligne)</a></li>
+                <li><a href="Produit.html">Acheter Avec FarmsConnect</a></li>
+                <li><a href="Visiteur.html">A propos de FarmConnect</a></li>
+                <li><a href="contact.html">Service client</a></li>
             </ul>
         </nav>
+        <div class="image-container">
+            <img src="img/FarmsConnect.jpg" alt="Farms Connect" class="header-image">
+        </div>
     </header>
-
+                
+    
 
     <section class="categories">
         <div class="category-list">
@@ -124,7 +140,7 @@
                 </select>
             </div>
 
-            <button onclick="acheterProduit('Poulet de Chair', 6000, 'quantity-poulet-chair', 'weight-poulet-chair', 'option-traitement-poulet-chair', 'abattage-type-poulet-chair')">Acheter</button>
+            <button onclick="acheterProduit('poulet chair', 6000, 'quantity-poulet-chair', 'weight-poulet-chair', 'option-traitement-poulet-chair', 'abattage-type-poulet-chair')">Acheter</button>
         </div>
 
         <!-- Poulet Amélioré -->
@@ -153,7 +169,7 @@
                 </select>
             </div>
 
-            <button onclick="acheterProduit('Poulet Local Amélioré', 7500, 'quantity-poulet-ameliore', 'weight-poulet-ameliore', 'option-traitement-poulet-ameliore', 'abattage-type-poulet-ameliore')">Acheter</button>
+            <button onclick="acheterProduit('poulet ameliore', 7500, 'quantity-poulet-ameliore', 'weight-poulet-ameliore', 'option-traitement-poulet-ameliore', 'abattage-type-poulet-ameliore')">Acheter</button>
         </div>
 
         <!-- Poule Pondeuse -->
@@ -188,6 +204,20 @@
     </div>
 </section>
 
+<!-- Message de chargement -->
+<div id="loadingMessage" class="hidden">
+    <div class="spinner-container">
+        <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
+        <div class="spinner"></div>
+    </div>
+    <p class="loading-text">Traitement de votre commande, veuillez patienter...</p>
+</div>
+
+
+
+
+
+
 
 <script>
     function updateAbattageOptions(productId) {
@@ -203,67 +233,11 @@
 }
 
 </script>
-
-
-<!-- Message de chargement -->
-<div id="loadingMessage" class="hidden">
-    <div class="spinner-container">
-        <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
-        <div class="spinner"></div>
-    </div>
-    <p class="loading-text">Traitement de votre commande, veuillez patienter...</p>
-</div>
-
   
 
 <script>
-    // Afficher le message de patience
-function showLoadingMessage() {
-    const loadingMessage = document.getElementById("loadingMessage");
-    loadingMessage.classList.remove("hidden");
-}
-
-// Masquer le message de patience
-function hideLoadingMessage() {
-    const loadingMessage = document.getElementById("loadingMessage");
-    loadingMessage.classList.add("hidden");
-}
-
-// Gestion du clic sur le bouton Acheter
-function acheterProduit() {
-    showLoadingMessage(); // Afficher le message de chargement
-
-    // Simuler une requête serveur avec setTimeout
-    setTimeout(() => {
-        const serverResponse = Math.random() > 0.2; // Simule une réponse avec succès ou échec (80% de succès)
-
-        if (serverResponse) {
-            alert("Achat réussi ! Merci pour votre confiance.");
-        } else {
-            alert("Échec de l'achat. Veuillez réessayer.");
-        }
-
-        hideLoadingMessage(); // Cacher le message de chargement
-    }, 3000); // Temps simulé : 3 secondes
-}
 
 </script>
-
-
-
-
-
-
-    
-
-<!-- Alert Box -->
-<div class="alert hidden" id="customAlert">
-    <div class="alert-content">
-        <img src="img/FarmsConnect.jpg" alt="FarmsConnect Logo" class="alert-image">
-        <p id="alertMessage"></p>
-        <button class="alert-close-button" onclick="closeAlert()">×</button>
-    </div>
-</div>
 
 
 
@@ -297,6 +271,11 @@ function acheterProduit() {
 
 
 function acheterProduit(nomProduit, prix, quantityId, weightId) {
+
+    // Afficher le message de chargement
+    const loadingMessage = document.getElementById("loadingMessage");
+    loadingMessage.classList.remove("hidden");
+
     const username = localStorage.getItem('username');
     const email = localStorage.getItem('email');
     const contact = localStorage.getItem('contact');
@@ -337,14 +316,32 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
 
     const poidsTotal = quantity * weight;
 
-    // Définir la variable traitement avant de l'utiliser
-    const traitement = document.getElementById(`option-traitement-${nomProduit.toLowerCase()}`).value || "Non spécifié";
-    let typeAbattage = null;
+// Définir la variable traitement avant de l'utiliser
+// Fonction pour normaliser les IDs
+function normalizeId(nomProduit) {
+    return nomProduit.toLowerCase().replace(/\s+/g, '-');
+}
 
-    // Vérifier si des options d'abattage sont affichées
-    if (traitement === "abattu") {
-        typeAbattage = document.getElementById(`abattage-type-${nomProduit.toLowerCase()}`).value;
-    }
+// Définir la variable traitement avant de l'utiliser
+const produitId = `option-traitement-${normalizeId(nomProduit)}`;
+const traitementElement = document.getElementById(produitId);
+if (!traitementElement) {
+    console.error(`L'élément avec l'ID ${produitId} est introuvable.`);
+    return;
+}
+
+console.log('Produit sélectionné :', nomProduit);
+console.log('ID recherché :', produitId);
+
+const traitement = traitementElement.value;
+let typeAbattage = null;
+
+// Vérifier si des options d'abattage sont affichées
+if (traitement === "abattu") {
+    typeAbattage = document.getElementById(`abattage-type-${normalizeId(nomProduit)}`).value;
+}
+
+
 
     const orderDetails = {
         username: username,
@@ -374,14 +371,16 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
         } else {
             throw new Error('Erreur lors de la commande');
         }
+
     })
     .then(data => {
         showAlert('Commande passée avec succès! Nous vous avons envoyé un mail contenant les détails de votre commande.');
         console.log(data);
+        loadingMessage.classList.add("hidden");
     })
     .catch(error => {
         console.error('Erreur lors de la commande :', error);
-        alert('Erreur lors de la commande.');
+        showAlert('Erreur lors de la commande.');
     });
 }
 
@@ -461,5 +460,14 @@ window.addEventListener('click', function(event) {
 </footer>
 
 <script src="js/script_Acceuil.js"></script>
+
+<div class="alert hidden" id="customAlert">
+    <div class="alert-content">
+        <img src="img/FarmsConnect.jpg" alt="FarmsConnect Logo" class="alert-image">
+        <p id="alertMessage"></p>
+        <button class="alert-close-button" onclick="closeAlert()">×</button>
+    </div>
+</div>
+
 </body>
 </html>

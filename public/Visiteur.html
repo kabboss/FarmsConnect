@@ -9,18 +9,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 </head>
-<body>
-    <header>
-        <h1>Animaux Disponibles</h1>
-        <nav>
+<body>    
+
+    <header class="header">
+     <div class="logo-container">
+            <h2 class="logo">Animaux Disponibles</h2>
+        </div>
+        <nav class="nav">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
             <ul class="nav-list">
                 <li><a href="Acceuil.html">Accueil</a></li>
                 <li><a href="Vente.html">Vendre</a></li>
                 <li><a href="apropos.html">À Propos</a></li>
             </ul>
         </nav>
+        <div class="image-container">
+            <img src="img/FarmsConnect.jpg" alt="Farms Connect" class="header-image">
+        </div>
     </header>
-    
+
+
     <button class="open-modal-button">Note Importante pour les Visiteurs</button>
 
     <!-- Fenêtre modale pour les visiteurs -->
@@ -144,6 +157,7 @@ sendEmailAcheteur(emailSubject, emailContentAcheteur, visitorInfo.email);
         Détails de l'achat :
         Catégorie : ${animal.categorie}
         Prix unitaire : ${animal.prix} FCFA
+        Prix net a payer :${animal.prix*1.04 +650} FCFA
         Code du vendeur : ${animal.codeVendeur}
         Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? `(secondaire : ${animal.contactSecondaire})` : ''}
         

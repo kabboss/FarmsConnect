@@ -10,8 +10,6 @@
 </head>
 <body>
 
-<div class="blur-background"></div> <!-- Couche floue en arrière-plan -->
-
 <header>
     <h2 class="Bienvenue">Bienvenue sur FarmsConnect Burkina</h2>
 </header>
@@ -598,37 +596,49 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
  <!-- Bouton -->
-<div class="button-container1">
+ <div class="button-container1">
     <button class="open-modal-button" onclick="openModal()">En savoir plus sur FarmsConnect</button>
 </div>
 
+<!-- Fenêtre modale -->
+<div class="modal hidden" id="farmsConnectModal">
+    <div class="modal-content">
+        <span class="close-button1" onclick="closeModal()">×</span>
+            <p>
+                <strong>Bienvenue sur FarmsConnect !</strong><br><br>
+                <em>Révolutionner l'élevage au Burkina Faso, un clic à la fois.</em><br><br>
 
- <!-- Fenêtre modale -->
- <div class="modal" id="farmsConnectModal">
-     <div class="modal-content">
-         <span class="close-button1" onclick="closeModal()">×</span>
-         <div class="description">
-             <div class="blur-background"></div>
-             <p>
-                <strong>Bienvenue sur FarmsConnect !<br><br></strong>
-                 
-                 Imaginez un Burkina Faso où les éleveurs, souvent isolés et confrontés à de nombreux défis, peuvent accéder en un clic à un marché national et international. Avec FarmsConnect, vendre un bétail ou une poule n’a jamais été aussi simple et transparent !<br><br>
-                 
-                 Fini les négociations interminables et les intermédiaires qui réduisent les profits des éleveurs. FarmsConnect, c’est une plateforme moderne, conçue pour connecter les éleveurs directement aux acheteurs, aux vétérinaires, et aux fournisseurs. C’est le supermarché digital de l’élevage où chacun trouve son compte :<br><br>
-                 
-                 <strong>Pour les éleveurs :</strong> Une opportunité unique de vendre leurs produits à un prix juste, peu importe leur localisation.<br>
-                 <strong>Pour les consommateurs :</strong> L’accès à des produits certifiés, traçables, et de qualité.<br>
-                 <strong>Pour tous les acteurs :</strong> Un écosystème numérique qui simplifie les transactions et valorise l’élevage, pilier de notre économie.<br><br>
-                 
-                 Grâce à des outils modernes, FarmsConnect permet aussi aux éleveurs de mieux gérer leurs ressources, surveiller la santé de leurs animaux, et optimiser leurs ventes. C’est une révolution pour l’élevage au Burkina Faso : plus connecté, plus efficace, et durable.<br><br>
-                 
-                 Rejoignez-nous pour construire un avenir où éleveurs et consommateurs grandissent ensemble, et où la technologie se met au service de notre tradition.<br><br>
-                 
-                 <strong>FarmsConnect :</strong> connectons des opportunités pour une transformation durable !
-             </p>
-         </div>
-     </div>
- </div>
+                Imaginez un monde où les éleveurs, souvent isolés et confrontés à des obstacles économiques, peuvent accéder facilement à un marché national et international. C’est exactement ce que propose <strong>FarmsConnect</strong> : une plateforme numérique qui relie directement les éleveurs aux acheteurs, vétérinaires, fournisseurs, et même aux décideurs politiques.
+                <br><br>
+                <strong>Fini les contraintes du passé.</strong> Les échanges sur les marchés locaux sont souvent imprévisibles, avec des prix opaques et des intermédiaires qui compliquent les affaires. Mais avec FarmsConnect, nous transformons le secteur de l'élevage : une plateforme simple, transparente, et <strong>sans escrocs.</strong>
+                <br><br>
+                <strong>FarmsConnect, c’est plus qu’un simple marché numérique.</strong> C’est un écosystème intelligent qui met la technologie au service de nos éleveurs. Grâce à des outils modernes et des données en temps réel, nos utilisateurs peuvent suivre la santé de leurs animaux, optimiser leurs ressources et éviter les pertes.
+                <br><br>
+                Pour les éleveurs, c'est une opportunité unique de vendre leurs produits à un large public, peu importe leur localisation. Pour les consommateurs, <strong>c’est l’assurance de produits certifiés, traçables, et au prix juste.</strong> Et pour les décideurs, c’est une mine de données précieuses pour améliorer les politiques agricoles.
+                <br><br>
+                <strong>FarmsConnect, c’est la digitalisation de l’élevage.</strong> En soutenant cette initiative, vous soutenez une transformation durable qui renforcera l’économie, améliorera la sécurité alimentaire, et autonomisera nos éleveurs.
+                <br><br>
+                <strong>Ensemble, nous connectons des opportunités.</strong> Merci de faire partie de cette révolution !
+            </p>
+    </div>
+</div>
+
+
+<script>
+    function openModal() {
+    const modal = document.getElementById('farmsConnectModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('visible');
+}
+
+function closeModal() {
+    const modal = document.getElementById('farmsConnectModal');
+    modal.classList.remove('visible');
+    modal.classList.add('hidden');
+}
+
+</script>
+
 
  <div class="terms-container">
     <a href="conditiondutili.html" class="terms-button">Voir les conditions d'utilisation</a>

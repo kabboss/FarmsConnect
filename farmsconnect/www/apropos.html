@@ -12,14 +12,35 @@
 </head>
 <body>
   <header class="header">
-    <nav class="navbar">
-      <a href="index.html" class="logo">FarmsConnect</a>
-      <ul class="nav-links">
-        <li><a href="index.html">Page de connexion</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+    <div class="header-container">
+        <h1>FarmsConnect</h1>
+        <!-- Icône pour menu burger -->
+        <div class="menu-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav class="nav">
+            <ul>
+                <li><a href="index.html">Page de connexion</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<script>
+  const menuIcon = document.querySelector(".menu-icon");
+  const nav = document.querySelector(".nav");
+
+  menuIcon.addEventListener("click", () => {
+      menuIcon.classList.toggle("active");
+      nav.classList.toggle("active");
+  });
+</script>
+
+<br>
+<br>
 
   <main>
     <section class="about-section">

@@ -9,18 +9,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 </head>
-<body>
-    <header>
-        <h1>Animaux Disponibles</h1>
-        <nav>
+<body>    
+
+    <header class="header">
+     <div class="logo-container">
+            <h2 class="logo">Animaux Disponibles</h2>
+        </div>
+        <nav class="nav">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
             <ul class="nav-list">
                 <li><a href="Acceuil.html">Accueil</a></li>
                 <li><a href="Vente.html">Vendre</a></li>
-                <li><a href="apropos.html">À Propos</a></li>
+                <li><a href="Visiteur.html">Visiter et Acheter (mis en ligne)</a></li>
+                <li><a href="Produit.html">Acheter Avec FarmsConnect</a></li>
+                <li><a href="Visiteur.html">A propos de FarmConnect</a></li>
+                <li><a href="contact.html">Service client</a></li>
             </ul>
         </nav>
+        <div class="image-container">
+            <img src="img/FarmsConnect.jpg" alt="Farms Connect" class="header-image">
+        </div>
     </header>
-    
+
+
     <button class="open-modal-button">Note Importante pour les Visiteurs</button>
 
     <!-- Fenêtre modale pour les visiteurs -->
@@ -62,6 +78,21 @@
         <!-- Les informations sur les animaux à vendre s'afficheront ici -->
     </section>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     <script>
 
 function handlePurchase(animal) {

@@ -10,17 +10,32 @@
 
 </head>
 <body>
-    <header>
-        <h1>Vendre des poulets </h1>
-        <nav>
-            <ul>
-                <li><a href="Acceuil.html">Accueil</a></li>
-                <li><a href="Visiteur.html">Poulet mis en Vente</a></li>
-                <li><a href="apropos.html">À Propos</a></li>
 
+    <header class="header">
+        <div class="logo-container">
+            <h2 class="logo">Vendre poulets</h2>
+        </div>
+        <nav class="nav">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul class="nav-list">
+                <li><a href="Acceuil.html">Accueil</a></li>
+                <li><a href="Vente.html">Vendre</a></li>
+                <li><a href="Visiteur.html">Visiter et Acheter (mis en ligne)</a></li>
+                <li><a href="Produit.html">Acheter Avec FarmsConnect</a></li>
+                <li><a href="Visiteur.html">A propos de FarmConnect</a></li>
+                <li><a href="contact.html">Service client</a></li>
             </ul>
         </nav>
+        <div class="image-container">
+            <img src="img/FarmsConnect.jpg" alt="Farms Connect" class="header-image">
+        </div>
     </header>
+
 
 
 <!-- Spinner d'attente avec une image -->
@@ -39,11 +54,11 @@
         <form id="vente-form">
             <label for="categorie">Catégorie :</label>
             <select id="categorie" name="categorie">
-                <option value="volaille">Poulet local</option>
-                <option value="volaille">Poulet de chair</option>
-                <option value="volaille">Poulet Ameliorer</option>
-                <option value="volaille">Poule Pondeuse</option>
-                <div class="invalid-feedback">Veuillez choisir une catégorie.</div>
+                <option value="poulet-local">Poulet local</option>
+                <option value="poulet-chair">Poulet de chair</option>
+                <option value="poulet-ameliorer">Poulet Amélioré</option>
+                <option value="poule-pondeuse">Poule Pondeuse</option>
+            <div class="invalid-feedback">Veuillez choisir une catégorie.</div>
 
             </select>
     
@@ -69,6 +84,71 @@
             <input type="email" id="email-vendeur" name="email-vendeur" placeholder="Ex: vendeur@example.com">
     
             <button class="open-modal-button">Note Importante aux Vendeurs</button>
+<!-- Fenêtre modale -->
+<div id="modal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Note Importante aux Vendeurs</h2>
+        <p><strong>Chers vendeurs,</strong></p>
+        <p>
+            Nous vous remercions de faire partie de la communauté <strong>FarmsConnect</strong>. Voici une information importante sur la gestion des ventes et des certifications sur notre plateforme :
+        </p>
+        <ol>
+            <li>
+                <strong>Notification lors d'une commande</strong><br>
+                Lorsqu’un client clique sur votre annonce pour acheter un produit, vous recevrez une notification via votre compte vendeur. Cette notification vous informera qu’une commande est en cours de traitement par FarmsConnect.
+            </li>
+            <li>
+                <strong>Certification des produits</strong><br>
+                FarmsConnect se charge de certifier vos produits avant de les livrer au client. Un vétérinaire de notre réseau inspectera les animaux pour garantir leur qualité et leur conformité.
+            </li>
+            <li>
+                <strong>Livraison au client</strong><br>
+                Après la certification, FarmsConnect organisera la livraison directement au client. Vous n’aurez pas à vous occuper de la logistique ou du transport.
+            </li>
+            <li>
+                <strong>Commissions</strong><br>
+                Une commission de <strong>4%</strong> sera appliquée sur chaque vente effectuée sur la plateforme. Cette commission est prélevée sur le montant total de la transaction, y compris le prix de l'animal et les frais supplémentaires.
+            </li>
+            <li>
+                <strong>Frais de Livraison</strong><br>
+                Des frais de livraison de <strong>650 FCFA</strong> seront appliqués à chaque commande, à moins que le client ne choisisse l'option de retrait en personne . Ces frais sont fixés par FarmsConnect et sont appliqués indépendamment du prix de l'animal.
+            </li>
+        </ol>
+        <p>
+            <strong>Ce processus permet de garantir une qualité optimale pour vos produits et d’établir une relation de confiance avec les clients.</strong>
+        </p>
+        <p>Pour toute question ou assistance, veuillez contacter notre service support.</p>
+        <p class="signature">Cordialement,<br><em>L’équipe FarmsConnect</em></p>
+    </div>
+    </div>
+    
+
+
+<script>
+    // Sélectionner le bouton d'ouverture, la modale et le bouton de fermeture
+const openModalButton = document.querySelector('.open-modal-button');
+const modal = document.getElementById('modal');
+const closeButton = document.querySelector('.close-button');
+
+// Lorsque le bouton "Note Importante aux Vendeurs" est cliqué
+openModalButton.addEventListener('click', () => {
+    modal.style.display = 'flex'; // Afficher la modale
+});
+
+// Lorsque le bouton de fermeture est cliqué
+closeButton.addEventListener('click', () => {
+    modal.style.display = 'none'; // Cacher la modale
+});
+
+// Fermer la modale si l'utilisateur clique en dehors de la fenêtre modale
+window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+        modal.style.display = 'none'; // Cacher la modale
+    }
+});
+
+</script>
 
 
 <script>
@@ -121,38 +201,6 @@
 
 </script>
 
-
-
-            <!-- Fenêtre modale -->
-    <div id="modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h2>Note Importante aux Vendeurs</h2>
-            <p><strong>Chers vendeurs,</strong></p>
-            <p>
-                Nous vous remercions de faire partie de la communauté <strong>FarmsConnect</strong>. Voici une information importante sur la gestion des ventes et des certifications sur notre plateforme :
-            </p>
-            <ol>
-                <li>
-                    <strong>Notification lors d'une commande</strong><br>
-                    Lorsqu’un client clique sur votre annonce pour acheter un produit, vous recevrez une notification via votre compte vendeur. Cette notification vous informera qu’une commande est en cours de traitement par FarmsConnect.
-                </li>
-                <li>
-                    <strong>Certification des produits</strong><br>
-                    FarmsConnect se charge de certifier vos produits avant de les livrer au client. Un vétérinaire de notre réseau inspectera les animaux pour garantir leur qualité et leur conformité.
-                </li>
-                <li>
-                    <strong>Livraison au client</strong><br>
-                    Après la certification, FarmsConnect organisera la livraison directement au client. Vous n’aurez pas à vous occuper de la logistique ou du transport.
-                </li>
-            </ol>
-            <p>
-                <strong>Ce processus permet de garantir une qualité optimale pour vos produits et d’établir une relation de confiance avec les clients.</strong>
-            </p>
-            <p>Pour toute question ou assistance, veuillez contacter notre service support.</p>
-            <p class="signature">Cordialement,<br><em>L’équipe FarmsConnect</em></p>
-        </div>
-    </div>
             <button type="submit">Ajouter l'annonce</button>
         </form>
     </section>
