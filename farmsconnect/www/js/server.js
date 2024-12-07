@@ -647,6 +647,118 @@ app.get('/api/map', async (req, res) => {
 
 
 
+// Regroupe annonce 
+
+
+
+
+const router = express.Router();
+
+// Route pour récupérer les annonces classées par catégorie et par fourchette de prix avec pagination
+router.get('/annonces', async (req, res) => {
+    try {
+        // Récupérer les paramètres de pagination depuis la requête
+        const page = parseInt(req.query.page) || 1;  // Par défaut page 1 si non spécifié
+        const limit = parseInt(req.query.limit) || 10;  // Par défaut 10 résultats par page
+
+        // Calculer l'index de départ
+        const skip = (page - 1) * limit;
+
+        // Tris et groupement par catégorie et fourchette de prix avec pagination
+        const annonces = await Annonce.aggregate([
+            { $sort: { categorie: 1, prix: 1 } },
+
+            // Grouper par catégorie
+            {
+                $group: {
+                    _id: "$categorie", // Groupement par catégorie
+                    annonces: { $push: "$$ROOT" }, // Ajouter tous les produits dans un tableau
+                }
+            },
+
+            // Optionnel : Utiliser $bucket pour diviser les prix en tranches
+            {
+                $project: {
+                    _id: 1,
+                    annonces: {
+                        $map: {
+                            input: "$annonces",
+                            as: "annonce",
+                            in: {
+                                $let: {
+                                    vars: {
+                                        priceBucket: {
+                                            $switch: {
+                                                branches: [
+                                                    { case: { $lte: ["$$annonce.prix", 500] }, then: "0-500" },
+                                                    { case: { $lte: ["$$annonce.prix", 1000] }, then: "501-1000" },
+                                                    { case: { $lte: ["$$annonce.prix", 2000] }, then: "1001-2000" },
+                                                    { case: { $lte: ["$$annonce.prix", 5000] }, then: "2001-5000" },
+                                                    { case: { $gt: ["$$annonce.prix", 5000] }, then: "5000+" }
+                                                ],
+                                                default: "Autres",
+                                            }
+                                        }
+                                    },
+                                    in: {
+                                        annonce: "$$annonce",
+                                        priceBucket: "$$priceBucket"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            // Grouper les produits par fourchette de prix
+            {
+                $group: {
+                    _id: { categorie: "$_id", prixRange: "$annonces.priceBucket" }, // Catégorie et fourchette de prix
+                    produits: { $push: "$annonces" }
+                }
+            },
+
+            // Tri final des résultats
+            {
+                $sort: { "_id.categorie": 1, "_id.prixRange": 1 }
+            },
+
+            // Appliquer le skip et le limit pour la pagination
+            { $skip: skip },
+            { $limit: limit }
+        ]);
+
+        // Obtenir le nombre total de résultats (sans pagination)
+        const totalCount = await Annonce.countDocuments();
+
+        // Calculer le nombre total de pages
+        const totalPages = Math.ceil(totalCount / limit);
+
+        // Réponse structurée avec pagination
+        res.json({
+            totalPages,
+            currentPage: page,
+            totalCount,
+            annonces
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erreur lors de la récupération des annonces' });
+    }
+});
+
+module.exports = router;
+
+
+
+
+
+
+
+
+
+
 
 
 // Configuration du serveur

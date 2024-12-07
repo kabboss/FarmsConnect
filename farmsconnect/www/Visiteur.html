@@ -70,14 +70,160 @@
         </div>
     </div>
     
-    <div id="animal-list">
-        <!-- Les animaux ajoutés seront affichés ici -->
-    </div>
-    
-    <section class="animals-list" id="animals-list">
-        <!-- Les informations sur les animaux à vendre s'afficheront ici -->
-    </section>
+<!-- Section pour les boutons de catégorie -->
+<div id="categories-buttons">
+    <button class="category-button" data-category="poulet-local">Poulet local</button>
+    <button class="category-button" data-category="poulet-chair">Poulet de chair</button>
+    <button class="category-button" data-category="poulet-ameliorer">Poulet Amélioré</button>
+    <button class="category-button" data-category="poule-pondeuse">Poule Pondeuse</button>
+</div>
 
+<!-- Section pour les boutons de prix -->
+<div id="price-buttons" class="hidden">
+    <button class="price-button" data-price="0-500">0-500</button>
+    <button class="price-button" data-price="501-1000">501-1000</button>
+    <button class="price-button" data-price="1001-2000">1001-2000</button>
+    <button class="price-button" data-price="2001-5000">2001-5000</button>
+    <button class="price-button" data-price="5000+">5000+</button>
+</div>
+
+<!-- Section où les annonces filtrées seront affichées -->
+<section class="animals-list" id="animals-list"></section>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const animalsList = document.getElementById('animals-list');
+    const categoriesButtons = document.querySelectorAll('.category-button');
+    const priceButtons = document.querySelectorAll('.price-button');
+    const priceButtonsSection = document.getElementById('price-buttons');
+    let selectedCategory = '';
+    let selectedPriceRange = '';
+
+    // Fonction pour afficher les annonces
+    function displayAnnonces(annonces) {
+        animalsList.innerHTML = '';  // Vider la section des annonces avant de les afficher
+        annonces.forEach(animal => {
+            const animalCard = document.createElement('div');
+            animalCard.classList.add('animal-card');
+            
+            // Sélection de l'image principale
+            const mainImage = animal.images[0];
+
+            // Création du bouton "Voir plus"
+            const seeMoreButton = animal.images.length > 1 ? 
+                `<button class="see-more-button" data-animal='${JSON.stringify(animal)}'>Voir plus</button>` : '';
+
+            // Construction du contenu de la carte de l'animal
+            animalCard.innerHTML = `
+                <h3>(${animal.categorie})</h3>
+                <p>Nombre : ${animal.nombre}</p>
+                <p>Poids par animal : ${animal.poids} kg</p>
+                <p>Prix unitaire : ${animal.prix*1.04 +650} FCFA</p>
+                <p>Code du vendeur : ${animal.codeVendeur}</p>
+                <div class="images-section">
+                    <img src="${mainImage}" alt="Image de l'animal" class="main-image"/>
+                    <div class="additional-images hidden">
+                        ${animal.images.slice(1).map(img => `<img src="${img}" alt="Image supplémentaire" class="additional-image" />`).join('')}
+                    </div>
+                    ${seeMoreButton}
+                </div>
+
+                <button class="buy-button" data-animal='${JSON.stringify(animal)}'>Acheter ce produit</button>
+            `;
+            animalsList.appendChild(animalCard);
+        });
+    }
+
+    // Récupérer les annonces depuis l'API
+    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/annonces')
+    .then(response => response.json())
+    .then(annonces => {
+        // Fonction pour appliquer le filtrage en fonction de la catégorie et du prix
+        function filterAnnonces() {
+            let filteredAnnonces = annonces;
+
+            // Filtrage par catégorie
+            if (selectedCategory) {
+                filteredAnnonces = filteredAnnonces.filter(animal => animal.categorie === selectedCategory);
+            }
+
+            // Filtrage par fourchette de prix
+            if (selectedPriceRange) {
+                filteredAnnonces = filteredAnnonces.filter(animal => {
+                    const price = animal.prix * 1.04 + 650; // Prix final avec frais
+                    if (selectedPriceRange === '0-500') return price <= 500;
+                    if (selectedPriceRange === '501-1000') return price > 500 && price <= 1000;
+                    if (selectedPriceRange === '1001-2000') return price > 1000 && price <= 2000;
+                    if (selectedPriceRange === '2001-5000') return price > 2000 && price <= 5000;
+                    if (selectedPriceRange === '5000+') return price > 5000;
+                    return false;
+                });
+            }
+
+            // Afficher les annonces filtrées
+            displayAnnonces(filteredAnnonces);
+        }
+
+        // Quand l'utilisateur clique sur une catégorie
+        categoriesButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                selectedCategory = button.getAttribute('data-category');
+                priceButtonsSection.classList.remove('hidden'); // Afficher les boutons de prix
+                filterAnnonces(); // Appliquer le filtrage
+            });
+        });
+
+        // Quand l'utilisateur clique sur une fourchette de prix
+        priceButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                selectedPriceRange = button.getAttribute('data-price');
+                filterAnnonces(); // Appliquer le filtrage
+            });
+        });
+    });
+});
+
+</script>
+
+
+
+
+
+<script>
+    async function fetchAnnonces(page = 1, limit = 10) {
+    try {
+        const response = await fetch(`/api/annonces?page=${page}&limit=${limit}`);
+        const data = await response.json();
+
+        // Afficher les annonces sur la page
+        console.log(data.annonces);  // Tu peux ensuite manipuler ces données comme tu veux
+
+        // Gérer la pagination (par exemple, afficher un pagination UI)
+        displayPagination(data.totalPages, data.currentPage);
+    } catch (error) {
+        console.error('Erreur lors du chargement des annonces:', error);
+    }
+}
+
+function displayPagination(totalPages, currentPage) {
+    const paginationElement = document.getElementById('pagination');
+    paginationElement.innerHTML = '';  // Vider l'élément de pagination
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.innerText = i;
+        pageButton.disabled = i === currentPage;  // Désactiver le bouton pour la page actuelle
+        pageButton.addEventListener('click', () => fetchAnnonces(i));
+        paginationElement.appendChild(pageButton);
+    }
+}
+
+// Charger les annonces pour la première page (exemple avec limit=10)
+fetchAnnonces(1, 10);
+
+</script>
 
 
 
