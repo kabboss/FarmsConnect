@@ -14,6 +14,7 @@
     <header class="header">
         <div class="logo-container">
             <h2 class="logo">Produits</h2>
+            <h4>Certifier par FarmsConnect</h4>
         </div>
         <nav class="nav">
             <input type="checkbox" id="menu-toggle" class="menu-toggle">
@@ -25,10 +26,10 @@
             <ul class="nav-list">
                 <li><a href="Acceuil.html">Accueil</a></li>
                 <li><a href="Vente.html">Vendre</a></li>
-                <li><a href="Visiteur.html">Visiter et Acheter (mis en ligne)</a></li>
+                <li><a href="Visiteur.html">Visiter</a></li>
                 <li><a href="Produit.html">Acheter Avec FarmsConnect</a></li>
-                <li><a href="apropos.html">A propos de FarmConnect</a></li>
-                <li><a href="contact.html">Service client</a></li>
+                <li><a href="Visiteur.html">A propos</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
         </nav>
         <div class="image-container">
@@ -36,7 +37,17 @@
         </div>
     </header>
                 
-    
+  
+    <button id="refreshButton">Rafraîchir la page</button>
+
+    <script>
+        // Attacher un événement de clic au bouton
+        document.getElementById('refreshButton').addEventListener('click', function() {
+            // Rafraîchir la page lorsque le bouton est cliqué
+            location.reload();
+        });
+    </script>
+
 
     <section class="categories">
         <div class="category-list">

@@ -7,35 +7,60 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    color: #1b94e4;
+    color: #0c08f0;
     background-color: #f5f5f5;
     overflow-x: hidden;
 }
 
-/* Hero section */
-.hero-section {
+/* Hero Section */
+.hero {
     position: relative;
-    height: 100vh;
-    background-image: url('img/FarmsConnect.jpg'); /* Image de fond */
-    background-size: cover;
-    background-position: center;
+    height: auto;
+    background: linear-gradient(135deg, #3a8dff, #4edc8c, #ffa500); /* Dégradé bleu, vert clair, orange */
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     overflow: hidden;
-    animation: gradientShift 15s ease infinite;
 }
 
-.hero-section::before {
+.hero::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5); /* Ombre sombre pour contraster */
+    top: -20%;
+    left: -20%;
+    width: 160%; /* Augmenter un peu pour mieux couvrir l'écran sur les petits appareils */
+    height: 160%;
+    background: radial-gradient(circle, rgb(11, 208, 243), transparent);
+    animation: floatingGradient 4s linear infinite;
     z-index: 1;
+}
+
+/* Responsive Design pour les petits écrans */
+@media (max-width: 768px) {
+    .hero::before {
+        width: 180%; /* Augmenter la taille pour les tablettes */
+        height: 180%;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero::before {
+        width: 110%; /* Augmenter encore pour les smartphones */
+        height: 170%;
+    }
+}
+
+@keyframes floatingGradient {
+    0% {
+        transform: translate(0, 0) rotate(0);
+    }
+    50% {
+        transform: translate(30px, 30px) rotate(45deg); /* Réduire les mouvements */
+    }
+    100% {
+        transform: translate(0, 0) rotate(360deg);
+    }
 }
 
 .hero-content {
@@ -43,35 +68,236 @@ body {
     z-index: 2;
     max-width: 800px;
     padding: 20px;
-    text-align: center;
     color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; /* Centrer tous les éléments horizontalement */
-    text-align: center; /* Centrer le texte */
+    align-items: center;
+    animation: fadeIn 2s ease forwards; /* Assure que le contenu apparait avec une animation */
 }
 
-/* Hero Title */
-.hero-title {
-    font-size: 4rem;
+.hero-content h2 {
+    font-size: 3.5rem;
     font-weight: 900;
-    letter-spacing: 5px;
-    text-transform: uppercase;
     margin-bottom: 20px;
-    animation: slideIn 2s ease-out;
-}
-
-/* Hero Subtitle */
-.hero-subtitle {
-    font-size: 1.5rem;
-    font-weight: 600;
+    text-transform: uppercase;
     letter-spacing: 2px;
-    margin-bottom: 30px;
-    opacity: 0.85;
-    animation: fadeIn 2s ease-in 1s;
+    color: #ffffff;
+    animation: fadeInSlide 1.5s ease-out forwards;
 }
 
+.hero-content p {
+    font-size: 1.4rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    opacity: 0.85;
+    color: #f8f8f8;
+    animation: fadeIn 2s ease-in 1s forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInSlide {
+    0% {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Buttons Section */
+.buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeIn 2.5s ease forwards;
+    opacity: 0;
+}
+
+.button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    background: linear-gradient(135deg, #ffa500, #3a8dff, #4edc8c); /* Dégradé orange, bleu, vert */
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 15px;
+    border-radius: 15px;
+    width: 140px;
+    height: 140px;
+    box-shadow: 0 6px 12px rgba(0, 102, 255, 0.3);
+    transition: all 0.4s ease;
+    overflow: hidden;
+}
+
+.button:hover {
+    background: linear-gradient(135deg, #4edc8c, #493cf7, #3a8dff); /* Dégradé inversé */
+    transform: scale(1.05) rotate(2deg); /* Réduire légèrement l'échelle */
+    box-shadow: 0 8px 16px rgba(255, 165, 0, 0.4); /* Ombre moins forte */
+}
+
+/* Responsive Design pour petits écrans */
+@media (max-width: 768px) {
+    .button:hover {
+        transform: scale(1.08) rotate(2deg); /* Augmenter légèrement l'échelle pour les tablettes */
+        box-shadow: 0 10px 20px rgba(255, 165, 0, 0.5); /* Ombre plus prononcée */
+    }
+}
+
+@media (max-width: 480px) {
+    .button:hover {
+        transform: scale(1.1) rotate(1deg); /* Augmenter un peu plus pour les smartphones */
+        box-shadow: 0 12px 24px rgba(255, 165, 0, 0.5); /* Ombre similaire mais avec moins de taille */
+    }
+}
+
+.button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent);
+    transform: translate(-50%, -50%) scale(0); /* État initial */
+    transition: transform 0.4s ease; /* Transition douce lors du survol */
+}
+
+.button:hover::after {
+    transform: translate(-50%, -50%) scale(1); /* État agrandi lors du survol */
+}
+
+.button img {
+    height: 60px;
+    width: 60px;
+    margin-bottom: 10px;
+    border-radius: 10%; /* Images arrondies */
+    transition: transform 0.4s ease;
+}
+
+.button:hover img {
+    transform: scale(1.2);
+}
+
+.button span {
+    position: relative;
+    z-index: 2;
+}
+
+/* Responsive Design */
+
+/* Tablettes */
+@media (max-width: 768px) {
+    .hero-content h2 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content p {
+        font-size: 1.2rem;
+    }
+
+    .button {
+        width: 120px;
+        height: 120px;
+        font-size: 1rem;
+    }
+
+    .button img {
+        height: 50px;
+        width: 50px;
+    }
+
+    .buttons {
+        gap: 15px;
+    }
+
+
+
+    .button::after {
+        width: 180%; /* Réduire la taille pour les tablettes */
+        height: 180%;
+    }
+    
+    .button:hover::after {
+        transform: translate(-50%, -50%) scale(1); /* Toujours visible */
+    }
+
+}
+
+
+
+/* Smartphones */
+@media (max-width: 480px) {
+    .hero-content h2 {
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .button {
+        width: 100px;
+        height: 100px;
+        font-size: 0.9rem;
+        transition: transform 0.3s ease; /* Assurez-vous que la transition est bien définie */
+    }
+
+    .button img {
+        height: 40px;
+        width: 40px;
+    }
+
+    .buttons {
+        gap: 10px;
+    }
+
+    .button::after {
+        width: 160%; /* Ajuster pour les petits écrans */
+        height: 160%;
+    }
+
+    .button:hover::after {
+        transform: translate(-50%, -50%) scale(1); /* Toujours visible */
+    }
+
+    .button:hover {
+        transform: scale(1.1) rotate(1deg); /* Une échelle plus forte */
+        box-shadow: 0 12px 24px rgba(255, 165, 0, 0.5); /* Ombre plus forte */
+    }
+
+    .button img {
+        transition: transform 0.3s ease;
+    }
+
+    .button:hover img {
+        transform: scale(1.2);
+    }
+
+    /* Assurer que les animations fonctionnent */
+    .hero-content,
+    .buttons,
+    .button {
+        animation: fadeIn 1.5s ease forwards;
+    }
+}
 
 /* Centrer le bouton et ajouter des animations dynamiques */
 
@@ -130,19 +356,6 @@ body {
 
 }
 
-/* Aide au positionnement du texte pour le bouton */
-.hero-container a {
-    color: inherit; /* Assure que le lien héritera de la couleur du bouton */
-    text-decoration: none; /* Retirer le soulignement */
-}
-
-/* Ajustements pour la version mobile */
-@media (max-width: 768px) {
-    .cta-button {
-        font-size: 1rem;
-        padding: 12px 30px;
-    }
-}
 
 
 

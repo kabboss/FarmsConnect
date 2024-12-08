@@ -265,18 +265,59 @@ app.post('/api/send-email', async (req, res) => {
 
 
 
+// Import des modules nécessaires
+const crypto = require("crypto");
 
 // Routes pour gérer les annonces
 app.post('/api/annonces', async (req, res) => {
     try {
-        const annonce = new Annonce(req.body);
-        await annonce.save();
-        res.status(201).json({ message: 'Annonce ajoutée avec succès' });
+        const { categorie, nombre, poids, prix, contactPrincipal, emailVendeur } = req.body;
+
+        // Génération d'un identifiant unique basé sur l'e-mail et le numéro de téléphone
+        if (!emailVendeur || !contactPrincipal) {
+            return res.status(400).json({ message: "L'e-mail et le contact principal sont requis." });
+        }
+
+        const vendeurId = crypto.createHash('sha256')
+            .update(emailVendeur + contactPrincipal)
+            .digest('hex');
+
+        // Vérification si le vendeur a déjà 7 annonces
+        const annoncesExistantes = await Annonce.find({ vendeurId });
+        if (annoncesExistantes.length >= 7) {
+            return res.status(403).json({ message: "Vous avez atteint la limite maximale de 7 annonces." });
+        }
+
+        // Vérification si une annonce similaire existe déjà (par catégorie, nombre, poids, prix)
+        const annonceDupliquee = await Annonce.findOne({
+            vendeurId,
+            categorie,
+            nombre,
+            poids,
+            prix
+        });
+
+        if (annonceDupliquee) {
+            return res.status(409).json({ message: "Une annonce similaire existe déjà." });
+        }
+
+        // Création et sauvegarde de l'annonce
+        const nouvelleAnnonce = new Annonce({
+            ...req.body,
+            vendeurId, // Ajout de l'identifiant unique
+        });
+
+        await nouvelleAnnonce.save();
+        res.status(201).json({ message: "Annonce ajoutée avec succès." });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'annonce' });
+        res.status(500).json({ message: "Erreur lors de l'ajout de l'annonce." });
     }
 });
+
+
+
+
 
 app.get('/api/annonces', async (req, res) => {
     try {
@@ -651,9 +692,6 @@ app.get('/api/map', async (req, res) => {
 
 
 
-
-const router = express.Router();
-
 // Route pour récupérer les annonces classées par catégorie et par fourchette de prix avec pagination
 router.get('/annonces', async (req, res) => {
     try {
@@ -748,7 +786,7 @@ router.get('/annonces', async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = app;
 
 
 
