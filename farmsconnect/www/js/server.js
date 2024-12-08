@@ -265,6 +265,20 @@ app.post('/api/send-email', async (req, res) => {
 
 
 
+
+// Routes pour gérer les annonces
+app.post('/api/annonces', async (req, res) => {
+    try {
+        const annonce = new Annonce(req.body);
+        await annonce.save();
+        res.status(201).json({ message: 'Annonce ajoutée avec succès' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'annonce' });
+    }
+});
+
+
 // Import des modules nécessaires
 const crypto = require("crypto");
 
@@ -314,6 +328,7 @@ app.post('/api/annonces', async (req, res) => {
         res.status(500).json({ message: "Erreur lors de l'ajout de l'annonce." });
     }
 });
+
 
 
 
@@ -693,7 +708,7 @@ app.get('/api/map', async (req, res) => {
 
 
 // Route pour récupérer les annonces classées par catégorie et par fourchette de prix avec pagination
-app.get('/annonces', async (req, res) => {
+router.get('/annonces', async (req, res) => {
     try {
         // Récupérer les paramètres de pagination depuis la requête
         const page = parseInt(req.query.page) || 1;  // Par défaut page 1 si non spécifié
