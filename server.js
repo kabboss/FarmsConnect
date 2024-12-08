@@ -588,6 +588,9 @@ app.post('/api/save-location', verifyToken, async (req, res) => {
 
 
 
+
+
+
 //Map 
 
 
@@ -647,8 +650,12 @@ app.get('/api/map', async (req, res) => {
 // Regroupe annonce 
 
 
+
+
+const router = express.Router();
+
 // Route pour récupérer les annonces classées par catégorie et par fourchette de prix avec pagination
-app.get('/annonces', async (req, res) => {
+router.get('/annonces', async (req, res) => {
     try {
         // Récupérer les paramètres de pagination depuis la requête
         const page = parseInt(req.query.page) || 1;  // Par défaut page 1 si non spécifié
@@ -741,7 +748,8 @@ app.get('/annonces', async (req, res) => {
     }
 });
 
-module.exports = app;
+module.exports = router;
+
 
 
 
