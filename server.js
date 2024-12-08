@@ -708,7 +708,7 @@ app.get('/api/map', async (req, res) => {
 
 
 // Route pour récupérer les annonces classées par catégorie et par fourchette de prix avec pagination
-router.get('/annonces', async (req, res) => {
+app.get('/annonces', async (req, res) => {
     try {
         // Récupérer les paramètres de pagination depuis la requête
         const page = parseInt(req.query.page) || 1;  // Par défaut page 1 si non spécifié
