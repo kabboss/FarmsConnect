@@ -5,6 +5,7 @@ const annonceSchema = new mongoose.Schema({
   nombre: { type: Number, required: true, min: 1 },
   poids: { type: Number, required: true, min: 0 },
   prix: { type: Number, required: true, min: 0 },
+  prixFinal: { type: Number, required: true, min: 0 },
   images: {
     type: [String],
     validate: {

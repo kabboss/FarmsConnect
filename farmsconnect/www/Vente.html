@@ -192,14 +192,45 @@ window.addEventListener('click', (event) => {
             const isSuccess = Math.random() > 0.5; // Exemple aléatoire
             if (isSuccess) {
                 showAlert("Votre annonce a été ajoutée avec succès !");
-            } else {
-                showAlert("Une erreur est survenue lors de l'ajout de votre annonce.");
-            }
+            } 
         }, 4000); // Délai de 2 secondes
     });
 });
 
 </script>
+
+
+
+
+<script>
+    document.getElementById('vente-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const emailVendeur = document.getElementById('email-vendeur').value;
+    const contactPrincipal = document.getElementById('contact-principal').value;
+
+    try {
+        // Envoyer une requête au serveur pour vérifier le nombre d'annonces
+        const response = await fetch(`https://farmsconnect-b084ddb02391.herokuapp.com/api/annonces/count?vendeur=${emailVendeur}&contact=${contactPrincipal}`);
+        const data = await response.json();
+
+        if (data.annoncesCount >= 3) {
+            alert("Vous ne pouvez publier que 3 annonces au maximum.");
+            return;
+        }
+
+        // Continuer avec la soumission si le nombre d'annonces est valide
+        this.submit();
+    } catch (error) {
+        console.error('Erreur lors de la vérification des annonces:', error);
+        alert("Une erreur est survenue. Veuillez réessayer.");
+    }
+});
+
+</script>
+
+
+
 
             <button type="submit">Ajouter l'annonce</button>
         </form>

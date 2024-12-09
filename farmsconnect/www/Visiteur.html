@@ -11,6 +11,32 @@
 </head>
 <body>    
 
+
+<!-- Message de chargement -->
+<div id="loadingMessage" class="hidden">
+    <div class="spinner-container">
+        <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
+        <div class="spinner"></div>
+    </div>
+    <p class="loading-text">Veuillez patienter...</p> 
+</div>
+
+
+<script>
+window.onload = function() {
+    // Afficher le message de chargement dès que la page est chargée
+    var loadingMessage = document.getElementById('loadingMessage');
+    loadingMessage.classList.remove('hidden');  // Afficher le message de chargement
+
+    // Masquer le message de chargement après 5 secondes (5000 ms)
+    setTimeout(function() {
+        loadingMessage.classList.add('hidden');  // Cacher le message de chargement
+    }, 10000);  // Temps en millisecondes
+};
+
+</script>
+
+
     <header class="header">
      <div class="logo-container">
             <h2 class="logo">Animaux Disponibles</h2>
@@ -29,7 +55,7 @@
                 <li><a href="Visiteur.html">Visiter</a></li>
                 <li><a href="Produit.html">Acheter Avec FarmsConnect</a></li>
                 <li><a href="Visiteur.html">A propos</a></li>
-                <li><a href="contact.html"></a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
         </nav>
         <div class="image-container">
@@ -234,13 +260,14 @@ categoryButtons.forEach(button => {
         });
 
         // Quand l'utilisateur clique sur une fourchette de prix
-        priceButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                selectedPriceRange = button.getAttribute('data-price');
-                filterAnnonces(); // Appliquer le filtrage
-            });
-        });
+        priceButtonsSection.querySelectorAll('.price-button').forEach(button => {
+    button.addEventListener('click', function() {
+        selectedPriceRange = button.getAttribute('data-price');
+        filterAnnonces(); // Appliquer le filtrage
     });
+});
+
+});
  document.addEventListener('DOMContentLoaded', function() {
 
  });

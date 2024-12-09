@@ -12,6 +12,8 @@ const socketIo = require('socket.io');
 const path = require('path');
 const Grid = require('gridfs-stream');
 const cookieParser = require('cookie-parser');
+const router = express.Router();
+
 
 
 // Modèles
@@ -266,17 +268,75 @@ app.post('/api/send-email', async (req, res) => {
 
 
 
-// Routes pour gérer les annonces
-app.post('/api/annonces', async (req, res) => {
+
+router.post('/api/annonces', async (req, res) => {
+    const { emailVendeur, contactPrincipal } = req.body;
+
     try {
-        const annonce = new Annonce(req.body);
-        await annonce.save();
-        res.status(201).json({ message: 'Annonce ajoutée avec succès' });
+        // Vérifiez le nombre d'annonces existantes pour ce vendeur
+        const annoncesExistantes = await Annonce.find({
+            emailVendeur,
+            contactPrincipal
+        });
+
+        if (annoncesExistantes.length >= 3) {
+            return res.status(400).json({
+                message: 'Vous avez atteint le nombre maximal de 3 annonces autorisées.'
+            });
+        }
+
+        // Si tout est bon, enregistrez l'annonce
+        const nouvelleAnnonce = new Annonce(req.body);
+        await nouvelleAnnonce.save();
+
+        res.status(201).json({
+            message: 'Annonce ajoutée avec succès !',
+            annonce: nouvelleAnnonce
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'annonce' });
+        console.error('Erreur lors de l’ajout de l’annonce:', error);
+        res.status(500).json({ message: 'Erreur serveur.' });
     }
 });
+
+module.exports = router;
+
+
+
+
+
+
+router.get('/api/annonces/count', async (req, res) => {
+    const { vendeur, contact } = req.query;
+
+    try {
+        const annoncesCount = await Annonce.countDocuments({ 
+            emailVendeur: vendeur, 
+            contactPrincipal: contact 
+        });
+        res.status(200).json({ annoncesCount });
+    } catch (error) {
+        console.error('Erreur lors de la récupération des annonces:', error);
+        res.status(500).json({ message: 'Erreur serveur.' });
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.get('/api/annonces', async (req, res) => {
     try {
@@ -648,11 +708,6 @@ app.get('/api/map', async (req, res) => {
 
 
 // Regroupe annonce 
-
-
-
-
-const router = express.Router();
 
 // Route pour récupérer les annonces classées par catégorie et par fourchette de prix avec pagination
 router.get('/annonces', async (req, res) => {

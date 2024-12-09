@@ -1,19 +1,32 @@
 document.getElementById('vente-form').addEventListener('submit', function(e) {
     e.preventDefault();
 
+    const prixUnitaire = parseFloat(document.getElementById('prix').value);
+    const commission = prixUnitaire * 0.04;
+    const fraisLivraison = 650;
+    const prixFinal = prixUnitaire + commission + fraisLivraison;
+    
+    const generateVendeurId = (email, contactPrincipal) => {
+        // Générer un identifiant unique basé sur l'email et le numéro de téléphone
+        return 'V' + Buffer.from(email + contactPrincipal).toString('hex');
+    };
+    
+
     const animal = {
         categorie: document.getElementById('categorie').value,
         nombre: document.getElementById('nombre').value,
         poids: document.getElementById('poids').value,
-        prix: document.getElementById('prix').value,
+        prix: prixUnitaire,
+        prixFinal: prixFinal.toFixed(2), // Inclure le prix final calculé
         images: [],
         contactPrincipal: document.getElementById('contact-principal').value,
         contactSecondaire: document.getElementById('contact-secondaire').value,
         emailVendeur: document.getElementById('email-vendeur').value,
         codeVendeur: 'V' + Date.now(),
     };
-
-    const files = document.getElementById('images').files;
+    
+    console.log(animal);
+        const files = document.getElementById('images').files;
     if (files.length === 0) {
         showAlert("Veuillez sélectionner au moins une image.");
         return;
@@ -55,10 +68,7 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
             // Affichez le message de succès
             showAlert(data.message);
         })
-        .catch(error => {
-            // Affichez les erreurs
-            showAlert("Erreur lors de l'ajout de l'annonce : " + error.message);
-        });
+        
     });
 });
 
@@ -77,7 +87,6 @@ function closeAlert() {
     const alertBox = document.getElementById("customAlert");
     alertBox.classList.remove("visible");
 }
-
 
 
 

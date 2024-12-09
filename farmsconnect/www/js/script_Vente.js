@@ -68,10 +68,7 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
             // Affichez le message de succès
             showAlert(data.message);
         })
-        .catch(error => {
-            // Affichez les erreurs
-            showAlert("Erreur lors de l'ajout de l'annonce : " + error.message);
-        });
+        
     });
 });
 
