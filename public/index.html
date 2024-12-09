@@ -49,35 +49,21 @@
         <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
         <div class="spinner"></div>
     </div>
-    <p class="loading-text">Connexion en cours, veuillez patienter...</p>
+    <p class="loading-text">Veuillez patienter...</p> 
 </div>
 
+
 <script>
-// Afficher le message de patience
-function showLoadingMessage() {
-    const loadingMessage = document.getElementById("loadingMessage");
-    loadingMessage.classList.remove("hidden");
-}
+window.onload = function() {
+    // Afficher le message de chargement dès que la page est chargée
+    var loadingMessage = document.getElementById('loadingMessage');
+    loadingMessage.classList.remove('hidden');  // Afficher le message de chargement
 
-// Masquer le message de patience
-function hideLoadingMessage() {
-    const loadingMessage = document.getElementById("loadingMessage");
-    loadingMessage.classList.add("hidden");
-}
-
-// Gestion de la soumission du formulaire
-document.getElementById("login-form").addEventListener("submit", function (event) {
-    event.preventDefault(); // Empêcher le rechargement de la page
-
-    showLoadingMessage(); // Afficher le message de chargement
-
-    // Simuler une requête serveur avec setTimeout
-    setTimeout(() => {
-        const serverResponse = Math.random() > 0.2; // Simule une réponse avec succès ou échec (80% de succès)
-
-        hideLoadingMessage(); // Cacher le message de chargement
-    }, 3000); // Temps simulé : 3 secondes
-});
+    // Masquer le message de chargement après 5 secondes (5000 ms)
+    setTimeout(function() {
+        loadingMessage.classList.add('hidden');  // Cacher le message de chargement
+    }, 7000);  // Temps en millisecondes
+};
 
 </script>
 
