@@ -38,12 +38,22 @@
 
 
 
-<!-- Spinner d'attente avec une image -->
+<!-- Spinner d'attente sophistiqué -->
 <div class="spinner hidden" id="loadingSpinner">
     <div class="spinner-content">
         <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
-        <p>Chargement en cours...</p>
-        <div class="loader"></div>
+        <h1 class="spinner-title">SUCCSES ✅</h1>
+        <div class="loader-line-container">
+            <div class="loader-line"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Boîte d'alerte personnalisée -->
+<div id="customAlert" class="alert hidden">
+    <div class="alert-content">
+        <h1 id="alertMessage">Votre annonce a été ajoutée avec succès !</h1>
+        <button onclick="closeAlert()">OK</button>
     </div>
 </div>
 
@@ -152,7 +162,7 @@ window.addEventListener('click', (event) => {
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("vente-form");
     const spinner = document.getElementById("loadingSpinner");
     const alertBox = document.getElementById("customAlert");
@@ -189,11 +199,8 @@ window.addEventListener('click', (event) => {
             hideSpinner(); // Masque le spinner
 
             // Logique conditionnelle pour afficher un message d'alerte
-            const isSuccess = Math.random() > 0.5; // Exemple aléatoire
-            if (isSuccess) {
-                showAlert("Votre annonce a été ajoutée avec succès !");
-            } 
-        }, 4000); // Délai de 2 secondes
+            showAlert("Votre annonce a été ajoutée avec succès !");
+        }, 3000); // Délai de 3 secondes
     });
 });
 
