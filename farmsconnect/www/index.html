@@ -49,35 +49,21 @@
         <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
         <div class="spinner"></div>
     </div>
-    <p class="loading-text">Connexion en cours, veuillez patienter...</p>
+    <p class="loading-text">Veuillez patienter...</p> 
 </div>
 
+
 <script>
-// Afficher le message de patience
-function showLoadingMessage() {
-    const loadingMessage = document.getElementById("loadingMessage");
-    loadingMessage.classList.remove("hidden");
-}
+window.onload = function() {
+    // Afficher le message de chargement dès que la page est chargée
+    var loadingMessage = document.getElementById('loadingMessage');
+    loadingMessage.classList.remove('hidden');  // Afficher le message de chargement
 
-// Masquer le message de patience
-function hideLoadingMessage() {
-    const loadingMessage = document.getElementById("loadingMessage");
-    loadingMessage.classList.add("hidden");
-}
-
-// Gestion de la soumission du formulaire
-document.getElementById("login-form").addEventListener("submit", function (event) {
-    event.preventDefault(); // Empêcher le rechargement de la page
-
-    showLoadingMessage(); // Afficher le message de chargement
-
-    // Simuler une requête serveur avec setTimeout
-    setTimeout(() => {
-        const serverResponse = Math.random() > 0.2; // Simule une réponse avec succès ou échec (80% de succès)
-
-        hideLoadingMessage(); // Cacher le message de chargement
-    }, 3000); // Temps simulé : 3 secondes
-});
+    // Masquer le message de chargement après 5 secondes (5000 ms)
+    setTimeout(function() {
+        loadingMessage.classList.add('hidden');  // Cacher le message de chargement
+    }, 7000);  // Temps en millisecondes
+};
 
 </script>
 
@@ -466,82 +452,6 @@ document.getElementById("login-form").addEventListener("submit", function (event
             });
         });
     });
-</script>
-
-
-
-<!-- Animation de chargement avancée -->
-<div id="loading-overlay" style="display: none;">
-    <div class="spinner">
-        <img src="img/FarmsConnect.jpg" alt="Chargement..." class="rotating-image">
-        <p>Veuillez patienter...</p>
-    </div>
-</div>
-
-
-
-
-<script>
-
-// Fonction pour afficher l'animation de chargement
-function showLoading() {
-    document.getElementById('loading-overlay').style.display = 'flex';
-}
-
-// Fonction pour cacher l'animation de chargement
-function hideLoading() {
-    document.getElementById('loading-overlay').style.display = 'none';
-}
-
-// Appliquer à toutes les actions de navigation (facultatif si navigation SPA)
-document.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', function () {
-        showLoading();
-    });
-});
-
-// Exemple d'utilisation pour une action de chargement (AJAX ou fetch)
-function simulateLongProcess() {
-    showLoading();
-    setTimeout(() => {
-        hideLoading();
-        alert("Processus terminé !");
-    }, 3000); // Simule un délai de 3 secondes
-}
-
-
-</script>
-
-
-
-<script>
-// Fonction pour afficher l'animation de chargement
-function showLoading() {
-    document.getElementById('loading-overlay').style.display = 'flex';
-}
-
-// Fonction pour cacher l'animation de chargement
-function hideLoading() {
-    document.getElementById('loading-overlay').style.display = 'none';
-}
-
-// Afficher le chargement au début
-showLoading();
-
-// Masquer le chargement après le chargement complet de la page
-window.addEventListener('load', function () {
-    hideLoading();
-});
-
-// Exemple d'utilisation avec un processus simulé
-function simulateLongProcess() {
-    showLoading();
-    setTimeout(() => {
-        hideLoading();
-        alert("Processus terminé !");
-    }, 3000); // Simule un délai de 3 secondes
-}
-
 </script>
 
 
