@@ -269,7 +269,7 @@ app.post('/api/send-email', async (req, res) => {
 
 
 
-router.post('/api/annonces', async (req, res) => {
+app.post('/api/annonces', async (req, res) => {
     const { emailVendeur, contactPrincipal } = req.body;
 
     try {
@@ -299,14 +299,14 @@ router.post('/api/annonces', async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = app;
 
 
 
 
 
 
-router.get('/api/annonces/count', async (req, res) => {
+app.get('/api/annonces/count', async (req, res) => {
     const { vendeur, contact } = req.query;
 
     try {
