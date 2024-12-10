@@ -12,6 +12,254 @@ body {
     overflow-x: hidden;
 }
 
+
+
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* General Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Header Styling */
+header {
+    display: flex;
+    flex-wrap: wrap; /* S'assure que tout reste visible sur de petits écrans */
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(135deg, #2e3a87, #6f42c1);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    height: auto;
+}
+
+/* Hero Container */
+.hero-container {
+    flex: 1;
+    text-align: left;
+    animation: fadeIn 1.2s ease-in;
+}
+
+.title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ffd600;
+    margin-bottom: 0.5rem;
+}
+
+/* Centrer le bouton et ajouter des animations dynamiques */
+
+.cta-button {
+    background-color: #ffcb05;
+    color: #333;
+    padding: 15px 60px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    display: inline-block;
+    text-decoration: none; /* Enlève le soulignement */
+    text-align: center;
+    animation: bounce 2s ease infinite; /* Animation pour attirer l'attention */
+
+    /* Ajout pour le centrer */
+    margin: 20px auto 0 auto; /* 20px en haut, auto sur les côtés, 0 en bas */
+    display: block; /* Nécessaire pour utiliser "margin: auto" */
+}
+
+/* Optionnel : Centrer verticalement dans un conteneur parent */
+.cta-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Garde le bouton seul */
+    height: 100%; /* Ajuste à la taille du conteneur parent */
+}
+
+/* Animation pour attirer l'attention */
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px); /* Effet de rebond */
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Couleur au survol */
+.cta-button:hover {
+    transform: translateY(-5px); /* Légère élévation au survol */
+    background-color: #f0a500;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); /* Ombre plus marquée */
+}
+
+/* Effet au clic */
+.cta-button:active {
+    transform: translateY(0); /* Rétablissement de la position initiale */
+    background-color: #d78900;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Navigation Section */
+.nav {
+    flex: 2;
+    display:contents;
+    justify-content: center;
+    position: relative;
+    
+}
+
+.nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    gap: 1.8rem;
+    animation: fadeIn 1.4s ease-in-out;
+}
+
+.nav-list a {
+    color: #FFA500;
+    font-size: 1.1rem;
+    font-weight: 900;
+    text-decoration: none;
+    text-transform:capitalize;
+    letter-spacing: 1px;
+    padding: 10px 15px;
+    border-radius: 30px;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+.nav-list a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive Navigation Menu */
+.menu-toggle {
+    display: none;
+}
+
+.menu-icon {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .menu-icon {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        z-index: 2;
+    }
+
+    .menu-icon span {
+        display: block;
+        width: 30px;
+        height: 3px;
+        background: white;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .menu-toggle:checked ~ .nav-list {
+        transform: translateY(0);
+    }
+
+    .nav-list {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        transform: translateY(-100%);
+        transition: transform 0.8s ease-in-out;
+    }
+
+    .nav-list a {
+        font-size: 1.2rem;
+        font-weight: 700;
+        text-transform: capitalize;
+        letter-spacing: 1px;
+        background: transparent;
+        color: white;
+    }
+
+    .menu-toggle:checked + .menu-icon span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .menu-toggle:checked + .menu-icon span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle:checked + .menu-icon span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+}
+
+/* Image Section */
+.image-container {
+    flex: 1; /* Vous pouvez ajuster cette valeur si nécessaire */
+    display: flex;
+    justify-content: flex-end; /* Assure que l'image est poussée à droite */
+    align-items: center; /* Aligne verticalement avec le contenu environnant */
+    animation: fadeIn 1.6s ease;
+}
+
+.header-image {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    object-fit: cover;
+    margin-left: auto; /* Pousse l'image à l'extrême droite */
+}
+
+.header-image:hover {
+    transform: rotate(360deg) scale(1.2);
+    box-shadow: 0 8px 16px rgba(255, 255, 0, 0.7);
+}
+
+/* Keyframes for Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+
+
 /* Hero Section */
 .hero {
     position: relative;
@@ -134,13 +382,13 @@ body {
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    background: linear-gradient(135deg, #ffa500, #3a8dff, #4edc8c); /* Dégradé orange, bleu, vert */
+    background: linear-gradient(135deg, #47c6f8, #3a8dff, #4e90dc); /* Dégradé orange, bleu, vert */
     color: #fff;
-    font-weight: 600;
+    font-weight: 900;
     font-size: 1.1rem;
     padding: 15px;
     border-radius: 15px;
-    width: 140px;
+    width: 160px;
     height: 140px;
     box-shadow: 0 6px 12px rgba(0, 102, 255, 0.3);
     transition: all 0.4s ease;
@@ -148,7 +396,7 @@ body {
 }
 
 .button:hover {
-    background: linear-gradient(135deg, #4edc8c, #493cf7, #3a8dff); /* Dégradé inversé */
+    background: linear-gradient(135deg, #eeea02, #face09, #3a8dff); /* Dégradé inversé */
     transform: scale(1.05) rotate(2deg); /* Réduire légèrement l'échelle */
     box-shadow: 0 8px 16px rgba(255, 165, 0, 0.4); /* Ombre moins forte */
 }
@@ -299,51 +547,6 @@ body {
     }
 }
 
-/* Centrer le bouton et ajouter des animations dynamiques */
-
-.cta-button {
-    background-color: #ffcb05;
-    color: #333;
-    padding: 15px 40px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    border-radius: 50px;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-    display: inline-block;
-    text-decoration: none; /* Enlève le soulignement */
-    text-align: center;
-    animation: bounce 2s ease infinite; /* Animation pour attirer l'attention */
-}
-
-/* Animation pour attirer l'attention */
-@keyframes bounce {
-    0% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px); /* Effet de rebond */
-    }
-    100% {
-        transform: translateY(0);
-    }
-}
-
-/* Couleur au survol */
-.cta-button:hover {
-    transform: translateY(-5px); /* Légère élévation au survol */
-    background-color: #f0a500;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); /* Ombre plus marquée */
-}
-
-/* Effet au clic */
-.cta-button:active {
-    transform: translateY(0); /* Rétablissement de la position initiale */
-    background-color: #d78900;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
 
 /* Centrer le bouton sur la page */
 .hero-container {
@@ -355,8 +558,6 @@ body {
     color: darkturquoise;
 
 }
-
-
 
 
 /* Style de la navigation */
@@ -374,7 +575,7 @@ nav {
     list-style: none;
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 10px;
     margin: -10px;
     padding: 0;
 }
@@ -406,10 +607,9 @@ nav {
 .nav-list li a {
     display: inline-block;
     text-decoration: none;
-    color: #fff;
+    color: #fccf06;
     font-weight: bold;
-    padding: 10px 20px;
-    background-color: #05c72f; /* Couleur de fond des liens */
+    padding: 10px 10px;
     border-radius: 30px; /* Bords arrondis prononcés */
     transition: all 0.5s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -696,31 +896,56 @@ footer {
     padding: 10px;
 }
 
-.title {
-    font-size: 30px;
-    border-radius: 10px;
-    padding: 5px;
-    background: linear-gradient(135deg, #43cea2, #185a9d);
-    text-align: center;
-}
 
 a {
     text-decoration: none;
-}
-
-.title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.5em;
-    color: #333;
-    font-weight: bold;
 }
 
 .title .logo {
     width: 60px; /* Ajustez la taille de l'image */
     height: auto;
     margin: 0 30px; /* Espacement entre le texte et les images */
+}
+
+
+
+
+
+
+/* Animation de pulsation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Appliquer l'animation de pulsation */
+.menu-icon {
+    display: inline-block;
+    cursor: pointer;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.menu-icon span {
+    display: block;
+    width: 30px;
+    height: 5px;
+    margin: 6px 0;
+    background-color: #0bdb15;
+    transition: all 0.5s ease;
+}
+
+.menu-icon:hover span {
+    background-color: #3498db; /* Change la couleur au survol */
 }
 
 

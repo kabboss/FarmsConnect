@@ -350,18 +350,32 @@ form button:hover {
 
 /* Style du bouton d'ouverture */
 .open-modal-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #007BFF;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    padding: 12px 30px; /* Ajout d'un espacement légèrement plus généreux */
+    font-size: 18px; /* Texte légèrement plus grand pour l'accentuer */
+    font-weight: bold; /* Renforce le texte */
+    color: #333; /* Texte légèrement adouci */
+    background: linear-gradient(135deg, #ffee02, #ffd700); /* Dégradé moderne pour l'arrière-plan */
+    border: 2px solid #ffd700; /* Bordure subtile assortie */
+    border-radius: 25px; /* Coins arrondis pour un look élégant */
+    cursor: pointer; /* Indicateur de clic */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Ombre douce pour donner du relief */
+    transition: all 0.3s ease; /* Transition douce pour toutes les modifications */
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
 }
 
 .open-modal-button:hover {
-    background-color: #0056b3;
+    background: linear-gradient(135deg, #ffd700, #ff9800); /* Dégradé dynamique au survol */
+    color: #fff; /* Change la couleur du texte au survol */
+    border-color: #ff9800; /* Bordure assortie au nouveau dégradé */
+    transform: translateY(-3px) scale(1.05); /* Légère montée et agrandissement */
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3); /* Ombre accentuée */
+}
+
+.open-modal-button:active {
+    transform: translateY(2px); /* Effet de clic */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Réduction de l'ombre */
 }
 
 
