@@ -16,7 +16,7 @@ body {
 .hero {
     position: relative;
     height: auto;
-    background: linear-gradient(135deg, #3a8dff, #4edc8c, #ffa500); /* Dégradé bleu, vert clair, orange */
+    background: linear-gradient(135deg, #3a8dff, #4edc8c, #1696ff); /* Dégradé bleu, vert clair, orange */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,12 +27,12 @@ body {
 .hero::before {
     content: '';
     position: absolute;
-    top: -20%;
-    left: -20%;
+    top: -25%;
+    left: -30%;
     width: 160%; /* Augmenter un peu pour mieux couvrir l'écran sur les petits appareils */
-    height: 160%;
-    background: radial-gradient(circle, rgb(11, 208, 243), transparent);
-    animation: floatingGradient 4s linear infinite;
+    height: 120%;
+    background: radial-gradient(ellipse, rgb(85, 245, 120), transparent);
+    animation: floatingGradient 3s linear infinite;
     z-index: 1;
 }
 
