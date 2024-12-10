@@ -11,20 +11,36 @@
     <link rel="stylesheet" href="Forum.css">
 </head>
 <body>
-    <header>
-        <h1>Forum de Discussion de FarmsConnect</h1>
+    
+    <header class="header">
+        <div class="logo-container">
+            <h2 class="logo">Forum de Discussion de FarmsConnect</h2>
+        </div>
+        <nav class="nav">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul class="nav-list">
+                <li><a href="Acceuil.html">Accueil</a></li>
+                <li><a href="Vente.html">Vendre</a></li>
+                <li><a href="Visiteur.html">Visiter et Acheter (mis en ligne)</a></li>
+                <li><a href="Produit.html">Acheter Avec FarmsConnect</a></li>
+                <li><a href="Visiteur.html">A propos de FarmConnect</a></li>
+                <li><a href="contact.html">Service client</a></li>
+            </ul>
+        </nav>
+        <div class="image-container">
+            <img src="img/FarmsConnect.jpg" alt="Farms Connect" class="header-image">
+        </div>
     </header>
+                
 
-    <nav>
-        <ul class="nav-list">
-            <li><a href="Acceuil.html">Accueil</a></li>
-            <li><a href="Vente.html">Vendre</a></li>
-            <li><a href="Visiteur.html">Visiter et Acheter (mis en ligne)</a></li>
-            <li><a href="Produit.html">Acheter Avec FarmsConnect</a></li>
-            <li><a href="Visiteur.html">A propos de FarmConnect</a></li>
-            <li><a href="contact.html">Service client</a></li>
-    </ul>
-    </nav>
+
+    
+
 
     <section id="forum">
         <div id="message-list">
@@ -36,6 +52,35 @@
             <button type="submit">Publier</button>
         </form>
     </section>
+
+
+
+
+    <!-- Message de chargement -->
+<div id="loadingMessage" class="hidden">
+    <div class="spinner-container">
+        <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
+        <div class="spinner"></div>
+    </div>
+    <p class="loading-text">Veuillez patienter...</p> 
+</div>
+
+
+<script>
+window.onload = function() {
+    // Afficher le message de chargement dès que la page est chargée
+    var loadingMessage = document.getElementById('loadingMessage');
+    loadingMessage.classList.remove('hidden');  // Afficher le message de chargement
+
+    // Masquer le message de chargement après 5 secondes (5000 ms)
+    setTimeout(function() {
+        loadingMessage.classList.add('hidden');  // Cacher le message de chargement
+    }, 2800);  // Temps en millisecondes
+};
+
+</script>
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/socket.io-client/dist/socket.io.min.js"></script>
     <script src="Forum.js"></script>

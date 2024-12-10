@@ -551,3 +551,204 @@ form button:hover {
 .hidden {
     display: none;
 }
+
+
+
+
+
+/* Style du message de chargement */
+#loadingMessage {
+    position: fixed;
+    top: 140px;
+    left: 15px;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.9); /* Fond sombre intense */
+    padding: 40px 60px; /* Espacement réduit pour une taille plus compacte */
+    border-radius: 20px; /* Coins arrondis */
+    color: white;
+    z-index: 1000;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6); /* Ombre portée plus légère */
+    animation: fadeIn 1s ease-out, pulse 3s infinite; /* Apparition fluide et effet de pulsation */
+    backdrop-filter: blur(10px); /* Flou du fond pour ajouter un effet moderne de profondeur */
+}
+
+/* Animation d'apparition douce */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Animation de pulsation (effet vivant) */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+    }
+}
+
+/* Conteneur du spinner */
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Empiler le spinner et le texte verticalement */
+    animation: fadeIn 1s ease-out; /* Apparition fluide */
+}
+
+/* Animation du spinner */
+.spinner {
+    border: 6px solid #f3f3f3; /* Couleur de fond claire pour un contraste subtil */
+    border-top: 6px solid #ff6347; /* Couleur dynamique rouge orangé */
+    border-radius: 50%;
+    width: 80px; /* Taille du spinner réduite pour plus de subtilité */
+    height: 80px; /* Taille du spinner réduite */
+    animation: spin 2s linear infinite, pulseSpinner 1s infinite; /* Rotation plus lente et pulsation dynamique */
+    margin-bottom: 20px; /* Espacement entre le spinner et le texte */
+}
+
+/* Animation de rotation fluide */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Animation de pulsation du spinner */
+@keyframes pulseSpinner {
+    0% {
+        transform: rotate(0deg);
+        box-shadow: 0 0 10px rgba(255, 99, 71, 0.6);
+    }
+    50% {
+        transform: rotate(180deg);
+        box-shadow: 0 0 25px rgba(255, 99, 71, 1);
+    }
+    100% {
+        transform: rotate(360deg);
+        box-shadow: 0 0 10px rgba(255, 99, 71, 0.6);
+    }
+}
+
+/* Style pour l'image (si nécessaire) */
+.spinner-image {
+    width: 80px; /* Taille de l'image ajustée pour un impact modéré */
+    height: 80px;
+    margin-bottom: 15px; /* Espacement sous l'image */
+    border-radius: 50%;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    animation: fadeInImage 1.5s ease-out;
+}
+
+/* Animation d'apparition de l'image */
+@keyframes fadeInImage {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Texte de chargement */
+.loading-text {
+    margin-top: 20px;
+    font-size: 18px; /* Taille du texte réduite pour une meilleure lisibilité */
+    font-family: 'Poppins', sans-serif; /* Police moderne et élégante */
+    font-weight: 600;
+    letter-spacing: 2px; /* Espacement des lettres modéré */
+    color: #fff;
+    text-transform: uppercase; /* Texte en majuscule pour un effet plus percutant */
+    animation: fadeInText 1.2s ease-out; /* Apparition douce du texte */
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre subtile du texte */
+    opacity: 0.9;
+}
+
+/* Animation du texte */
+@keyframes fadeInText {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive : ajuster pour les petits écrans */
+@media (max-width: 768px) {
+    #loadingMessage {
+        padding: 25px 40px; /* Espacement réduit pour les petits écrans */
+        width: 92%; /* Largeur plus petite sur mobile */
+        height: 300px;
+    }
+
+    .spinner {
+        width: 70px;  /* Réduire la taille du spinner */
+        height: 70px;
+    }
+
+    .spinner-image {
+        width: 70px; /* Réduire la taille de l'image */
+        height: 70px;
+    }
+
+    .loading-text {
+        font-size: 16px; /* Réduire la taille du texte */
+        letter-spacing: 1.5px; /* Espacement réduit */
+    }
+}
+
+
+/* Centrage pour les grands écrans */
+@media (min-width: 1200px) {
+    #loadingMessage {
+        position: fixed; /* Fixe l'élément au centre même en cas de défilement */
+        top: 190px; /* Position verticale centrée */
+        left: 300px; /* Position horizontale centrée */
+        transform: translate(-50%, -50%); /* Ajustement pour centrer précisément */
+        padding: 30px 50px; /* Ajout d'un espace intérieur */
+        background: rgba(0, 0, 0, 0.9); /* Couleur d'arrière-plan élégante */
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Effet d'ombre subtil */
+        border-radius: 10px; /* Arrondi pour un style moderne */
+        text-align: center; /* Centrer le texte */
+        width: 50%;
+    }
+
+    .spinner-image {
+        width: 110px; /* Taille adaptée à l'image sur grands écrans */
+        height: auto;
+    }
+
+    .spinner-title {
+        font-size: 1.8rem; /* Agrandir le titre */
+        margin-bottom: 20px;
+        color: #4caf50; /* Couleur élégante pour le texte */
+    }
+
+    .loader-line-container {
+        width: 70%; /* Ligne de progression plus large */
+        margin: 20px auto; /* Espacement autour de la barre */
+    }
+
+    .loader-line {
+        height: 10px; /* Ligne plus épaisse */
+        border-radius: 5px; /* Arrondi de la ligne */
+    }
+}

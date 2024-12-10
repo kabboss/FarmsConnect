@@ -25,6 +25,19 @@
         </ul>
     </nav>
 
+    <script>
+        window.onload = function() {
+            // Afficher le message de chargement dès que la page est chargée
+            var loadingMessage = document.getElementById('loadingMessage');
+            loadingMessage.classList.remove('hidden');  // Afficher le message de chargement
+        
+            // Masquer le message de chargement après 5 secondes (5000 ms)
+            setTimeout(function() {
+                loadingMessage.classList.add('hidden');  // Cacher le message de chargement
+            }, 10000);  // Temps en millisecondes
+        };
+        </script>
+        
     <section class="hero">
         <div class="hero-content">
             <h2>Bienvenue sur FarmsConnect</h2>

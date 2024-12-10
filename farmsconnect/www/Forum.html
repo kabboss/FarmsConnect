@@ -39,7 +39,7 @@
                 
 
 
-
+    
 
 
     <section id="forum">
@@ -52,6 +52,35 @@
             <button type="submit">Publier</button>
         </form>
     </section>
+
+
+
+
+    <!-- Message de chargement -->
+<div id="loadingMessage" class="hidden">
+    <div class="spinner-container">
+        <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
+        <div class="spinner"></div>
+    </div>
+    <p class="loading-text">Veuillez patienter...</p> 
+</div>
+
+
+<script>
+window.onload = function() {
+    // Afficher le message de chargement dès que la page est chargée
+    var loadingMessage = document.getElementById('loadingMessage');
+    loadingMessage.classList.remove('hidden');  // Afficher le message de chargement
+
+    // Masquer le message de chargement après 5 secondes (5000 ms)
+    setTimeout(function() {
+        loadingMessage.classList.add('hidden');  // Cacher le message de chargement
+    }, 2800);  // Temps en millisecondes
+};
+
+</script>
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/socket.io-client/dist/socket.io.min.js"></script>
     <script src="js/Forum.js"></script>

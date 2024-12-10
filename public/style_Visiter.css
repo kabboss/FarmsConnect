@@ -625,7 +625,6 @@ body {
 
 
 
-
 /* Masque l'élément par défaut */
 .hidden {
     display: none;
@@ -634,8 +633,8 @@ body {
 /* Style du message de chargement */
 #loadingMessage {
     position: fixed;
-    top: 40%;
-    left: 10%;
+    top: 140px;
+    left: 15px;
     transform: translate(-50%, -50%);
     text-align: center;
     background-color: rgba(0, 0, 0, 0.9); /* Fond sombre intense */
@@ -770,7 +769,9 @@ body {
 @media (max-width: 768px) {
     #loadingMessage {
         padding: 25px 40px; /* Espacement réduit pour les petits écrans */
-        width: 80%; /* Largeur plus petite sur mobile */
+        width: 90%; /* Largeur plus petite sur mobile */
+        top: 200px;
+        left: 12px;
     }
 
     .spinner {
@@ -788,6 +789,55 @@ body {
         letter-spacing: 1.5px; /* Espacement réduit */
     }
 }
+
+
+/* Centrage pour les grands écrans */
+@media (min-width: 1200px) {
+    #loadingMessage {
+        position: fixed; /* Fixe l'élément au centre même en cas de défilement */
+        top: 190px; /* Position verticale centrée */
+        left: 300px; /* Position horizontale centrée */
+        transform: translate(-50%, -50%); /* Ajustement pour centrer précisément */
+        padding: 30px 50px; /* Ajout d'un espace intérieur */
+        background: rgba(0, 0, 0, 0.9); /* Couleur d'arrière-plan élégante */
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Effet d'ombre subtil */
+        border-radius: 10px; /* Arrondi pour un style moderne */
+        text-align: center; /* Centrer le texte */
+        width: 50%;
+    }
+
+    .spinner-image {
+        width: 110px; /* Taille adaptée à l'image sur grands écrans */
+        height: auto;
+    }
+
+    .spinner-title {
+        font-size: 1.8rem; /* Agrandir le titre */
+        margin-bottom: 20px;
+        color: #4caf50; /* Couleur élégante pour le texte */
+    }
+
+    .loader-line-container {
+        width: 70%; /* Ligne de progression plus large */
+        margin: 20px auto; /* Espacement autour de la barre */
+    }
+
+    .loader-line {
+        height: 10px; /* Ligne plus épaisse */
+        border-radius: 5px; /* Arrondi de la ligne */
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -10,7 +10,9 @@
 <body>
     <h1>Connexion Socket.IO</h1>
     <script>
-        const socket = io('https://farmsconnect-b084ddb02391.herokuapp.com'); // Établir la connexion
+        const socket = io('https://farmsconnect-b084ddb02391.herokuapp.com', {
+  transports: ['polling'], // Spécifiez le transport si nécessaire
+});
 
         socket.on('connect', () => {
             console.log('Connecté au serveur Socket.IO.');
