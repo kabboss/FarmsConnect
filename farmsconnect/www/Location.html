@@ -6,7 +6,7 @@
   <title>Demande de Localisation</title>
   <link rel="icon" type="image/png" href="img/FarmsConnect.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="Location.css">
+  <link rel="stylesheet" href="css/Location.css">
 </head>
 <body>
 
@@ -116,6 +116,9 @@
                     alert("Votre localisation a été enregistrée avec succès !");
                     window.location.href = 'Acceuil.html'; 
                 })
+                
+                
+            
                 .catch(error => {
                     console.error('Erreur lors de l\'enregistrement :', error);
                     alert("Erreur : " + error.message);

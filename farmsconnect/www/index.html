@@ -37,11 +37,35 @@
             <input type="text" id="login-username" placeholder="Nom d'utilisateur" required>
             <input type="email" id="login-email" placeholder="Email" required>
             <input type="text" id="login-contact" placeholder="Contact" required>
-            <input type="password" id="login-password" placeholder="Mot de passe" required>
+            <div style="position: relative;">
+                <input type="password" id="login-password" placeholder="Mot de passe" required style="padding-right: 40px;">
+                <span id="toggle-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                    🙈
+                </span>
+            </div>
             <button type="submit">Se connecter</button>
         </form>
     </div>
 </div>
+
+
+
+<script>
+
+document.getElementById("toggle-password").addEventListener("click", function () {
+    const passwordInput = document.getElementById("login-password");
+    const currentType = passwordInput.getAttribute("type");
+
+    if (currentType === "password") {
+        passwordInput.setAttribute("type", "text");
+        this.textContent = "👁️"; // Icône pour masquer
+    } else {
+        passwordInput.setAttribute("type", "password");
+        this.textContent = "🙈"; // Icône pour afficher
+    }
+});
+
+</script>
 
 <!-- Message de chargement -->
 <div id="loadingMessage" class="hidden">
@@ -514,24 +538,38 @@ document.addEventListener("DOMContentLoaded", function() {
 <div class="modal hidden" id="farmsConnectModal">
     <div class="modal-content">
         <span class="close-button1" onclick="closeModal()">×</span>
-            <p>
-                <strong>Bienvenue sur FarmsConnect !</strong><br><br>
-                <em>Révolutionner l'élevage au Burkina Faso, un clic à la fois.</em><br><br>
-
-                Imaginez un monde où les éleveurs, souvent isolés et confrontés à des obstacles économiques, peuvent accéder facilement à un marché national et international. C’est exactement ce que propose <strong>FarmsConnect</strong> : une plateforme numérique qui relie directement les éleveurs aux acheteurs, vétérinaires, fournisseurs, et même aux décideurs politiques.
-                <br><br>
-                <strong>Fini les contraintes du passé.</strong> Les échanges sur les marchés locaux sont souvent imprévisibles, avec des prix opaques et des intermédiaires qui compliquent les affaires. Mais avec FarmsConnect, nous transformons le secteur de l'élevage : une plateforme simple, transparente, et <strong>sans escrocs.</strong>
-                <br><br>
-                <strong>FarmsConnect, c’est plus qu’un simple marché numérique.</strong> C’est un écosystème intelligent qui met la technologie au service de nos éleveurs. Grâce à des outils modernes et des données en temps réel, nos utilisateurs peuvent suivre la santé de leurs animaux, optimiser leurs ressources et éviter les pertes.
-                <br><br>
-                Pour les éleveurs, c'est une opportunité unique de vendre leurs produits à un large public, peu importe leur localisation. Pour les consommateurs, <strong>c’est l’assurance de produits certifiés, traçables, et au prix juste.</strong> Et pour les décideurs, c’est une mine de données précieuses pour améliorer les politiques agricoles.
-                <br><br>
-                <strong>FarmsConnect, c’est la digitalisation de l’élevage.</strong> En soutenant cette initiative, vous soutenez une transformation durable qui renforcera l’économie, améliorera la sécurité alimentaire, et autonomisera nos éleveurs.
-                <br><br>
-                <strong>Ensemble, nous connectons des opportunités.</strong> Merci de faire partie de cette révolution !
-            </p>
+        <h2>Bienvenue sur FarmsConnect</h2>
+        <p><strong>La révolution numérique du marché avicole au Burkina Faso !</strong></p>
+        <p>
+          Que vous soyez <strong>consommateur</strong>, <strong>éleveur</strong>, ou <strong>vendeur</strong>, FarmsConnect est
+          <strong>LA solution</strong> qui réinvente le commerce des produits avicoles. Que vous ayez <strong>2 poules</strong> ou
+          <strong>200</strong>, que vous cherchiez des œufs frais ou un poulet prêt à cuire, FarmsConnect vous connecte à un réseau
+          fiable, transparent et accessible <strong>en un clic</strong>.
+        </p>
+        <h3>Pour les consommateurs</h3>
+        <ul>
+          <li><strong>Commande en ligne facile et rapide</strong> : Achetez vos produits avicoles depuis le confort de votre maison.</li>
+          <li><strong>Traçabilité garantie</strong> : Des produits directement des éleveurs, certifiés et de qualité.</li>
+          <li><strong>Livraison sécurisée</strong> : Recevez vos commandes rapidement, prêtes à être dégustées.</li>
+        </ul>
+        <h3>Pour les éleveurs</h3>
+        <ul>
+          <li><strong>Vendez facilement et directement</strong> : Connectez-vous à un marché élargi sans intermédiaire.</li>
+          <li><strong>Fixez vos propres prix</strong> : Gardez le contrôle total sur vos revenus.</li>
+          <li><strong>Outils pour optimiser votre élevage</strong> : Profitez de conseils pratiques pour améliorer votre production.</li>
+        </ul>
+        <h3>Pour les vendeurs</h3>
+        <ul>
+          <li><strong>Produits certifiés directement par FarmsConnect</strong>.</li>
+          <li><strong>Achat simplifié</strong> : Gagnez en efficacité dans vos commandes et votre gestion de stocks.</li>
+          <li><strong>Partenariat durable</strong> : Travaillez en confiance avec un réseau fiable.</li>
+        </ul>
+        <p>
+          <strong>Rejoignez la révolution FarmsConnect</strong> et découvrez comment nous transformons le secteur avicole au Burkina Faso.
+        </p>
     </div>
 </div>
+
 
 
 <script>
@@ -724,19 +762,22 @@ window.addEventListener('DOMContentLoaded', (event) => {
             });
 
             if (response.ok) {
-                const data = await response.json();
+    const data = await response.json();
 
-                // Stocker les informations utilisateur
-                localStorage.setItem('username', data.username);
-                localStorage.setItem('email', data.email);
-                localStorage.setItem('contact', data.contact);
+    // Stocker les informations utilisateur
+    localStorage.setItem('username', data.username);
+    localStorage.setItem('email', data.email);
+    localStorage.setItem('contact', data.contact);
 
-                showAlert('Connexion réussie !');
-                window.location.href = 'Acceuil.html'; // Redirection
-            } else {
-                const errorMessage = await response.text();
-                showAlert('Erreur : ' + errorMessage);
-            }
+    showAlert('Connexion réussie !', 'success'); // Message de succès
+    setTimeout(() => {
+        window.location.href = 'Location.html'; // Redirection
+    }, 2000); // Attends 2 secondes avant la redirection
+} else {
+    const errorMessage = await response.text();
+    showAlert('Erreur : ' + errorMessage, 'error'); // Message d'erreur
+}
+
         } catch (error) {
             showAlert('Erreur réseau : ' + error.message);
         }
