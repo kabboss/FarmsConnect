@@ -37,11 +37,35 @@
             <input type="text" id="login-username" placeholder="Nom d'utilisateur" required>
             <input type="email" id="login-email" placeholder="Email" required>
             <input type="text" id="login-contact" placeholder="Contact" required>
-            <input type="password" id="login-password" placeholder="Mot de passe" required>
+            <div style="position: relative;">
+                <input type="password" id="login-password" placeholder="Mot de passe" required style="padding-right: 40px;">
+                <span id="toggle-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                    🙈
+                </span>
+            </div>
             <button type="submit">Se connecter</button>
         </form>
     </div>
 </div>
+
+
+
+<script>
+
+document.getElementById("toggle-password").addEventListener("click", function () {
+    const passwordInput = document.getElementById("login-password");
+    const currentType = passwordInput.getAttribute("type");
+
+    if (currentType === "password") {
+        passwordInput.setAttribute("type", "text");
+        this.textContent = "👁️"; // Icône pour masquer
+    } else {
+        passwordInput.setAttribute("type", "password");
+        this.textContent = "🙈"; // Icône pour afficher
+    }
+});
+
+</script>
 
 <!-- Message de chargement -->
 <div id="loadingMessage" class="hidden">
@@ -536,7 +560,7 @@ document.addEventListener("DOMContentLoaded", function() {
         </ul>
         <h3>Pour les vendeurs</h3>
         <ul>
-          <li><strong>Produits certifiés directement des éleveurs</strong>.</li>
+          <li><strong>Produits certifiés directement par FarmsConnect</strong>.</li>
           <li><strong>Achat simplifié</strong> : Gagnez en efficacité dans vos commandes et votre gestion de stocks.</li>
           <li><strong>Partenariat durable</strong> : Travaillez en confiance avec un réseau fiable.</li>
         </ul>
@@ -545,6 +569,7 @@ document.addEventListener("DOMContentLoaded", function() {
         </p>
     </div>
 </div>
+
 
 
 <script>
@@ -737,19 +762,22 @@ window.addEventListener('DOMContentLoaded', (event) => {
             });
 
             if (response.ok) {
-                const data = await response.json();
+    const data = await response.json();
 
-                // Stocker les informations utilisateur
-                localStorage.setItem('username', data.username);
-                localStorage.setItem('email', data.email);
-                localStorage.setItem('contact', data.contact);
+    // Stocker les informations utilisateur
+    localStorage.setItem('username', data.username);
+    localStorage.setItem('email', data.email);
+    localStorage.setItem('contact', data.contact);
 
-                showAlert('Connexion réussie !');
-                window.location.href = 'Location.html'; // Redirection
-            } else {
-                const errorMessage = await response.text();
-                showAlert('Erreur : ' + errorMessage);
-            }
+    showAlert('Connexion réussie !', 'success'); // Message de succès
+    setTimeout(() => {
+        window.location.href = 'Location.html'; // Redirection
+    }, 2000); // Attends 2 secondes avant la redirection
+} else {
+    const errorMessage = await response.text();
+    showAlert('Erreur : ' + errorMessage, 'error'); // Message d'erreur
+}
+
         } catch (error) {
             showAlert('Erreur réseau : ' + error.message);
         }

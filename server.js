@@ -39,7 +39,6 @@ app.use(cookieParser());  // Ajoutez cette ligne avant votre middleware `verifyT
 
 
 // Configuration CORS pour permettre les requêtes provenant de l'origine spécifiée
-// Configuration CORS pour permettre les requêtes provenant de l'origine spécifiée
 const corsOptions = {
     origin: '*', // Remplacez par l'URL de votre frontend (application mobile ou web)
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -152,6 +151,10 @@ app.post('/api/login', async (req, res) => {
 });
 
 module.exports = app;
+
+
+
+
 
 
 
@@ -588,10 +591,6 @@ module.exports = app;
 
 
 
-
-
-
-
 const verifyToken = (req, res, next) => {
     const token = req.cookies.token;
 
@@ -612,38 +611,34 @@ const verifyToken = (req, res, next) => {
     }
 };
 
+// Middleware pour vérifier le token JWT
+app.use(verifyToken);  // Utilisez ce middleware dans votre application
 
-// Route pour enregistrer la localisation de l'utilisateur
+// Route pour enregistrer la localisation
 app.post('/api/save-location', verifyToken, async (req, res) => {
     const { latitude, longitude } = req.body;
-    const email = req.user.email; // Extraire l'email du token
+    const { email } = req.user;  // Récupérer l'email de l'utilisateur depuis le token décodé
 
-    console.log("Requête reçue pour l'enregistrement de la localisation.");
-    console.log("Utilisateur identifié : ", req.user);
-
-    // Vérifier si les coordonnées sont présentes
     if (!latitude || !longitude) {
-        return res.status(400).send("Coordonnées manquantes.");
+        return res.status(400).send("Latitude et longitude sont requis.");
     }
 
     try {
-        // Créer un nouvel objet Location
-        const location = new Location({
-            userId: req.user.userId, // Utilisateur identifié par le token
-            email: req.user.email,  // Ajouter l'email au modèle
-            latitude,
-            longitude,
+        // Enregistrer la localisation dans la base de données
+        const newLocation = new Location({
+            email: email,       // Utiliser l'email extrait du token
+            latitude: latitude,
+            longitude: longitude,
         });
 
-        // Sauvegarder la localisation dans la base de données
-        await location.save();
+        await newLocation.save();  // Sauvegarder la localisation dans la base de données
+
         res.status(200).json({ message: "Localisation enregistrée avec succès." });
     } catch (error) {
         console.error("Erreur lors de l'enregistrement de la localisation :", error.message);
-        res.status(500).json({ error: "Erreur serveur lors de l'enregistrement de la localisation." });
+        res.status(500).send("Erreur serveur : " + error.message);
     }
 });
-
 
 
 

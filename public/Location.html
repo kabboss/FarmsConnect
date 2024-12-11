@@ -7,48 +7,33 @@
   <link rel="icon" type="image/png" href="img/FarmsConnect.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="Location.css">
+
 </head>
 <body>
 
-  <!-- Fenêtre modale pour demander la localisation -->
-  <div id="myModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h3>Pourquoi avons-nous besoin de votre localisation ?</h3>
-      <p>Nous avons besoin de connaître votre position géographique pour des raisons de livraison et de coordination de services. Cela nous permettra de vous fournir des services plus efficaces et adaptés à votre emplacement.</p>
-      <button id="acceptBtn">Accepter</button>
-      <button id="declineBtn">Refuser</button>
-    </div>
+  <div>
+    <h3>Pourquoi avons-nous besoin de votre localisation ?</h3>
+    <p>Nous avons besoin de connaître votre position géographique pour des raisons de livraison et de coordination de services. Cela nous permettra de vous fournir des services plus efficaces et adaptés à votre emplacement.</p>
+    <button id="acceptBtn">Accepter</button>
+    <button id="declineBtn">Refuser</button>
   </div>
 
   <script src="cordova.js"></script>
   <script src="js/index.js"></script>
   <script>
     document.addEventListener('deviceready', function() {
-        // Variables pour la modale et les boutons
-        const modal = document.getElementById("myModal");
-        const closeBtn = document.getElementsByClassName("close")[0];
+        // Variables pour les boutons
         const acceptBtn = document.getElementById("acceptBtn");
         const declineBtn = document.getElementById("declineBtn");
-
-        // Afficher la modale
-        modal.style.display = "block";
-
-        // Fermer la modale
-        closeBtn.onclick = function() {
-            modal.style.display = "none";
-        };
 
         // Lorsque l'utilisateur accepte, on récupère la localisation
         acceptBtn.onclick = function() {
             getLocation();  // Récupérer la géolocalisation
-            modal.style.display = "none";  // Fermer la modale
         };
 
-        // Lorsque l'utilisateur refuse, on ferme la modale sans rien faire
+        // Lorsque l'utilisateur refuse, on affiche un message
         declineBtn.onclick = function() {
             alert("Vous avez refusé de partager votre localisation.");
-            modal.style.display = "none";  // Fermer la modale
         };
 
         // Fonction pour récupérer la localisation avec le plugin Cordova

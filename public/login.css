@@ -189,7 +189,7 @@ button:hover {
     border-radius: 8px;
     text-align: center;
     background-color: #ffffff;
-    z-index: 1000;
+    z-index: 10000;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.5s ease, visibility 0.5s ease;
@@ -447,7 +447,7 @@ nav ul li a:hover {
 
 /* Contenu de la modale */
 .modal-content {
-    background: linear-gradient(145deg, #b3e6f3, #93faa0); /* Dégradé moderne */
+    background: linear-gradient(145deg, #c9f9b4, #a8e6a2);
     margin: 20px auto;
     padding: 40px;
     border-radius: 12px;
@@ -1255,32 +1255,20 @@ h3 {
 
 
 
-
-
-
-
-.modal.open {
-    display: block;
-    /* Vous pouvez ajouter des animations ou autres effets visuels ici */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
 
-/* Modal d'inscription */
-.signup-modal {
-    display: none;
-}
 
-.signup-modal.open {
-    display: block;
-}
-
-/* Modal de connexion */
-.login-modal {
-    display: none;
-}
-
-.login-modal.open {
-    display: block;
+#toggle-password {
+    font-size: 40px;
+    color: #666;
 }
 
 
