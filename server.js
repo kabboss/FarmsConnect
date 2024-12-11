@@ -227,6 +227,52 @@ app.post('/api/order', async (req, res) => {
 
 
 
+// Fonction pour envoyer l'email
+const sendEmail = async (content, email) => {
+    const mailOptions = {
+      from: 'kaboreabwa2020@gmail.com', // L'adresse de l'expéditeur
+      to: email, // L'adresse du destinataire
+      subject: 'Détails de l\'achat',
+      text: content // Contenu du mail
+    };
+  
+    try {
+      const info = await transporter.sendMail(mailOptions);
+      console.log('Email envoyé : ' + info.response);
+      return { success: true };
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi de l\'email:', error);
+      return { success: false, message: 'Erreur d\'envoi de l\'email' };
+    }
+  };
+  
+  // Route pour envoyer l'email
+  app.post('/api/send-email', async (req, res) => {
+    const { content, email } = req.body;
+  
+    if (!content || !email) {
+      return res.status(400).json({ success: false, message: 'Les données sont manquantes.' });
+    }
+  
+    const result = await sendEmail(content, email);
+    if (result.success) {
+      return res.status(200).json({ success: true, message: 'Email envoyé avec succès' });
+    } else {
+      return res.status(500).json(result);
+    }
+  });
+  
+
+
+
+
+
+
+
+
+
+
+
 //Ajout
 
 // Route pour servir le fichier users.html
