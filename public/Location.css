@@ -1,106 +1,194 @@
-  /* Global Styles */
-  body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(to right, #00b4d8, #0077b6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    color: white;
-    overflow: hidden;
-  }
+/* Global Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #00b4d8, #0077b6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  color: white;
+  overflow:scroll;
+  flex-direction: column;
+  padding: 20px; /* Ajouter du padding pour les petits écrans */
+}
 
-  /* Container */
-  .container {
-    text-align: center;
-    max-width: 500px;
-    padding: 30px;
-    background: rgba(0, 0, 0, 0.7);
-    border-radius: 15px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-    animation: fadeIn 1s ease-in-out;
+/* Container */
+.container {
+  text-align: center;
+  max-width: 400px;
+  padding: 30px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 15px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 1s ease-in-out;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Image Styling */
+img {
+  width: 160px; /* Réduire la taille de l'image pour les petits écrans */
+  height: 160px; /* Réduire la taille de l'image */
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto 30px auto;
+  animation: fadeIn 2s ease-out;
+  margin-top: 20px;
+}
+
+/* Title Styling */
+h3 {
+  font-size: 30px; /* Réduire la taille du titre */
+  margin-bottom: 15px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  animation: slideIn 0.6s ease-out;
+}
+
+/* Paragraph Styling */
+p {
+  font-size: 22px; /* Ajuster la taille du texte pour les petits écrans */
+  margin-bottom: 25px;
+  animation: fadeInText 1.5s ease-in-out;
+}
+
+/* Button Styling */
+button {
+  padding: 15px 30px;
+  margin: 10px;
+  background: #00b4d8;
+  border: none;
+  border-radius: 30px;
+  font-size: 18px; /* Réduire la taille du bouton */
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0077b6;
+  transform: scale(1.1);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%; /* Faire en sorte que le modal prenne moins de place sur les petits écrans */
+  max-width: 350px;
+  text-align: center;
+}
+
+.modal h2 {
+  color: #e74c3c; /* Rouge pour indiquer l'importance */
+}
+
+.modal input {
+  width: 90%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.modal button {
+  background-color: #3498db;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.modal button:hover {
+  background-color: #2980b9;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInText {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  body {
+    padding: 15px; /* Padding supplémentaire sur petits écrans */
   }
 
   h3 {
-    font-size: 28px;
-    margin-bottom: 15px;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    animation: slideIn 0.6s ease-out;
+    font-size: 26px; /* Réduire la taille du titre sur petits écrans */
   }
 
   p {
-    font-size: 16px;
-    margin-bottom: 25px;
-    animation: fadeInText 1.5s ease-in-out;
+    font-size: 18px; /* Réduire la taille du texte pour les petits écrans */
   }
 
   button {
-    padding: 15px 30px;
-    margin: 10px;
-    background: #00b4d8;
-    border: none;
-    border-radius: 30px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease;
+    font-size: 16px; /* Taille réduite des boutons */
+    padding: 12px 24px;
   }
 
-  button:hover {
-    background-color: #0077b6;
-    transform: scale(1.1);
+  .container {
+    padding: 20px;
   }
 
-  button:active {
-    transform: scale(0.95);
+  img {
+    width: 120px; /* Réduire encore plus la taille de l'image sur petits écrans */
+    height: 120px; /* Réduire encore la taille de l'image */
   }
 
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    h3 {
-      font-size: 24px;
-    }
-    p {
-      font-size: 14px;
-    }
-    button {
-      font-size: 16px;
-      padding: 12px 24px;
-    }
+  /* Modifier la largeur du modal pour les petits écrans */
+  .modal-content {
+    width: 80%;
+    max-width: 300px;
   }
-
-  /* Animations */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateX(-100%);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes fadeInText {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
+}

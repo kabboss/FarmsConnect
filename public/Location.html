@@ -6,7 +6,8 @@
   <title>Demande de Localisation</title>
   <link rel="icon" type="image/png" href="img/FarmsConnect.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/Location.css">
+  <link rel="stylesheet" href="Location.css">
+
 </head>
 <body>
 
@@ -15,6 +16,17 @@
     <p>Nous avons besoin de connaître votre position géographique pour des raisons de livraison et de coordination de services. Cela nous permettra de vous fournir des services plus efficaces et adaptés à votre emplacement.</p>
     <button id="acceptBtn">Accepter</button>
     <button id="declineBtn">Refuser</button>
+  </div>
+
+  <!-- Fenêtre modale pour entrer l'email -->
+  <div id="emailModal" class="modal">
+    <div class="modal-content">
+      <h2>🚨 Email Très Important 🚨</h2>
+      <p>Veuillez entrer votre adresse email valide pour continuer.</p>
+      <input type="email" id="emailInput" placeholder="Votre adresse email..." required>
+      <input type="email" id="emailInputConfirm" placeholder="Confirmez votre email..." required>
+      <button onclick="submitEmail()">Valider</button>
+    </div>
   </div>
 
   <script src="cordova.js"></script>
@@ -26,13 +38,26 @@
 
     // Lorsque l'utilisateur accepte, on récupère la localisation et demande son email
     acceptBtn.onclick = function() {
-      // Demander à l'utilisateur de saisir son email
-      const email = prompt("Veuillez entrer votre adresse email :");
+      // Ouvrir la fenêtre modale pour demander l'email
+      document.getElementById("emailModal").style.display = "flex";
+    };
+
+    // Lorsque l'utilisateur refuse, on affiche un message et redirige
+    declineBtn.onclick = function() {
+      alert("Vous avez refusé de partager votre localisation.");
+      window.location.href = 'Acceuil.html'; 
+    };
+
+    // Fonction pour soumettre l'email
+    function submitEmail() {
+      const email = document.getElementById("emailInput").value;
+      const emailConfirm = document.getElementById("emailInputConfirm").value;
 
       // Validation basique de l'email
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!email || !emailRegex.test(email)) {
-        alert("Veuillez saisir un email valide !");
+
+      if (!email || !emailRegex.test(email) || email !== emailConfirm) {
+        alert("Les emails ne correspondent pas ou ne sont pas valides. Veuillez les saisir à nouveau.");
         return;
       }
 
@@ -59,13 +84,10 @@
           maximumAge: 0
         }
       );
-    };
 
-    // Lorsque l'utilisateur refuse, on affiche un message et redirige
-    declineBtn.onclick = function() {
-      alert("Vous avez refusé de partager votre localisation.");
-      window.location.href = 'Acceuil.html'; 
-    };
+      // Fermer la fenêtre modale après soumission
+      document.getElementById("emailModal").style.display = "none";
+    }
 
     // Fonction pour sauvegarder la localisation avec l'email
     function saveLocation(email, latitude, longitude) {
