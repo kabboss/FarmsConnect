@@ -91,9 +91,6 @@ function closeAlert() {
 
 
 
-
-
-
 document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('modal');
     const openModalButton = document.querySelector('.open-modal-button');
