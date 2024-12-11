@@ -591,42 +591,22 @@ module.exports = app;
 
 
 
-const verifyToken = (req, res, next) => {
-    const token = req.cookies.token;
-
-    if (!token) {
-        console.error("Token JWT manquant dans les cookies.");
-        return res.status(401).send("Token JWT manquant.");
-    }
-
-    try {
-        // Vérification du token avec un secret
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'ka23bo23re23');
-        console.log("Token décodé avec succès :", decoded);
-        req.user = decoded;  // Attacher l'utilisateur au request
-        next();  // Passer à la prochaine fonction
-    } catch (error) {
-        console.error("Erreur lors de la vérification du token :", error.message);
-        return res.status(401).send(`Token JWT invalide : ${error.message}`);
-    }
-};
-
-// Middleware pour vérifier le token JWT
-app.use(verifyToken);  // Utilisez ce middleware dans votre application
-
 // Route pour enregistrer la localisation
-app.post('/api/save-location', verifyToken, async (req, res) => {
-    const { latitude, longitude } = req.body;
-    const { email } = req.user;  // Récupérer l'email de l'utilisateur depuis le token décodé
+app.post('/api/save-location', async (req, res) => {
+    const { latitude, longitude, email } = req.body;  // Récupérer email, latitude et longitude
 
     if (!latitude || !longitude) {
         return res.status(400).send("Latitude et longitude sont requis.");
     }
 
+    if (!email || !email.includes('@')) {
+        return res.status(400).send("Un email valide est requis.");
+    }
+
     try {
         // Enregistrer la localisation dans la base de données
         const newLocation = new Location({
-            email: email,       // Utiliser l'email extrait du token
+            email: email,       // Utiliser l'email fourni par l'utilisateur
             latitude: latitude,
             longitude: longitude,
         });

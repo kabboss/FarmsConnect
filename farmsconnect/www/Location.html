@@ -7,7 +7,6 @@
   <link rel="icon" type="image/png" href="img/FarmsConnect.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/Location.css">
-
 </head>
 <body>
 
@@ -21,97 +20,78 @@
   <script src="cordova.js"></script>
   <script src="js/index.js"></script>
   <script>
-    document.addEventListener('deviceready', function() {
-        // Variables pour les boutons
-        const acceptBtn = document.getElementById("acceptBtn");
-        const declineBtn = document.getElementById("declineBtn");
+    // Variables pour les boutons
+    const acceptBtn = document.getElementById("acceptBtn");
+    const declineBtn = document.getElementById("declineBtn");
 
-        // Lorsque l'utilisateur accepte, on récupère la localisation
-        acceptBtn.onclick = function() {
-            getLocation();  // Récupérer la géolocalisation
-        };
+    // Lorsque l'utilisateur accepte, on récupère la localisation et demande son email
+    acceptBtn.onclick = function() {
+      // Demander à l'utilisateur de saisir son email
+      const email = prompt("Veuillez entrer votre adresse email :");
 
-        // Lorsque l'utilisateur refuse, on affiche un message
-        declineBtn.onclick = function() {
+      // Validation basique de l'email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email || !emailRegex.test(email)) {
+        alert("Veuillez saisir un email valide !");
+        return;
+      }
+
+      console.log("Email saisi :", email);
+
+      // Récupérer la géolocalisation
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+          console.log("Position récupérée : ", latitude, longitude);
+          saveLocation(email, latitude, longitude);  // Sauvegarder la localisation
+        },
+        function(error) {
+          if (error.code === error.PERMISSION_DENIED) {
             alert("Vous avez refusé de partager votre localisation.");
-            window.location.href = 'Acceuil.html'; 
-        };
-
-        // Fonction pour récupérer la localisation avec le plugin Cordova
-        function getLocation() {
-            navigator.geolocation.getCurrentPosition(
-                function(position) {
-                    // Si l'utilisateur accepte, on enregistre sa localisation
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-                    console.log("Position récupérée : ", latitude, longitude);
-                    saveLocation(latitude, longitude);  // Appeler la fonction pour sauvegarder la localisation
-                },
-                function(error) {
-                    // Si l'utilisateur refuse, afficher une erreur
-                    if (error.code === error.PERMISSION_DENIED) {
-                        alert("Vous avez refusé de partager votre localisation.");
-                    } else {
-                        alert("Erreur lors de la récupération de la position : " + error.message);
-                    }
-                },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 40000,
-                    maximumAge: 0
-                }
-            );
+          } else {
+            alert("Erreur lors de la récupération de la position : " + error.message);
+          }
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 40000,
+          maximumAge: 0
         }
+      );
+    };
 
-        // Fonction pour récupérer l'email depuis le token JWT (côté client)
-        function getEmailFromServer() {
-            const token = document.cookie.split('token=')[1];  // Extraire le token des cookies
+    // Lorsque l'utilisateur refuse, on affiche un message et redirige
+    declineBtn.onclick = function() {
+      alert("Vous avez refusé de partager votre localisation.");
+      window.location.href = 'Acceuil.html'; 
+    };
 
-            if (token) {
-                try {
-                    const decoded = jwt_decode(token);  // Décoder le token
-                    return decoded.email;  // Retourner l'email contenu dans le token
-                } catch (error) {
-                    console.error('Erreur lors du décodage du token:', error);
-                    return null;
-                }
-            }
-            return null;
-        }
-
-        // Fonction pour envoyer la localisation à un backend (vous pouvez adapter cela à votre API backend)
-        function saveLocation(latitude, longitude) {
-            const email = getEmailFromServer();  // Récupérer l'email de l'utilisateur
-
-            // Vérifier que l'email existe avant d'envoyer la localisation
-            if (email) {
-                fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        latitude: latitude,
-                        longitude: longitude,
-                        email: email  // Envoyer l'email avec la localisation
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Localisation enregistrée :', data);
-                    alert("Votre localisation a été enregistrée avec succès !");
-                    window.location.href = 'Acceuil.html'; 
-                })
-                .catch(error => {
-                    console.error('Erreur lors de l\'enregistrement :', error);
-                    alert("Erreur : " + error.message);
-                });
-            } else {
-                alert("Erreur : Impossible de récupérer votre email.");
-            }
-        }
-
-    }, false);
+    // Fonction pour sauvegarder la localisation avec l'email
+    function saveLocation(email, latitude, longitude) {
+      fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          latitude: latitude,
+          longitude: longitude,
+          email: email
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Localisation enregistrée :', data);
+        alert("Votre localisation a été enregistrée avec succès !");
+        window.location.href = 'Acceuil.html';  // Redirection vers la page d'accueil après l'enregistrement
+      })
+      .catch(error => {
+        console.error('Erreur lors de l\'enregistrement :', error);
+        alert("Erreur : " + error.message);
+      });
+    }
   </script>
+
 </body>
 </html>
