@@ -157,9 +157,6 @@ module.exports = app;
 
 
 
-
-
-
 // Route pour passer une commande et envoyer les emails de confirmation
 app.post('/api/order', async (req, res) => {
     const { username, email, contact, price, quantity, weight, Produit: nomproduit, traitement, typeAbattage } = req.body;
@@ -178,7 +175,7 @@ app.post('/api/order', async (req, res) => {
             return res.status(400).send('Localisation non trouvée pour cet utilisateur.');
         }
 
-        const { latitude, longitude } = locationData;
+        const { latitude, longitude } = locationData; // Récupérer les coordonnées
 
         // Préparer l'email pour le client
         const mailOptionsClient = {
@@ -197,15 +194,15 @@ app.post('/api/order', async (req, res) => {
             console.log('Email envoyé au client:', info.response);
         });
 
-        // Préparer l'email pour Farmsconnect
+        // Préparer l'email pour Farmsconnect avec les coordonnées géographiques
         const mailOptionsFarmsconnect = {
             from: 'kaboreabwa2020@gmail.com',
             to: 'kaboreabwa2020@gmail.com', // Destinataire: Farmsconnect
             subject: 'Nouvelle commande reçue',
-            text: `Nouvelle commande reçue !\n\nDétails de la commande :\n- Client : ${username}\n- Email : ${email}\n- Contact : ${contact}\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}- Type d'abattage : ${typeAbattage}\n \n\nMerci de traiter cette commande.`
+            text: `Nouvelle commande reçue !\n\nDétails de la commande :\n- Client : ${username}\n- Email : ${email}\n- Contact : ${contact}\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Type d'abattage : ${typeAbattage}\n\nCoordonnées géographiques :\n- Latitude : ${latitude}\n- Longitude : ${longitude}\n\nMerci de traiter cette commande.`
         };
 
-        // Envoi de l'email à Farmsconnect
+        // Envoi de l'email à Farmsconnect avec les coordonnées
         transporter.sendMail(mailOptionsFarmsconnect, (error, info) => {
             if (error) {
                 console.error('Erreur lors de l\'envoi de l\'email à Farmsconnect :', error);
@@ -221,6 +218,8 @@ app.post('/api/order', async (req, res) => {
         res.status(500).send('Erreur lors de la commande : ' + error.message);
     }
 });
+
+
 
 
 
@@ -591,7 +590,7 @@ module.exports = app;
 
 
 
-// Route pour enregistrer la localisation
+// Route pour enregistrer ou mettre à jour la localisation
 app.post('/api/save-location', async (req, res) => {
     const { latitude, longitude, email } = req.body;  // Récupérer email, latitude et longitude
 
@@ -604,16 +603,29 @@ app.post('/api/save-location', async (req, res) => {
     }
 
     try {
-        // Enregistrer la localisation dans la base de données
-        const newLocation = new Location({
-            email: email,       // Utiliser l'email fourni par l'utilisateur
-            latitude: latitude,
-            longitude: longitude,
-        });
+        // Vérifier si l'utilisateur existe déjà
+        const existingLocation = await Location.findOne({ email: email });
 
-        await newLocation.save();  // Sauvegarder la localisation dans la base de données
+        if (existingLocation) {
+            // Si l'utilisateur existe, on met à jour ses coordonnées
+            existingLocation.latitude = latitude;
+            existingLocation.longitude = longitude;
 
-        res.status(200).json({ message: "Localisation enregistrée avec succès." });
+            await existingLocation.save();  // Sauvegarder les modifications
+
+            res.status(200).json({ message: "Localisation mise à jour avec succès." });
+        } else {
+            // Si l'utilisateur n'existe pas, on enregistre une nouvelle localisation
+            const newLocation = new Location({
+                email: email,
+                latitude: latitude,
+                longitude: longitude,
+            });
+
+            await newLocation.save();  // Sauvegarder la localisation dans la base de données
+
+            res.status(200).json({ message: "Localisation enregistrée avec succès." });
+        }
     } catch (error) {
         console.error("Erreur lors de l'enregistrement de la localisation :", error.message);
         res.status(500).send("Erreur serveur : " + error.message);
