@@ -185,7 +185,7 @@ app.post('/api/order', async (req, res) => {
             from: 'kaboreabwa2020@gmail.com',
             to: email,
             subject: 'Confirmation de commande',
-            text: `Merci, ${username}, pour votre commande ! Détails :\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA\n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Type d'abattage : ${typeAbattage} \n\nNous vous contacterons au ${contact} pour valider la commande.`
+            text: `Merci, ${username}, pour votre commande ! Détails :\n- Produit : ${nomproduit}\n- Prix : ${price} FCFA + Frais de livraison  .... FCFA \n- Quantité : ${quantity}\n- Poids : ${weight} kg\n- Traitement : ${traitement}\n- Type d'abattage : ${typeAbattage} \n\nNous vous contacterons au ${contact} pour valider la commande.`
         };
 
         // Envoi de l'email au client
@@ -226,35 +226,6 @@ app.post('/api/order', async (req, res) => {
 
 
 
-
-
-
-
-// Route pour obtenir les informations de l'utilisateur connecté
-app.get('/api/user/me', async (req, res) => {
-    const token = req.headers.authorization?.split(' ')[1]; // Récupérer le token depuis l'en-tête
-
-    if (!token) {
-        return res.status(401).send('Accès non autorisé. Token manquant.');
-    }
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'ka23bo23re23');
-        const userId = decoded.userId;
-
-        // Récupérer les informations de l'utilisateur à partir de l'ID décodé
-        const user = await User.findById(userId).select('username email contact');
-
-        if (!user) {
-            return res.status(404).send('Utilisateur non trouvé.');
-        }
-
-        res.status(200).json(user);
-    } catch (error) {
-        console.error('Erreur lors de la vérification du token :', error);
-        res.status(401).send('Token invalide.');
-    }
-});
 
 
 

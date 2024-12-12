@@ -12,6 +12,13 @@
     <allow-navigation href="https://farmsconnect-b084ddb02391.herokuapp.com" />
     <allow-intent href="geo:*" />
     <preference name="GeolocationEnabled" value="true" />
+    <plugin name="cordova-plugin-geolocation" source="npm" />
+    <preference name="android-targetSdkVersion" value="30" />
+    <preference name="permissions" value="geolocation" />
+    <preference name="AllowUntrustedCertificates" value="true" />
+
+
+
     <platform name="android">
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />

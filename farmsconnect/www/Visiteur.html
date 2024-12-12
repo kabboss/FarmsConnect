@@ -375,7 +375,7 @@ fetchAnnonces(1, 10);
         const emailData = {
             subject: subject,    // Sujet de l'e-mail
             content: content,    // Contenu de l'e-mail
-            email: email         // Destinataire
+            email: visitorInfo.email         // Destinataire
         };
     
         fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {

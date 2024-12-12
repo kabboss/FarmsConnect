@@ -312,57 +312,73 @@ window.onload = function() {
 
 function acheterProduit(nomProduit, prix, quantityId, weightId) {
 
-    // Afficher le message de chargement
-    const loadingMessage = document.getElementById("loadingMessage");
-    loadingMessage.classList.remove("hidden");
+// Afficher le message de chargement
+const loadingMessage = document.getElementById("loadingMessage");
+loadingMessage.classList.remove("hidden");
 
-    const username = localStorage.getItem('username');
-    const email = localStorage.getItem('email');
-    const contact = localStorage.getItem('contact');
+// Demander les informations à l'utilisateur
+const username = prompt("Veuillez entrer votre nom et prénom");
+if (!username) {
+    alert("Le nom d'utilisateur est requis.");
+    return;
+}
 
-    if (!username || !email) {
-        console.error('Nom d\'utilisateur ou e-mail non spécifié dans le localStorage');
-        alert('Veuillez vous connecter pour passer une commande.');
-        return;
-    }
+// Demander l'email et valider qu'il est valide
+let email = prompt("Veuillez entrer votre adresse e-mail");
+if (!email || !validateEmail(email)) {
+    alert("Veuillez entrer un e-mail valide.");
+    return;
+}
 
-    const quantityElement = document.getElementById(quantityId);
-    const weightElement = document.getElementById(weightId);
+// Demander la confirmation de l'email
+let confirmEmail = prompt("Veuillez confirmer votre e-mail");
+if (email !== confirmEmail) {
+    alert("Les adresses e-mail ne correspondent pas.");
+    return;
+}
 
-    if (!quantityElement || !weightElement) {
-        console.error('Les éléments pour la quantité ou le poids sont introuvables');
-        alert('Erreur : éléments introuvables.');
-        return;
-    }
+// Demander le numéro de contact
+const contact = prompt("Veuillez entrer votre numéro de contact");
+if (!contact) {
+    alert("Le contact est requis.");
+    return;
+}
 
-    const quantity = parseInt(quantityElement.value);
-    const weight = parseFloat(weightElement.value);
+const quantityElement = document.getElementById(quantityId);
+const weightElement = document.getElementById(weightId);
 
-    if (isNaN(quantity) || isNaN(weight)) {
-        console.error('Valeurs de quantité ou de poids invalides');
-        alert('Erreur : veuillez entrer des valeurs valides.');
-        return;
-    }
+if (!quantityElement || !weightElement) {
+    console.error('Les éléments pour la quantité ou le poids sont introuvables');
+    alert('Erreur : éléments introuvables.');
+    return;
+}
 
-    // Calcul du prix total avant remise
-    let total = quantity * prix * weight;
+const quantity = parseInt(quantityElement.value);
+const weight = parseFloat(weightElement.value);
 
-    // Appliquer une remise pour les grandes quantités
-    if (quantity >= 20) {
-        total *= 0.80; // 20% de remise pour 20 articles ou plus
-    } else if (quantity >= 10) {
-        total *= 0.90; // 10% de remise pour 10 à 19 articles
-    }
+if (isNaN(quantity) || isNaN(weight)) {
+    console.error('Valeurs de quantité ou de poids invalides');
+    alert('Erreur : veuillez entrer des valeurs valides.');
+    return;
+}
 
-    const poidsTotal = quantity * weight;
+// Calcul du prix total avant remise
+let total = quantity * prix * weight;
+
+// Appliquer une remise pour les grandes quantités
+if (quantity >= 20) {
+    total *= 0.80; // 20% de remise pour 20 articles ou plus
+} else if (quantity >= 10) {
+    total *= 0.90; // 10% de remise pour 10 à 19 articles
+}
+
+const poidsTotal = quantity * weight;
 
 // Définir la variable traitement avant de l'utiliser
-// Fonction pour normaliser les IDs
 function normalizeId(nomProduit) {
     return nomProduit.toLowerCase().replace(/\s+/g, '-');
 }
 
-// Définir la variable traitement avant de l'utiliser
 const produitId = `option-traitement-${normalizeId(nomProduit)}`;
 const traitementElement = document.getElementById(produitId);
 if (!traitementElement) {
@@ -381,52 +397,56 @@ if (traitement === "abattu") {
     typeAbattage = document.getElementById(`abattage-type-${normalizeId(nomProduit)}`).value;
 }
 
+const orderDetails = {
+    username: username,
+    email: email,
+    quantity: quantity,
+    weight: poidsTotal,
+    price: total.toFixed(2), // Arrondir le prix total à deux décimales
+    contact: contact,
+    Produit: nomProduit,
+    traitement: traitement || "Non spécifié", // Par défaut, "Non spécifié" si aucune option n'est choisie
+    typeAbattage: typeAbattage || "Non applicable" // Si pas d'abattage, indiquer "Non applicable"
+};
 
+console.log('Order Data:', orderDetails);
 
-    const orderDetails = {
-        username: username,
-        email: email,
-        quantity: quantity,
-        weight: poidsTotal,
-        price: total.toFixed(2), // Arrondir le prix total à deux décimales
-        contact: contact,
-        Produit: nomProduit,
-        traitement: traitement || "Non spécifié", // Par défaut, "Non spécifié" si aucune option n'est choisie
-        typeAbattage: typeAbattage || "Non applicable" // Si pas d'abattage, indiquer "Non applicable"
-    };
+// Envoyer la requête POST à l'API
+fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/order', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(orderDetails)
+})
+.then(response => {
+    if (response.ok) {
+        return response.text();
+    } else {
+        throw new Error('Erreur lors de la commande');
+    }
 
-    console.log('Order Data:', orderDetails);
+})
+.then(data => {
+    showAlert('Commande passée avec succès! Nous vous avons envoyé un mail contenant les détails de votre commande.');
+    console.log(data);
+    loadingMessage.classList.add("hidden");
+})
+.catch(error => {
+    console.error('Erreur lors de la commande :', error);
+    showAlert('Erreur lors de la commande.');
+});
+}
 
-    // Envoyer la requête POST à l'API
-    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/order', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(orderDetails)
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.text();
-        } else {
-            throw new Error('Erreur lors de la commande');
-        }
-
-    })
-    .then(data => {
-        showAlert('Commande passée avec succès! Nous vous avons envoyé un mail contenant les détails de votre commande.');
-        console.log(data);
-        loadingMessage.classList.add("hidden");
-    })
-    .catch(error => {
-        console.error('Erreur lors de la commande :', error);
-        showAlert('Erreur lors de la commande.');
-    });
+// Fonction de validation de l'e-mail
+function validateEmail(email) {
+const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+return regex.test(email);
 }
 
 
-    </script>
-    
+</script>
+
 
 <script>
 function showAlert(message) {
