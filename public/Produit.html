@@ -312,26 +312,56 @@ window.onload = function() {
 
 function acheterProduit(nomProduit, prix, quantityId, weightId) {
 
-    // Afficher le message de chargement
-    const loadingMessage = document.getElementById("loadingMessage");
-    loadingMessage.classList.remove("hidden");
+// Afficher le message de chargement
+const loadingMessage = document.getElementById("loadingMessage");
+loadingMessage.classList.remove("hidden");
 
-    const username = localStorage.getItem('username');
-    const email = localStorage.getItem('email');
-    const contact = localStorage.getItem('contact');
 
-    if (!username || !email) {
-        console.error('Nom d\'utilisateur ou e-mail non spécifié dans le localStorage');
-        alert('Veuillez vous connecter pour passer une commande.');
-        return;
+
+
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+}
+
+// Vérifier la présence du token
+const token = getCookie('token');
+if (token) {
+    console.log('Token trouvé :', token);
+} else {
+    console.error('Token d\'authentification manquant.');
+}
+
+
+// Envoyer la requête GET pour récupérer l'utilisateur avec le token
+fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/user/me', {
+    method: 'GET',
+    headers: {
+        'Authorization': `Bearer ${token}` // Ajouter le token dans l'en-tête de la requête
     }
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Utilisateur non trouvé');
+    }
+    return response.json(); // Récupérer les données JSON
+})
+.then(user => {
+    const username = user.username;
+    const contact = user.contact;
+    const email = user.email;
 
+    // Vérification de la disponibilité des éléments
     const quantityElement = document.getElementById(quantityId);
     const weightElement = document.getElementById(weightId);
 
     if (!quantityElement || !weightElement) {
         console.error('Les éléments pour la quantité ou le poids sont introuvables');
         alert('Erreur : éléments introuvables.');
+        loadingMessage.classList.add("hidden");
         return;
     }
 
@@ -341,6 +371,7 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
     if (isNaN(quantity) || isNaN(weight)) {
         console.error('Valeurs de quantité ou de poids invalides');
         alert('Erreur : veuillez entrer des valeurs valides.');
+        loadingMessage.classList.add("hidden");
         return;
     }
 
@@ -356,48 +387,39 @@ function acheterProduit(nomProduit, prix, quantityId, weightId) {
 
     const poidsTotal = quantity * weight;
 
-// Définir la variable traitement avant de l'utiliser
-// Fonction pour normaliser les IDs
-function normalizeId(nomProduit) {
-    return nomProduit.toLowerCase().replace(/\s+/g, '-');
-}
+    // Définir la variable traitement avant de l'utiliser
+    const produitId = `option-traitement-${normalizeId(nomProduit)}`;
+    const traitementElement = document.getElementById(produitId);
 
-// Définir la variable traitement avant de l'utiliser
-const produitId = `option-traitement-${normalizeId(nomProduit)}`;
-const traitementElement = document.getElementById(produitId);
-if (!traitementElement) {
-    console.error(`L'élément avec l'ID ${produitId} est introuvable.`);
-    return;
-}
+    if (!traitementElement) {
+        console.error(`L'élément avec l'ID ${produitId} est introuvable.`);
+        loadingMessage.classList.add("hidden");
+        return;
+    }
 
-console.log('Produit sélectionné :', nomProduit);
-console.log('ID recherché :', produitId);
+    const traitement = traitementElement.value;
+    let typeAbattage = null;
 
-const traitement = traitementElement.value;
-let typeAbattage = null;
-
-// Vérifier si des options d'abattage sont affichées
-if (traitement === "abattu") {
-    typeAbattage = document.getElementById(`abattage-type-${normalizeId(nomProduit)}`).value;
-}
-
-
+    // Vérifier si des options d'abattage sont affichées
+    if (traitement === "abattu") {
+        typeAbattage = document.getElementById(`abattage-type-${normalizeId(nomProduit)}`).value;
+    }
 
     const orderDetails = {
         username: username,
         email: email,
+        contact: contact,
         quantity: quantity,
         weight: poidsTotal,
         price: total.toFixed(2), // Arrondir le prix total à deux décimales
-        contact: contact,
-        Produit: nomProduit,
+        produit: nomProduit,
         traitement: traitement || "Non spécifié", // Par défaut, "Non spécifié" si aucune option n'est choisie
         typeAbattage: typeAbattage || "Non applicable" // Si pas d'abattage, indiquer "Non applicable"
     };
 
     console.log('Order Data:', orderDetails);
 
-    // Envoyer la requête POST à l'API
+    // Envoyer la requête POST pour passer la commande
     fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/order', {
         method: 'POST',
         headers: {
@@ -411,7 +433,6 @@ if (traitement === "abattu") {
         } else {
             throw new Error('Erreur lors de la commande');
         }
-
     })
     .then(data => {
         showAlert('Commande passée avec succès! Nous vous avons envoyé un mail contenant les détails de votre commande.');
@@ -422,6 +443,20 @@ if (traitement === "abattu") {
         console.error('Erreur lors de la commande :', error);
         showAlert('Erreur lors de la commande.');
     });
+})
+.catch(error => {
+    console.error('Erreur lors de la récupération des informations utilisateur :', error);
+    alert('Erreur lors de la récupération des informations utilisateur.');
+    loadingMessage.classList.add("hidden");
+});
+}
+
+// Fonction pour récupérer un cookie par son nom
+function getCookie(name) {
+const value = `; ${document.cookie}`;
+const parts = value.split(`; ${name}=`);
+if (parts.length === 2) return parts.pop().split(';').shift();
+return null;
 }
 
 

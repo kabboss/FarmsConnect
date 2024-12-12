@@ -232,28 +232,34 @@ app.post('/api/order', async (req, res) => {
 
 
 
-// Route pour récupérer les informations de l'utilisateur
-router.get('/api/user/:userId', async (req, res) => {
+
+
+
+// Route pour obtenir les informations de l'utilisateur connecté
+app.get('/api/user/me', async (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1]; // Récupérer le token depuis l'en-tête
+
+    if (!token) {
+        return res.status(401).send('Accès non autorisé. Token manquant.');
+    }
+
     try {
-        const { userId } = req.params; // Récupérer l'identifiant de l'utilisateur à partir des paramètres d'URL
-        const user = await User.findById(userId);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'ka23bo23re23');
+        const userId = decoded.userId;
+
+        // Récupérer les informations de l'utilisateur à partir de l'ID décodé
+        const user = await User.findById(userId).select('username email contact');
 
         if (!user) {
-            return res.status(404).json({ error: 'Utilisateur non trouvé' });
+            return res.status(404).send('Utilisateur non trouvé.');
         }
 
-        res.status(200).json({
-            username: user.username,
-            email: user.email,
-            contact: user.contact,
-        });
+        res.status(200).json(user);
     } catch (error) {
-        console.error('Erreur lors de la récupération des informations utilisateur:', error);
-        res.status(500).json({ error: 'Erreur serveur' });
+        console.error('Erreur lors de la vérification du token :', error);
+        res.status(401).send('Token invalide.');
     }
 });
-
-module.exports = router;
 
 
 
