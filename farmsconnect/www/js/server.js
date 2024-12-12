@@ -232,6 +232,48 @@ app.post('/api/order', async (req, res) => {
 
 
 
+
+// Route pour récupérer les informations de l'utilisateur
+router.get('/api/user/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params; // Récupérer l'identifiant de l'utilisateur à partir des paramètres d'URL
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ error: 'Utilisateur non trouvé' });
+        }
+
+        res.status(200).json({
+            username: user.username,
+            email: user.email,
+            contact: user.contact,
+        });
+    } catch (error) {
+        console.error('Erreur lors de la récupération des informations utilisateur:', error);
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
+});
+
+module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //Ajout
 
 // Route pour servir le fichier users.html
