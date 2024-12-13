@@ -49,3 +49,11 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('loading-screen').style.display = 'none';
     }, 3000); // Durée de l'animation.
 });
+
+
+document.addEventListener('deviceready', function () {
+    setTimeout(() => {
+        navigator.splashscreen.hide(); // Cache le splash screen par défaut.
+        document.getElementById('animated-splash').style.display = 'none';
+    }, 3000); // Synchronisez avec la durée de l'animation.
+});
