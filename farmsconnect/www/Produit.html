@@ -129,7 +129,7 @@ window.onload = function() {
         <div class="product poulet-local">
             <img src="img/local.jpg" alt="Poulet Local">
             <h3>Poulet Local</h3>
-            <p id="price-poulet-local">Prix unitaire:  3500 FCFA</p>
+            <p id="price-poulet-local">Prix: 3000 FCFA</p>
             <label for="quantity-poulet-local">Quantité:</label>
             <input type="number" id="quantity-poulet-local" min="1" value="1">
             <label for="weight-poulet-local">Poids (kg) pas obligatoire:</label>
@@ -151,18 +151,18 @@ window.onload = function() {
                 </select>
             </div>
 
-            <button onclick="acheterProduit('Poulet Local', 3500, 'quantity-poulet-local', 'weight-poulet-local', 'option-traitement-poulet-local', 'abattage-type-poulet-local')">Acheter</button>
+            <button onclick="acheterProduit('Poulet Local', 3000, 'quantity-poulet-local', 'weight-poulet-local', 'option-traitement-poulet-local', 'abattage-type-poulet-local')">Acheter</button>
         </div>
 
         <!-- Poulet de Chair -->
         <div class="product poulet-chair">
             <img src="img/Chair.jpg" alt="Poulet de Chair">
             <h3>Poulet de Chair</h3>
-            <p id="price-poulet-chair">Prix unitaire: 4000 FCFA</p>
+            <p id="price-poulet-chair">Prix: 3200 FCFA</p>
             <label for="quantity-poulet-chair">Quantité:</label>
             <input type="number" id="quantity-poulet-chair" min="1" value="1">
             <label for="weight-poulet-chair">Poids (kg) pas obligatoire:</label>
-            <input type="number" id="weight-poulet-chair" min="0.1" step="0.1" value="2.5">
+            <input type="number" id="weight-poulet-chair" min="0.1" step="0.1" value="2.3">
 
             <!-- Options de traitement -->
             <label for="option-traitement-poulet-chair">Traitement:</label>
@@ -180,18 +180,18 @@ window.onload = function() {
                 </select>
             </div>
 
-            <button onclick="acheterProduit('poulet chair', 4000, 'quantity-poulet-chair', 'weight-poulet-chair', 'option-traitement-poulet-chair', 'abattage-type-poulet-chair')">Acheter</button>
+            <button onclick="acheterProduit('poulet chair', 3200, 'quantity-poulet-chair', 'weight-poulet-chair', 'option-traitement-poulet-chair', 'abattage-type-poulet-chair')">Acheter</button>
         </div>
 
         <!-- Poulet Amélioré -->
         <div class="product poulet-ameliore">
             <img src="img/ameliorer.jpg" alt="Poulet Amélioré">
             <h3>Poulet Local Amélioré</h3>
-            <p id="price-poulet-ameliore">Prix unitaire: 4000 FCFA</p>
+            <p id="price-poulet-ameliore">Prix: 3600 FCFA</p>
             <label for="quantity-poulet-ameliore">Quantité:</label>
             <input type="number" id="quantity-poulet-ameliore" min="1" value="1">
             <label for="weight-poulet-ameliore">Poids (kg) pas obligatoire:</label>
-            <input type="number" id="weight-poulet-ameliore" min="0.1" step="0.1" value="2.5">
+            <input type="number" id="weight-poulet-ameliore" min="0.1" step="0.1" value="2.4">
 
             <!-- Options de traitement -->
             <label for="option-traitement-poulet-ameliore">Traitement:</label>
@@ -209,18 +209,18 @@ window.onload = function() {
                 </select>
             </div>
 
-            <button onclick="acheterProduit('poulet ameliore', 4000, 'quantity-poulet-ameliore', 'weight-poulet-ameliore', 'option-traitement-poulet-ameliore', 'abattage-type-poulet-ameliore')">Acheter</button>
+            <button onclick="acheterProduit('poulet ameliore', 3600, 'quantity-poulet-ameliore', 'weight-poulet-ameliore', 'option-traitement-poulet-ameliore', 'abattage-type-poulet-ameliore')">Acheter</button>
         </div>
 
         <!-- Poule Pondeuse -->
         <div class="product poule-pondeuse">
             <img src="img/pondeuse.jpg" alt="Poule Pondeuse">
             <h3>Poule Pondeuse</h3>
-            <p id="price-poule-pondeuse">Prix unitaire: 3000 FCFA</p>
+            <p id="price-poule-pondeuse">Prix: 3800 FCFA</p>
             <label for="quantity-poule-pondeuse">Quantité:</label>
             <input type="number" id="quantity-poule-pondeuse" min="1" value="1">
             <label for="weight-poule-pondeuse">Poids (kg) pas obligatoire:</label>
-            <input type="number" id="weight-poule-pondeuse" min="0.1" step="0.1" value="2">
+            <input type="number" id="weight-poule-pondeuse" min="0.1" step="0.1" value="2.8">
 
             <!-- Options de traitement -->
             <label for="option-traitement-poule-pondeuse">Traitement:</label>
@@ -238,7 +238,7 @@ window.onload = function() {
                 </select>
             </div>
 
-            <button onclick="acheterProduit('Poule Pondeuse', 3000, 'quantity-poule-pondeuse', 'weight-poule-pondeuse', 'option-traitement-poule-pondeuse', 'abattage-type-poule-pondeuse')">Acheter</button>
+            <button onclick="acheterProduit('Poule Pondeuse', 3800, 'quantity-poule-pondeuse', 'weight-poule-pondeuse', 'option-traitement-poule-pondeuse', 'abattage-type-poule-pondeuse')">Acheter</button>
         </div>
 
     </div>
@@ -282,54 +282,38 @@ window.onload = function() {
 
 
 <script>
-function updatePrice(nomProduit, prixUnitaire, quantityId, weightId) {
+    function updatePrice(nomProduit, prixUnitaire, quantityId, weightId) {
     const quantityElement = document.getElementById(quantityId);
     const weightElement = document.getElementById(weightId);
 
-    // Obtenir la quantité et le poids choisis
-    const quantity = parseInt(quantityElement.value) || 0; // Valeur par défaut : 0
-    const weight = parseFloat(weightElement.value) || 0;  // Valeur par défaut : 0
+    const quantity = parseInt(quantityElement.value);
+    const weight = parseFloat(weightElement.value);
 
-    // Vérifier si les entrées sont valides
-    if (quantity <= 0 || weight <= 0) {
+    if (isNaN(quantity) || isNaN(weight)) {
         console.error('Valeurs invalides pour la quantité ou le poids');
-        document.getElementById('price-' + nomProduit.toLowerCase()).textContent = `Prix: 0 FCFA`;
+        alert('Erreur : veuillez entrer des valeurs valides.');
         return;
     }
 
-    // Calculer le prix total avant remise
+    // Calcul du prix total avant remise
     let total = quantity * prixUnitaire * weight;
 
-    // Appliquer une remise si la commande dépasse 10 articles
-    if (quantity > 10) {
-        total *= 0.90; // Remise de 10 %
+    // Appliquer une remise en fonction de la quantité
+    if (quantity >= 20) {
+        total *= 0.80; // 20% de remise pour 20 articles ou plus
+    } else if (quantity >= 10) {
+        total *= 0.90; // 10% de remise pour 10 à 19 articles
     }
 
-    // Afficher le prix total mis à jour
+    // Mettre à jour le prix affiché sur la page
     document.getElementById('price-' + nomProduit.toLowerCase()).textContent = `Prix: ${total.toFixed(2)} FCFA`;
 }
 
-// Ajouter des événements pour que le prix soit mis à jour en temps réel
-function setupPriceUpdate(nomProduit, prixUnitaire, quantityId, weightId) {
-    const quantityElement = document.getElementById(quantityId);
-    const weightElement = document.getElementById(weightId);
-
-    quantityElement.addEventListener('input', () => updatePrice(nomProduit, prixUnitaire, quantityId, weightId));
-    weightElement.addEventListener('input', () => updatePrice(nomProduit, prixUnitaire, quantityId, weightId));
-}
-
-
-
-
-
-// Afficher le message de chargement
-loadingMessage.classList.remove("hidden");
-
-
 
 function acheterProduit(nomProduit, prix, quantityId, weightId) {
-const loadingMessage = document.getElementById("loadingMessage");
 
+// Afficher le message de chargement
+const loadingMessage = document.getElementById("loadingMessage");
 
 // Demander les informations à l'utilisateur
 const username = prompt("Veuillez entrer votre nom et prénom");
@@ -376,6 +360,18 @@ if (isNaN(quantity) || isNaN(weight)) {
     alert('Erreur : veuillez entrer des valeurs valides.');
     return;
 }
+
+// Calcul du prix total avant remise
+let total = quantity * prix * weight;
+
+// Appliquer une remise pour les grandes quantités
+if (quantity >= 20) {
+    total *= 0.80; // 20% de remise pour 20 articles ou plus
+} else if (quantity >= 10) {
+    total *= 0.90; // 10% de remise pour 10 à 19 articles
+}
+
+const poidsTotal = quantity * weight;
 
 // Définir la variable traitement avant de l'utiliser
 function normalizeId(nomProduit) {
@@ -449,7 +445,7 @@ return regex.test(email);
 
 
 </script>
-    
+
 
 <script>
 function showAlert(message) {

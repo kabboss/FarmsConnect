@@ -367,11 +367,6 @@ nav ul li a:hover {
     z-index: 9999; /* Au-dessus de tout */
 }
 
-/* Conteneur de la spinner */
-.spinner {
-    text-align: center;
-    animation: fadeIn 0.5s ease-in-out;
-}
 
 /* Style pour l'image */
 .rotating-image {
@@ -1273,3 +1268,25 @@ input {
 
 
 
+
+
+/* Style pour le spinner */
+.spinner {
+    margin: 10px auto;
+    width: 30px;
+    height: 30px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Animation de rotation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -43,11 +43,42 @@
                     🙈
                 </span>
             </div>
-            <button type="submit">Se connecter</button>
+            <button  type="submit" id="loginButton" >Se connecter</button>
+            <!-- Spinner caché par défaut -->
+          <div id="spinner" class="spinner" style="display: none;"></div>
         </form>
     </div>
 </div>
 
+
+
+<script>
+    // Fonction appelée lorsque le formulaire est soumis
+function handleLogin(event) {
+    event.preventDefault(); // Empêche le rechargement de la page
+
+    // Références des éléments
+    const spinner = document.getElementById('spinner');
+    const loginButton = document.getElementById('loginButton');
+
+    // Afficher le spinner et désactiver le bouton
+    spinner.style.display = 'block';
+    loginButton.disabled = true;
+    loginButton.innerText = 'Connexion en cours...';
+
+    // Simuler un délai pour la connexion (par exemple, un appel API)
+    setTimeout(() => {
+        // Masquer le spinner après 3 secondes
+        spinner.style.display = 'none';
+        loginButton.disabled = false;
+        loginButton.innerText = 'Se connecter';
+
+        // Simuler une réussite de connexion
+        alert('Connexion réussie!');
+    }, 3000); // 3 secondes
+}
+
+</script>
 
 
 <script>
