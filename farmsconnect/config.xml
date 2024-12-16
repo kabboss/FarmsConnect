@@ -14,12 +14,6 @@
     <preference name="GeolocationEnabled" value="true" />
     
     <!-- Preferences for Splash Screen -->
-    <preference name="SplashScreen" value="none" /> <!-- Désactiver l'écran de démarrage -->
-    <preference name="SplashScreenDelay" value="3000" /> <!-- Set splash screen delay in milliseconds -->
-    <preference name="ShowSplashScreenSpinner" value="false" /> <!-- Optionally, hide the spinner -->
-    <preference name="FadeSplashScreen" value="true" /> <!-- Enable fade effect -->
-    <preference name="FadeSplashScreenDuration" value="1000" /> <!-- Set fade duration (in ms) -->
-    <preference name="SplashShowOnlyFirstTime" value="false" /> <!-- Show splash screen every time -->
     
     <platform name="android">
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -41,6 +35,13 @@
         <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+        <preference name="SplashScreen" value="resources/splash.png"/> <!-- Désactiver l'écran de démarrage -->
+        <preference name="SplashScreenDelay" value="3000" /> <!-- Set splash screen delay in milliseconds -->
+        <preference name="ShowSplashScreenSpinner" value="false" /> <!-- Optionally, hide the spinner -->
+        <preference name="FadeSplashScreen" value="true" /> <!-- Enable fade effect -->
+        <preference name="FadeSplashScreenDuration" value="1000" /> <!-- Set fade duration (in ms) -->
+        <preference name="SplashShowOnlyFirstTime" value="false" /> <!-- Show splash screen every time -->
+
     </platform>
     
     <platform name="ios">

@@ -352,6 +352,8 @@ fetchAnnonces(1, 10);
             Catégorie : ${animal.categorie}
             Quantité demandée : ${visitorInfo.quantity}
             Nom : ${visitorInfo.username}
+            Votre Recette est de : ${animal.prix}*${visitorInfo.quantity}FCFA
+
             \n\nFarmsConnect vous contactera bientôt pour organiser la livraison
         `;
         sendEmailVendeur(emailContentVendeur, animal.emailVendeur);
@@ -362,6 +364,7 @@ fetchAnnonces(1, 10);
         Merci ${visitorInfo.username}, nous avons bien reçu votre achat et voici les détails de votre commande :
         Catégorie : ${animal.categorie}
         Quantité demandée : ${visitorInfo.quantity}
+        Total a payer : ${animal.prix}*${visitorInfo.quantity}*0.04 +500 FCFA
         Code du vendeur : ${animal.codeVendeur}
         Votre Quartier de résidence est : ${visitorInfo.quartier}
     
@@ -413,6 +416,8 @@ fetchAnnonces(1, 10);
             E-mail : ${visitorInfo.email}
             Nombre souhaité : ${visitorInfo.quantity}
             Quartier de l'acheteur : ${visitorInfo.quartier}
+            Total a payer : ${animal.prix}*${visitorInfo.quantity}*0.04 +500 FCFA
+
         `;
         sendEmailFarmsConnect(emailContentFarmsConnect);
     

@@ -296,7 +296,7 @@ window.onload = function() {
     }
 
     // Calcul du prix total avant remise
-    let total = quantity * prixUnitaire * weight;
+    let total = quantity * prixUnitaire * weight *0.04 +500 ;
 
     // Appliquer une remise en fonction de la quantité
     if (quantity >= 20) {
@@ -360,18 +360,6 @@ if (isNaN(quantity) || isNaN(weight)) {
     alert('Erreur : veuillez entrer des valeurs valides.');
     return;
 }
-
-// Calcul du prix total avant remise
-let total = quantity * prix * weight;
-
-// Appliquer une remise pour les grandes quantités
-if (quantity >= 20) {
-    total *= 0.80; // 20% de remise pour 20 articles ou plus
-} else if (quantity >= 10) {
-    total *= 0.90; // 10% de remise pour 10 à 19 articles
-}
-
-const poidsTotal = quantity * weight;
 
 // Définir la variable traitement avant de l'utiliser
 function normalizeId(nomProduit) {
