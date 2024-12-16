@@ -84,22 +84,15 @@ navigator.splashscreen.hide(); // Cache le splash screen
 
 </script>
 
+<!-- Écran de chargement -->
+<div id="loading-screen">
+    Chargement...
+</div>
+
 <!-- Conteneur de la vidéo -->
-    <video id="splash-video" autoplay muted playsinline>
-        <source src="img/Untitled ‑ Made with FlexClip.mp4" type="video/mp4">
-    </video>
-
-    <script>
-        // Cacher la vidéo et afficher l'application après la lecture
-        const video = document.getElementById('splash-video');
-        const appContent = document.getElementById('app-content');
-
-        video.addEventListener('ended', function() {
-            video.style.display = 'none'; // Masque la vidéo
-            appContent.style.display = 'block'; // Affiche le contenu principal
-        });
-    </script>
-
+<video id="splash-video" autoplay muted playsinline>
+    <source src="img/Untitled ‑ Made with FlexClip.mp4" type="video/mp4">
+</video>
 <script>
 
 document.getElementById("toggle-password").addEventListener("click", function () {

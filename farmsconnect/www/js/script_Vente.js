@@ -52,7 +52,9 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(animal) // Assurez-vous que 'animal' est bien formé
+            
         })
+        
         .then(response => {
             // Vérifiez si la réponse est réussie
             if (!response.ok) {
@@ -66,7 +68,6 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
         })
         .then(data => {
             // Affichez le message de succès
-            showAlert(data.message);
         })
         
     });

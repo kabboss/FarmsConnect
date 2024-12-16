@@ -324,6 +324,11 @@ form button:hover {
     visibility: visible;
 }
 
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
 .alert-content {
     display: flex;
     flex-direction: column;
@@ -509,20 +514,32 @@ form button:hover {
     }
 }
 
-/* Style de la boîte d'alerte */
 .alert {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    width: 400px;
+    width: 90%;
+    max-width: 400px;
     padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
     text-align: center;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    z-index: 10000;
-    animation: slideIn 0.5s ease-in-out;
+    background-color: #ffffff;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.alert.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.hidden {
+    opacity: 0;
+    visibility: hidden;
 }
 
 .alert-content {
