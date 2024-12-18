@@ -79,20 +79,11 @@ function handleLogin(event) {
 }
 
 
-navigator.splashscreen.show(); // Affiche le splash screen
-navigator.splashscreen.hide(); // Cache le splash screen
 
 </script>
 
-<!-- Écran de chargement -->
-<div id="loading-screen">
-    Chargement...
-</div>
 
-<!-- Conteneur de la vidéo -->
-<video id="splash-video" autoplay muted playsinline>
-    <source src="img/Untitled ‑ Made with FlexClip.mp4" type="video/mp4">
-</video>
+
 <script>
 
 document.getElementById("toggle-password").addEventListener("click", function () {
@@ -847,81 +838,8 @@ function closeAlert() {
     alertBox.classList.remove("visible");
 }
 
-
-
-document.addEventListener('deviceready', function() {
-    setTimeout(function() {
-        navigator.splashscreen.hide(); // Masque le splash screen après 4 secondes
-    }, 4000); // 4000 ms = 4 secondes
-}, false);
-
 </script>
 
-
-
-<style>
-    #loading-screen {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      background-color: #007bff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-  
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid #fff;
-      border-top: 5px solid #007bff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-  
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-  </style>
-  
-  <div id="loading-screen">
-    <div class="spinner"></div>
-  </div>
-  
-
-  <style>
-    #animated-splash {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      animation: fadeOut 1s ease-in-out 3s forwards;
-    }
-  
-    @keyframes fadeOut {
-      from {
-        opacity: 1;
-      }
-      to {
-        opacity: 0;
-        visibility: hidden;
-      }
-    }
-  </style>
-  
-  <div id="animated-splash">
-    <img src="resources/icon.png" alt="App Logo" />
-  </div>
-  
 
 
 

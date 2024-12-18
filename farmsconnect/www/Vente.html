@@ -52,11 +52,15 @@
 
 
 
+
+
+
+
     <section class="form-section">
         <form id="vente-form">
             <span class="highlight">N'oubliez pas de prendre les photos de vos produits<strong class="large-icon">📸</strong> avant de commencer à remplir le formulaire!</span>
 <br>
-            <label for="categorie">Catégorie :</label>
+            <label for="categorie">Catégorie* :</label>
             <select id="categorie" name="categorie">
                 <option value="poulet-local">Poulet local</option>
                 <option value="poulet-chair">Poulet de chair</option>
@@ -65,26 +69,26 @@
                 <div class="invalid-feedback">Veuillez choisir une catégorie.</div>
             </select>
     
-            <label for="nombre">Nombre :</label>
+            <label for="nombre">Nombre* :</label>
             <input type="number" id="nombre" name="nombre" min="1" required>
 
-            <label for="poids">Poids par animal (en kg) Pas obligatoire  :</label>
+            <label for="poids"> Poids approximatif par animal (en kg) <span style="font-style: italic; color: #888;">(optionnel)</span>:</label>
             <input type="number" id="poids" name="poids" step="0.1">
 
-            <label for="prix">Prix unitaire (en FCFA) :</label>
+            <label for="prix">Prix unitaire (en FCFA)* :</label>
             <input type="number" id="prix" name="prix" required>
 
-            <label for="images">Ajouter des images de vos/votre produit (s)  (max 10) :</label>
-            <input type="file" id="images" name="images" accept="image/*" multiple>
+            <label for="images">Ajouter une ou des images de vos/votre produit (s)  (max 10)* :</label>
+            <input type="file" id="images" name="images" required accept="image/*" multiple>
 
-            <label for="contact-principal">Contact principal :</label>
+            <label for="contact-principal">Contact principal* :</label>
             <input type="tel" id="contact-principal" name="contact-principal" required placeholder="Ex: +22670010101">
     
-            <label for="contact-secondaire">Contact secondaire (optionnel) :</label>
+            <label for="contact-secondaire">Contact secondaire :</label>
             <input type="tel" id="contact-secondaire" name="contact-secondaire" placeholder="Ex: +22670010101">
     
-            <label for="email-vendeur">E-mail (optionnel) :</label>
-            <input type="email" id="email-vendeur" name="email-vendeur" placeholder="Ex: vendeur@example.com">
+            <label for="email-vendeur">E-mail* :</label>
+            <input type="email" id="email-vendeur" name="email-vendeur" required placeholder="Ex: vendeur@example.com">
     
             <button class="open-modal-button">Note Importante aux Vendeurs</button>
 <!-- Fenêtre modale -->
@@ -99,7 +103,7 @@
         <ol>
             <li>
                 <strong>Notification lors d'une commande</strong><br>
-                Lorsqu’un client clique sur votre annonce pour acheter un produit, vous recevrez une notification via votre compte vendeur. Cette notification vous informera qu’une commande est en cours de traitement par FarmsConnect.
+                Lorsqu’un client clique sur votre annonce pour acheter un produit, vous recevrez une notification sur votre boite mail . Cette notification vous informera qu’une commande est en cours de traitement par FarmsConnect.
             </li>
             <li>
                 <strong>Certification des produits</strong><br>

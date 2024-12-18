@@ -526,40 +526,60 @@ select:focus {
     margin: 0 auto; /* Centre le paragraphe */
 }
 
-/* Section Témoignages */
-.testimonials {
-    background-color: #fff;
-    color: #333;
-    padding: 30px; /* Espacement réduit */
-    text-align: center;
-}
-
-.testimonials h2 {
-    font-size: 28px; /* Taille ajustée */
-    margin-bottom: 20px; /* Marge ajustée */
-}
-
-.testimonial {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 15px; /* Espacement réduit */
-    margin: 15px auto; /* Marge réduite */
-    max-width: 90%; /* Limite de largeur */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.testimonial p {
-    font-size: 14px; /* Taille ajustée */
-    font-style: italic;
-    margin-bottom: 10px;
-}
-
-.testimonial cite {
-    font-size: 12px; /* Taille réduite */
-    color: #888;
-}
-
+            .testimonials {
+                max-width: 1200px; /* Largeur maximale de la section */
+                margin: 0 auto; /* Centrer la section */
+                padding: 20px;
+                font-family: 'Arial', sans-serif;
+                background-color: #f9f9f9;
+                border-radius: 10px;
+            }
+            
+            .testimonial {
+                background-color: #ffffff;
+                margin-bottom: 20px;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+        
+            .testimonial p {
+                line-height: 1.6;
+                font-size: 1.1rem;
+            }
+        
+            .testimonial strong {
+                color: #2c3e50;
+            }
+        
+            .testimonial em {
+                font-style: italic;
+                color: #7f8c8d;
+            }
+        
+            .testimonial p:first-child {
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #2980b9;
+            }
+        
+            .testimonial p:last-child {
+                font-size: 1rem;
+                font-weight: normal;
+                color: #34495e;
+            }
+        
+            /* Ajouter un peu de style au lien de recommandation */
+            .testimonials p:last-child {
+                font-size: 1.2rem;
+                text-align: center;
+                margin-top: 30px;
+                color: #e74c3c;
+            }
+        
+            .testimonials p:last-child strong {
+                font-weight: bold;
+            }
 /* Style du footer */
 footer {
     background-color: #2e8b57; /* Vert foncé */
@@ -1027,7 +1047,72 @@ footer p {
 
 
 
+.remise-message {
+    color: #fff;
+    background-color: #4ffc66; /* Rouge vif */
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    animation: clignoter 5s infinite;
+}
 
+@keyframes clignoter {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+
+
+
+/* Style du conteneur du champ de saisie */
+#abattage-container {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#abattage-container label {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+#abattage-container input {
+    padding: 10px;
+    font-size: 16px;
+    width: 200px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+}
+
+#abattage-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#confirm-abattage {
+    background-color: #28a745;
+    color: white;
+}
+
+#cancel-abattage {
+    background-color: #dc3545;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.8;
+}
 
 
 
