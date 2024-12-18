@@ -43,46 +43,37 @@
                     🙈
                 </span>
             </div>
+
+ <!-- Message de patience avec animation -->
+ <div id="loadingMessage" class="loading-message">
+    <!-- Le spinner à la place de l'image -->
+    <div class="spinner"></div>
+    <p id="loadingText">Connexion en cours...</p>
+</div>
             <button  type="submit" id="loginButton" >Se connecter</button>
-            <!-- Spinner caché par défaut -->
-          <div id="spinner" class="spinner" style="display: none;"></div>
+    
         </form>
     </div>
 </div>
 
 
-
 <script>
-    // Fonction appelée lorsque le formulaire est soumis
-function handleLogin(event) {
-    event.preventDefault(); // Empêche le rechargement de la page
+    // script.js
 
-    // Références des éléments
-    const spinner = document.getElementById('spinner');
-    const loginButton = document.getElementById('loginButton');
+// Obtenez le bouton et le message de patience
+const loginButton = document.getElementById("loginButton");
+const loadingMessage = document.getElementById("loadingMessage");
 
-    // Afficher le spinner et désactiver le bouton
-    spinner.style.display = 'block';
-    loginButton.disabled = true;
-    loginButton.innerText = 'Connexion en cours...';
-
-    // Simuler un délai pour la connexion (par exemple, un appel API)
-    setTimeout(() => {
-        // Masquer le spinner après 3 secondes
-        spinner.style.display = 'none';
-        loginButton.disabled = false;
-        loginButton.innerText = 'Se connecter';
-
-        // Simuler une réussite de connexion
-        alert('Connexion réussie!');
-    }, 3000); // 3 secondes
-}
-
-
+// Ajoutez un événement de clic sur le bouton
+loginButton.addEventListener("click", function() {
+    // Affichez le message de patience
+    loadingMessage.style.display = "block";  // Affiche le message
+    setTimeout(function() {
+        loadingMessage.style.display = "none";  // Cache le message après 3 secondes
+    }, 4000);  // 3000 millisecondes = 3 secondes
+});
 
 </script>
-
-
 
 <script>
 
@@ -101,14 +92,6 @@ document.getElementById("toggle-password").addEventListener("click", function ()
 
 </script>
 
-<!-- Message de chargement -->
-<div id="loadingMessage" class="hidden">
-    <div class="spinner-container">
-        <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
-        <div class="spinner"></div>
-    </div>
-    <p class="loading-text">Veuillez patienter...</p> 
-</div>
 
 
 <script>

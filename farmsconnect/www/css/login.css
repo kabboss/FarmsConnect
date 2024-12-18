@@ -1052,50 +1052,110 @@ h3 {
     display: none;
 }
 
-/* Style du message de chargement */
-#loadingMessage {
+/* styles.css */
+
+/* Style du message de patience */
+.loading-message {
+    display: none; /* Initialement caché */
     position: fixed;
-    top: 140px;
-    left: 15px;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.9); /* Fond sombre intense */
-    padding: 40px 60px; /* Espacement réduit pour une taille plus compacte */
-    border-radius: 20px; /* Coins arrondis */
+    padding: 30px;
+    background-color: rgba(0, 0, 0, 0.8); /* Fond semi-transparent */
     color: white;
-    z-index: 1000;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6); /* Ombre portée plus légère */
-    animation: fadeIn 1s ease-out, pulse 3s infinite; /* Apparition fluide et effet de pulsation */
-    backdrop-filter: blur(10px); /* Flou du fond pour ajouter un effet moderne de profondeur */
+    font-size: 20px;
+    border-radius: 15px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 0.8s forwards, bounceIn 1s forwards;
 }
 
-/* Animation d'apparition douce */
+/* Animation de l'apparition */
 @keyframes fadeIn {
-    from {
+    0% {
         opacity: 0;
-        transform: translate(-50%, -60%) scale(0.8);
     }
-    to {
+    100% {
         opacity: 1;
+    }
+}
+
+/* Animation du rebond de l'élément */
+@keyframes bounceIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+    }
+    60% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
         transform: translate(-50%, -50%) scale(1);
     }
 }
 
-/* Animation de pulsation (effet vivant) */
-@keyframes pulse {
+/* Le spinner qui tourne */
+.spinner {
+    width: 50px;  /* Taille du spinner */
+    height: 50px;
+    border: 6px solid #f3f3f3; /* Couleur de fond du spinner */
+    border-top: 6px solid #4CAF50; /* Couleur de la partie qui tourne */
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite; /* Animation de rotation du spinner */
+    margin-bottom: 15px; /* Espace entre le spinner et le texte */
+}
+
+/* Animation de rotation du spinner */
+@keyframes spin {
     0% {
-        transform: scale(1);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
-    }
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+        transform: rotate(0deg);
     }
     100% {
-        transform: scale(1);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+        transform: rotate(360deg);
     }
 }
+
+/* Style du texte */
+#loadingText {
+    font-size: 22px;
+    font-weight: bold;
+    color: #f2f2f2; /* Couleur claire pour le texte */
+    animation: textFadeIn 1.5s ease-in-out; /* Animation de fondu du texte */
+}
+
+/* Animation de fondu du texte */
+@keyframes textFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Style du bouton */
+button {
+    padding: 12px 24px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Effet au survol du bouton */
+button:hover {
+    background-color: #45a049;
+}
+
 
 /* Conteneur du spinner */
 .spinner-container {
