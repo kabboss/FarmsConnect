@@ -873,6 +873,8 @@ module.exports = router;
 
 // Middleware pour autoriser les requêtes CORS
 app.use(cors()); // Autorise toutes les origines par défaut
+const packageJson = require('./package.json');
+
 
   // URL de connexion MongoDB
 const url = "mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority";
