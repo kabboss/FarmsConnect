@@ -866,6 +866,34 @@ module.exports = router;
 
 
 
+// mise a jour 
+
+
+// Définition du modèle pour les mises à jour
+const updateSchema = new mongoose.Schema({
+    version: String, // Version de l'application
+    downloadUrl: String, // Lien pour télécharger la mise à jour
+    message: String, // Message informatif sur la mise à jour
+  });
+  
+  const Update = mongoose.model("Update", updateSchema);
+  
+  // API pour récupérer les informations de la dernière mise à jour
+  app.get("/api/update", async (req, res) => {
+    try {
+      // On récupère la mise à jour la plus récente dans la base de données
+      const latestUpdate = await Update.findOne().sort({ _id: -1 }); // Trie les mises à jour par ID (du plus récent au plus ancien)
+      res.status(200).json(latestUpdate); // Renvoie les détails de la mise à jour
+    } catch (err) {
+      // En cas d'erreur, on renvoie un message d'erreur
+      res.status(500).json({ error: "Erreur lors de la récupération des mises à jour." });
+    }
+  });
+
+
+
+
+
 
 
 
