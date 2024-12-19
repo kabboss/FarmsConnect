@@ -876,7 +876,7 @@ app.get("/get-update", (req, res) => {
     try {
       // Retourne un lien direct pour télécharger la dernière version de l'application
       res.json({
-        downloadUrl: "https://drive.google.com/uc?export=download&id=1U8EgDv0HWtcCv2o4TTCDGXo-_4TR04Zz", // Lien de téléchargement
+        downloadUrl: "https://1drv.ms/u/c/bda8ebc010e57553/Ee1xSK6sEXZPnC05vpbKyF4BK5k5_s3OZ8Y_3S-Ip5o4Gg?e=RM2HJA", // Lien de téléchargement
         message: "Une nouvelle mise à jour est disponible ! Cliquez pour télécharger.", // Message d'information
       });
     } catch (err) {
