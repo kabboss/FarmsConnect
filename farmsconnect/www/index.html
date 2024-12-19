@@ -27,78 +27,42 @@
 
 <div class="container">
     <p id="appMessage" class="message"></p>
-    <button id="updateButton" class="update-button" style="display: none;">Mettre à Jour</button>
+    <button id="updateButton" class="update-button" style="display: none;">Télécharger la mise à jour</button>
     <p id="errorMessage" class="error" style="display: none;"></p>
-</div>
-
-
-
-<script>
-    // Fonction pour vérifier les mises à jour
+  </div>
+  
+  <script>
+    // Fonction pour vérifier la mise à jour
     async function checkForUpdate() {
       try {
         const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/get-update'); // URL de l'API
-
-        // Vérification de la réponse HTTP
-        if (!response.ok) {
-          throw new Error(`Erreur HTTP : ${response.status}`);
-        }
-
+  
+        if (!response.ok) throw new Error(`Erreur HTTP : ${response.status}`);
+  
         const updateData = await response.json();
+  
         const appMessage = document.getElementById('appMessage');
         const updateButton = document.getElementById('updateButton');
-        const errorMessage = document.getElementById('errorMessage');
-
-        if (updateData && updateData.version) {
-          const currentVersion = "1.0.0"; // Version actuelle de l'application
-
-          // Fonction pour comparer les versions
-          function compareVersions(version1, version2) {
-            const v1 = version1.split('.').map(Number);
-            const v2 = version2.split('.').map(Number);
-            
-            for (let i = 0; i < 3; i++) {
-              if (v1[i] > v2[i]) return 1;
-              if (v1[i] < v2[i]) return -1;
-            }
-            return 0;
-          }
-
-          const updateVersion = updateData.version;
-          const comparisonResult = compareVersions(updateVersion, currentVersion);
-
-          if (comparisonResult === 1) {
-            // Nouvelle version disponible
-            appMessage.textContent = `Une nouvelle version est disponible : ${updateVersion}.`;
-            updateButton.style.display = 'block';
-
-            updateButton.onclick = () => {
-              window.location.href = updateData.downloadUrl; // Lien de téléchargement
-            };
-          } else if (comparisonResult === 0) {
-            // Application à jour
-            appMessage.textContent = "Votre application est à jour.";
-            updateButton.style.display = 'none';
-          } else {
-            // Version actuelle est plus récente (improbable)
-            appMessage.textContent = "La version actuelle est plus récente.";
-            updateButton.style.display = 'none';
-          }
-        } else {
-          appMessage.textContent = "Impossible de vérifier les mises à jour.";
-          updateButton.style.display = 'none';
-        }
+  
+        // Affiche le message de mise à jour
+        appMessage.textContent = updateData.message;
+        updateButton.style.display = 'block';
+  
+        // Redirige vers le lien de téléchargement
+        updateButton.onclick = () => {
+          window.location.href = updateData.downloadUrl;
+        };
       } catch (err) {
-        const errorMessage = document.getElementById('errorMessage');
-        errorMessage.textContent = "Erreur de connexion à l'API ou problème serveur.";
         console.error("Erreur lors de la vérification de mise à jour :", err);
+        document.getElementById('errorMessage').textContent =
+          "Impossible de vérifier les mises à jour pour le moment.";
       }
     }
-
+  
     // Appeler la fonction au chargement de la page
     checkForUpdate();
   </script>
-
+  
 
 
 <div id="splash-screen">
