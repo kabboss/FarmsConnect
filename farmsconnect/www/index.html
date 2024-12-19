@@ -31,7 +31,7 @@
     // Cette fonction va vérifier les informations de mise à jour en appelant l'API
 async function checkForUpdate() {
   try {
-    const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/update'); // URL de l'API
+    const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/get-update'); // URL de l'API
 
     // Vérification de la réponse HTTP
     if (!response.ok) {
