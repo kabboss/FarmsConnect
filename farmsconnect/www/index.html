@@ -38,6 +38,7 @@ async function checkForUpdate() {
       throw new Error(`Erreur HTTP : ${response.status}`);
     }
 
+    
     const updateData = await response.json();
 
     const appMessage = document.getElementById('appMessage');
