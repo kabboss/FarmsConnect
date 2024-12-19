@@ -23,7 +23,7 @@ async function insertUpdate() {
 
     // Objet de la nouvelle mise à jour
     const update = {
-      version: "1.4.0", // Version de la mise à jour
+      version: "1.4.0", // Version de la mise à jou
 
       downloadUrl: "https://drive.google.com/uc?export=download&id=1U8EgDv0HWtcCv2o4TTCDGXo-_4TR04Zz", // Lien de téléchargement
       message: "Nouvelle version avec des améliorations majeures et des corrections de bugs.", // Description de la mise à jour

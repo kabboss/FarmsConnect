@@ -872,11 +872,9 @@ module.exports = router;
 // mise a jour 
 
 // Middleware pour autoriser les requêtes CORS
-app.use(cors()); // Autorise toutes les origines par défaut
-const packageJson = require('./package.json');
+app.use(cors());
 
-
-  // URL de connexion MongoDB
+// URL de connexion MongoDB
 const url = "mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority";
 const client = new MongoClient(url);
 
@@ -884,32 +882,33 @@ const client = new MongoClient(url);
 const dbName = "FarmsConnect_updates"; // Nom de la base de données
 const collectionName = "updates"; // Nom de la collection
 
+// Endpoint pour récupérer la mise à jour
 app.get("/get-update", async (req, res) => {
-    try {
-      await client.connect();
-      const db = client.db(dbName);
-      const collection = db.collection(collectionName);
-  
-      // Récupérer la dernière mise à jour
-      const latestUpdate = await collection.find().sort({ createdAt: -1 }).limit(1).toArray();
-      
-      if (latestUpdate.length === 0) {
-        return res.status(404).send("Aucune mise à jour trouvée.");
-      }
-  
-      // Envoi de la version de l'app et de la mise à jour
-      res.json({
-        version: packageJson.version,
-        downloadUrl: latestUpdate[0].downloadUrl,
-      });
-    } catch (err) {
-      console.error("Erreur lors de la récupération de la mise à jour :", err);
-      res.status(500).send("Erreur serveur");
-    } finally {
-      await client.close();
-    }
-  });
+  try {
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection(collectionName);
+    
+    // Récupérer la dernière mise à jour
+    const latestUpdate = await collection.find().sort({ createdAt: -1 }).limit(1).toArray();
 
+    if (latestUpdate.length === 0) {
+      return res.status(404).send("Aucune mise à jour trouvée.");
+    }
+
+    // Envoi de la version de l'app et de la mise à jour
+    res.json({
+      version: latestUpdate[0].version,
+      downloadUrl: latestUpdate[0].downloadUrl, // URL du fichier de mise à jour
+    });
+
+  } catch (err) {
+    console.error("Erreur lors de la récupération de la mise à jour :", err);
+    res.status(500).send("Erreur serveur");
+  } finally {
+    await client.close();
+  }
+});
 
 
 
