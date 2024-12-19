@@ -868,27 +868,35 @@ module.exports = router;
 
 // mise a jour 
 
+  // URL de connexion MongoDB
+const url = "mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority";
+const client = new MongoClient(url);
 
-// Définition du modèle pour les mises à jour
-const updateSchema = new mongoose.Schema({
-    version: String, // Version de l'application
-    downloadUrl: String, // Lien pour télécharger la mise à jour
-    message: String, // Message informatif sur la mise à jour
-  });
-  
-  const Update = mongoose.model("Update", updateSchema);
-  
-  // API pour récupérer les informations de la dernière mise à jour
-  app.get("/api/update", async (req, res) => {
-    try {
-      // On récupère la mise à jour la plus récente dans la base de données
-      const latestUpdate = await Update.findOne().sort({ _id: -1 }); // Trie les mises à jour par ID (du plus récent au plus ancien)
-      res.status(200).json(latestUpdate); // Renvoie les détails de la mise à jour
-    } catch (err) {
-      // En cas d'erreur, on renvoie un message d'erreur
-      res.status(500).json({ error: "Erreur lors de la récupération des mises à jour." });
+// Nom de la base de données et de la collection
+const dbName = "FarmsConnect_updates"; // Nom de la base de données
+const collectionName = "updates"; // Nom de la collection
+
+app.get("/get-update", async (req, res) => {
+  try {
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection(collectionName);
+
+    // Récupérer la dernière mise à jour
+    const latestUpdate = await collection.find().sort({ createdAt: -1 }).limit(1).toArray();
+    
+    if (latestUpdate.length === 0) {
+      return res.status(404).send("Aucune mise à jour trouvée.");
     }
-  });
+
+    res.json(latestUpdate[0]);
+  } catch (err) {
+    console.error("Erreur lors de la récupération de la mise à jour :", err);
+    res.status(500).send("Erreur serveur");
+  } finally {
+    await client.close();
+  }
+});
 
 
 

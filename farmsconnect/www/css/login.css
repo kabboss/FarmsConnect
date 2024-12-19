@@ -1486,3 +1486,42 @@ button:hover {
     }
   }
   
+
+
+
+
+
+
+
+
+  .container {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .message {
+    font-size: 15px;
+    margin: -10px 0;
+    color: #333;
+    left: 50%;
+  }
+
+  .update-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .update-button:hover {
+    background-color: #45a049;
+  }
+
+  .error {
+    color: red;
+  }

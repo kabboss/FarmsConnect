@@ -18,6 +18,51 @@
 </header>
 
 
+
+
+<div class="container">
+    <p id="appMessage" class="message"></p>
+    <button id="updateButton" class="update-button" style="display: none;">Mettre à Jour</button>
+    <p id="errorMessage" class="error" style="display: none;"></p>
+  </div>
+
+
+  <script>
+    // Cette fonction va vérifier les informations de mise à jour en appelant l'API
+    async function checkForUpdate() {
+      try {
+        const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/update'); // Remplace avec ton URL d'API
+        const updateData = await response.json();
+
+        const appMessage = document.getElementById('appMessage');
+        const updateButton = document.getElementById('updateButton');
+        const errorMessage = document.getElementById('errorMessage');
+
+        if (updateData) {
+          // Affichage du message de mise à jour
+          appMessage.textContent = `Une nouvelle version est disponible: ${updateData.version}.`;
+          updateButton.style.display = 'block';
+
+          // Lorsque l'utilisateur clique sur le bouton de mise à jour
+          updateButton.onclick = () => {
+            window.location.href = updateData.downloadUrl; // Redirige vers le lien de téléchargement
+          };
+        } else {
+          appMessage.textContent = "Votre application est à jour.";
+        }
+      } catch (err) {
+        errorMessage.textContent = "Erreur de connexion à l'API.";
+        console.error("Erreur de mise à jour:", err);
+      }
+    }
+
+    // Appeler la fonction au chargement de la page
+    checkForUpdate();
+  </script>
+
+
+
+
 <div id="splash-screen">
     <img src="img/FarmsConnect.jpg" alt="Logo" />
   </div>
