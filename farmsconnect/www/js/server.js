@@ -539,8 +539,21 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
           from: 'kaboreabwa2020@gmail.com',
           to: purchaseDetails.email,    // Email du client
           subject: 'Merci pour votre achat !',
-          text: `Bonjour ${purchaseDetails.username},\n\nMerci pour votre achat ! Nous vous envoyons ce lien pour un feedback sur votre expérience d'achat :\n\nhttps://ee.kobotoolbox.org/x/uhCnWFCN.`
-      };
+          text: `👋 Bonjour ${purchaseDetails.username},
+
+          ✨ **Merci pour votre achat !**  
+          Votre satisfaction nous tient à cœur 💖. Nous vous invitons à partager votre expérience avec nous en répondant à ce rapide formulaire de feedback 📝 :  
+          
+          🔗 [**Donnez votre avis ici !**](https://ee.kobotoolbox.org/x/uhCnWFCN)
+          
+          🌟 Vos retours nous aident à améliorer nos services et à vous offrir la meilleure expérience possible.  
+          
+          Merci de faire confiance à *FarmsConnect* 🚜🐓.  
+          À bientôt !  
+          
+          📧 *Pour toute question, contactez-nous directement.*  
+          `
+                };
   
       // Planifier l'envoi de l'email au client après le délai spécifié (2 minutes)
       schedule.scheduleJob(scheduledTime, async () => {

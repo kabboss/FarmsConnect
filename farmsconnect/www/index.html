@@ -7,12 +7,47 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="img/FarmsConnect.jpg"> <!-- Chemin vers votre image -->
     <link rel="stylesheet" href="css/login.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.3/lottie.min.js"></script>
+
 </head>
 <body>
 
 <header>
     <h2 class="Bienvenue">Bienvenue sur FarmsConnect Burkina</h2>
 </header>
+
+
+<div id="splash-screen">
+    <img src="img/FarmsConnect.jpg" alt="Logo" />
+  </div>
+  
+  <script>
+    // Après 5 secondes, masquer l'écran de démarrage
+    setTimeout(function() {
+      document.body.classList.add('splash-screen-hidden'); // Cache l'écran de démarrage
+    }, 5000);
+  </script>
+  
+
+<script>
+    // Animation de la page de démarrage
+    window.onload = function() {
+        const splashScreen = document.getElementById('splash-screen');
+        const mainContent = document.getElementById('main-content');
+
+        // Animation du splash screen pour la transition
+        gsap.to(splashScreen, { duration: 1, opacity: 0, display: "none" });
+        gsap.to(mainContent, { duration: 1, delay: 1, opacity: 1, display: "block" });
+    };
+
+    // Démarrer l'application
+    document.getElementById('startButton').addEventListener('click', function() {
+    });
+</script>
+
+
+
 
 <div class="home-container">
     <img src="img/FarmsConnect.jpg" alt="Bienvenue sur FarmsConnect" class="home-image">

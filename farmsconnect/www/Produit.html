@@ -500,16 +500,6 @@ let fraisSupplementaires = (total * 0.04) + 400;
     const poidsSupplementaire = Math.max(0, weight - 2, 0); // Supposons que 2 kg est le poids de base
     const ajustementPoids = poidsSupplementaire * 700; // 700 FCFA pour chaque kg supplémentaire
 
-// Appliquer la remise en fonction de la quantité
-if (quantity >= 20) {
-    prixFinal *= 0.76; // 24% de remise
-} else if (quantity >= 10) {
-    prixFinal *= 0.87; // 13% de remise
-} else if (quantity >= 5) {
-    prixFinal *= 0.95; // 5% de remise
-}
-
-
 
 // Définir la variable traitement avant de l'utiliser
 function normalizeId(nomProduit) {
@@ -532,18 +522,34 @@ let typeAbattage = null;
 let fraisAbattage = 0; // Frais d'abattage initialisés à 0
 
 if (traitementElement && traitementElement.value === "abattu") {
-        // Demande à l'utilisateur combien de poules il veut abattre
-        const poulesAbattues = parseInt(prompt(`Combien de poules souhaitez-vous abattre ? Cela coûte 100 FCFA par poule.`));
-        if (poulesAbattues > quantity) {
-            alert("Vous ne pouvez pas abattre plus de poules que vous ne voulez  achetée veuillez verifier si dessus la quantite que vous commander.");
-        } else if (poulesAbattues > 0) {
-            fraisAbattage = poulesAbattues * 100; // Applique 200 FCFA par poule abattue
-        }
+    // Demande à l'utilisateur combien de poules il veut abattre
+    let poulesAbattues = parseInt(prompt("Veuillez confirmer le nombre de poules que vous voulez abattre."));
+
+    // Vérifier si la valeur entrée est un nombre valide
+    if (isNaN(poulesAbattues)) {
+        alert("Veuillez entrer un nombre valide.");
+    } else if (poulesAbattues > quantity) {
+        alert("Vous ne pouvez pas abattre plus de poules que celles que vous avez achetées. Veuillez vérifier la quantité renseignée.");
+    } else if (poulesAbattues < 1) {
+        alert("Le nombre de poules abattues doit être supérieur à zéro. Veuillez entrer un nombre valide.");
+    } else {
+        // Si le nombre de poules abattues est valide
+        fraisAbattage = poulesAbattues * 100; // Applique 100 FCFA par poule abattue
+        alert(`Vous avez choisi d'abattre ${poulesAbattues} poules. Les frais d'abattage sont de ${fraisAbattage} FCFA.`);
     }
+}
 
     // Calcul du prix final
-    let prixFinal = totalBase + fraisSupplementaires + ajustementPrixPoids + fraisAbattage;
+    let prixFinal = total + fraisSupplementaires + ajustementPoids + fraisAbattage;
 
+    // Appliquer la remise en fonction de la quantité
+if (quantity >= 20) {
+    prixFinal *= 0.76; // 24% de remise
+} else if (quantity >= 10) {
+    prixFinal *= 0.87; // 13% de remise
+} else if (quantity >= 5) {
+    prixFinal *= 0.95; // 5% de remise
+}
 
 // Vérifier si des options d'abattage sont affichées
 if (traitement === "abattu") {
@@ -653,22 +659,8 @@ window.addEventListener('click', function(event) {
 
 
 <section class="testimonials">
-        <div class="testimonials">
-            <h2 style="text-align:center; color: #2c3e50;">Témoignages de nos clients satisfaits</h2>
-            
-            <div class="testimonial">
-                <p>📝 <strong>Fiabilité et Traçabilité</strong></p>
-                <p>"Je suis extrêmement satisfait de la qualité et du service de <strong>FarmsConnect</strong>. Non seulement leurs produits sont d'une fraîcheur impeccable, mais leur système de traçabilité me permet de suivre chaque étape de ma commande, de la ferme jusqu'à ma porte. Cela m'assure que je reçois toujours de la volaille de qualité supérieure et que mes achats sont totalement sécurisés. Je recommande vivement <strong>FarmsConnect</strong> à tous mes amis et famille pour toutes leurs commandes de volaille. Vous ne serez pas déçus!"</p>
-                <p><em>- Mamadou, Client fidèle</em></p>
-            </div>
-            
-            <div class="testimonial">
-                <p>🍽️ <strong>Sécurité Alimentaire et Confiance</strong></p>
-                <p>"En tant que consommateur soucieux de la sécurité alimentaire de ma famille, j'ai trouvé en <strong>FarmsConnect</strong> un partenaire de confiance. Chaque produit que j'ai reçu était non seulement frais, mais j'ai également pu vérifier les standards de sécurité et d'hygiène rigoureux qu'ils appliquent. C'est une marque qui se soucie vraiment de ses clients. Je recommande <strong>FarmsConnect</strong> à tous mes amis pour leurs achats de volaille, car je sais que leur sécurité alimentaire est entre de bonnes mains!"</p>
-                <p><em>- Aminata, Maman et consommatrice responsable</em></p>
-            </div>
-            
-            <p><strong>👉 Recommandez <strong>FarmsConnect</strong> à vos proches pour une volaille de qualité, fiable et sécurisée !</strong></p>
+      
+            <p><strong>👉 Recommandez <strong>FarmsConnect</strong> à vos proches pour acceder a des produit de qualité, certifier par un véterinaire , fiable , tracable et sécurisée et au prix juste  !!!</strong></p>
         </div>    </div>
     </section>
 

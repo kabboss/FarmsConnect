@@ -894,8 +894,8 @@ footer p {
 /* Style de la modale */
 .modal {
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 5%;
+    left: 3%;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
@@ -911,13 +911,14 @@ footer p {
 /* Contenu de la modale */
 .modal-content {
     background: #ffffff;
-    padding: 20px;
+    padding: 40px;
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
+    max-width: 800px;
     text-align: left;
-    max-height: 90vh; /* Hauteur maximale pour éviter que le contenu dépasse */
+    max-height: 100vh; /* Hauteur maximale pour éviter que le contenu dépasse */
     overflow-y: auto; /* Activer le défilement si le contenu dépasse la hauteur */
+    left: 50%;
 }
 
 /* Style pour les titres dans la modale */
@@ -1049,14 +1050,14 @@ footer p {
 
 .remise-message {
     color: #fff;
-    background-color: #4ffc66; /* Rouge vif */
+    background-color: #615512; /* Rouge vif */
     font-size: 1.2rem;
     font-weight: bold;
     text-align: center;
     padding: 10px;
     margin: 10px 0;
     border-radius: 5px;
-    animation: clignoter 5s infinite;
+    animation: clignoter 10s infinite;
 }
 
 @keyframes clignoter {

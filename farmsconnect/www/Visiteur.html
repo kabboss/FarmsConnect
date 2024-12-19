@@ -199,7 +199,7 @@ categoryButtons.forEach(button => {
                         <h3>(${animal.categorie})</h3>
                         <p>Nombre : ${animal.nombre}</p>
                         <p>Poids par animal : ${animal.poids || 'Non spécifié'} kg</p>
-                        <p>Prix unitaire : ${(animal.prix * 0.04 + 500).toFixed(2)} FCFA</p>
+                        <p>Prix unitaire : ${animal.prixFinal}
                         <p>Code du vendeur : ${animal.codeVendeur}</p>
                         <div class="images-section">
                             <img src="${mainImage}" alt="Image de l'animal" class="main-image"/>
@@ -253,11 +253,12 @@ categoryButtons.forEach(button => {
             });
     
             document.querySelectorAll('.buy-button').forEach(button => {
-                button.addEventListener('click', function () {
-                    const animal = JSON.parse(this.getAttribute('data-animal'));
-                    alert(`Vous avez sélectionné d'acheter : ${animal.nombre} ${animal.categorie} pour ${(animal.prix * 1.04 + 650).toFixed(2)} FCFA par unité.`);
-                });
+            button.addEventListener('click', function() {
+                const animal = JSON.parse(this.getAttribute('data-animal'));
+                handlePurchase(animal);
             });
+        });
+
         }
     
         // Récupérer les annonces depuis l'API
@@ -309,18 +310,12 @@ categoryButtons.forEach(button => {
                         filterAnnonces();
                     });
                 });
-    
-                // Affichage initial
-                displayAnnonces(filteredAnnonces, 1);
-                displayPagination(filteredAnnonces.length, 1);
+
             })
             .catch(error => console.error('Erreur lors de la récupération des annonces :', error));
     });
     </script>
     
-
-
-
 
 <script>
 async function fetchAnnonces(page = 1, limit = 10) {
@@ -356,17 +351,6 @@ fetchAnnonces(1, 10);
 </script>
 
 
-
-
-
-
-
-
-
-
-
-
-
 <script>
 
     function handlePurchase(animal) {
@@ -392,31 +376,46 @@ fetchAnnonces(1, 10);
         };
     
         // Envoi de l'email immédiatement au vendeur
-        const emailContentVendeur = ` 
-            Un client est intéressé par votre annonce :
-            Catégorie : ${animal.categorie}
-            Quantité demandée : ${visitorInfo.quantity}
-            Nom : ${visitorInfo.username}
-            Votre Recette est de : ${animal.prix}*${visitorInfo.quantity}FCFA
+        const emailContentVendeur = `
+📢 Interet pour votre annonce !
 
-            \n\nFarmsConnect vous contactera bientôt pour organiser la livraison
-        `;
+🔹 Catégorie : ${animal.categorie}
+🔹 Quantité demandée : ${visitorInfo.quantity}
+🔹 Nom du client : ${visitorInfo.username}
+💰 Recette estimée : ${(animal.prix * visitorInfo.quantity).toLocaleString()} FCFA
+
+📦 Prochaine étape : FarmsConnect vous contactera bientôt pour organiser la livraison. 🚚
+
+Merci d'utiliser FarmsConnect!
+`;
         sendEmailVendeur(emailContentVendeur, animal.emailVendeur);
-    
+  
+        
+        
+
     // Envoi de l'email de confirmation à l'acheteur
     const emailSubject = "Votre achat a été passé avec succès !";
-    const emailContentAcheteur = `
-        Merci ${visitorInfo.username}, nous avons bien reçu votre achat et voici les détails de votre commande :
-        Catégorie : ${animal.categorie}
-        Quantité demandée : ${visitorInfo.quantity}
-        Total a payer : ${animal.prix}*${visitorInfo.quantity}*0.04 +500 FCFA
-        Code du vendeur : ${animal.codeVendeur}
-        Votre Quartier de résidence est : ${visitorInfo.quartier}
-    
-        Vous voulez nous contacter ? Cliquez sur ce lien pour être redirigé sur WhatsApp et nous laisser un message : https://wa.me/+22656663638
-    
-        \n\nFarmsConnect vous contactera bientôt pour organiser la livraison.
-    `;
+    const emailContentClient = `
+Merci, ${visitorInfo.username} ! 🤝✨  
+Votre commande a été enregistrée avec succès. Voici les détails de votre achat :  
+
+🔹 Catégorie : ${animal.categorie}  
+🔹 Quantité demandée : ${visitorInfo.quantity}  
+💰 Total à payer : ${(animal.prix * visitorInfo.quantity * 1.04 + 500).toLocaleString()} FCFA  
+   _(inclut 500 FCFA de frais de traitement)_  
+🚚 Livraison : Gratuite  
+
+🆔 Code du vendeur : ${animal.codeVendeur}  
+🏡 Quartier de résidence : ${visitorInfo.quartier}  
+
+📞 Vous souhaitez nous contacter ?  
+👉 [Cliquez ici pour nous écrire sur WhatsApp](https://wa.me/+22656663638)  
+
+📦 Prochaine étape :  
+FarmsConnect vous contactera bientôt pour organiser la livraison. 🚚💨  
+
+✨ Merci de faire confiance à FarmsConnect, votre partenaire de choix !!  
+`;
     
     // Fonction d'envoi de l'e-mail
     function sendEmailAcheteur(subject, content, email) {
@@ -442,28 +441,31 @@ fetchAnnonces(1, 10);
     }
     
     // Envoi de l'e-mail
-    sendEmailAcheteur(emailSubject, emailContentAcheteur, visitorInfo.email);
+    sendEmailAcheteur(emailSubject, emailContentClient, visitorInfo.email);
     
     
     
     
-        // Envoi de l'email à FarmsConnect avec les détails de l'achat
-        const emailContentFarmsConnect = `
-            Détails de l'achat :
-            Catégorie : ${animal.categorie}
-            Prix unitaire : ${animal.prix} FCFA
-            Code du vendeur : ${animal.codeVendeur}
-            Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? `(secondaire : ${animal.contactSecondaire})` : ''}
-            
-            Informations sur le visiteur :
-            Nom d'utilisateur : ${visitorInfo.username}
-            Contact : ${visitorInfo.contact}
-            E-mail : ${visitorInfo.email}
-            Nombre souhaité : ${visitorInfo.quantity}
-            Quartier de l'acheteur : ${visitorInfo.quartier}
-            Total a payer : ${animal.prix}*${visitorInfo.quantity}*0.04 +500 FCFA
+    const emailContentFarmsConnect = `
+📋 Détails de l'achat :  
+🔹 Catégorie : ${animal.categorie}  
+💰 Prix unitaire : ${animal.prix} FCFA  
+🆔 Code du vendeur : ${animal.codeVendeur}  
+📞 Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? `(Secondaire : ${animal.contactSecondaire})` : ''}  
 
-        `;
+👤 Informations sur l'acheteur :  
+🔹 Nom d'utilisateur : ${visitorInfo.username}  
+📱 Contact : ${visitorInfo.contact}  
+✉️ E-mail : ${visitorInfo.email}  
+📦 Nombre souhaité : ${visitorInfo.quantity}  
+🏡 Quartier : ${visitorInfo.quartier}  
+
+💵 Total à payer : ${(animal.prix * visitorInfo.quantity * 1.04 + 500)} FCFA
+
+---
+
+🌐 Veuillez traitez la Commande
+`;
         sendEmailFarmsConnect(emailContentFarmsConnect);
     
         // Envoyer au backend pour planifier l'envoi du mail au client dans 24h
@@ -486,10 +488,6 @@ fetchAnnonces(1, 10);
         })
         .catch(error => console.error("Erreur réseau lors de l'envoi de l'email au vendeur:", error));
     }
-    
-    
-    
-    
     
     
     // Nouvelle fonction pour envoyer l'email à FarmsConnect

@@ -4,7 +4,7 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
     const prixUnitaire = parseFloat(document.getElementById('prix').value);
     const commission = prixUnitaire * 0.04;
     const fraisLivraison = 500;
-    const prixFinal = prixUnitaire + commission + fraisLivraison;
+    const prixFinal = prixUnitaire + commission ;
     
     const generateVendeurId = (email, contactPrincipal) => {
         // Générer un identifiant unique basé sur l'email et le numéro de téléphone
