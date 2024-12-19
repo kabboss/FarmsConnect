@@ -188,18 +188,18 @@ app.post('/api/order', async (req, res) => {
             text: `
             Merci, ${username}, pour votre commande ! 🛒 
             
-            📋 **Détails de votre commande :**
-            - **Produit** : ${nomproduit}
-            - **Prix Total à payer** : ${price} FCFA (Livraison gratuite)
-            - **Quantité** : ${quantity}
-            - **Poids Total** : ${weight} kg 
+            📋 Détails de votre commande :
+            - Produit : ${nomproduit}
+            - Prix Total à payer : ${price} FCFA (Livraison gratuite)
+            - Quantité : ${quantity}
+            - Poids Total : ${weight} kg 
               *(NB : Par défaut, le poids commercialisé est de 2 kg. Une augmentation de 0,1 kg sera facturée à 70 FCFA)*
-            - **Traitement choisi** : ${traitement}
-            - **Type d'abattage** : ${typeAbattage}
+            - Traitement choisi : ${traitement}
+            - Type d'abattage : ${typeAbattage}
             
-            📞 **Nous vous contacterons prochainement sur votre numéro ${contact} pour valider la commande.**
+            📞 Nous vous contacterons prochainement sur votre numéro ${contact} pour valider la commande.
             
-            💬 **Vous avez des questions ou souhaitez nous contacter immédiatement ?**
+            💬 Vous avez des questions ou souhaitez nous contacter immédiatement ?
             👉 Cliquez ici pour nous joindre sur WhatsApp : [Nous contacter sur WhatsApp](https://wa.me/+22656663638)
             `
                     };
@@ -219,21 +219,21 @@ app.post('/api/order', async (req, res) => {
             to: 'kaboreabwa2020@gmail.com', // Destinataire: Farmsconnect
             subject: 'Nouvelle commande reçue',
             text: `
-            📦 **Nouvelle commande reçue !**
+            📦 Nouvelle commande reçue !
             
-            📋 **Détails de la commande :**
-            - **Client** : ${username}
-            - **Email** : ${email}
-            - **Contact** : ${contact}
-            - **Produit** : ${nomproduit}
-            - **Prix Total** : ${price} FCFA
-            - **Quantité** : ${quantity}
-            - **Poids Total** : ${weight} kg
+            📋 Détails de la commande :
+            - Client : ${username}
+            - Email : ${email}
+            - Contact : ${contact}
+            - Produit : ${nomproduit}
+            - Prix Total : ${price} FCFA
+            - Quantité : ${quantity}
+            - Poids Total : ${weight} kg
               *(NB : Par défaut, le poids commercialisé est de 2 kg. Une augmentation de 0,1 kg sera facturée à 70 FCFA.)*
-            - **Traitement** : ${traitement}
-            - **Type d'abattage** : ${typeAbattage}
+            - Traitement : ${traitement}
+            - Type d'abattage : ${typeAbattage}
             
-            🛠️ **Veuillez traiter cette commande dans les meilleurs délais.**
+            🛠️ Veuillez traiter cette commande dans les meilleurs délais.
             `
                     };
 
@@ -541,10 +541,10 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
           subject: 'Merci pour votre achat !',
           text: `👋 Bonjour ${purchaseDetails.username},
 
-          ✨ **Merci pour votre achat !**  
+          ✨ Merci pour votre achat !  
           Votre satisfaction nous tient à cœur 💖. Nous vous invitons à partager votre expérience avec nous en répondant à ce rapide formulaire de feedback 📝 :  
           
-          🔗 [**Donnez votre avis ici !**](https://ee.kobotoolbox.org/x/uhCnWFCN)
+          🔗 [Donnez votre avis ici !](https://ee.kobotoolbox.org/x/uhCnWFCN)
           
           🌟 Vos retours nous aident à améliorer nos services et à vous offrir la meilleure expérience possible.  
           
