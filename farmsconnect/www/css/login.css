@@ -451,7 +451,7 @@ nav ul li a:hover {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Ombre plus douce */
     animation: slideDown 0.5s ease-out;
     transform-origin: top center;
-    max-height: 90vh; /* Limiter la hauteur maximale */
+    max-height: 100vh; /* Limiter la hauteur maximale */
     overflow-y: auto; /* Activer le défilement interne si nécessaire */
     box-sizing: border-box;
     border: 1px solid #ddd; /* Bordure subtile */

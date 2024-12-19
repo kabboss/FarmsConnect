@@ -186,23 +186,25 @@ app.post('/api/order', async (req, res) => {
             to: email,
             subject: 'Confirmation de commande',
             text: `
-            Merci, ${username}, pour votre commande ! 🛒 
-            
-            📋 Détails de votre commande :
-            - Produit : ${nomproduit}
-            - Prix Total à payer : ${price} FCFA (Livraison gratuite)
-            - Quantité : ${quantity}
-            - Poids Total : ${weight} kg 
-              *(NB : Par défaut, le poids commercialisé est de 2 kg. Une augmentation de 0,1 kg sera facturée à 70 FCFA)*
-            - Traitement choisi : ${traitement}
-            - Type d'abattage : ${typeAbattage}
-            
-            📞 Nous vous contacterons prochainement sur votre numéro ${contact} pour valider la commande.
-            
-            💬 Vous avez des questions ou souhaitez nous contacter immédiatement ?
-            👉 Cliquez ici pour nous joindre sur WhatsApp : [Nous contacter sur WhatsApp](https://wa.me/+22656663638)
-            `
-                    };
+Merci, ${username}, pour votre commande ! 🛒
+
+📋 Détails de votre commande :
+🔹 Produit : ${nomproduit}
+🔹 Quantité : ${quantity}
+🔹 Poids total : ${weight} kg
+💡 (NB : Le poids commercialisé par défaut est de 2 kg. Une augmentation de 0,1 kg est facturée à 70 FCFA.)
+🔹 Traitement choisi : ${traitement}
+🔹 Type d'abattage : ${typeAbattage}
+
+💰 Prix total à payer : ${price} FCFA (Livraison gratuite 🚚)
+
+📞 Nous vous contacterons bientôt sur votre numéro : ${contact} pour valider la commande.
+
+💬 Vous avez des questions ou souhaitez nous contacter immédiatement ?
+👉 Cliquez ici pour nous joindre sur WhatsApp https://wa.me/+22656663638
+
+🙏 Merci de votre confiance et à bientôt ! ✨`
+};
 
         // Envoi de l'email au client
         transporter.sendMail(mailOptionsClient, (error, info) => {
@@ -219,23 +221,22 @@ app.post('/api/order', async (req, res) => {
             to: 'kaboreabwa2020@gmail.com', // Destinataire: Farmsconnect
             subject: 'Nouvelle commande reçue',
             text: `
-            📦 Nouvelle commande reçue !
+📦 Nouvelle commande reçue !
             
-            📋 Détails de la commande :
-            - Client : ${username}
-            - Email : ${email}
-            - Contact : ${contact}
-            - Produit : ${nomproduit}
-            - Prix Total : ${price} FCFA
-            - Quantité : ${quantity}
-            - Poids Total : ${weight} kg
-              *(NB : Par défaut, le poids commercialisé est de 2 kg. Une augmentation de 0,1 kg sera facturée à 70 FCFA.)*
-            - Traitement : ${traitement}
-            - Type d'abattage : ${typeAbattage}
+📋 Détails de la commande :
+Client : ${username}
+Email : ${email}
+Contact : ${contact}
+Produit : ${nomproduit}
+Prix Total : ${price} FCFA
+Quantité : ${quantity}
+Poids Total : ${weight} kg
+Traitement : ${traitement}
+Type d'abattage : ${typeAbattage}
             
-            🛠️ Veuillez traiter cette commande dans les meilleurs délais.
-            `
-                    };
+🛠️ Veuillez traiter cette commande dans les meilleurs délais.
+`
+};
 
         // Envoi de l'email à Farmsconnect
         transporter.sendMail(mailOptionsFarmsconnect, (error, info) => {
@@ -539,21 +540,22 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
           from: 'kaboreabwa2020@gmail.com',
           to: purchaseDetails.email,    // Email du client
           subject: 'Merci pour votre achat !',
-          text: `👋 Bonjour ${purchaseDetails.username},
+          text: 
+`👋 Bonjour ${purchaseDetails.username},
 
-          ✨ Merci pour votre achat !  
-          Votre satisfaction nous tient à cœur 💖. Nous vous invitons à partager votre expérience avec nous en répondant à ce rapide formulaire de feedback 📝 :  
+✨ Merci pour votre achat !  
+Votre satisfaction nous tient à cœur 💖. Nous vous invitons à partager votre expérience avec nous en répondant à ce rapide formulaire de feedback 📝 :  
           
-          🔗 [Donnez votre avis ici !](https://ee.kobotoolbox.org/x/uhCnWFCN)
+🔗 [Donnez votre avis ici !](https://ee.kobotoolbox.org/x/uhCnWFCN)
           
-          🌟 Vos retours nous aident à améliorer nos services et à vous offrir la meilleure expérience possible.  
+🌟 Vos retours nous aident à améliorer nos services et à vous offrir la meilleure expérience possible.  
           
-          Merci de faire confiance à *FarmsConnect* 🚜🐓.  
-          À bientôt !  
+Merci de faire confiance à *FarmsConnect* 🚜🐓.  
+À bientôt !  
           
-          📧 *Pour toute question, contactez-nous directement.*  
-          `
-                };
+📧 *Pour toute question, contactez-nous directement. au +226 56663638 
+    `
+};
   
       // Planifier l'envoi de l'email au client après le délai spécifié (2 minutes)
       schedule.scheduleJob(scheduledTime, async () => {

@@ -361,11 +361,11 @@ function handlePurchase(animal) {
 // Envoi de l'email de confirmation à l'acheteur
 const emailSubject = "Votre achat a été passé avec succès !";
 const emailContentAcheteur = `
-    Merci ${visitorInfo.username}, nous avons bien reçu votre achat et voici les détails de votre commande :
-    Catégorie : ${animal.categorie}
-    Quantité demandée : ${visitorInfo.quantity}
-    Code du vendeur : ${animal.codeVendeur}
-    Votre Quartier de résidence est : ${visitorInfo.quartier}
+Merci ${visitorInfo.username}, nous avons bien reçu votre achat et voici les détails de votre commande :
+Catégorie : ${animal.categorie}
+Quantité demandée : ${visitorInfo.quantity}
+Code du vendeur : ${animal.codeVendeur}
+Votre Quartier de résidence est : ${visitorInfo.quartier}
 
     Vous voulez nous contacter ? Cliquez sur ce lien pour être redirigé sur WhatsApp et nous laisser un message : https://wa.me/+22656663638
 

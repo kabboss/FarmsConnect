@@ -1117,5 +1117,91 @@ button:hover {
 
 
 
+/* Style du message de patience */
+.loading-message {
+    display: none; /* Initialement caché */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    background-color: rgba(0, 0, 0, 0.8); /* Fond semi-transparent */
+    color: white;
+    font-size: 20px;
+    border-radius: 15px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 0.8s forwards, bounceIn 1s forwards;
+}
+
+/* Animation de l'apparition */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Animation du rebond de l'élément */
+@keyframes bounceIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+    }
+    60% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Le spinner qui tourne */
+.spinner {
+    width: 50px;  /* Taille du spinner */
+    height: 50px;
+    border: 6px solid #f3f3f3; /* Couleur de fond du spinner */
+    border-top: 6px solid #4CAF50; /* Couleur de la partie qui tourne */
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite; /* Animation de rotation du spinner */
+    margin-bottom: 15px; /* Espace entre le spinner et le texte */
+}
+
+/* Animation de rotation du spinner */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Style du texte */
+#loadingText {
+    font-size: 22px;
+    font-weight: bold;
+    color: #f2f2f2; /* Couleur claire pour le texte */
+    animation: textFadeIn 1.5s ease-in-out; /* Animation de fondu du texte */
+}
+
+/* Animation de fondu du texte */
+@keyframes textFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
 
 
