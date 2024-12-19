@@ -868,6 +868,9 @@ module.exports = router;
 
 // mise a jour 
 
+// Middleware pour autoriser les requêtes CORS
+app.use(cors()); // Autorise toutes les origines par défaut
+
   // URL de connexion MongoDB
 const url = "mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority";
 const client = new MongoClient(url);
