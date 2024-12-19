@@ -23,10 +23,9 @@ async function insertUpdate() {
 
     // Objet de la nouvelle mise à jour
     const update = {
-      version: "1.3.0", // Version de la mise à jour
+      version: "1.4.0", // Version de la mise à jour
 
-
-      downloadUrl: "https://drive.google.com/uc?export=download&id=1KwLZyucJ3odQ5hPEfayg7zav-_U0_Gjh", // Lien de téléchargement
+      downloadUrl: "https://drive.google.com/uc?export=download&id=1U8EgDv0HWtcCv2o4TTCDGXo-_4TR04Zz", // Lien de téléchargement
       message: "Nouvelle version avec des améliorations majeures et des corrections de bugs.", // Description de la mise à jour
       createdAt: new Date() // Ajout de la date et heure d'insertion
     };
