@@ -1495,3 +1495,123 @@ button:hover {
 
 
 
+  
+/* Conteneur principal */
+.container {
+    width: 100%;
+    max-width: 700px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-out;
+    margin-bottom: 20px;
+}
+
+/* Animation de fondu */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Message de mise à jour dans un petit carré avec défilement */
+.message {
+    font-size: 17px;
+    font-weight: 600;
+    color: #555;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 5px;
+    max-height: 100px;
+    overflow-y: auto; /* Active le défilement */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3px;
+}
+
+/* Bouton de mise à jour */
+.update-button {
+    background: linear-gradient(45deg, #4CAF50, #66bb6a);
+    color: #fff;
+    padding: 18px 30px;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    text-transform: uppercase;
+}
+
+.update-button:hover {
+    background: linear-gradient(45deg, #1146f3, #619efa);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+.update-button:active {
+    transform: translateY(2px);
+}
+
+/* Message d'erreur */
+.error {
+    color: #f44336;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    animation: errorAnimation 0.5s forwards;
+}
+
+@keyframes errorAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation du bouton lors de l'apparition */
+@keyframes buttonPop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Lorsque le bouton de mise à jour est visible */
+.update-button {
+    animation: buttonPop 0.6s ease-out;
+}
+
+/* Responsivité */
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 0px;
+    }
+
+    .message {
+        font-size: 16px;
+    }
+
+    .update-button {
+        font-size: 16px;
+        padding: 15px 25px;
+    }
+}
