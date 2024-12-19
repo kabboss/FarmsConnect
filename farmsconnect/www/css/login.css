@@ -1496,16 +1496,18 @@ button:hover {
 
 
   
-  /* Conteneur principal */
-  .container {
+ /* Conteneur principal */
+.container {
     width: 100%;
-    max-width: 600px;
-    padding: 30px;
+    height: 40px;
+    max-width: 700px;
+    padding: 10px; /* Padding positif pour donner de l'espace intérieur */
     background: #fff;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     animation: fadeIn 1s ease-out;
   }
+  
   
   /* Animation de fondu */
   @keyframes fadeIn {
@@ -1521,8 +1523,8 @@ button:hover {
   
   /* Message de mise à jour */
   .message {
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 17px;
+    font-weight: 600;
     margin-bottom: 20px;
     color: #555;
     opacity: 0.9;
@@ -1546,7 +1548,7 @@ button:hover {
   }
   
   .update-button:hover {
-    background: linear-gradient(45deg, #66bb6a, #4CAF50);
+    background: linear-gradient(45deg, #1146f3, #619efa);
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
     transform: translateY(-5px);
   }
@@ -1596,7 +1598,7 @@ button:hover {
   @media (max-width: 600px) {
     .container {
       width: 90%;
-      padding: 20px;
+      padding: 10px;
     }
   
     .message {
