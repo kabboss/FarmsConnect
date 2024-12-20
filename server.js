@@ -877,7 +877,7 @@ app.get("/get-update", (req, res) => {
       // Retourne un lien direct pour télécharger la dernière version de l'application
       res.json({
         downloadUrl: "https://drive.google.com/uc?export=download&id=1fpZMpy5W5cj7kEIItMsOk5KGLSkHBKcr",
-        message: "📱 <b style='color: green;'>VERSION 1.4.0 (Optimal)</b> \n\n Veuillez mettre à jour votre application vers la version optimale si ce n'est pas encore fait !\n\n💡Remarque importante : Si votre application est déjà à la version 1.4.0, aucune mise à jour n'est nécessaire.\n\n⚠️ Avant d'installer la nouvelle version, veuillez d'abord désinstaller l'ancienne version pour éviter tout conflit et garantir un fonctionnement optimal 🔄.",
+        message: "📱 VERSION 1.4.0 (Optimal) \n\n Veuillez mettre à jour votre application vers la version optimale si ce n'est pas encore fait !\n\n💡Remarque importante : Si votre application est déjà à la version 1.4.0, aucune mise à jour n'est nécessaire.\n\n⚠️ Avant d'installer la nouvelle version, veuillez d'abord désinstaller l'ancienne version pour éviter tout conflit et garantir un fonctionnement optimal 🔄.",
     });
     } catch (err) {
       console.error("Erreur lors de l'envoi du lien de mise à jour :", err);
