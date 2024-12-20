@@ -78,15 +78,22 @@ window.onload = function() {
 
 
 
-    <section class="categories">
-        <div class="category-list">
-            <button onclick="showCategory('poulet-local')">Poulet Local</button>
-            <button onclick="showCategory('poulet-chair')">Poulet de Chair</button>
-            <button onclick="showCategory('poulet-ameliore')">Poulet Amélioré</button>
-            <button onclick="showCategory('poule-pondeuse')">Poule Pondeuse</button>
-            <!-- Ajoutez ici d'autres catégories si nécessaire -->
-        </div>
-    </section>
+<section class="categories">
+    <div class="category-list">
+        <button onclick="showCategory('poulet-local')">Poulet Local</button>
+        <button onclick="showCategory('poulet-chair')">Poulet de Chair</button>
+        <button onclick="showCategory('poulet-ameliore')">Poulet Amélioré</button>
+        <button onclick="showCategory('poule-pondeuse')">Poule Pondeuse</button>
+        <button onclick="showCategory('coq-local')">Coq Local</button>
+        <button onclick="showCategory('coq-local-ameliore')">Coq Local Amélioré</button>
+        <button onclick="showCategory('pintade-male')">Pintade Male</button>
+        <button onclick="showCategory('pintade-femelle')">Pintade Femelle</button>
+        <button onclick="showCategory('dindon')">Dindon</button>
+        <button onclick="showCategory('canard')">Canard</button>
+        <button onclick="showCategory('caille')">Caille</button>
+        <button onclick="showCategory('lapin')">Lapin</button>
+    </div>
+</section>
 
     <!-- Message des remises animées -->
 <div class="remise-message">
@@ -141,7 +148,7 @@ window.onload = function() {
         <!-- Poulet Local -->
         <div class="product poulet-local">
             <img src="img/local.jpg" alt="Poulet Local">
-            <h3>Poulet Local</h3>
+            <h3>Poule Local</h3>
             <div class="price-info">
                 <p id="price-poulet-local"><strong>Prix unitaire:</strong> 3000 FCFA</p>
                 <p><strong>Frais supplémentaires :</strong></p>
@@ -219,7 +226,7 @@ window.onload = function() {
         <!-- Poulet Amélioré -->
         <div class="product poulet-ameliore">
             <img src="img/ameliorer.jpg" alt="Poulet Amélioré">
-            <h3>Poulet Local Amélioré</h3>
+            <h3>Poule Local Amélioré</h3>
             <div class="price-info">
                 <p id="price-poulet-ameliore"><strong>Prix unitaire:</strong> 3600 FCFA</p>
                 <p><strong>Frais supplémentaires :</strong></p>
@@ -291,6 +298,274 @@ window.onload = function() {
             <button id="loginButton" onclick="acheterProduit('Poule Pondeuse', 3800, 'quantity-poule-pondeuse', 'weight-poule-pondeuse', 'option-traitement-poule-pondeuse', 'abattage-type-poule-pondeuse')">Acheter 🛒</button>
         </div>
 
+
+ <!-- Coq Local -->
+ <div class="product coq-local">
+    <img src="img/Coq.jpg" alt="Coq Local">
+    <h3>Coq Local</h3>
+    <div class="price-info">
+        <p><strong>Prix unitaire:</strong> 3500 FCFA</p>
+        <p><strong>Frais supplémentaires :</strong></p>
+        <ul>
+            <li>🔹 <strong>Frais:</strong> 4% de la somme totale</li>
+            <li>🔧 <strong>Traitement :</strong> 400 FCFA (prix fixe)</li>
+            <li>🔪 <strong>Abattage :</strong> 100 FCFA (si choisi)</li>
+        </ul>
+    </div>
+    <label for="quantity-coq-local">Quantité:</label>
+    <input type="number" id="quantity-coq-local" min="1" value="0">
+    <label for="weight-coq-local">Poids (Par defaut : 2kg)</label>
+    <input type="number" id="weight-coq-local" min="0.1" step="0.1" value="2.5">
+    <label for="option-traitement-coq-local">Traitement:</label>
+    <select id="option-traitement-coq-local">
+        <option value="vivant">🐔 Vivant</option>
+        <option value="abattu">🔪 Abattu</option>
+    </select>
+    <div id="abattage-options-coq-local" style="display: none;">
+        <label for="abattage-type-coq-local">Type d'abattage:</label>
+        <select id="abattage-type-coq-local">
+            <option value="halal">🕌 Halal</option>
+            <option value="peu-importe">🤷 Sans préférence</option>
+        </select>
+    </div>
+    <button onclick="acheterProduit('Coq Local', 3500, 'quantity-coq-local', 'weight-coq-local', 'option-traitement-coq-local', 'abattage-type-coq-local')">Acheter 🛒</button>
+</div>
+
+<!-- Coq Local Amélioré -->
+<div class="product coq-local-ameliore">
+    <img src="img/Coq.jpg" alt="Coq Local Amélioré">
+    <h3>Coq Local Amélioré</h3>
+    <div class="price-info">
+        <p><strong>Prix unitaire:</strong> 3700 FCFA</p>
+        <p><strong>Frais supplémentaires :</strong></p>
+        <ul>
+            <li>🔹 <strong>Frais:</strong> 4% de la somme totale</li>
+            <li>🔧 <strong>Traitement :</strong> 400 FCFA (prix fixe)</li>
+            <li>🔪 <strong>Abattage :</strong> 100 FCFA (si choisi)</li>
+        </ul>
+    </div>
+    <label for="quantity-coq-local-ameliore">Quantité:</label>
+    <input type="number" id="quantity-coq-local-ameliore" min="1" value="0">
+    <label for="weight-coq-local-ameliore">Poids (Par defaut : 2kg)</label>
+    <input type="number" id="weight-coq-local-ameliore" min="0.1" step="0.1" value="2.5">
+    <label for="option-traitement-coq-local-ameliore">Traitement:</label>
+    <select id="option-traitement-coq-local-ameliore">
+        <option value="vivant">🐔 Vivant</option>
+        <option value="abattu">🔪 Abattu</option>
+    </select>
+    <div id="abattage-options-coq-local-ameliore" style="display: none;">
+        <label for="abattage-type-coq-local-ameliore">Type d'abattage:</label>
+        <select id="abattage-type-coq-local-ameliore">
+            <option value="halal">🕌 Halal</option>
+            <option value="peu-importe">🤷 Sans préférence</option>
+        </select>
+    </div>
+    <button onclick="acheterProduit('Coq Local Amélioré', 3700, 'quantity-coq-local-ameliore', 'weight-coq-local-ameliore', 'option-traitement-coq-local-ameliore', 'abattage-type-coq-local-ameliore')">Acheter 🛒</button>
+</div>
+
+<!-- Pintade Male -->
+<div class="product pintade-male">
+    <img src="img/pintade.jpg" alt="Pintade Male">
+    <h3>Pintade Male</h3>
+    <div class="price-info">
+        <p><strong>Prix unitaire:</strong> 4200 FCFA</p>
+        <p><strong>Frais supplémentaires :</strong></p>
+        <ul>
+            <li>🔹 <strong>Frais:</strong> 4% de la somme totale</li>
+            <li>🔧 <strong>Traitement :</strong> 400 FCFA (prix fixe)</li>
+            <li>🔪 <strong>Abattage :</strong> 100 FCFA (si choisi)</li>
+        </ul>
+    </div>
+    <label for="quantity-pintade-male">Quantité:</label>
+    <input type="number" id="quantity-pintade-male" min="1" value="0">
+    <label for="weight-pintade-male">Poids (Par defaut : 2kg)</label>
+    <input type="number" id="weight-pintade-male" min="0.1" step="0.1" value="2.5">
+    <label for="option-traitement-pintade-male">Traitement:</label>
+    <select id="option-traitement-pintade-male">
+        <option value="vivant">🐔 Vivant</option>
+        <option value="abattu">🔪 Abattu</option>
+    </select>
+    <div id="abattage-options-pintade-male" style="display: none;">
+        <label for="abattage-type-pintade-male">Type d'abattage:</label>
+        <select id="abattage-type-pintade-male">
+            <option value="halal">🕌 Halal</option>
+            <option value="peu-importe">🤷 Sans préférence</option>
+        </select>
+    </div>
+    <button onclick="acheterProduit('Pintade Male', 4200, 'quantity-pintade-male', 'weight-pintade-male', 'option-traitement-pintade-male', 'abattage-type-pintade-male')">Acheter 🛒</button>
+</div>
+
+<!-- Pintade Femelle -->
+<div class="product pintade-femelle">
+    <img src="img/pintade.jpg" alt="Pintade Femelle">
+    <h3>Pintade Femelle</h3>
+    <div class="price-info">
+        <p><strong>Prix unitaire:</strong> 4300 FCFA</p>
+        <p><strong>Frais supplémentaires :</strong></p>
+        <ul>
+            <li>🔹 <strong>Frais:</strong> 4% de la somme totale</li>
+            <li>🔧 <strong>Traitement :</strong> 400 FCFA (prix fixe)</li>
+            <li>🔪 <strong>Abattage :</strong> 100 FCFA (si choisi)</li>
+        </ul>
+    </div>
+    <label for="quantity-pintade-femelle">Quantité:</label>
+    <input type="number" id="quantity-pintade-femelle" min="1" value="0">
+    <label for="weight-pintade-femelle">Poids (Par defaut : 2kg)</label>
+    <input type="number" id="weight-pintade-femelle" min="0.1" step="0.1" value="2.5">
+    <label for="option-traitement-pintade-femelle">Traitement:</label>
+    <select id="option-traitement-pintade-femelle">
+        <option value="vivant">🐔 Vivant</option>
+        <option value="abattu">🔪 Abattu</option>
+    </select>
+    <div id="abattage-options-pintade-femelle" style="display: none;">
+        <label for="abattage-type-pintade-femelle">Type d'abattage:</label>
+        <select id="abattage-type-pintade-femelle">
+            <option value="halal">🕌 Halal</option>
+            <option value="peu-importe">🤷 Sans préférence</option>
+        </select>
+    </div>
+    <button onclick="acheterProduit('Pintade Femelle', 4300, 'quantity-pintade-femelle', 'weight-pintade-femelle', 'option-traitement-pintade-femelle', 'abattage-type-pintade-femelle')">Acheter 🛒</button>
+</div>
+
+<!-- Dindon -->
+<div class="product dindon">
+    <img src="img/Dinde.jpg" alt="Dindon">
+    <h3>Dindon</h3>
+    <div class="price-info">
+        <p><strong>Prix unitaire:</strong> 5000 FCFA</p>
+        <p><strong>Frais supplémentaires :</strong></p>
+        <ul>
+            <li>🔹 <strong>Frais:</strong> 4% de la somme totale</li>
+            <li>🔧 <strong>Traitement :</strong> 400 FCFA (prix fixe)</li>
+            <li>🔪 <strong>Abattage :</strong> 100 FCFA (si choisi)</li>
+        </ul>
+    </div>
+    <label for="quantity-dindon">Quantité:</label>
+    <input type="number" id="quantity-dindon" min="1" value="0">
+    <label for="weight-dindon">Poids (Par defaut : 4kg)</label>
+    <input type="number" id="weight-dindon" min="0.1" step="0.1" value="4">
+    <label for="option-traitement-dindon">Traitement:</label>
+    <select id="option-traitement-dindon">
+        <option value="vivant">🦃 Vivant</option>
+        <option value="abattu">🔪 Abattu</option>
+    </select>
+    <div id="abattage-options-dindon" style="display: none;">
+        <label for="abattage-type-dindon">Type d'abattage:</label>
+        <select id="abattage-type-dindon">
+            <option value="halal">🕌 Halal</option>
+            <option value="peu-importe">🤷 Sans préférence</option>
+        </select>
+    </div>
+    <button onclick="acheterProduit('Dindon', 5000, 'quantity-dindon', 'weight-dindon', 'option-traitement-dindon', 'abattage-type-dindon')">Acheter 🛒</button>
+ </div>
+
+ <!-- Caille -->
+ <div class="product caille">
+    <img src="img/cailles.jpg" alt="Caille">
+    <h3>Caille</h3>
+    <div class="price-info">
+        <p><strong>Prix unitaire:</strong> 1500 FCFA</p>
+        <p><strong>Frais supplémentaires :</strong></p>
+        <ul>
+            <li>🔹 <strong>Frais:</strong> 4% de la somme totale</li>
+            <li>🔧 <strong>Traitement :</strong> 400 FCFA (prix fixe)</li>
+            <li>🔪 <strong>Abattage :</strong> 100 FCFA (si choisi)</li>
+        </ul>
+    </div>
+    <label for="quantity-caille">Quantité:</label>
+    <input type="number" id="quantity-caille" min="1" value="0">
+    <label for="weight-caille">Poids (Par defaut : 0.5kg)</label>
+    <input type="number" id="weight-caille" min="0.1" step="0.1" value="0.5">
+    <label for="option-traitement-caille">Traitement:</label>
+    <select id="option-traitement-caille">
+        <option value="vivant">🐦 Vivant</option>
+        <option value="abattu">🔪 Abattu</option>
+    </select>
+    <div id="abattage-options-caille" style="display: none;">
+        <label for="abattage-type-caille">Type d'abattage:</label>
+        <select id="abattage-type-caille">
+            <option value="halal">🕌 Halal</option>
+            <option value="peu-importe">🤷 Sans préférence</option>
+        </select>
+    </div>
+    <button onclick="acheterProduit('Caille', 1500, 'quantity-caille', 'weight-caille', 'option-traitement-caille', 'abattage-type-caille')">Acheter 🛒</button>
+ </div>
+
+ <!-- Lapin -->
+ <div class="product lapin">
+    <img src="img/lapins.jpg" alt="Lapin">
+    <h3>Lapin</h3>
+    <div class="price-info">
+        <p><strong>Prix unitaire:</strong> 3000 FCFA</p>
+        <p><strong>Frais supplémentaires :</strong></p>
+        <ul>
+            <li>🔹 <strong>Frais:</strong> 4% de la somme totale</li>
+            <li>🔧 <strong>Traitement :</strong> 400 FCFA (prix fixe)</li>
+            <li>🔪 <strong>Abattage :</strong> 100 FCFA (si choisi)</li>
+        </ul>
+    </div>
+    <label for="quantity-lapin">Quantité:</label>
+    <input type="number" id="quantity-lapin" min="1" value="0">
+    <label for="weight-lapin">Poids (Par defaut : 2kg)</label>
+    <input type="number" id="weight-lapin" min="0.1" step="0.1" value="3">
+    <label for="option-traitement-lapin">Traitement:</label>
+    <select id="option-traitement-lapin">
+        <option value="vivant">🐇 Vivant</option>
+        <option value="abattu">🔪 Abattu</option>
+    </select>
+    <div id="abattage-options-lapin" style="display: none;">
+        <label for="abattage-type-lapin">Type d'abattage:</label>
+        <select id="abattage-type-lapin">
+            <option value="halal">🕌 Halal</option>
+            <option value="peu-importe">🤷 Sans préférence</option>
+        </select>
+    </div>
+    <button onclick="acheterProduit('Lapin', 3000, 'quantity-lapin', 'weight-lapin', 'option-traitement-lapin', 'abattage-type-lapin')">Acheter 🛒</button>
+ </div>
+ 
+
+
+
+ <!-- Canard -->
+<div class="product canard">
+    <img src="img/canard.jpg" alt="Canard">
+    <h3>Canard</h3>
+    <div class="price-info">
+        <p id="price-canard"><strong>Prix unitaire:</strong> 4500 FCFA</p>
+        <p><strong>Frais supplémentaires :</strong></p>
+        <ul style="font-size: 16px; line-height: 1.8; color: #333; list-style: none; padding-left: 0;">
+            <li>🔹 <strong>Frais:</strong> 4% de la somme totale</li>
+            <li>🔧 <strong>Traitement :</strong> 500 FCFA (prix fixe)</li>
+            <li>🔪 <strong>Abattage :</strong> 100 FCFA (si choisi)</li>
+        </ul>
+        <br>
+    </div>
+    <label for="quantity-canard">Quantité:</label>
+    <input type="number" id="quantity-canard" min="1" value="0">
+    <label for="weight-canard">Poids (Par defaut : 3kg)</label>
+    <input type="number" id="weight-canard" min="0.1" step="0.1" value="3">
+
+    <!-- Options de traitement -->
+    <label for="option-traitement-canard">Traitement:</label>
+    <select id="option-traitement-canard" onchange="updateAbattageOptions('canard')">
+        <option value="vivant">🦆 Vivant</option>
+        <option value="abattu">🔪 Abattu</option>
+    </select>
+
+    <!-- Options pour l'abattage -->
+    <div id="abattage-options-canard" style="display: none;">
+        <label for="abattage-type-canard">Type d'abattage:</label>
+        <select id="abattage-type-canard">
+            <option value="halal">🕌 Halal</option>
+            <option value="peu-importe">🤷 Sans préférence</option>
+        </select>
+    </div>
+
+    <button id="loginButton" onclick="acheterProduit('Canard', 4500, 'quantity-canard', 'weight-canard', 'option-traitement-canard', 'abattage-type-canard')">Acheter 🛒</button>
+</div>
+
+
+
     </div>
 </section>
 
@@ -351,8 +626,7 @@ loginButton.addEventListener("click", function() {
 
 
 <script>
-// Fonction pour calculer et afficher le prix total d'un produit
-function updatePrixProduit(nomProduit, prixUnitaire, quantityId, weightId, totalId, traitementId) {
+function updatePrixProduit(produit, quantityId, weightId, totalId, traitementId) {
     const quantity = parseInt(document.getElementById(quantityId).value) || 0;
     const weight = parseFloat(document.getElementById(weightId).value) || 0;
 
@@ -361,18 +635,15 @@ function updatePrixProduit(nomProduit, prixUnitaire, quantityId, weightId, total
         return;
     }
 
-     // Calcul du prix de base (quantité x prix unitaire)
-    let totalBase = quantity * prixUnitaire;
+    // Calcul du prix de base (quantité x prix unitaire)
+    let totalBase = quantity * produit.prix;
 
     // Calcul des frais supplémentaires
     let fraisSupplementaires = (totalBase * 0.04) + 400;
 
-    // Calcul de l'ajustement du prix basé sur le poids
-    let poidsSupplementaire = Math.max(weight - 2, 0); // On considère 2 kg comme poids de base
-    let ajustementPrixPoids = poidsSupplementaire * 700; // 70 FCFA par 0.1 kg = 700 FCFA par 1 kg
-
-
-
+    // Calcul de l'ajustement basé sur le poids
+    const poidsSupplementaire = Math.max(0, weight - produit.poidsBase);
+    const ajustementPoids = poidsSupplementaire * produit.prixParKg; // Prix par kilogramme spécifique au produit
 
     // Calcul des frais d'abattage (200 FCFA par unité si "abattu" est sélectionné)
     const traitementElement = document.getElementById(traitementId);
@@ -382,28 +653,23 @@ function updatePrixProduit(nomProduit, prixUnitaire, quantityId, weightId, total
         // Demande à l'utilisateur combien de poules il veut abattre
         const poulesAbattues = parseInt(prompt(`Combien de poules souhaitez-vous abattre ? Cela coûte 100 FCFA par poule.`));
         if (poulesAbattues > quantity) {
-            alert("Vous ne pouvez pas abattre plus de poules que vous ne voulez  achetée veuillez verifier si dessus la quantite que vous commander.");
+            alert("Vous ne pouvez pas abattre plus de poules que vous ne voulez achetées. Veuillez vérifier votre quantité.");
         } else if (poulesAbattues > 0) {
-            fraisAbattage = poulesAbattues * 100; // Applique 200 FCFA par poule abattue
+            fraisAbattage = poulesAbattues * 100; // Applique 100 FCFA par poule abattue
         }
     }
 
     // Calcul du prix final
-    let prixFinal = totalBase + fraisSupplementaires + ajustementPrixPoids + fraisAbattage;
+    let prixFinal = totalBase + fraisSupplementaires + ajustementPoids + fraisAbattage;
 
-
-    
-
-// Appliquer des remises basées sur la quantité
-if (quantity >= 20) {
-    prixFinal *= 0.76; // 24% de réduction
-} else if (quantity >= 10) {
-    prixFinal *= 0.87; // 13% de réduction
-} else if (quantity >= 5) {
-    prixFinal *= 0.95; // 5% de réduction
-}
-
-    
+    // Appliquer des remises basées sur la quantité
+    if (quantity >= 20) {
+        prixFinal *= 0.76; // 24% de réduction
+    } else if (quantity >= 10) {
+        prixFinal *= 0.87; // 13% de réduction
+    } else if (quantity >= 5) {
+        prixFinal *= 0.95; // 5% de réduction
+    }
 
     // Affichage du prix total final
     document.getElementById(totalId).textContent = `Prix Total à payer : ${prixFinal.toFixed(2)} FCFA`;
@@ -412,11 +678,23 @@ if (quantity >= 20) {
 // Fonction qui met à jour dynamiquement les prix pour tous les produits
 function initializeProductListeners() {
     const produits = [
-        { nom: 'poulet-local', prix: 3000 },
-        { nom: 'poulet-chair', prix: 3200 },
-        { nom: 'poulet-ameliore', prix: 3600 },
-        { nom: 'poule-pondeuse', prix: 3800 }
+        { nom: 'poulet-local', prix: 3000, poidsBase: 2, prixParKg: 750 }, // Exemple de produit avec 2kg comme poids de base et 700 FCFA par kg
+        { nom: 'poulet-chair', prix: 3200, poidsBase: 2, prixParKg: 800 },
+        { nom: 'poulet-ameliore', prix: 3600, poidsBase: 2, prixParKg: 700 },
+        { nom: 'poule-pondeuse', prix: 3800, poidsBase: 2, prixParKg: 700 },
+        { nom: 'canard', prix: 4500, poidsBase: 3, prixParKg: 750 }, // Poids de base 3kg et prix par kg de 750 FCFA
+        { nom: 'lapin', prix: 3000, poidsBase: 3, prixParKg: 850 },
+        { nom: 'caille', prix: 1500, poidsBase: 0.5, prixParKg: 1200 },
+        { nom: 'dindon', prix: 5000, poidsBase: 4, prixParKg: 1000 },
+        { nom: 'pintade-femelle', prix: 4300, poidsBase: 2.5, prixParKg: 750 },
+        { nom: 'pintade-male', prix: 4200, poidsBase: 2.5, prixParKg: 770 },
+        { nom: 'coq-local-ameliore', prix: 3700, poidsBase: 2.5, prixParKg: 720 },
+        { nom: 'coq-local', prix: 3500, poidsBase: 2.5, prixParKg: 730 }
     ];
+
+
+
+    
 
     produits.forEach(produit => {
         const quantityId = `quantity-${produit.nom}`;
@@ -425,37 +703,63 @@ function initializeProductListeners() {
         const traitementId = `option-traitement-${produit.nom}`; // ID de l'option de traitement (ex : abattu)
 
         // Crée un élément pour afficher le prix total si non existant
-        if (!document.getElementById(totalId)) {
-            const totalDiv = document.createElement("div");
-            totalDiv.id = totalId;
-            totalDiv.textContent = "Le Prix Total à payer est de : 0 FCFA";
-            document.querySelector(`.product.${produit.nom}`).appendChild(totalDiv);
+        const productElement = document.querySelector(`.product.${produit.nom}`);
+        if (productElement) {
+            if (!document.getElementById(totalId)) {
+                const totalDiv = document.createElement("div");
+                totalDiv.id = totalId;
+                totalDiv.textContent = "Le Prix Total à payer est de : 0 FCFA";
+                productElement.appendChild(totalDiv);
+            }
+        } else {
+            console.error(`L'élément avec la classe '.product.${produit.nom}' est introuvable.`);
         }
 
         // Ajoute des écouteurs d'événements pour mettre à jour le prix en temps réel
         document.getElementById(quantityId).addEventListener("input", () => {
-            updatePrixProduit(produit.nom, produit.prix, quantityId, weightId, totalId, traitementId);
+            updatePrixProduit(produit, quantityId, weightId, totalId, traitementId);
         });
 
         document.getElementById(weightId).addEventListener("input", () => {
-            updatePrixProduit(produit.nom, produit.prix, quantityId, weightId, totalId, traitementId);
+            updatePrixProduit(produit, quantityId, weightId, totalId, traitementId);
         });
 
-        // Ajoute un écouteur d'événement pour les options de traitement (abattu ou non)
         const traitementElement = document.getElementById(traitementId);
         if (traitementElement) {
             traitementElement.addEventListener("change", () => {
-                updatePrixProduit(produit.nom, produit.prix, quantityId, weightId, totalId, traitementId);
+                updatePrixProduit(produit, quantityId, weightId, totalId, traitementId);
             });
         }
     });
+
+
 }
 
-// Initialisation au chargement de la page
-document.addEventListener("DOMContentLoaded", initializeProductListeners);
+document.addEventListener('DOMContentLoaded', function() {
+    initializeProductListeners();
+});
 
 
 function acheterProduit(nomProduit, prixUnitaire, quantityId, weightId) {
+
+
+    const prod = [
+        { nom: 'poulet-local', prix: 3000, poidsB: 2, prixPKg: 750 }, // Exemple de produit avec 2kg comme poids de base et 700 FCFA par kg
+        { nom: 'poulet-chair', prix: 3200, poidsB: 2, prixPKg: 800 },
+        { nom: 'poulet-ameliore', prix: 3600, poidsB: 2, prixPKg: 700 },
+        { nom: 'poule-pondeuse', prix: 3800, poidsB: 2, prixPKg: 700 },
+        { nom: 'canard', prix: 4500, poidsB: 3, prixPKg: 750 }, // Poids de base 3kg et prix par kg de 750 FCFA
+        { nom: 'lapin', prix: 3000, poidsB: 3, prixPKg: 850 },
+        { nom: 'caille', prix: 1500, poidsB: 0.5, prixPKg: 1200 },
+        { nom: 'dindon', prix: 5000, poidsB: 4, prixPKg: 1000 },
+        { nom: 'pintade-femelle', prix: 4300, poidsB: 2.5, prixPKg: 750 },
+        { nom: 'pintade-male', prix: 4200, poidsB: 2.5, prixPKg: 770 },
+        { nom: 'coq-local-ameliore', prix: 3700, poidsB: 2.5, prixPKg: 720 },
+        { nom: 'coq-local', prix: 3500, poidsB: 2.5, prixPKg: 730 }
+    ];
+
+
+
 
 // Afficher le message de chargement
 const loadingMessage = document.getElementById("loadingMessage");
@@ -521,14 +825,16 @@ window.poidsTotal += poidsProduit;
 // Afficher le poids total global
 console.log(`Poids total global: ${window.poidsTotal} kg`);
 
+
 // Vous pouvez ajouter d'autres actions ici, comme calculer le prix total ou afficher des informations supplémentaires
 
-let total = quantity * prixUnitaire ;
+let total = quantity * prod.prix ;
 let fraisSupplementaires = (total * 0.04) + 400;
 
-// Ajustement basé sur le poids supplémentaire (augmentation de 70 FCFA par 0.1 kg)
-    const poidsSupplementaire = Math.max(0, weight - 2, 0); // Supposons que 2 kg est le poids de base
-    const ajustementPoids = poidsSupplementaire * 700; // 700 FCFA pour chaque kg supplémentaire
+    // Calcul de l'ajustement basé sur le poids
+    const poidsSupplementaire = Math.max(0, weight - prod.poidsB);
+    const ajustementPoids = poidsSupplementaire * prod.prixPKg; // Prix par kilogramme spécifique au produit
+
 
 
 // Définir la variable traitement avant de l'utiliser

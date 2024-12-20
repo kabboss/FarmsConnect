@@ -251,14 +251,15 @@ header {
 /* Liste des catégories */
 .category-list {
     display: flex;
-    justify-content: center; /* Centre horizontalement */
-    gap: 15px; /* Espacement entre les boutons */
+    justify-content: left; /* Centre horizontalement */
+    flex-wrap: wrap;
+    gap: 30px; /* Espacement entre les boutons */
 }
 
 /* Style des boutons de catégorie */
 .category-list button {
-    background-color: #4a90e2; /* Couleur de fond bleu clair */
-    color: white; /* Couleur du texte */
+    background-color: #78f38d; /* Couleur de fond bleu clair */
+    color: rgb(22, 17, 17); /* Couleur du texte */
     border: none; /* Pas de bordure */
     padding: 16px 20px; /* Espacement ajusté */
     border-radius: 25px; /* Bords arrondis prononcés */
