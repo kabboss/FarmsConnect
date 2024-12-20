@@ -173,15 +173,6 @@ app.post('/api/order', async (req, res) => {
     }
 
     try {
-        // Récupérer les coordonnées GPS à partir de la collection "Location"
-        const locationData = await Location.findOne({ email: email });  // Si tu veux utiliser email, sinon change pour userID
-
-        if (!locationData) {
-            return res.status(400).send('Localisation non trouvée pour cet utilisateur.');
-        }
-
-        const { latitude, longitude } = locationData;
-
         // Préparer l'email pour le client
         const mailOptionsClient = {
             from: 'kaboreabwa2020@gmail.com',
@@ -205,7 +196,7 @@ Merci, ${username}, pour votre commande ! 🛒
 💬 Vous avez des questions ou souhaitez nous contacter immédiatement ?
 👉 Cliquez ici pour nous joindre sur WhatsApp : [Nous contacter sur WhatsApp](https://wa.me/+22656663638)
             `
-                    };            
+        };
 
         // Envoi de l'email au client
         transporter.sendMail(mailOptionsClient, (error, info) => {
@@ -238,7 +229,7 @@ Merci, ${username}, pour votre commande ! 🛒
             
 🛠️ Veuillez traiter cette commande dans les meilleurs délais.
             `
-                    };
+        };
 
         // Envoi de l'email à Farmsconnect
         transporter.sendMail(mailOptionsFarmsconnect, (error, info) => {
@@ -256,7 +247,6 @@ Merci, ${username}, pour votre commande ! 🛒
         res.status(500).send('Erreur lors de la commande : ' + error.message);
     }
 });
-
 
 
 

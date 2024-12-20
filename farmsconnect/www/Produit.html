@@ -627,11 +627,11 @@ fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/order', {
 });
 }
 
-// Fonction de validation de l'e-mail
 function validateEmail(email) {
-const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-return regex.test(email);
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
 }
+
 
 
 </script>
