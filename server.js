@@ -179,22 +179,26 @@ app.post('/api/order', async (req, res) => {
             to: email,
             subject: 'Confirmation de commande',
             text: `
-Merci, ${username}, pour votre commande ! 🛒 
-            
+🛒✨ Merci, ${username}, pour votre commande !
+
 📋 Détails de votre commande :
-- Produit : ${nomproduit}
-- Prix Total à payer : ${price} FCFA 
-  (Livraison gratuite)
-- Quantité : ${quantity}
-- Poids Total : ${weight} kg 
-  (NB : Par défaut, le poids commercialisé est de 2 kg. Une augmentation de 0,1 kg sera facturée à 70 FCFA)
-- Traitement choisi : ${traitement}
-- Type d'abattage : ${typeAbattage}
-            
-📞 Nous vous contacterons prochainement sur votre numéro ${contact} pour valider la commande.
-            
+🍗 Produit : ${nomproduit}
+🔢 Quantité : ${quantity}
+⚖️ Poids Total : ${weight} kg
+💸 Prix Total à payer : ${price} FCFA
+🚚💨 Livraison gratuite
+   Traitement choisi : ${traitement}
+   Type d'abattage : ${typeAbattage}
+🔪 Quantité à abattre : ${NomAbattre}
+
+⚠️ Note importante :
+Le prix du produit peut augmenter en fonction du poids choisi. Chaque kilogramme supplémentaire sera facturé selon le tarif spécifique du produit. Pour plus de détails, veuillez consulter la "Note importante aux acheteurs" 📑.
+
+📞 Nous vous contacterons prochainement sur votre numéro ${contact} 📱 pour valider la commande.
+
 💬 Vous avez des questions ou souhaitez nous contacter immédiatement ?
-👉 Cliquez ici pour nous joindre sur WhatsApp : [Nous contacter sur WhatsApp](https://wa.me/+22656663638)
+📲 Cliquez ici pour nous joindre sur WhatsApp
+
             `
         };
 
@@ -213,22 +217,21 @@ Merci, ${username}, pour votre commande ! 🛒
             to: 'kaboreabwa2020@gmail.com', // Destinataire: Farmsconnect
             subject: 'Nouvelle commande reçue',
             text: `
-📦 Nouvelle commande reçue !
-            
+📩 Nouvelle commande reçue !
+
 📋 Détails de la commande :
-- Client : ${username}
-- Email : ${email}
-- Contact : ${contact}
-- Produit : ${nomproduit}
-- Prix Total : ${price} FCFA
-- Quantité : ${quantity}
-- Poids Total : ${weight} kg
-  (NB : Par défaut, le poids commercialisé est de 2 kg. Une augmentation de 0,1 kg sera facturée à 70 FCFA.)
-- Traitement : ${traitement}
-- Type d'abattage : ${typeAbattage}
-            
-🛠️ Veuillez traiter cette commande dans les meilleurs délais.
-            `
+👤 Client : ${username}
+✉️ Email : ${email}
+📞 Contact : ${contact}
+🍗 Produit : ${nomproduit}
+🔢 Quantité : ${quantity}
+⚖️ Poids Total : ${weight} kg
+💸 Prix Total : ${price} FCFA
+🛠️ Traitement : ${traitement}
+🔪 Type d'abattage : ${typeAbattage}
+🐔 Quantité à abattre : ${NomAbattre}
+
+⏳ Action requise : Veuillez traiter cette commande dans les meilleurs délais. ⏱️            `
         };
 
         // Envoi de l'email à Farmsconnect
