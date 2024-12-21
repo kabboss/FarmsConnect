@@ -696,6 +696,9 @@ body {
     align-items: center;
     flex-direction: column; /* Empiler le spinner et le texte verticalement */
     animation: fadeIn 1s ease-out; /* Apparition fluide */
+    position: fixed;
+    top: 50%;
+    left: 40%;
 }
 
 /* Animation du spinner */

@@ -971,8 +971,11 @@ footer p {
 @media (max-width: 600px) {
     .modal-content {
         padding: 10px;
-        width: 90%; /* Réduire la largeur pour les petits écrans */
+        width: 95%; /* Réduire la largeur pour les petits écrans */
+        max-height: 100vh; /* Hauteur maximale pour éviter que le contenu dépasse */
+
     }
+    
 }
 
 
@@ -1205,3 +1208,103 @@ button:hover {
 
 
 
+
+
+
+/* Cacher initialement l'élément */
+.hidden1 {
+    display: none;
+  }
+  
+  /* Style du conteneur de chargement avec effet de pulsation infini */
+  .spinner-container1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.85), rgba(50, 50, 50, 0.8));
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5), inset 0 3px 8px rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 30px 60px;
+    width: 350px; /* Légère augmentation de la largeur du conteneur */
+    border-radius: 20px; /* Plus d'arrondi pour un effet plus doux */
+    z-index: 1000;
+    text-align: center;
+    box-sizing: border-box;
+    animation: pulseContainer 2s ease-in-out infinite; /* Animation de pulsation */
+  }
+  
+  /* Animation de pulsation infinie du conteneur */
+  @keyframes pulseContainer {
+    0% {
+      transform: translate(-50%, -50%) scale(1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5), inset 0 3px 8px rgba(255, 255, 255, 0.1);
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.05); /* Effet de zoom */
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), inset 0 5px 12px rgba(255, 255, 255, 0.2); /* Effet de lumière accrue */
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5), inset 0 3px 8px rgba(255, 255, 255, 0.1);
+    }
+  }
+  
+  /* Spinner stylisé */
+  .spinner1 {
+    width: 60px;
+    height: 60px;
+    border: 6px solid rgba(255, 255, 255, 0.3);
+    border-top: 6px solid #4caf50; /* Couleur personnalisée pour le spinner */
+    border-radius: 50%;
+    animation: spin1 1.2s cubic-bezier(0.5, 0.1, 0.25, 1) infinite;
+    margin-bottom: 16px; /* Espacement plus important entre le spinner et le texte */
+  }
+  
+  /* Animation fluide pour le spinner */
+  @keyframes spin1 {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Image dans le conteneur (si nécessaire) */
+  .spinner-image1 {
+    width: 120px;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  /* Texte stylisé sous le spinner */
+  .loading-text1 {
+    font-size: 1.4em;
+    font-family: "Arial", sans-serif;
+    color: #fa0505;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+    margin-top: 15px;
+    line-height: 1.5;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  /* Animation pour le texte */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  

@@ -164,7 +164,7 @@ module.exports = app;
 
 // Route pour passer une commande et envoyer les emails de confirmation
 app.post('/api/order', async (req, res) => {
-    const { username, email, contact, price, quantity, weight, Produit: nomproduit, traitement, typeAbattage, NomAbattre } = req.body;
+    const { username, email, contact, price, quantity, weight, Produit: nomproduit, traitement, typeAbattage, NomAbattre, Residence } = req.body;
 
     // Vérifiez si traitement est défini
     if (!traitement) {
@@ -190,6 +190,7 @@ app.post('/api/order', async (req, res) => {
 🛠️ Traitement choisi : ${traitement}
 🔪 Type d'abattage : ${typeAbattage}
 🐔🔪 Quantité à abattre : ${NomAbattre}
+🏡 Quartier de Residence : ${Residence}
 
 ⚠️ Note importante :
 Le prix du produit peut augmenter en fonction du poids choisi. Chaque kilogramme supplémentaire sera facturé selon le tarif spécifique du produit. Pour plus de détails, veuillez consulter la "Note importante aux acheteurs" 📑.
@@ -230,6 +231,8 @@ Le prix du produit peut augmenter en fonction du poids choisi. Chaque kilogramme
 🛠️ Traitement : ${traitement}
 🔪 Type d'abattage : ${typeAbattage}
 🐔🔪 Quantité à abattre : ${NomAbattre}
+🏡 Quartier de Residence : ${Residence}
+
 
 ⏳ Action requise : Veuillez traiter cette commande dans les meilleurs délais. ⏱️            `
         };
@@ -870,7 +873,7 @@ app.get("/get-update", (req, res) => {
       // Retourne un lien direct pour télécharger la dernière version de l'application
       res.json({
         downloadUrl: "https://drive.google.com/uc?export=download&id=1qXl6cx4YzUbJ2gts5mURvwusJ9ZZ1TDJ",
-        message: "📱 Nouveau : VERSION 1.6.0 (Optimal) \n\n Veuillez mettre à jour votre application vers la version optimale si ce n'est pas encore fait !\n\n💡Remarque importante : Si votre application est déjà à la version 1.6.0, aucune mise à jour n'est nécessaire.\n\n⚠️ Avant d'installer la nouvelle version, veuillez d'abord désinstaller l'ancienne version pour éviter tout conflit et garantir un fonctionnement optimal 🔄.",
+        message: "📱 Nouveau : VERSION 1.6.0 (Optimal)🔄 \n\n Veuillez mettre à jour votre application vers la version optimale si ce n'est pas encore fait !\n\n💡Remarque importante : Si votre application est déjà à la version 1.6.0, aucune mise à jour n'est nécessaire.",
     });
     } catch (err) {
       console.error("Erreur lors de l'envoi du lien de mise à jour :", err);
