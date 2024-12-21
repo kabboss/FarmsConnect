@@ -164,7 +164,7 @@ module.exports = app;
 
 // Route pour passer une commande et envoyer les emails de confirmation
 app.post('/api/order', async (req, res) => {
-    const { username, email, contact, price, quantity, weight, Produit: nomproduit, traitement, typeAbattage } = req.body;
+    const { username, email, contact, price, quantity, weight, Produit: nomproduit, traitement, typeAbattage, NomAbattre } = req.body;
 
     // Vérifiez si traitement est défini
     if (!traitement) {
