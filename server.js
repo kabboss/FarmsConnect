@@ -186,10 +186,10 @@ app.post('/api/order', async (req, res) => {
 🔢 Quantité : ${quantity}
 ⚖️ Poids Total : ${weight} kg
 💸 Prix Total à payer : ${price} FCFA
-🚚💨 Livraison gratuite
-   Traitement choisi : ${traitement}
-   Type d'abattage : ${typeAbattage}
-🔪 Quantité à abattre : ${NomAbattre}
+🚚 Livraison gratuite
+🛠️ Traitement choisi : ${traitement}
+🔪 Type d'abattage : ${typeAbattage}
+🐔🔪 Quantité à abattre : ${NomAbattre}
 
 ⚠️ Note importante :
 Le prix du produit peut augmenter en fonction du poids choisi. Chaque kilogramme supplémentaire sera facturé selon le tarif spécifique du produit. Pour plus de détails, veuillez consulter la "Note importante aux acheteurs" 📑.
@@ -229,7 +229,7 @@ Le prix du produit peut augmenter en fonction du poids choisi. Chaque kilogramme
 💸 Prix Total : ${price} FCFA
 🛠️ Traitement : ${traitement}
 🔪 Type d'abattage : ${typeAbattage}
-🐔 Quantité à abattre : ${NomAbattre}
+🐔🔪 Quantité à abattre : ${NomAbattre}
 
 ⏳ Action requise : Veuillez traiter cette commande dans les meilleurs délais. ⏱️            `
         };
