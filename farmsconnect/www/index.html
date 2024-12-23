@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmsConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="img/FarmsConnect.jpg"> <!-- Chemin vers votre image -->
+    <link rel="stylesheet" href="css/login.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.3/lottie.min.js"></script>
+
+</head>
+<body>
+
+<header>
+    <h2 class="Bienvenue">Bienvenue sur FarmsConnect Burkina</h2>
+</header>
+
+
+<style>
+    .message { font-size: 18px; color: #333; }
+    .update-button { padding: 10px 20px; background-color: #28a745; color: white; border: none; cursor: pointer; }
+    .error { color: red; font-size: 16px; }
+</style>
+
+
+<div class="container">
+    <p id="appMessage" class="message"></p>
+    <button id="updateButton" class="update-button" style="display: none;">Télécharger la mise à jour</button>
+    <p id="errorMessage" class="error" style="display: none;"></p>
+  </div>
+  
+  <script>
+    // Fonction pour vérifier la mise à jour
+    async function checkForUpdate() {
+      try {
+        const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/get-update'); // URL de l'API
+  
+        if (!response.ok) throw new Error(`Erreur HTTP : ${response.status}`);
+  
+        const updateData = await response.json();
+  
+        const appMessage = document.getElementById('appMessage');
+        const updateButton = document.getElementById('updateButton');
+  
+        // Affiche le message de mise à jour
+        appMessage.textContent = updateData.message;
+        updateButton.style.display = 'block';
+  
+        // Redirige vers le lien de téléchargement
+        updateButton.onclick = () => {
+          window.location.href = updateData.downloadUrl;
+        };
+      } catch (err) {
+        console.error("Erreur lors de la vérification de mise à jour :", err);
+        document.getElementById('errorMessage').textContent =
+          "Impossible de vérifier les mises à jour pour le moment.";
+      }
+    }
+  
+    // Appeler la fonction au chargement de la page
+    checkForUpdate();
+  </script>
+  
+
+
+<div id="splash-screen">
+    <img src="img/FarmsConnect.jpg" alt="Logo" />
+  </div>
+  
+  <script>
+    // Après 5 secondes, masquer l'écran de démarrage
+    setTimeout(function() {
+      document.body.classList.add('splash-screen-hidden'); // Cache l'écran de démarrage
+    }, 5000);
+  </script>
+  
+
+<script>
+    // Animation de la page de démarrage
+    window.onload = function() {
+        const splashScreen = document.getElementById('splash-screen');
+        const mainContent = document.getElementById('main-content');
+
+        // Animation du splash screen pour la transition
+        gsap.to(splashScreen, { duration: 1, opacity: 0, display: "none" });
+        gsap.to(mainContent, { duration: 1, delay: 1, opacity: 1, display: "block" });
+    };
+
+    // Démarrer l'application
+    document.getElementById('startButton').addEventListener('click', function() {
+    });
+</script>
+
+<div class="home-container">
+    <img src="img/FarmsConnect.jpg" alt="Bienvenue sur FarmsConnect" class="home-image">
+</div>
+
+<section class="button-container">
+    <button id="show-login-btn">Se connecter</button>
+    <button id="show-signup-btn">S'inscrire</button>
+</section>
+
+
+
+
+
+<!-- Modale de connexion -->
+
+<div class="modal" id="login-modal">
+    <div class="modal-content">
+        <span class="close-btn" id="close-login-modal">&times;</span>
+        <h2>Connexion</h2>
+        <form id="login-form">
+            <input type="text" id="login-username" placeholder="Nom d'utilisateur" required>
+            <input type="email" id="login-email" placeholder="Email" required>
+            <input type="text" id="login-contact" placeholder="Contact" required>
+            <div style="position: relative;">
+                <input type="password" id="login-password" placeholder="Mot de passe" required style="padding-right: 40px;">
+                <span id="toggle-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                    🙈
+                </span>
+            </div>
+
+ <!-- Message de patience avec animation -->
+ <div id="loadingMessage" class="loading-message">
+    <!-- Le spinner à la place de l'image -->
+    <div class="spinner"></div>
+    <p id="loadingText">Connexion en cours...</p>
+</div>
+            <button  type="submit" id="loginButton" >Se connecter</button>
+    
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+
+document.getElementById("toggle-password").addEventListener("click", function () {
+    const passwordInput = document.getElementById("login-password");
+    const currentType = passwordInput.getAttribute("type");
+
+    if (currentType === "password") {
+        passwordInput.setAttribute("type", "text");
+        this.textContent = "👁️"; // Icône pour masquer
+    } else {
+        passwordInput.setAttribute("type", "password");
+        this.textContent = "🙈"; // Icône pour afficher
+    }
+});
+
+</script>
+
+
+
+<script>
+window.onload = function() {
+    // Afficher le message de chargement dès que la page est chargée
+    var loadingMessage = document.getElementById('loadingMessage');
+    loadingMessage.classList.remove('hidden');  // Afficher le message de chargement
+
+    // Masquer le message de chargement après 5 secondes (5000 ms)
+    setTimeout(function() {
+        loadingMessage.classList.add('hidden');  // Cacher le message de chargement
+    }, 3000);  // Temps en millisecondes
+};
+
+</script>
+
+
+
+
+
+
+
+
+<!-- Modale d'inscription -->
+<div class="modal" id="signup-modal">
+    <div class="modal-content">
+        <span class="close-btn" id="close-signup-modal">&times;</span>
+        <h2>Créer un compte</h2>
+        <form id="signup-form">
+            <input type="text" id="signup-username" name="username" placeholder="Nom d'utilisateur" required>
+            <input type="email" id="signup-email" name="email" placeholder="Email" required>
+            <input type="text" id="signup-contact" name="contact" placeholder="Contact" required>
+            <input type="password" id="signup-password" name="password" placeholder="Mot de passe" required>
+            <select id="signup-userType" name="userType" required>
+                <option value="" disabled selected>Type d'utilisateur</option>
+                <option value="vendeur">Vendeur</option>
+                <option value="visiteur">Visiteur</option>
+                <option value="veterinaire">Vétérinaire</option>
+                <option value="eleveur">Éleveur</option>
+            </select>
+            <button type="button" id="continue-registration">Repondre au questions de FarmConnect</button>
+
+            <button type="submit">S'inscrire</button> <!-- Changer en type="submit" -->
+        </form>
+    </div>
+</div>
+
+<!-- Message de chargement pour l'inscription -->
+<div id="signupLoadingMessage" class="hidden">
+    <div class="spinner-container">
+        <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
+        <div class="spinner"></div>
+    </div>
+    <p class="loading-text">Inscription en cours, veuillez patienter...</p>
+</div>
+
+
+<script>
+    
+</script>
+
+
+
+
+
+
+
+<!-- Modale d'autorisation -->
+<div class="modal" id="consent-modal">
+    <div class="modal-content">
+        <h2>Autorisation de collecte de données supplémentaires</h2>
+        <p>
+            Dans le cadre de l'amélioration de notre plateforme et pour fournir des statistiques utiles aux décideurs,
+            nous collectons des informations supplémentaires. Ces données resteront anonymes et seront utilisées à des
+            fins statistiques uniquement.
+        </p>
+        <p>Souhaitez-vous répondre à ces questions ?</p>
+        <div>
+            <button id="accept-consent">J'accepte</button>
+            <button id="decline-consent">Non</button>
+        </div>
+    </div>
+</div>
+
+<!-- Questions supplémentaires -->
+<div class="modal" id="extra-questions-modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-button1" onclick="closeExtraModal()">×</span>
+        <h2>Questions supplémentaires</h2>
+        <form id="extra-questions-form">
+            <h3>Informations personnelles</h3>
+            <label for="Nom_prenom">Nom & Prénom </label>
+            <input type="text" id="Nom_prenom" name="Nom_prenom"  required>
+            
+            <label for="Numero_telephone">Numero de telephone Principale</label>
+            <input type="number" id="Numero_telephone" name="Numero_telephone"  required>
+
+            <label for="Numero_telephone2">Numero de telephone Secondaire</label>
+            <input type="number" id="Numero_telephone2" name="Numero_telephone2"  required>
+
+            <label for="age">Quel est votre âge ?</label>
+            <input type="number" id="age" name="age"  required>
+            
+            <label for="region">Dans quelle région vivez-vous ?</label>
+<select id="region" name="region" required onchange="toggleRegionInput(this)">
+  <option value="">-- Sélectionnez une région --</option>
+  <option value="Boucle du Mouhoun">Boucle du Mouhoun</option>
+  <option value="Cascades">Cascades</option>
+  <option value="Centre">Centre</option>
+  <option value="Centre-Est">Centre-Est</option>
+  <option value="Centre-Nord">Centre-Nord</option>
+  <option value="Centre-Ouest">Centre-Ouest</option>
+  <option value="Centre-Sud">Centre-Sud</option>
+  <option value="Est">Est</option>
+  <option value="Hauts-Bassins">Hauts-Bassins</option>
+  <option value="Nord">Nord</option>
+  <option value="Plateau-Central">Plateau-Central</option>
+  <option value="Sahel">Sahel</option>
+  <option value="Sud-Ouest">Sud-Ouest</option>
+</select>
+
+            <label for="Localite">Quartier</label>
+            <input type="text" id="Localite" name="Localite" placeholder=" Exemple : Nagrin , Bendogo , Karpala" required>
+
+            <label for="sexe">Sexe :</label>
+            <select id="sexe" name="sexe" required>
+                <option value="" disabled selected>Choisissez</option>
+                <option value="homme">Homme</option>
+                <option value="femme">Femme</option>
+            </select>
+
+            <label for="education">Quel est votre niveau d'éducation ?</label>
+            <select id="education" name="education">
+                <option value="" disabled selected>Choisissez</option>
+                <option value="aucun">Aucun</option>
+                <option value="primaire">Primaire</option>
+                <option value="secondaire">Secondaire</option>
+                <option value="universitaire">Universitaire</option>
+            </select>
+
+            <h3>Informations sur l’élevage</h3>
+            <p>Quel type d'élevage pratiquez-vous ? (vous pouvez choisir plusieurs options)</p>
+            <div class="checkbox-group">
+              <input type="checkbox" id="bovins" name="type_elevage" value="bovins" class="checkbox">
+              <label for="bovins" class="checkbox-label">Bovins</label>
+            
+              <input type="checkbox" id="ovins" name="type_elevage" value="ovins" class="checkbox">
+              <label for="ovins" class="checkbox-label">Ovins</label>
+            
+              <input type="checkbox" id="caprins" name="type_elevage" value="caprins" class="checkbox">
+              <label for="caprins" class="checkbox-label">Caprins</label>
+            
+              <input type="checkbox" id="volaille" name="type_elevage" value="volaille" class="checkbox">
+              <label for="volaille" class="checkbox-label">Volaille</label>
+            
+              <input type="checkbox" id="porcins" name="type_elevage" value="porcins" class="checkbox">
+              <label for="porcins" class="checkbox-label">Porcins</label>
+
+              <input type="checkbox" id="Aucun" name="type_elevage" value="Aucun" class="checkbox">
+              <label for="Aucun" class="checkbox-label">Aucun</label>
+            </div>
+            
+            <label for="nombre-animaux">Combien d’animaux possédez-vous ?</label>
+            <input type="number" id="nombre-animaux" name="nombre_animaux" placeholder="Ex : 50" required>
+
+            <label for="revenus-elevage">Quel pourcentage de vos revenus provient de l’élevage ?</label>
+            <select id="revenus-elevage" name="revenus_elevage" required>
+                <option value="" disabled selected>Choisissez</option>
+                <option value="moins-de-25%">Moins de 25%</option>
+                <option value="25-50%">25% - 50%</option>
+                <option value="50-75%">50% - 75%</option>
+                <option value="plus-de-75%">Plus de 75%</option>
+            </select>
+
+            <label for="mode-alimentation">Comment nourrissez-vous vos animaux ?</label>
+            <select id="mode-alimentation" name="mode_alimentation" required>
+              <option value="" disabled selected>Choisissez</option>
+              <option value="aliments-industriels">Aliments industriels</option>
+              <option value="paturage">Pâturage</option>
+              <option value="mixte">Mixte (industriel et pâturage)</option>
+              <option value="residus-agricoles">Résidus agricoles</option>
+              <option value="autoproduction">Autoproduction (fourrage, cultures)</option>
+              <option value="poules-liberte">Poules en liberté (nourries naturellement)</option> <!-- Nouvelle option -->
+              <option value="autres">Autres</option>
+            </select>
+
+            <label for="acces-eau">Vos animaux ont-ils un accès régulier à l’eau ?</label>
+            <select id="acces-eau" name="acces_eau" required>
+                <option value="" disabled selected>Choisissez</option>
+                <option value="oui">Oui</option>
+                <option value="non">Non</option>
+            </select>
+
+
+            <h3>Problématiques rencontrées</h3>
+            <label for="principaux-defis" class="main-label">Quels sont vos principaux défis dans l’élevage ? (Cochez tout ce qui s'applique)</label>
+            <div class="defis-group">
+              <div class="defi-item">
+                <input type="checkbox" id="sante-animaux" name="defis" value="sante-animaux" class="checkbox">
+                <label for="sante-animaux" class="checkbox-label">Santé des animaux</label>
+              </div>
+              
+              <div class="defi-item">
+                <input type="checkbox" id="manque-eau" name="defis" value="manque-eau" class="checkbox">
+                <label for="manque-eau" class="checkbox-label">Manque d'eau</label>
+              </div>
+              
+              <div class="defi-item">
+                <input type="checkbox" id="alimentation-animaux" name="defis" value="alimentation-animaux" class="checkbox">
+                <label for="alimentation-animaux" class="checkbox-label">Alimentation des animaux</label>
+              </div>
+              
+              <div class="defi-item">
+                <input type="checkbox" id="acces-marche" name="defis" value="acces-marche" class="checkbox">
+                <label for="acces-marche" class="checkbox-label">Accès aux marchés</label>
+              </div>
+              
+              <div class="defi-item">
+                <input type="checkbox" id="autres-defis" name="defis" value="autres" class="checkbox" onclick="toggleAutresInput()">
+                <label for="autres-defis" class="checkbox-label">Autres</label>
+
+                <input type="checkbox" id="Aucun" name="defis" value="Aucun" class="checkbox">
+                <label for="Aucun" class="checkbox-label">Aucun</label>
+  
+              </div>
+            </div>
+            
+            <!-- Champ texte pour l'option "Autres" -->
+            <div id="autres-defis-input" class="other-input" style="display: none;">
+              <label for="autres-text-defis">Précisez vos autres défis :</label>
+              <input type="text" id="autres-text-defis" name="autres_defis" class="text-input">
+            </div>
+             
+
+
+            <script>
+              // Afficher le champ texte si "Autres" est sélectionné
+              const autresDefisCheckbox = document.getElementById("autres-defis");
+              const autresDefisInput = document.getElementById("autres-defis-input");
+            
+              autresDefisCheckbox.addEventListener("change", function () {
+                if (this.checked) {
+                  autresDefisInput.style.display = "block";
+                } else {
+                  autresDefisInput.style.display = "none";
+                }
+              });
+
+
+
+
+              function toggleAutresInput() {
+  var autresDefisInput = document.getElementById('autres-defis-input');
+  var autresCheckbox = document.getElementById('autres-defis');
+  if (autresCheckbox.checked) {
+    autresDefisInput.style.display = 'block';
+  } else {
+    autresDefisInput.style.display = 'none';
+  }
+}
+            </script>
+            
+
+<h3>Financement et besoins</h3>
+<label for="financement">Avez-vous accès à des financements pour votre activité ?</label>
+<select id="financement" name="financement" required>
+    <option value="" disabled selected>Choisissez</option>
+    <option value="oui">Oui</option>
+    <option value="non">Non</option>
+</select>
+
+<label for="besoin-financier">Si non, quels seraient vos besoins financiers ?</label>
+<textarea id="besoin-financier" name="besoin_financier" placeholder="Ex : Crédits, subventions, microfinance Ect...."></textarea>
+
+<h3>Perspectives futures</h3>
+<label for="plan-futur">Quels sont vos projets pour l’avenir de votre exploitation ?</label>
+<textarea id="plan-futur" name="plan_futur" placeholder="Ex : Augmenter le cheptel, investir dans de nouvelles technologies Ect..."></textarea>
+
+
+<h3>Technologies et innovations</h3>
+<label for="utilisation-technologie">Utilisez-vous des technologies modernes dans votre exploitation ?</label>
+<select id="utilisation-technologie" name="utilisation_technologie">
+    <option value="" disabled selected>Choisissez</option>
+    <option value="oui">Oui</option>
+    <option value="non">Non</option>
+</select>
+
+<!-- Si oui, permettre de spécifier -->
+<div id="technologie-details" style="display:none;">
+    <label for="technologie-details">Précisez les technologies utilisées :</label>
+    <textarea id="technologies-utilisees" name="technologies_utilisees" placeholder="Ex : Équipements modernes, systèmes de suivi numérique, etc."></textarea>
+</div>
+
+<h3>Accès à la formation</h3>
+<label for="acces-formation">Avez-vous accès à des formations sur l'élevage ?</label>
+<select id="acces-formation" name="acces_formation">
+    <option value="" disabled selected>Choisissez</option>
+    <option value="oui">Oui</option>
+    <option value="non">Non</option>
+</select>
+
+<!-- Si oui, permettre de spécifier -->
+<div id="formation-details" style="display:none;">
+    <label for="formation-details">Quel type de formation avez-vous reçu ?</label>
+    <textarea id="type-formation" name="type_formation" placeholder="Ex : Gestion d'élevage, santé animale, techniques de production, etc."></textarea>
+</div>
+
+
+            <button type="button" id="submit-questions">Soumettre</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function closeExtraModal() {
+    document.getElementById("extra-questions-modal").style.display = "none";
+}
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Obtenir les éléments des modals
+        const consentModal = document.getElementById("consent-modal");
+        const signupModal = document.getElementById("signup-modal");
+        const extraQuestionsModal = document.getElementById("extra-questions-modal"); // Modal de questions supplémentaires
+
+        // Obtenir les boutons de la modal de consentement
+        const acceptConsentButton = document.getElementById("accept-consent");
+        const declineConsentButton = document.getElementById("decline-consent");
+
+        // Ouverture de la modale d'autorisation lors du clic sur "continue-registration"
+        document.getElementById("continue-registration").addEventListener("click", function () {
+            signupModal.style.display = "none";
+            consentModal.style.display = "block";
+        });
+
+        // Gestion du consentement : acceptation du consentement
+        acceptConsentButton.addEventListener("click", function () {
+            consentModal.style.display = "none";
+            extraQuestionsModal.style.display = "block";
+        });
+
+        // Gestion du consentement : refus du consentement
+        declineConsentButton.addEventListener("click", function () {
+            consentModal.style.display = "none";
+        });
+
+        // Lorsque l'utilisateur clique sur "Non" (refuser le consentement)
+        declineConsentButton.addEventListener("click", function () {
+            consentModal.style.display = "none";
+            signupModal.style.display = "block";
+        });
+
+        // Soumission des questions supplémentaires lorsque l'utilisateur clique sur "submit-questions"
+        document.getElementById("submit-questions").addEventListener("click", function () {
+            const extraQuestionsForm = document.getElementById("extra-questions-form");
+            const formData = new FormData(extraQuestionsForm);
+
+            // Convertir FormData en un objet JavaScript
+            const formDataJson = {};
+
+            formData.forEach((value, key) => {
+                if (key === 'defis') {
+                    if (!formDataJson[key]) {
+                        formDataJson[key] = [];
+                    }
+                    formDataJson[key].push(value);
+                } else {
+                    formDataJson[key] = value;
+                }
+            });
+
+            // Faire la requête POST avec les données du formulaire
+            fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/questions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formDataJson),
+            })
+            .then((response) => {
+                if (response.ok) {
+                    alert("Merci pour vos réponses !");
+
+                    // Masquer la modal des questions supplémentaires
+                    extraQuestionsModal.style.display = "none";
+
+                    // Afficher la modal d'inscription après un délai de 3 secondes
+                    setTimeout(function() {
+                        signupModal.style.display = "block";
+                    }, 3000); // 3000 millisecondes = 3 secondes
+                } else {
+                    alert("Une erreur est survenue lors de la soumission des questions.");
+                }
+            })
+            .catch((error) => {
+                // Gestion des erreurs réseau
+                console.error("Erreur réseau : ", error);
+                alert("Une erreur réseau est survenue.");
+            });
+        });
+    });
+</script>
+
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Cibler les boutons
+    const showLoginBtn = document.getElementById('show-login-btn');
+    const showSignupBtn = document.getElementById('show-signup-btn');
+    
+    const loginModal = document.getElementById('login-modal');
+    const signupModal = document.getElementById('signup-modal');
+
+    const closeLoginModal = document.getElementById('close-login-modal');
+    const closeSignupModal = document.getElementById('close-signup-modal');
+
+    // Afficher la modale de connexion
+    showLoginBtn.addEventListener('click', function() {
+        loginModal.style.display = 'flex';
+        signupModal.style.display = 'none'; // Cacher la modale d'inscription
+    });
+
+    // Afficher la modale d'inscription
+    showSignupBtn.addEventListener('click', function() {
+        signupModal.style.display = 'flex';
+        loginModal.style.display = 'none'; // Cacher la modale de connexion
+    });
+
+    // Fermer la modale de connexion
+    closeLoginModal.addEventListener('click', function() {
+        loginModal.style.display = 'none';
+    });
+
+    // Fermer la modale d'inscription
+    closeSignupModal.addEventListener('click', function() {
+        signupModal.style.display = 'none';
+    });
+
+    // Fermer les modales en cliquant en dehors de la boîte de contenu
+    window.addEventListener('click', function(event) {
+        if (event.target === loginModal) {
+            loginModal.style.display = 'none';
+        } else if (event.target === signupModal) {
+            signupModal.style.display = 'none';
+        }
+    });
+});
+
+
+</script>
+
+
+ <!-- Bouton -->
+ <div class="button-container1">
+    <button class="open-modal-button" onclick="openModal()">En savoir plus sur FarmsConnect</button>
+</div>
+
+<!-- Fenêtre modale -->
+<div class="modal hidden" id="farmsConnectModal">
+    <div class="modal-content">
+        <span class="close-button1" onclick="closeModal()">×</span>
+        <h2>Bienvenue sur <strong>FarmsConnect</strong> 🐓🌍</h2>
+        <p>
+          <strong>La révolution numérique du marché avicole au Burkina Faso ! 🚀</strong>
+        </p>
+        <p>
+          Que vous soyez <strong>consommateur</strong> 🛒, <strong>éleveur</strong> 👩‍🌾, ou <strong>vendeur</strong> 🏪, 
+          <strong>FarmsConnect</strong> est <strong>LA solution innovante</strong> qui transforme le commerce des produits avicoles. 
+          Que vous possédiez <strong>2 poules</strong> 🐔 ou <strong>200 poules</strong> 🐔🐔🐔, que vous recherchiez de la volaille vivante ou prête à cuire, 
+          <strong>FarmsConnect</strong> vous connecte à un réseau <strong>fiable</strong>, <strong>transparent</strong>, et <strong>accessible en un clic</strong> 🖱️.
+        </p>
+        
+        <h3>Pour les consommateurs 🛒</h3>
+        <ul>
+          <li><strong>Commande en ligne facile et rapide</strong> 💻 : Achetez vos produits avicoles depuis le confort de votre maison.</li>
+          <li><strong>Traçabilité garantie</strong> ✅ : Des produits certifiés, directement issus des éleveurs.</li>
+          <li><strong>Livraison sécurisée</strong> 🚚 : Recevez vos commandes en un temps record grâce à notre service logistique fiable.</li>
+        </ul>
+        
+        <h3>Pour les éleveurs 👩‍🌾</h3>
+        <ul>
+          <li><strong>Accès direct au marché</strong> 🔗 : Vendez facilement vos produits sans intermédiaire.</li>
+          <li><strong>Fixez vos propres prix</strong> 💰 : Gardez un contrôle total sur vos revenus et optimisez vos profits.</li>
+          <li><strong>Outils de gestion et conseils pratiques</strong> 🛠️ : Améliorez votre production grâce à des recommandations adaptées.</li>
+        </ul>
+        
+        <h3>Pour les vendeurs 🏪</h3>
+        <ul>
+          <li><strong>Produits certifiés FarmsConnect</strong> 🥇 : Assurez-vous de la qualité et de la fiabilité de vos achats.</li>
+          <li><strong>Achat simplifié</strong> 🛍️ : Gagnez en efficacité dans la gestion de vos commandes et de vos stocks.</li>
+          <li><strong>Partenariats durables</strong> 🤝 : Collaborez avec un réseau de confiance pour développer votre activité.</li>
+        </ul>
+        
+        <p>
+          <strong>Rejoignez la révolution FarmsConnect</strong> 🌟 et découvrez comment nous transformons le secteur avicole au Burkina Faso. 
+          Ensemble, nous construisons un avenir plus connecté et prospère pour tous ! 🌱🐓
+        </p>
+    </div>
+</div>
+
+  
+  <div class="container">
+    <p id="appMessage" class="message"></p>
+    <button id="updateButton" class="update-button" style="display: none;">Télécharger une mise à jour</button>
+    <p id="errorMessage" class="error" style="display: none;"></p>
+  </div>
+
+
+
+<script>
+    function openModal() {
+    const modal = document.getElementById('farmsConnectModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('visible');
+}
+
+function closeModal() {
+    const modal = document.getElementById('farmsConnectModal');
+    modal.classList.remove('visible');
+    modal.classList.add('hidden');
+}
+
+</script>
+
+
+ <div class="terms-container">
+    <a href="conditiondutili.html" class="terms-button">Voir les conditions d'utilisation</a>
+</div>
+
+
+ <script>
+    function openModal() {
+    document.getElementById("farmsConnectModal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("farmsConnectModal").style.display = "none";
+}
+
+ </script>
+
+
+<script>
+    // Afficher les formulaires lors du clic sur "Connexion"
+    document.getElementById('show-login').addEventListener('click', function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        document.getElementById('form-container').style.display = 'flex'; // Affiche le formulaire
+    });
+</script>
+
+
+
+<div class="alert hidden" id="customAlert">
+    <div class="alert-content">
+        <img src="img/FarmsConnect.jpg" alt="FarmsConnect Logo" class="alert-image">
+        <p id="alertMessage"></p>
+        <button class="alert-close-button" onclick="closeAlert()">×</button>
+    </div>
+</div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Fonction générique pour afficher des alertes utilisateur
+    function showAlert(message) {
+    const alertBox = document.getElementById("customAlert");
+    const alertMessage = document.getElementById("alertMessage");
+
+    if (!alertBox || !alertMessage) {
+        console.error("L'élément d'alerte personnalisé est introuvable.");
+        return;
+    }
+
+    alertMessage.textContent = message; // Définit le message de l'alerte
+    alertBox.classList.remove("hidden"); // Affiche l'alerte en retirant 'hidden'
+    alertBox.classList.add("visible");  // Ajoute la classe 'visible' pour le style
+
+    // Masquer automatiquement après 5 secondes
+    setTimeout(() => {
+        alertBox.classList.remove("visible");
+        alertBox.classList.add("hidden");
+    }, 5000);
+}
+
+
+// Gestion de l'inscription
+document.getElementById("signup-form").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    // Afficher le message de chargement
+    showSignupLoadingMessage();
+
+    try {
+        // Récupération des données du formulaire
+        const username = document.getElementById("signup-username").value.trim();
+        const email = document.getElementById("signup-email").value.trim();
+        const contact = document.getElementById("signup-contact").value.trim();
+        const password = document.getElementById("signup-password").value;
+        const userType = document.getElementById("signup-userType").value;
+
+        // Validation des champs
+        if (!username || !email || !contact || !password || !userType) {
+            hideSignupLoadingMessage();
+            showAlert('Veuillez remplir tous les champs.');
+            return;
+        }
+
+        // Envoi des données au serveur
+        const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, contact, password, userType }),
+        });
+
+        if (response.ok) {
+            hideSignupLoadingMessage();
+            alert('Inscription réussie !');
+            window.location.href = 'Location.html'; 
+
+
+            document.getElementById("signup-modal").classList.remove("open");
+            document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('open'));
+            // Si la connexion est réussie, afficher la modale de connexion
+            document.getElementById("login-modal").classList.add("open");
+             // Masquer le modal d'inscription
+
+        } else {
+            const message = await response.text();
+            hideSignupLoadingMessage();
+            showAlert('Erreur lors de l\'inscription : ' + message);
+        }
+    } catch (error) {
+        hideSignupLoadingMessage();
+        showAlert('Erreur réseau : ' + error.message);
+    }
+});
+
+
+
+// Afficher le message de chargement pour l'inscription
+function showSignupLoadingMessage() {
+    const loadingMessage = document.getElementById("signupLoadingMessage");
+    if (loadingMessage) {
+        loadingMessage.classList.remove("hidden");
+    }
+}
+
+// Masquer le message de chargement pour l'inscription
+function hideSignupLoadingMessage() {
+    const loadingMessage = document.getElementById("signupLoadingMessage");
+    if (loadingMessage) {
+        loadingMessage.classList.add("hidden");
+    }
+}
+
+
+
+
+
+    // Vérifier si le paramètre showLoginModal est présent dans l'URL
+window.addEventListener('DOMContentLoaded', (event) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const showLoginModal = urlParams.get('showLoginModal');
+
+    // Si le paramètre est vrai, afficher la modale
+    if (showLoginModal === 'true') {
+        const modal = document.getElementById('login-modal');
+        if (modal) {
+            modal.style.display = 'block';  // Affiche la modale
+        }
+    }
+});
+
+
+
+
+
+    // Gestion de la connexion
+    document.getElementById("login-form").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    // Récupérer les valeurs des champs de formulaire
+    const username = document.getElementById("login-username").value.trim();
+    const email = document.getElementById("login-email").value.trim();
+    const contact = document.getElementById("login-contact").value.trim();
+    const password = document.getElementById("login-password").value;
+
+    if (!username || !email || !contact || !password) {
+        showAlert('Veuillez remplir tous les champs.');
+        return;
+    }
+
+    // Afficher le message de patience
+    document.getElementById('loadingMessage').style.display = 'flex';
+
+    try {
+        const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, contact, password }),
+        });
+
+        // Attendre 3 secondes avant de masquer le message de patience
+        setTimeout(async () => {
+            // Cacher le message de patience
+            document.getElementById('loadingMessage').style.display = 'none';
+
+            if (response.ok) {
+                const data = await response.json();
+
+                // Stocker les informations utilisateur
+                localStorage.setItem('username', data.username);
+                localStorage.setItem('email', data.email);
+                localStorage.setItem('contact', data.contact);
+
+                showAlert('Connexion réussie !', 'success'); // Message de succès
+                setTimeout(() => {
+                    window.location.href = 'Location.html'; // Redirection
+                }, 2000); // Attends 2 secondes avant la redirection
+            } else {
+                const errorMessage = await response.text();
+                showAlert('Erreur : ' + errorMessage, 'error'); // Message d'erreur
+            }
+        }, 3000); // Attendre 3 secondes avant de masquer le message de patience
+
+    } catch (error) {
+        showAlert('Erreur réseau : ' + error.message);
+    }
+
+  });
+
+});
+
+
+
+
+
+function showAlert(message) {
+    const alertBox = document.getElementById("customAlert");
+    const alertMessage = document.getElementById("alertMessage");
+
+    alertMessage.textContent = message;
+    alertBox.classList.add("visible"); // Ajoute la classe pour afficher l'alerte
+
+    // Masque automatiquement après 5 secondes
+    setTimeout(() => closeAlert(), 10000);
+}
+
+function closeAlert() {
+    const alertBox = document.getElementById("customAlert");
+    alertBox.classList.remove("visible");
+}
+
+</script>
+
+
+
+
+
+<script src="js/index.js"></script>
+
+
+
+
+</body>
+</html>

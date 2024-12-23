@@ -1,20 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.farmsconnect.app" version="1.3.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.example.farmsconnect" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>FarmsConnect</name>
-    <description>FarmsConnect, une application pour connecter les acteurs dans le secteur de l'elevage.</description>
+    <description>Sample Apache Cordova App</description>
     <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
         Apache Cordova Team
     </author>
-    <content src="https://farmsconnect-b084ddb02391.herokuapp.com" />
-    
+    <content src="index.html" />
     <access origin="https://farmsconnect-b084ddb02391.herokuapp.com" />
     <allow-navigation href="https://farmsconnect-b084ddb02391.herokuapp.com" />
     <allow-intent href="geo:*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
 
 <preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/splash.png" />
 <preference name="AndroidWindowSplashScreenDuration" value="5000" />
@@ -30,8 +26,11 @@
         <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
         <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
         <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <feature name="Geolocation">
+
+        <feature name="Geolocation">
         <param name="android-package" value="android.location.Location"/>
     </feature>
     <preference name="GeolocationEnabled" value="true" />
@@ -41,5 +40,5 @@
         <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     </config-file>
 
+
     </platform>
-</widget>

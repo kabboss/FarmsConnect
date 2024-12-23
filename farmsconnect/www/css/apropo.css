@@ -1,0 +1,337 @@
+/* Importation de la police Poppins */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f7f7f7;  /* Couleur de fond claire pour un look épuré */
+  color: #4f4f4f;  /* Texte sombre pour un meilleur contraste */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Général */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Corps du header */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #FFFFFF;
+  padding: 1.5rem 3rem;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  transition: background-color 0.3s ease-in-out;
+}
+
+.header:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+/* Titre */
+h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #00D4FF;
+  transition: transform 0.3s ease;
+}
+
+h1:hover {
+  transform: scale(1.1);
+}
+
+/* Menu de navigation */
+.nav ul {
+  display: flex;
+  list-style: none;
+  gap: 3rem;
+}
+
+.nav a {
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  letter-spacing: 1px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav a:hover {
+  color: #FFB400;
+  transform: translateY(-5px);
+}
+
+/* Icône menu burger */
+.menu-icon {
+  display: none; /* Caché sur les grands écrans */
+  flex-direction: column;
+  justify-content: space-between;
+  height: 2rem;
+  width: 2.5rem;
+  cursor: pointer;
+  z-index: 15;
+}
+
+.menu-icon span {
+  display: block;
+  height: 0.3rem;
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 5px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Animation menu burger (croix) */
+.menu-icon.active span:nth-child(1) {
+  transform: rotate(45deg) translateY(8px);
+}
+
+.menu-icon.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-icon.active span:nth-child(3) {
+  transform: rotate(-45deg) translateY(-8px);
+}
+
+/* Menu mobile */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: auto;
+  width: auto;
+  background-color: rgba(0, 0, 0, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(100%); /* Caché à droite au départ */
+  transition: transform 0.5s ease-in-out;
+  z-index: 5;
+  flex-direction: column;
+  margin-left: 72%;
+}
+
+.nav ul {
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.nav.active {
+  transform: translateX(0); /* Affiche le menu */
+}
+
+/* Animation des liens */
+.nav a {
+  font-size: 1.1rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideIn 0.4s forwards ease-in-out;
+}
+
+.nav a:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.nav a:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+@keyframes slideIn {
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .menu-icon {
+      display: flex; /* Affiche le menu burger */
+  }
+
+  .nav ul {
+      gap: 1.5rem;
+  }
+
+  h1 {
+      font-size: 1.8rem;
+  }
+}
+
+
+/* Section principale "À propos" */
+.about-section {
+  background-color: #ffffff;
+  color: #333;
+  padding: 90px 20px 20px 20px;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.content-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.about-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #3b6b2f;
+}
+
+.about-description {
+  font-size: 18px;
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+.values {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 40px;
+}
+
+.value-item {
+  background: #f0f0f0;
+  border-radius: 10px;
+  padding: 20px;
+  width: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.value-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.value-item img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.value-item h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.value-item p {
+  font-size: 14px;
+  color: #6a6a6a;
+}
+
+/* Section de l'équipe */
+.team-section {
+  margin-top: 30px;
+}
+
+.team-section h2 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #3b6b2f;
+}
+
+.team-section p {
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+.btn {
+  background: #3b6b2f;
+  color: #fff;
+  padding: 12px 25px;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background: #2a4a24;
+}
+
+/* Footer */
+.footer {
+  background: #3b6b2f;
+  color: #fff;
+  padding: 15px 0;
+  text-align: center;
+}
+
+.footer p {
+  margin: 10px 0;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.footer-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #a1c89e;
+}
+
+/* Styles responsive pour petits écrans */
+@media (max-width: 768px) {
+  .values {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .value-item {
+    width: 110%;
+    margin-bottom: 20px;
+  }
+
+  .team-section h2 {
+    font-size: 24px;
+  }
+
+  .about-title {
+    font-size: 28px;
+  }
+
+  .about-description {
+    font-size: 16px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}

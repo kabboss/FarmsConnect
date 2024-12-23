@@ -1,0 +1,814 @@
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #a0c6f8;
+    color: #333;
+}
+
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Header Styling */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(135deg, #2e3a87, #6f42c1);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    animation: slideIn 1s ease-out;
+    overflow: hidden;
+}
+
+/* Logo Section */
+.logo-container {
+    flex: 1;
+    animation: fadeIn 1.2s ease-in;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ffd600;
+}
+
+/* Navigation Section */
+.nav {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    animation: fadeIn 1.4s ease-in-out;
+    transition: transform 0.3s ease-in-out;
+}
+
+.nav-list a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    font-size: 1rem;
+    position: relative;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    transition: all 0.4s ease;
+    background: transparent;
+}
+
+.nav-list a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive Nav Toggle */
+.menu-toggle {
+    display: none;
+}
+
+.menu-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 2; /* Pour s'assurer que l'icône soit au-dessus du menu */
+}
+
+.menu-icon span {
+    display: block;
+    width: 30px;
+    height: 3px;
+    background: white;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+/* Animation du menu au survol du menu burger */
+.menu-toggle:checked ~ .nav-list {
+    transform: translateY(0); /* On ramène le menu en position visible */
+}
+
+
+/* Style du menu lorsque l'icône burger est activée */
+@media (max-width: 768px) {
+    .menu-icon {
+        display: flex;
+        position: relative;
+        z-index: 3; /* Pour éviter les problèmes de superposition */
+    }
+
+    .nav-list {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: auto;
+        height: auto;
+        background: rgba(0, 0, 0, 0.85); /* Fond semi-transparent */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 2rem 0;
+        transform: translateY(-100%); /* Menu caché au départ */
+        transition: transform 0.8s ease-in-out;
+        z-index: 1; /* Pour garantir que le menu soit en dessous de l'icône burger */
+    }
+
+    .nav-list a {
+        color: #FFA500;
+        font-size: 1.1rem;
+        font-weight: 900;
+        text-decoration: none;
+        text-transform:capitalize;
+        letter-spacing: 1px;
+        padding: 10px 15px;
+        border-radius: 30px;
+        transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .nav-list a:hover {
+        background: rgb(24, 127, 245);
+        transform: scale(1.05);
+    }
+
+    /* Animation de l'icône burger */
+    .menu-toggle:checked + .menu-icon span:nth-child(1) {
+        transform: rotate(45deg);
+        position: relative;
+        top: 8px;
+    }
+    .menu-toggle:checked + .menu-icon span:nth-child(2) {
+        opacity: 0;
+    }
+    .menu-toggle:checked + .menu-icon span:nth-child(3) {
+        transform: rotate(-45deg);
+        position: relative;
+        bottom: 8px;
+    }
+}
+
+
+/* Image Section */
+.image-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    animation: fadeIn 1.6s ease;
+}
+
+.header-image {
+    width: 60px; /* Adjust size as needed */
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    object-fit: cover;
+}
+
+.header-image:hover {
+    transform: rotate(360deg) scale(1.2);
+    box-shadow: 0 8px 16px rgba(255, 255, 0, 0.7);
+}
+
+/* Keyframes for Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+
+/* Application de l'animation à l'en-tête */
+header {
+    animation: slideIn 0.8s ease forwards; /* Animation d'apparition */
+}
+
+/* Section de formulaire */
+.form-section {
+    background-color: #fff;
+    max-width: 100%; /* Prend la largeur totale sur petits écrans */
+    margin: 50px auto;
+    padding: 20px; /* Réduit le padding pour petits écrans */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin: 10px 0 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+form input, form select, form button {
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+
+/* Media Queries pour l'adaptation */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 28px; /* Réduction de la taille du titre */
+    }
+
+    nav ul {
+        gap: 30px; /* Réduit l'espacement entre les éléments du menu */
+    }
+
+    nav ul li a {
+        font-size: 16px; /* Taille de police réduite pour petits écrans */
+    }
+
+    .form-section {
+        padding: 15px; /* Réduit l'espacement interne pour les petits écrans */
+    }
+
+    form input, form select, form button {
+        padding: 8px; /* Ajustement de la taille des champs pour petits écrans */
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    nav ul {
+        flex-direction: column; /* Les éléments du menu s'empilent verticalement sur très petits écrans */
+        gap: 20px; /* Espace réduit entre les liens */
+    }
+
+    nav ul li a {
+        font-size: 14px; /* Réduit la taille du texte pour très petits écrans */
+    }
+
+    .form-section {
+        margin: 30px auto; /* Réduction de la marge sur les petits écrans */
+        padding: 10px; /* Moins de padding pour économiser l'espace */
+    }
+}
+
+
+.alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    text-align: center;
+    background-color: #ffffff;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.alert.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.alert-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.alert-image {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+}
+
+.alert-close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #333;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+
+
+
+.open-modal-button {
+    padding: 12px 30px; /* Ajout d'un espacement légèrement plus généreux */
+    font-size: 18px; /* Texte légèrement plus grand pour l'accentuer */
+    font-weight: bold; /* Renforce le texte */
+    color: #333; /* Texte légèrement adouci */
+    background: linear-gradient(135deg, #ffee02, #ffd700); /* Dégradé moderne pour l'arrière-plan */
+    border: 2px solid #ffd700; /* Bordure subtile assortie */
+    border-radius: 25px; /* Coins arrondis pour un look élégant */
+    cursor: pointer; /* Indicateur de clic */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Ombre douce pour donner du relief */
+    transition: all 0.3s ease; /* Transition douce pour toutes les modifications */
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+}
+
+.open-modal-button:hover {
+    background: linear-gradient(135deg, #ffd700, #ff9800); /* Dégradé dynamique au survol */
+    color: #fff; /* Change la couleur du texte au survol */
+    border-color: #ff9800; /* Bordure assortie au nouveau dégradé */
+    transform: translateY(-3px) scale(1.05); /* Légère montée et agrandissement */
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3); /* Ombre accentuée */
+}
+
+.open-modal-button:active {
+    transform: translateY(2px); /* Effet de clic */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Réduction de l'ombre */
+}
+
+
+
+/* Style de la modale */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s ease;
+}
+
+/* Apparition de la modale */
+.modal.visible {
+    visibility: visible;
+    opacity: 1;
+    display: flex; /* Affiche la modale quand elle devient visible */
+}
+
+/* Contenu de la modale */
+.modal-content {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    text-align: left;
+    max-height: 90vh; /* Hauteur maximale de la modale pour éviter les débordements */
+    overflow-y: auto; /* Activation du défilement si nécessaire */
+}
+
+/* Style des titres dans la modale */
+.modal-content h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+/* Style du texte dans la modale */
+.modal-content p {
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Style des listes ordonnées dans la modale */
+.modal-content ol {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+/* Signature dans la modale */
+.modal-content .signature {
+    text-align: right;
+    font-style: italic;
+    color: #777;
+}
+
+/* Bouton de fermeture de la modale */
+.close-button {
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #ff0000;
+}
+
+/* Responsivité pour les petits écrans */
+@media (max-width: 600px) {
+    .modal-content {
+        padding: 10px;
+        width: 90%; /* Ajuste la largeur de la modale pour les petits écrans */
+    }
+}
+
+
+
+
+
+
+/* Masquer les images supplémentaires par défaut */
+.hidden {
+    display: none;
+}
+
+
+
+
+/* Style général du spinner */
+.spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fond sombre pour focus */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.spinner-content {
+    text-align: center;
+    color: white;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Logo de chargement */
+.spinner-image {
+    width: 100px; /* Taille optimisée */
+    height: auto;
+    margin-bottom: 20px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+/* Titre sophistiqué */
+.spinner-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #81c784;
+    font-weight: bold;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Conteneur de la ligne de chargement */
+.loader-line-container {
+    width: 70%;
+    height: 8px;
+    background-color: #f0f0f0; /* Fond gris clair */
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 0 auto;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Ligne animée */
+.loader-line {
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #4caf50, #81c784, #4caf50); /* Dégradé dynamique */
+    animation: loadLine 3s ease-in-out forwards;
+    border-radius: 20px;
+}
+
+/* Animation de la ligne */
+@keyframes loadLine {
+    0% {
+        width: 0%;
+    }
+    50% {
+        width: 80%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+/* Animation d'apparition générale */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    text-align: center;
+    background-color: #ffffff;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.alert.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.alert-content {
+    color: #4caf50;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.2rem;
+}
+
+.alert button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #4caf50;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.alert button:hover {
+    background-color: #388e3c;
+}
+
+/* Animation de glissement */
+@keyframes slideIn {
+    0% {
+        transform: translate(-50%, -60%);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+/* Masquer les éléments */
+.hidden {
+    display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Fenêtre modale */
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none; /* Désactive les interactions avant d'être visible */
+    transition: opacity 0.5s ease;
+}
+
+/* Contenu de la modale */
+.modal-content {
+    background: linear-gradient(135deg, #0dfdb5 0%, #1ef7a3 100%);
+    border-radius: 12px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 25px;
+    text-align: left;
+    width: 90%;
+    max-width: 600px;
+    animation: slideIn 0.8s ease-out;
+}
+
+/* Texte mis en évidence */
+.highlight {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #0c0c0a;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    display: block;
+    animation: textGlow 2s infinite;
+}
+
+/* Bouton */
+.btn-dismiss {
+    margin-top: 15px;
+    background: linear-gradient(45deg, #4caf50, #81c784);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+}
+
+/* Effet hover du bouton */
+.btn-dismiss:hover {
+    background: linear-gradient(45deg, #388e3c, #66bb6a);
+    transform: scale(1.1);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+
+
+/* Animation d'apparition */
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation de disparition */
+@keyframes slideOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+}
+
+/* Responsive pour grands écrans */
+@media (min-width: 1200px) {
+    .modal-container {
+        max-width: 50%;
+    }
+}
+
+/* Responsive pour petits écrans */
+@media (max-width: 768px) {
+    .highlight {
+        font-size: 1.3rem;
+    }
+    .btn-dismiss {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+    }
+}
+
+
+
+/* Style pour l'icône agrandie */
+.large-icon {
+    font-size: 2.5rem; /* Agrandir la taille de l'icône */
+    vertical-align: middle; /* Alignement avec le texte */
+    margin-right: 10px; /* Espacement entre l'icône et le texte */
+    animation: bounce 1.5s infinite ease-in-out; /* Animation pour attirer l'attention */
+}
+
+/* Animation de rebond subtile */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+
+
+
+/* Animation de pulsation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Appliquer l'animation de pulsation */
+.menu-icon {
+    display: inline-block;
+    cursor: pointer;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.menu-icon span {
+    display: block;
+    width: 30px;
+    height: 5px;
+    margin: 6px 0;
+    background-color: #0bdb15;
+    transition: all 0.5s ease;
+}
+
+.menu-icon:hover span {
+    background-color: #3498db; /* Change la couleur au survol */
+}
+
+
+
+

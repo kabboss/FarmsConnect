@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>À propos - FarmsConnect</title>
+  <link rel="icon" type="image/png" href="img/FarmsConnect.jpg"> <!-- Chemin vers votre image -->
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/apropo.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-container">
+        <h1>FarmsConnect</h1>
+        <!-- Icône pour menu burger -->
+        <div class="menu-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav class="nav">
+            <ul>
+                <li><a href="index.html">Page de connexion</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<script>
+  const menuIcon = document.querySelector(".menu-icon");
+  const nav = document.querySelector(".nav");
+
+  menuIcon.addEventListener("click", () => {
+      menuIcon.classList.toggle("active");
+      nav.classList.toggle("active");
+  });
+</script>
+
+<br>
+<br>
+
+  <main>
+    <section class="about-section">
+      <div class="content-wrapper">
+        <h1 class="about-title">À propos de FarmsConnect</h1>
+        <p class="about-description">
+          FarmsConnect est une plateforme innovante dédiée à connecter les agriculteurs, éleveurs, vendeurs et vétérinaires 
+          pour créer une communauté dynamique et interconnectée. Notre mission est de transformer le secteur agricole 
+          en facilitant l'accès à des services essentiels, en renforçant les réseaux locaux et en stimulant l'innovation.
+        </p>
+
+        <div class="values">
+          <div class="value-item">
+            <img src="img/innovation.jpg" style="height: 300px; width: 300px;" alt="Innovation" class="value-icon">
+            <h3>Innovation</h3>
+            <p>Nous exploitons la technologie pour améliorer les processus agricoles et offrir des solutions pratiques aux défis du secteur.</p>
+          </div>
+          <div class="value-item">
+            <img src="img/Comunnauter.jpg" style="height: 300px; width: 300px;" alt="Communauté" class="value-icon">
+            <h3>Communauté</h3>
+            <p>Nous croyons en la force d’une communauté soudée où chaque membre contribue au succès de l’ensemble.</p>
+          </div>
+          <div class="value-item">
+            <img src="img/Durable.jpg" style="height: 300px; width: 300px;" alt="Durabilité" class="value-icon">
+            <h3>Durabilité</h3>
+            <p>Nos initiatives visent à promouvoir des pratiques agricoles respectueuses de l’environnement et économiquement viables.</p>
+          </div>
+        </div>
+
+        <div class="team-section">
+          <h2>Notre équipe</h2>
+          <p>Notre équipe est composée de passionnés du secteur agricole, d'experts en technologie et de professionnels engagés à améliorer les moyens de subsistance des acteurs locaux.</p>
+          <a href="contact.html" class="btn">Rencontrez notre équipe</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2024 FarmsConnect. Tous droits réservés.</p>
+    <ul class="footer-links">
+      <li><a href="confidentialiter.html">Politique de confidentialité</a></li>
+      <li><a href="conditiondutili.html">Conditions d'utilisation</a></li>
+    </ul>
+  </footer>
+</body>
+</html>

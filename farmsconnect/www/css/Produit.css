@@ -1,0 +1,1310 @@
+/* Global styles */
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #e0dddd;
+    color: #333;
+}
+
+
+
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Header Styling */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(135deg, #2e3a87, #6f42c1);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    animation: slideIn 1s ease-out;
+    overflow: hidden;
+}
+
+/* Logo Section */
+.logo-container {
+    flex: 1;
+    animation: fadeIn 1.2s ease-in;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ffd600;
+}
+
+/* Navigation Section */
+.nav {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    animation: fadeIn 1.4s ease-in-out;
+    transition: transform 0.3s ease-in-out;
+}
+
+.nav-list a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    font-size: 1rem;
+    position: relative;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    transition: all 0.4s ease;
+    background: transparent;
+}
+
+.nav-list a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive Nav Toggle */
+.menu-toggle {
+    display: none;
+}
+
+.menu-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 2; /* Pour s'assurer que l'icône soit au-dessus du menu */
+}
+
+.menu-icon span {
+    display: block;
+    width: 30px;
+    height: 3px;
+    background: white;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+/* Animation du menu au survol du menu burger */
+.menu-toggle:checked ~ .nav-list {
+    transform: translateY(0); /* On ramène le menu en position visible */
+}
+
+
+/* Style du menu lorsque l'icône burger est activée */
+@media (max-width: 768px) {
+    .menu-icon {
+        display: flex;
+        position: relative;
+        z-index: 3; /* Pour éviter les problèmes de superposition */
+    }
+
+    .nav-list {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: auto;
+        height: auto;
+        background: rgba(0, 0, 0, 0.85); /* Fond semi-transparent */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 2rem 0;
+        transform: translateY(-100%); /* Menu caché au départ */
+        transition: transform 0.8s ease-in-out;
+        z-index: 1; /* Pour garantir que le menu soit en dessous de l'icône burger */
+        text-align: left;
+    }
+
+    .nav-list a {
+        color: #FFA500;
+        font-size: 1.1rem;
+        font-weight: 900;
+        text-decoration: none;
+        text-transform:capitalize;
+        letter-spacing: 1px;
+        padding: 10px 15px;
+        border-radius: 30px;
+        transition: background 0.3s ease, transform 0.3s ease;
+        text-align: left;
+
+    }
+
+    .nav-list a:hover {
+        background: rgb(24, 127, 245);
+        transform: scale(1.05);
+    }
+
+    /* Animation de l'icône burger */
+    .menu-toggle:checked + .menu-icon span:nth-child(1) {
+        transform: rotate(45deg);
+        position: relative;
+        top: 8px;
+    }
+    .menu-toggle:checked + .menu-icon span:nth-child(2) {
+        opacity: 0;
+    }
+    .menu-toggle:checked + .menu-icon span:nth-child(3) {
+        transform: rotate(-45deg);
+        position: relative;
+        bottom: 8px;
+    }
+}
+
+
+/* Image Section */
+.image-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    animation: fadeIn 1.6s ease;
+}
+
+.header-image {
+    width: 60px; /* Adjust size as needed */
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    object-fit: cover;
+}
+
+.header-image:hover {
+    transform: rotate(360deg) scale(1.2);
+    box-shadow: 0 8px 16px rgba(255, 255, 0, 0.7);
+}
+
+/* Keyframes for Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+
+
+/* Application de l'animation à l'en-tête */
+header {
+    animation: fadeInDown 0.6s ease forwards; /* Animation d'apparition */
+}
+
+/* Hero section */
+.hero {
+    text-align: center;
+    background-color: #2980b9;
+    color: white;
+    padding: 30px 15px; /* Espacement réduit */
+}
+
+.hero h2 {
+    font-size: 1.8em; /* Taille réduite pour mobile */
+}
+
+.hero p {
+    font-size: 1em; /* Taille réduite pour mobile */
+}
+
+/* Style de la section Catégories */
+.categories {
+    text-align: center;
+    margin: 30px 0; /* Marges ajoutées pour une meilleure espacement */
+}
+
+/* Liste des catégories */
+.category-list {
+    display: flex;
+    justify-content: left; /* Centre horizontalement */
+    flex-wrap: wrap;
+    gap: 30px; /* Espacement entre les boutons */
+}
+
+/* Style des boutons de catégorie */
+.category-list button {
+    background-color: #78f38d; /* Couleur de fond bleu clair */
+    color: rgb(22, 17, 17); /* Couleur du texte */
+    border: none; /* Pas de bordure */
+    padding: 16px 20px; /* Espacement ajusté */
+    border-radius: 25px; /* Bords arrondis prononcés */
+    cursor: pointer; /* Curseur en forme de main */
+    font-size: 16px; /* Taille de police augmentée */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transitions douces */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre légère pour effet de profondeur */
+}
+
+/* Effet au survol des boutons */
+.category-list button:hover {
+    background-color: #16e75c; /* Couleur de fond plus foncée */
+    transform: scale(1.1); /* Légère augmentation de la taille au survol */
+}
+
+/* Animation d'apparition */
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Applique l'animation à chaque bouton */
+.category-list button {
+    animation: zoomIn 1s ease forwards; /* Animation d'apparition */
+    margin: -10px; /* Ajuster cette valeur pour réduire l'espace autour des boutons */
+}
+
+/* Pour un léger décalage entre les animations des boutons */
+.category-list button:nth-child(1) {
+    animation-delay: 0.5s;
+}
+
+.category-list button:nth-child(2) {
+    animation-delay: 1s;
+}
+
+.category-list button:nth-child(3) {
+    animation-delay: 1.5s;
+}
+
+
+/* Style global pour les produits */
+
+.products {
+    background: linear-gradient(135deg, #8aadee, #ffffff);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    max-width: 100%; /* Par défaut, occupe tout l'espace disponible */
+    margin: 0 auto; /* Centrer si nécessaire */
+}
+
+/* Pour les écrans larges */
+@media (min-width: 1024px) {
+    .products {
+        max-width: 40%; /* Réduire la largeur sur un écran large */
+        padding: 10px;
+    }
+}
+
+/* Pour les écrans moyens */
+@media (max-width: 1023px) and (min-width: 768px) {
+    .products {
+        max-width: 80%;
+        padding: 15px;
+    }
+}
+
+/* Pour les petits écrans (smartphones) */
+@media (max-width: 767px) {
+    .products {
+        max-width: 100%; /* Occupe tout l'espace */
+        padding: 20px;
+    }
+
+    .product-list {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.product {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Style des images */
+.product img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* Titres et textes */
+.product h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.product p {
+    font-size: 1.1em;
+    color: #666;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Champs de saisie */
+.product input,
+.product select {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+/* Boutons */
+.product button {
+    width: 100%;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.product button:hover {
+    background: #0056b3;
+}
+
+/* Général */
+label {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    display: block;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background: #f9f9f9;
+    font-size: 1rem;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+select:hover {
+    border-color: #00aaff;
+    background-color: #e6f7ff;
+}
+
+select:focus {
+    outline: none;
+    border-color: #0077cc;
+    background-color: #cceeff;
+    box-shadow: 0 0 8px rgba(0, 119, 204, 0.5);
+}
+
+/* Conteneur des options d'abattage */
+#abattage-options-poulet-local {
+    padding: 10px;
+    background: #f7f7f7;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    margin-top: 15px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+#abattage-options-poulet-local label {
+    color: #555;
+}
+
+#abattage-options-poulet-local select {
+    border-color: #aaa;
+}
+
+#abattage-options-poulet-local select:hover {
+    border-color: #ff8800;
+}
+
+/* Animation fadeIn */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .product-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul {
+        flex-direction: column; /* Change la direction pour mobile */
+    }
+
+    nav ul li {
+        margin-bottom: 10px;
+    }
+
+    .hero h2 {
+        font-size: 1.5em; /* Taille réduite pour mobile */
+    }
+
+    .hero p {
+        font-size: 0.9em; /* Taille réduite pour mobile */
+    }
+}
+
+/* Section À propos */
+.about {
+    background-color: #2e8b57; /* Vert foncé */
+    color: white;
+    padding: 30px; /* Espacement réduit */
+    text-align: center;
+}
+
+.about h2 {
+    font-size: 28px; /* Taille ajustée */
+    margin-bottom: 15px; /* Marge ajustée */
+}
+
+.about p {
+    font-size: 16px; /* Taille réduite pour mobile */
+    line-height: 1.4; /* Espacement de ligne ajusté */
+    max-width: 90%; /* Limite de largeur */
+    margin: 0 auto; /* Centre le paragraphe */
+}
+
+            .testimonials {
+                max-width: 1200px; /* Largeur maximale de la section */
+                margin: 0 auto; /* Centrer la section */
+                padding: 20px;
+                font-family: 'Arial', sans-serif;
+                background-color: #f9f9f9;
+                border-radius: 10px;
+            }
+            
+            .testimonial {
+                background-color: #ffffff;
+                margin-bottom: 20px;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+        
+            .testimonial p {
+                line-height: 1.6;
+                font-size: 1.1rem;
+            }
+        
+            .testimonial strong {
+                color: #2c3e50;
+            }
+        
+            .testimonial em {
+                font-style: italic;
+                color: #7f8c8d;
+            }
+        
+            .testimonial p:first-child {
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #2980b9;
+            }
+        
+            .testimonial p:last-child {
+                font-size: 1rem;
+                font-weight: normal;
+                color: #34495e;
+            }
+        
+            /* Ajouter un peu de style au lien de recommandation */
+            .testimonials p:last-child {
+                font-size: 1.2rem;
+                text-align: center;
+                margin-top: 30px;
+                color: #e74c3c;
+            }
+        
+            .testimonials p:last-child strong {
+                font-weight: bold;
+            }
+/* Style du footer */
+footer {
+    background-color: #2e8b57; /* Vert foncé */
+    color: white;
+    text-align: center;
+    padding: 15px; /* Espacement réduit */
+}
+
+footer p {
+    margin: 0;
+    font-size: 12px; /* Taille réduite */
+}
+
+/* Alert styles */
+.alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    text-align: center;
+    background-color: #ffffff;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.alert.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.alert-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.alert-image {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+}
+
+.alert-close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #333;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Masquer par défaut */
+.hidden {
+    display: none;
+}
+
+
+
+
+
+
+/* Style du message de chargement */
+#loadingMessage {
+    position: fixed;
+    top: 140px;
+    left: 15px;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.9); /* Fond sombre intense */
+    padding: 40px 60px; /* Espacement réduit pour une taille plus compacte */
+    border-radius: 20px; /* Coins arrondis */
+    color: white;
+    z-index: 1000;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6); /* Ombre portée plus légère */
+    animation: fadeIn 1s ease-out, pulse 3s infinite; /* Apparition fluide et effet de pulsation */
+    backdrop-filter: blur(10px); /* Flou du fond pour ajouter un effet moderne de profondeur */
+}
+
+/* Animation d'apparition douce */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Animation de pulsation (effet vivant) */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+    }
+}
+
+/* Conteneur du spinner */
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Empiler le spinner et le texte verticalement */
+    animation: fadeIn 1s ease-out; /* Apparition fluide */
+}
+
+/* Animation du spinner */
+.spinner {
+    border: 6px solid #f3f3f3; /* Couleur de fond claire pour un contraste subtil */
+    border-top: 6px solid #ff6347; /* Couleur dynamique rouge orangé */
+    border-radius: 50%;
+    width: 80px; /* Taille du spinner réduite pour plus de subtilité */
+    height: 80px; /* Taille du spinner réduite */
+    animation: spin 2s linear infinite, pulseSpinner 1s infinite; /* Rotation plus lente et pulsation dynamique */
+    margin-bottom: 20px; /* Espacement entre le spinner et le texte */
+}
+
+/* Animation de rotation fluide */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Animation de pulsation du spinner */
+@keyframes pulseSpinner {
+    0% {
+        transform: rotate(0deg);
+        box-shadow: 0 0 10px rgba(255, 99, 71, 0.6);
+    }
+    50% {
+        transform: rotate(180deg);
+        box-shadow: 0 0 25px rgba(255, 99, 71, 1);
+    }
+    100% {
+        transform: rotate(360deg);
+        box-shadow: 0 0 10px rgba(255, 99, 71, 0.6);
+    }
+}
+
+/* Style pour l'image (si nécessaire) */
+.spinner-image {
+    width: 80px; /* Taille de l'image ajustée pour un impact modéré */
+    height: 80px;
+    margin-bottom: 15px; /* Espacement sous l'image */
+    border-radius: 50%;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    animation: fadeInImage 1.5s ease-out;
+}
+
+/* Animation d'apparition de l'image */
+@keyframes fadeInImage {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Texte de chargement */
+.loading-text {
+    margin-top: 20px;
+    font-size: 18px; /* Taille du texte réduite pour une meilleure lisibilité */
+    font-family: 'Poppins', sans-serif; /* Police moderne et élégante */
+    font-weight: 600;
+    letter-spacing: 2px; /* Espacement des lettres modéré */
+    color: #fff;
+    text-transform: uppercase; /* Texte en majuscule pour un effet plus percutant */
+    animation: fadeInText 1.2s ease-out; /* Apparition douce du texte */
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre subtile du texte */
+    opacity: 0.9;
+}
+
+/* Animation du texte */
+@keyframes fadeInText {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive : ajuster pour les petits écrans */
+@media (max-width: 768px) {
+    #loadingMessage {
+        padding: 25px 40px; /* Espacement réduit pour les petits écrans */
+        width: 90%; /* Largeur plus petite sur mobile */
+    }
+
+    .spinner {
+        width: 70px;  /* Réduire la taille du spinner */
+        height: 70px;
+    }
+
+    .spinner-image {
+        width: 70px; /* Réduire la taille de l'image */
+        height: 70px;
+    }
+
+    .loading-text {
+        font-size: 16px; /* Réduire la taille du texte */
+        letter-spacing: 1.5px; /* Espacement réduit */
+    }
+}
+
+
+/* Centrage pour les grands écrans */
+@media (min-width: 1200px) {
+    #loadingMessage {
+        position: fixed; /* Fixe l'élément au centre même en cas de défilement */
+        top: 190px; /* Position verticale centrée */
+        left: 350px; /* Position horizontale centrée */
+        transform: translate(-50%, -50%); /* Ajustement pour centrer précisément */
+        padding: 30px 50px; /* Ajout d'un espace intérieur */
+        background: rgba(3, 1, 1, 0.9); /* Couleur d'arrière-plan élégante */
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Effet d'ombre subtil */
+        border-radius: 10px; /* Arrondi pour un style moderne */
+        text-align: center; /* Centrer le texte */
+        width: 50%;
+    }
+
+    .spinner-image {
+        width: 110px; /* Taille adaptée à l'image sur grands écrans */
+        height: auto;
+    }
+
+    .spinner-title {
+        font-size: 1.8rem; /* Agrandir le titre */
+        margin-bottom: 20px;
+        color: #4caf50; /* Couleur élégante pour le texte */
+    }
+
+    .loader-line-container {
+        width: 70%; /* Ligne de progression plus large */
+        margin: 20px auto; /* Espacement autour de la barre */
+    }
+
+    .loader-line {
+        height: 10px; /* Ligne plus épaisse */
+        border-radius: 5px; /* Arrondi de la ligne */
+    }
+}
+
+
+
+
+
+/* Style du bouton d'ouverture */
+.open-modal-button {
+    padding: 12px 30px; /* Ajout d'un espacement légèrement plus généreux */
+    font-size: 18px; /* Texte légèrement plus grand pour l'accentuer */
+    font-weight: bold; /* Renforce le texte */
+    color: #333; /* Texte légèrement adouci */
+    background: linear-gradient(135deg, #ffee02, #ffd700); /* Dégradé moderne pour l'arrière-plan */
+    border: 2px solid #ffd700; /* Bordure subtile assortie */
+    border-radius: 25px; /* Coins arrondis pour un look élégant */
+    cursor: pointer; /* Indicateur de clic */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Ombre douce pour donner du relief */
+    transition: all 0.3s ease; /* Transition douce pour toutes les modifications */
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+}
+
+.open-modal-button:hover {
+    background: linear-gradient(135deg, #ffd700, #ff9800); /* Dégradé dynamique au survol */
+    color: #fff; /* Change la couleur du texte au survol */
+    border-color: #ff9800; /* Bordure assortie au nouveau dégradé */
+    transform: translateY(-3px) scale(1.05); /* Légère montée et agrandissement */
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3); /* Ombre accentuée */
+}
+
+.open-modal-button:active {
+    transform: translateY(2px); /* Effet de clic */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Réduction de l'ombre */
+}
+
+/* Style de la modale */
+.modal {
+    position: fixed;
+    top: 5%;
+    left: 3%;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s ease;
+}
+
+/* Contenu de la modale */
+.modal-content {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    text-align: left;
+    max-height: 100vh; /* Hauteur maximale pour éviter que le contenu dépasse */
+    overflow-y: auto; /* Activer le défilement si le contenu dépasse la hauteur */
+    left: 50%;
+}
+
+/* Style pour les titres dans la modale */
+.modal-content h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+/* Style pour le texte dans la modale */
+.modal-content p {
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Liste ordonnée dans la modale */
+.modal-content ol {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+/* Signature dans la modale */
+.modal-content .signature {
+    text-align: right;
+    font-style: italic;
+    color: #777;
+}
+
+/* Style du bouton de fermeture */
+.close-button {
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #ff0000;
+}
+
+/* Apparition de la modale */
+.modal.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Responsivité pour les petits écrans */
+@media (max-width: 600px) {
+    .modal-content {
+        padding: 10px;
+        width: 95%; /* Réduire la largeur pour les petits écrans */
+        max-height: 100vh; /* Hauteur maximale pour éviter que le contenu dépasse */
+
+    }
+    
+}
+
+
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+    animation: fadeIn 0.5s; /* Animation pour un effet fluide */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+
+
+
+
+/* Animation de pulsation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Appliquer l'animation de pulsation */
+.menu-icon {
+    display: inline-block;
+    cursor: pointer;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.menu-icon span {
+    display: block;
+    width: 30px;
+    height: 5px;
+    margin: 6px 0;
+    background-color: #0bdb15;
+    transition: all 0.5s ease;
+}
+
+.menu-icon:hover span {
+    background-color: #3498db; /* Change la couleur au survol */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.remise-message {
+    color: #fff;
+    background-color: #615512; /* Rouge vif */
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+@keyframes clignoter {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+
+
+
+/* Style du conteneur du champ de saisie */
+#abattage-container {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#abattage-container label {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+#abattage-container input {
+    padding: 10px;
+    font-size: 16px;
+    width: 200px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+}
+
+#abattage-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#confirm-abattage {
+    background-color: #28a745;
+    color: white;
+}
+
+#cancel-abattage {
+    background-color: #dc3545;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+
+
+/* Style du message de patience */
+.loading-message {
+    display: none; /* Initialement caché */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    background-color: rgba(0, 0, 0, 0.8); /* Fond semi-transparent */
+    color: white;
+    font-size: 20px;
+    border-radius: 15px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 0.8s forwards, bounceIn 1s forwards;
+}
+
+/* Animation de l'apparition */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Animation du rebond de l'élément */
+@keyframes bounceIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+    }
+    60% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Le spinner qui tourne */
+.spinner {
+    width: 50px;  /* Taille du spinner */
+    height: 50px;
+    border: 6px solid #f3f3f3; /* Couleur de fond du spinner */
+    border-top: 6px solid #4CAF50; /* Couleur de la partie qui tourne */
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite; /* Animation de rotation du spinner */
+    margin-bottom: 15px; /* Espace entre le spinner et le texte */
+}
+
+/* Animation de rotation du spinner */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Style du texte */
+#loadingText {
+    font-size: 22px;
+    font-weight: bold;
+    color: #f2f2f2; /* Couleur claire pour le texte */
+    animation: textFadeIn 1.5s ease-in-out; /* Animation de fondu du texte */
+}
+
+/* Animation de fondu du texte */
+@keyframes textFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+
+
+
+
+/* Cacher initialement l'élément */
+.hidden1 {
+    display: none;
+  }
+  
+  /* Style du conteneur de chargement avec effet de pulsation infini */
+  .spinner-container1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.85), rgba(50, 50, 50, 0.8));
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5), inset 0 3px 8px rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 30px 60px;
+    width: 350px; /* Légère augmentation de la largeur du conteneur */
+    border-radius: 20px; /* Plus d'arrondi pour un effet plus doux */
+    z-index: 1000;
+    text-align: center;
+    box-sizing: border-box;
+    animation: pulseContainer 2s ease-in-out infinite; /* Animation de pulsation */
+  }
+  
+  /* Animation de pulsation infinie du conteneur */
+  @keyframes pulseContainer {
+    0% {
+      transform: translate(-50%, -50%) scale(1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5), inset 0 3px 8px rgba(255, 255, 255, 0.1);
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.05); /* Effet de zoom */
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), inset 0 5px 12px rgba(255, 255, 255, 0.2); /* Effet de lumière accrue */
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5), inset 0 3px 8px rgba(255, 255, 255, 0.1);
+    }
+  }
+  
+  /* Spinner stylisé */
+  .spinner1 {
+    width: 60px;
+    height: 60px;
+    border: 6px solid rgba(255, 255, 255, 0.3);
+    border-top: 6px solid #4caf50; /* Couleur personnalisée pour le spinner */
+    border-radius: 50%;
+    animation: spin1 1.2s cubic-bezier(0.5, 0.1, 0.25, 1) infinite;
+    margin-bottom: 16px; /* Espacement plus important entre le spinner et le texte */
+  }
+  
+  /* Animation fluide pour le spinner */
+  @keyframes spin1 {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Image dans le conteneur (si nécessaire) */
+  .spinner-image1 {
+    width: 120px;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  /* Texte stylisé sous le spinner */
+  .loading-text1 {
+    font-size: 1.4em;
+    font-family: "Arial", sans-serif;
+    color: #fa0505;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+    margin-top: 15px;
+    line-height: 1.5;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  /* Animation pour le texte */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  

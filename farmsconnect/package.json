@@ -1,5 +1,5 @@
 {
-  "name": "com.farmsconnect.app",
+  "name": "com.example.farmsconnect",
   "displayName": "FarmsConnect",
   "version": "1.0.0",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
@@ -24,10 +24,12 @@
       "android"
     ],
     "plugins": {
-      "cordova-plugin-splashscreen": {},
-      "cordova-plugin-geolocation": {},
+      "cordova-plugin-geolocation": {
+        "GPS_REQUIRED": "true"
+      },
       "cordova-plugin-android-permissions": {},
-      "cordova-plugin-inappbrowser": {}
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-splashscreen": {}
     }
   }
 }

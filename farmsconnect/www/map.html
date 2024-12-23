@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carte des Utilisateurs</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    #map {
+      height: 700px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h3>Localisation des utilisateurs</h3>
+  <div id="map"></div>
+
+  <script>
+    // Initialisation de la carte
+    const map = L.map('map').setView([12.3404288, -1.5106048], 13);  // Vue initiale
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Icônes personnalisées pour les types d'utilisateurs
+    const userIcons = {
+      vendeur: L.icon({ iconUrl: 'seller-icon.png', iconSize: [30, 30] }),
+      eleveur: L.icon({ iconUrl: 'breeder-icon.png', iconSize: [30, 30] }),
+      veterinaire: L.icon({ iconUrl: 'vet-icon.png', iconSize: [30, 30] }),
+    };
+
+    // Fonction pour afficher la carte
+    function loadMapData() {
+      axios.get('/api/map')
+        .then(response => {
+          const data = response.data;
+          data.forEach(user => {
+            const { username, userType, location } = user;
+            const [lng, lat] = location.coordinates;
+
+            // Déterminer l'icône en fonction du type d'utilisateur
+            const userIcon = userIcons[userType] || L.icon({ iconUrl: 'default-icon.png', iconSize: [30, 30] });
+
+            const marker = L.marker([lat, lng], { icon: userIcon }).addTo(map);
+            marker.bindPopup(`
+              <b>${username}</b><br>${userType}<br>
+              <button onclick="calculateRoute(${lat}, ${lng})">Voir l'itinéraire</button>
+            `);
+          });
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données : ", error);
+        });
+    }
+
+    // Fonction pour calculer l'itinéraire entre l'utilisateur et le vendeur
+    let routeControl;
+    function calculateRoute(destLat, destLng) {
+      if (routeControl) {
+        map.removeControl(routeControl); // Supprimer l'itinéraire précédent
+      }
+
+      navigator.geolocation.getCurrentPosition(position => {
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+
+        routeControl = L.Routing.control({
+          waypoints: [
+            L.latLng(userLat, userLng),
+            L.latLng(destLat, destLng)
+          ],
+          routeWhileDragging: true
+        }).addTo(map);
+      });
+    }
+
+    // Charger les données au chargement de la page
+    loadMapData();
+  </script>
+</body>
+</html>

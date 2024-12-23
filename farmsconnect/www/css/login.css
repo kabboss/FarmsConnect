@@ -1,0 +1,1617 @@
+/* Style de base */
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #4d8cebd2;
+    position: relative;
+    line-height: 1.5;
+    background-image: url('img/FarmsConnect.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+    filter: brightness(0.8) contrast(1.6);
+    background-color: #bee4fd;
+}
+
+
+/* En-tête */
+/* Style de l'en-tête */
+/* Animation d'apparition */
+@keyframes apparaitre {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Style de l'en-tête avec animation */
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background: linear-gradient(135deg, #fdb10b, #e9bf06);
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    margin: 20px;
+    text-align: center;
+    opacity: 0; /* Initialement invisible */
+    animation: apparaitre 2s ease-out forwards; /* Durée de l'animation et activation */
+}
+
+/* Style du texte de bienvenue */
+.Bienvenue {
+    font-size: 2.5em;
+    color: #fffefe;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    margin: 0;
+}
+
+
+/* Style de la navigation */
+nav {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #333;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    background: linear-gradient(to right, #43cea2, #185a9d);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+nav ul li a:hover {
+    background: linear-gradient(to right, #185a9d, #43cea2);
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Style responsive pour les petits écrans */
+@media (max-width: 768px) {
+    .Bienvenue {
+        font-size: 2em;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    nav ul li a {
+        padding: 8px 16px;
+        font-size: 1.1em;
+    }
+}
+
+
+/* Conteneur des formulaires */
+.form-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px auto;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Formulaire */
+.login-form, .signup-form {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1 1 300px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Champs du formulaire */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Boutons */
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Alertes */
+
+
+
+.alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    text-align: center;
+    background-color: #ffffff;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.alert.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.alert-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.alert-image {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+}
+
+.alert-close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #333;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+
+
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Adaptation aux petits écrans */
+@media (max-width: 600px) {
+    .form-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .login-form, .signup-form {
+        width: 90%;
+        max-width: 100%;
+        margin: 10px 0;
+    }
+
+    .Bienvenue {
+        font-size: 1.8em;
+    }
+
+    nav ul li {
+        font-size: 16px;
+        display: block;
+        margin: 5px 0;
+    }
+
+    .description {
+        font-size: 16px;
+    }
+}
+
+/* Adaptation aux écrans moyens (tablettes) */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .login-form, .signup-form {
+        width: 48%;
+        margin: 1%;
+    }
+
+    .Bienvenue {
+        font-size: 2.2em;
+    }
+
+    nav ul li {
+        font-size: 18px;
+        display: inline-block;
+    }
+
+    .description {
+        font-size: 17px;
+    }
+}
+
+
+
+.modal {
+    display: none; /* Les modales sont cachées par défaut */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.close-btn {
+    font-size: 30px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+
+
+
+
+
+/* Conteneur des boutons */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;  /* Espacement entre les boutons */
+    margin-top: 50px;  /* Espacement depuis le haut */
+}
+
+/* Style général des boutons */
+.button-container button {
+    background-color: #007BFF; /* Couleur principale (bleu professionnel) */
+    color: white;  /* Texte en blanc */
+    font-size: 16px;  /* Taille de police agréable */
+    padding: 12px 30px;  /* Espacement interne du bouton */
+    border: none;  /* Enlever les bordures par défaut */
+    border-radius: 30px;  /* Coins arrondis pour un effet moderne */
+    cursor: pointer;  /* Curseur de souris pointer pour indiquer que c'est cliquable */
+    font-weight: bold;  /* Texte en gras pour plus de visibilité */
+    transition: all 0.3s ease-in-out;  /* Animation fluide pour les effets de survol */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Ombre discrète sous les boutons */
+}
+
+/* Effet de survol */
+.button-container button:hover {
+    background-color: #0056b3; /* Couleur plus sombre sur le survol */
+    transform: translateY(-4px);  /* Légère élévation du bouton pour un effet dynamique */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);  /* Ombre plus marquée au survol */
+}
+
+/* Bouton d'inscription avec un style différent */
+#show-signup-btn {
+    background-color: #28a745; /* Vert pour l'inscription */
+}
+
+#show-signup-btn:hover {
+    background-color: #218838; /* Vert plus sombre au survol */
+}
+
+
+
+
+
+/* Superposition de l'animation */
+#loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Fond semi-transparent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Au-dessus de tout */
+}
+
+
+/* Style pour l'image */
+.rotating-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%; /* Rendre l'image ronde */
+    border: 4px solid #fff; /* Ajouter une bordure blanche */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Effet lumineux */
+    animation: spin 1.5s linear infinite; /* Animation de rotation */
+}
+
+/* Texte sous l'image */
+.spinner p {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
+}
+
+/* Animation de rotation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+
+
+
+
+
+
+/* Style global pour toutes les modales */
+.modal {
+    display: none; /* Cacher les modales par défaut */
+    position: fixed;
+    z-index: 1050;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    overflow-y: auto; /* Défilement vertical activé */
+    background-color: rgba(0, 0, 0, 0.8); /* Fond plus sombre pour accentuer l'effet */
+    backdrop-filter: blur(8px); /* Augmenter le flou pour un effet plus élégant */
+    padding: 20px 0; /* Espacement pour éviter que le contenu ne touche le haut ou le bas */
+    box-sizing: border-box; /* Inclure les marges et les bordures dans les dimensions */
+    transition: all 0.3s ease; /* Ajout d'une transition fluide pour l'apparition */
+
+}
+
+/* Modale active - apparition */
+.modal.active {
+    display: flex;
+    animation: fadeIn 0.5s ease-out;
+    justify-content: center; /* Centrer le contenu */
+    align-items: center; /* Centrer verticalement */
+}
+
+/* Contenu de la modale */
+.modal-content {
+    background: linear-gradient(145deg, #e4f7dc, #98a197);
+    margin: 20px auto;
+    padding: 40px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Ombre plus douce */
+    animation: slideDown 0.5s ease-out;
+    transform-origin: top center;
+    max-height: 100vh; /* Limiter la hauteur maximale */
+    overflow-y: auto; /* Activer le défilement interne si nécessaire */
+    box-sizing: border-box;
+    border: 1px solid #ddd; /* Bordure subtile */
+    overflow-x: hidden; /* Empêcher le défilement horizontal */
+    justify-content: center;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Animation de transition pour l'apparition */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Bouton de fermeture */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    background: #f2f2f2;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close-btn:hover {
+    background: #e74c3c; /* Couleur rouge moderne */
+    color: #fff;
+    transform: scale(1.1); /* Agrandissement subtil au survol */
+    border-color: #e74c3c;
+}
+
+
+/* Croix de fermeture */
+.close-button1 {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    background: #f2f2f2;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close-button1:hover {
+    background: #e74c3c; /* Couleur rouge moderne */
+    color: #fff;
+    transform: scale(1.1); /* Agrandissement subtil au survol */
+    border-color: #e74c3c;
+}
+
+
+
+/* Titres */
+.modal-content h2 {
+    margin-top: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Sous-titres */
+.modal-content h3 {
+    font-size: 20px;
+    color: #555;
+    margin-bottom: 20px;
+    text-align: left;
+    font-weight: 600;
+}
+
+/* Formulaire */
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espacement entre les champs */
+}
+
+/* Labels */
+.modal-content label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 5px;
+}
+
+/* Champs de formulaire */
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #fafafa;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtile ombre pour les champs */
+}
+
+/* Focus sur les champs de formulaire */
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Boutons */
+.modal-content button {
+    padding: 14px;
+    background: linear-gradient(145deg, #007BFF, #0056b3);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content button:hover {
+    background: linear-gradient(145deg, #0056b3, #007BFF);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Checkbox */
+.modal-content input[type="checkbox"] {
+    accent-color: #007BFF;
+    margin-right: 10px;
+}
+
+/* Responsivité */
+@media (max-width: 768px) {
+    /* Modale */
+    .modal-content {
+        margin: 10px 5%;
+        padding: 30px;
+        width: 100%;
+    }
+
+    /* Boutons */
+    .modal-content button {
+        font-size: 14px;
+    }
+
+    /* Champs de formulaire */
+    .modal-content input,
+    .modal-content select,
+    .modal-content textarea {
+        font-size: 14px;
+        padding: 12px;
+    }
+    
+    /* Titres */
+    .modal-content h2 {
+        font-size: 24px;
+    }
+
+    /* Sous-titres */
+    .modal-content h3 {
+        font-size: 18px;
+    }
+}
+
+@media (min-width: 768px) {
+    .modal-content {
+        margin: 5% auto;
+        padding: 40px;
+        width: 70%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .modal-content {
+        width: 50%;
+    }
+}
+
+/* Transition subtile au survol des champs */
+.modal-content input:hover,
+.modal-content select:hover,
+.modal-content textarea:hover {
+    border-color: #0056b3;
+}
+
+/* Effet subtil de défilement */
+.modal-content textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+
+
+
+
+
+/* Conteneur pour centrer le bouton */
+.button-container1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto; /* Centre verticalement sur toute la hauteur de l'écran */
+    margin-top: 50px;
+}
+
+/* Style du bouton */
+.open-modal-button {
+    padding: 20px 40px; /* Augmenter la taille du bouton */
+    font-size: 24px; /* Texte plus grand */
+    font-weight: bold; /* Mettre en valeur le texte */
+    color: #fff; /* Couleur du texte */
+    background: linear-gradient(45deg, #6a11cb, #2575fc); /* Dégradé moderne */
+    border: none;
+    border-radius: 50px; /* Forme ovale */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Ombre élégante */
+    cursor: pointer;
+    transition: all 0.3s ease; /* Transition douce pour les interactions */
+}
+
+/* Effets au survol */
+.open-modal-button:hover {
+    transform: scale(1.1); /* Légère augmentation de taille */
+    background: linear-gradient(45deg, #2575fc, #6a11cb); /* Inverse le dégradé */
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3); /* Accentue l'ombre */
+}
+
+/* Effets lors d'un clic */
+.open-modal-button:active {
+    transform: scale(1.05); /* Réduction légère */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Réduction de l'ombre */
+}
+
+
+
+
+
+
+/* Style général de la section */
+h3 {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 26px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    font-size: 18px;
+    color: #34495e;
+    margin-bottom: 30px;
+  }
+  
+  /* Conteneur des cases à cocher */
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px 0;
+    justify-content: center; /* Centre les cases à cocher */
+  }
+  
+  /* Masquer les cases à cocher natives */
+  .checkbox {
+    display: none;
+  }
+  
+  /* Style des labels personnalisés */
+  .checkbox-label {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 18px;
+    padding: 15px 30px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #3498db, #8e44ad);
+    color: #fff;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transform: scale(1);
+  }
+  
+  /* Icône de coche personnalisé dans le label */
+  .checkbox-label::before {
+    content: "";
+    position: absolute;
+    left: -9px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background-color: transparent;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Effet visuel lorsque la case est cochée */
+  .checkbox:checked + .checkbox-label {
+    background: linear-gradient(135deg, #2ecc71, #1abc9c);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.3);
+    transform: scale(1.05);
+  }
+  
+  .checkbox:checked + .checkbox-label::before {
+    background-color: #fff;
+    border-color: #1abc9c;
+    content: "✔";
+    color: #1abc9c;
+    font-size: 18px;
+    border-radius: 50%;
+  }
+  
+  /* Effet au survol de l'élément */
+  .checkbox-label:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
+  
+  .checkbox-label:hover::before {
+    border-color: #3498db;
+    background-color: #fff;
+  }
+  
+  /* Ajout d'un focus clair lors de l'interaction */
+  .checkbox:focus + .checkbox-label,
+  .checkbox-label:focus {
+    outline: none;
+    border: 2px solid #8e44ad;
+    box-shadow: 0 0 10px rgba(142, 68, 173, 0.5);
+  }
+  
+
+
+
+
+
+
+
+
+
+
+  /* Style général de la section */
+h3 {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 26px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+  
+  .main-label {
+    font-size: 18px;
+    color: #34495e;
+    margin-bottom: 20px;
+    display: block;
+    margin-top: 10px;
+  }
+  
+  /* Conteneur des cases à cocher */
+  .defis-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0;
+    justify-content: flex-start;
+  }
+  
+  /* Élément individuel pour chaque défi */
+  .defi-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  /* Masquer les cases à cocher natives */
+  .checkbox {
+    display: none;
+  }
+  
+  /* Style des labels personnalisés */
+  .checkbox-label {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #3498db, #8e44ad);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    display: inline-block;
+    margin-left: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transform: scale(1);
+  }
+  
+  /* Effet visuel lorsque la case est cochée */
+  .checkbox:checked + .checkbox-label {
+    background: linear-gradient(135deg, #2ecc71, #1abc9c);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.3);
+    transform: scale(1.05);
+  }
+  
+  .checkbox:checked + .checkbox-label::before {
+    background-color: #fff;
+    border-color: #1abc9c;
+    content: "✔";
+    color: #1abc9c;
+    font-size: 18px;
+    border-radius: 50%;
+  }
+  
+  /* Effet au survol de l'élément */
+  .checkbox-label:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
+  
+  .checkbox-label:hover::before {
+    border-color: #3498db;
+    background-color: #fff;
+  }
+  
+  /* Champ texte dynamique pour "Autres" */
+  .other-input {
+    display: none;
+    margin-top: 20px;
+  }
+  
+  .text-input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .text-input:focus {
+    border-color: #3498db;
+    outline: none;
+  }
+  
+  /* Ajout d'un focus clair lors de l'interaction */
+  .checkbox:focus + .checkbox-label,
+  .checkbox-label:focus {
+    outline: none;
+    border: 2px solid #8e44ad;
+    box-shadow: 0 0 10px rgba(142, 68, 173, 0.5);
+  }
+  
+
+
+
+
+
+
+
+
+
+  /* Conteneur principal */
+  .home-container {
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center;    /* Centre verticalement */
+    width: 50px;            /* Largeur égale à la taille de l'image */
+    height: 50px;           /* Hauteur égale à la taille de l'image */
+    margin: 0 auto;         /* Centre horizontalement sur la page */
+    background: linear-gradient(to bottom right, #df132e, #634ce6); /* Fond discret */
+    border-radius: 50%;     /* Rendre le conteneur circulaire */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ajouter une ombre élégante */
+    margin-top: 30px;
+}
+/* Image ronde et petite */
+.home-image {
+    width: 100px;            /* Taille de l'image (largeur) */
+    height: 100px;           /* Taille de l'image (hauteur) */
+    border-radius: 50%;      /* Image circulaire */
+    border: 3px solid #007bff; /* Bordure fine et colorée */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre subtile */
+    object-fit: cover;       /* Ajuste l'image pour qu'elle s'adapte parfaitement */
+    animation: fadeIn 1s ease-in-out; /* Animation d'apparition */
+}
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8); /* Taille réduite au départ */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);   /* Retour à la taille normale */
+    }
+}
+
+
+
+
+
+/* Conteneur centré avec une taille réduite */
+.terms-container {
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center;    /* Centre verticalement */
+    height: auto;          /* Pleine hauteur de l'écran */
+    background: linear-gradient(to bottom right, #f0f0f0, #d9d9d9); /* Fond léger */
+    margin-top: 40px;
+}
+
+/* Bouton plus petit et élégant */
+.terms-button {
+    display: inline-block;
+    padding: 10px 20px;              /* Espacement interne plus petit */
+    font-size: 14px;                 /* Taille du texte réduite */
+    font-weight: normal;             /* Moins accentué en gras */
+    text-transform: none;            /* Garder le texte tel quel */
+    color: #ffffff;                  /* Couleur du texte */
+    text-decoration: none;           /* Supprime le soulignement */
+    background: linear-gradient(45deg, #007bff, #0056b3); /* Dégradé élégant */
+    border: none;                    /* Pas de bordure */
+    border-radius: 20px;             /* Coins arrondis modérés */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); /* Ombre subtile */
+    transition: all 0.3s ease-in-out; /* Transition fluide */
+    cursor: pointer;                 /* Curseur pointer */
+}
+
+/* Effet au survol */
+.terms-button:hover {
+    background: linear-gradient(45deg, #0056b3, #003d80); /* Couleur plus foncée au survol */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Accentuation de l'ombre */
+    transform: scale(1.05); /* Légère augmentation de taille */
+}
+
+
+
+
+
+
+
+/* Masque l'élément par défaut */
+.hidden {
+    display: none;
+}
+
+/* styles.css */
+
+/* Style du message de patience */
+.loading-message {
+    display: none; /* Initialement caché */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    background-color: rgba(0, 0, 0, 0.8); /* Fond semi-transparent */
+    color: white;
+    font-size: 20px;
+    border-radius: 15px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 0.8s forwards, bounceIn 1s forwards;
+}
+
+/* Animation de l'apparition */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Animation du rebond de l'élément */
+@keyframes bounceIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+    }
+    60% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Le spinner qui tourne */
+.spinner {
+    width: 50px;  /* Taille du spinner */
+    height: 50px;
+    border: 6px solid #f3f3f3; /* Couleur de fond du spinner */
+    border-top: 6px solid #4CAF50; /* Couleur de la partie qui tourne */
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite; /* Animation de rotation du spinner */
+    margin-bottom: 15px; /* Espace entre le spinner et le texte */
+}
+
+/* Animation de rotation du spinner */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Style du texte */
+#loadingText {
+    font-size: 22px;
+    font-weight: bold;
+    color: #f2f2f2; /* Couleur claire pour le texte */
+    animation: textFadeIn 1.5s ease-in-out; /* Animation de fondu du texte */
+}
+
+/* Animation de fondu du texte */
+@keyframes textFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Style du bouton */
+button {
+    padding: 12px 24px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Effet au survol du bouton */
+button:hover {
+    background-color: #45a049;
+}
+
+
+/* Conteneur du spinner */
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Empiler le spinner et le texte verticalement */
+    animation: fadeIn 1s ease-out; /* Apparition fluide */
+}
+
+/* Animation du spinner */
+.spinner {
+    border: 6px solid #f3f3f3; /* Couleur de fond claire pour un contraste subtil */
+    border-top: 6px solid #ff6347; /* Couleur dynamique rouge orangé */
+    border-radius: 50%;
+    width: 80px; /* Taille du spinner réduite pour plus de subtilité */
+    height: 80px; /* Taille du spinner réduite */
+    animation: spin 2s linear infinite, pulseSpinner 1s infinite; /* Rotation plus lente et pulsation dynamique */
+    margin-bottom: 20px; /* Espacement entre le spinner et le texte */
+}
+
+/* Animation de rotation fluide */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Animation de pulsation du spinner */
+@keyframes pulseSpinner {
+    0% {
+        transform: rotate(0deg);
+        box-shadow: 0 0 10px rgba(255, 99, 71, 0.6);
+    }
+    50% {
+        transform: rotate(180deg);
+        box-shadow: 0 0 25px rgba(255, 99, 71, 1);
+    }
+    100% {
+        transform: rotate(360deg);
+        box-shadow: 0 0 10px rgba(255, 99, 71, 0.6);
+    }
+}
+
+/* Style pour l'image (si nécessaire) */
+.spinner-image {
+    width: 80px; /* Taille de l'image ajustée pour un impact modéré */
+    height: 80px;
+    margin-bottom: 15px; /* Espacement sous l'image */
+    border-radius: 50%;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    animation: fadeInImage 1.5s ease-out;
+}
+
+/* Animation d'apparition de l'image */
+@keyframes fadeInImage {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Texte de chargement */
+.loading-text {
+    margin-top: 20px;
+    font-size: 18px; /* Taille du texte réduite pour une meilleure lisibilité */
+    font-family: 'Poppins', sans-serif; /* Police moderne et élégante */
+    font-weight: 600;
+    letter-spacing: 2px; /* Espacement des lettres modéré */
+    color: #fff;
+    text-transform: uppercase; /* Texte en majuscule pour un effet plus percutant */
+    animation: fadeInText 1.2s ease-out; /* Apparition douce du texte */
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre subtile du texte */
+    opacity: 0.9;
+}
+
+/* Animation du texte */
+@keyframes fadeInText {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive : ajuster pour les petits écrans */
+@media (max-width: 768px) {
+    #loadingMessage {
+        padding: 25px 40px; /* Espacement réduit pour les petits écrans */
+        width: 70%; /* Largeur plus petite sur mobile */
+    }
+
+    .spinner {
+        width: 70px;  /* Réduire la taille du spinner */
+        height: 70px;
+    }
+
+    .spinner-image {
+        width: 70px; /* Réduire la taille de l'image */
+        height: 70px;
+    }
+
+    .loading-text {
+        font-size: 16px; /* Réduire la taille du texte */
+        letter-spacing: 1.5px; /* Espacement réduit */
+    }
+}
+
+
+/* Centrage pour les grands écrans */
+@media (min-width: 1200px) {
+    #loadingMessage {
+        position: fixed; /* Fixe l'élément au centre même en cas de défilement */
+        top: 190px; /* Position verticale centrée */
+        left: 300px; /* Position horizontale centrée */
+        transform: translate(-50%, -50%); /* Ajustement pour centrer précisément */
+        padding: 30px 50px; /* Ajout d'un espace intérieur */
+        background: rgba(26, 2, 2, 0.9); /* Couleur d'arrière-plan élégante */
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Effet d'ombre subtil */
+        border-radius: 10px; /* Arrondi pour un style moderne */
+        text-align: center; /* Centrer le texte */
+        width: 50%;
+    }
+
+    .spinner-image {
+        width: 110px; /* Taille adaptée à l'image sur grands écrans */
+        height: auto;
+    }
+
+    .spinner-title {
+        font-size: 1.8rem; /* Agrandir le titre */
+        margin-bottom: 20px;
+        color: #4caf50; /* Couleur élégante pour le texte */
+    }
+
+    .loader-line-container {
+        width: 70%; /* Ligne de progression plus large */
+        margin: 20px auto; /* Espacement autour de la barre */
+    }
+
+    .loader-line {
+        height: 10px; /* Ligne plus épaisse */
+        border-radius: 5px; /* Arrondi de la ligne */
+    }
+}
+
+
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+
+
+#toggle-password {
+    font-size: 40px;
+    color: #666;
+}
+
+
+
+
+
+/* Style pour le spinner */
+.spinner {
+    margin: 10px auto;
+    width: 30px;
+    height: 30px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Animation de rotation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+
+
+/* Main content */
+#main-content {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #4CAF50;
+}
+
+p {
+    font-size: 1.2rem;
+    color: #333;
+    margin-top: 10px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+
+
+/* Container principal de l'écran de démarrage */
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #2C3E50, #3498DB); /* Dégradé fluide dynamique */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    overflow: hidden;
+    opacity: 1;
+    animation: fadeIn 2s ease-out; /* Apparition de l'écran */
+  }
+  
+  /* Animation du fond avec un dégradé mouvant */
+  @keyframes backgroundAnimation {
+    0% {
+      background: linear-gradient(45deg, #2C3E50, #3498DB);
+    }
+    50% {
+      background: linear-gradient(135deg, #2980B9, #8E44AD);
+    }
+    100% {
+      background: linear-gradient(45deg, #2C3E50, #3498DB);
+    }
+  }
+  
+  #splash-screen {
+    animation: backgroundAnimation 8s ease infinite; /* Fond en mouvement */
+  }
+  
+  /* Animation 3D du logo */
+  #splash-screen img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+    animation: logoAnimation 3s ease-out infinite;
+    transform-origin: center center;
+    transform: rotateY(0deg);
+  }
+  
+  /* Rotation 3D du logo */
+  @keyframes logoAnimation {
+    0% {
+      transform: rotateY(0deg) scale(1);
+      opacity: 0.8;
+    }
+    50% {
+      transform: rotateY(360deg) scale(1.1);
+      opacity: 1;
+    }
+    100% {
+      transform: rotateY(0deg) scale(1);
+      opacity: 0.8;
+    }
+  }
+  
+  /* Animation de disparition après le délai */
+  .splash-hide {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s ease-out;
+  }
+  
+  /* Cache l'écran une fois qu'il a disparu */
+  body.splash-screen-hidden #splash-screen {
+    display: none;
+  }
+  
+  /* Animation de texte pour le message de bienvenue */
+  #splash-screen h1 {
+    font-size: 32px;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0;
+    animation: textAnimation 3s ease-out forwards;
+  }
+  
+  @keyframes textAnimation {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+
+
+
+
+
+
+
+
+
+  
+/* Conteneur principal */
+.container {
+    width: 100%;
+    max-width: 700px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-out;
+    margin-bottom: 20px;
+}
+
+/* Animation de fondu */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Message de mise à jour dans un petit carré avec défilement */
+.message {
+    font-size: 17px;
+    font-weight: 600;
+    color: #555;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 5px;
+    max-height: 100px;
+    overflow-y: auto; /* Active le défilement */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3px;
+}
+
+/* Bouton de mise à jour */
+.update-button {
+    background: linear-gradient(45deg, #4CAF50, #66bb6a);
+    color: #fff;
+    padding: 18px 30px;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    text-transform: uppercase;
+}
+
+.update-button:hover {
+    background: linear-gradient(45deg, #1146f3, #619efa);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+.update-button:active {
+    transform: translateY(2px);
+}
+
+/* Message d'erreur */
+.error {
+    color: #f44336;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    animation: errorAnimation 0.5s forwards;
+}
+
+@keyframes errorAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation du bouton lors de l'apparition */
+@keyframes buttonPop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Lorsque le bouton de mise à jour est visible */
+.update-button {
+    animation: buttonPop 0.6s ease-out;
+}
+
+/* Responsivité */
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 0px;
+    }
+
+    .message {
+        font-size: 16px;
+    }
+
+    .update-button {
+        font-size: 16px;
+        padding: 15px 25px;
+    }
+}

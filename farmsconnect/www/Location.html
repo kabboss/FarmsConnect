@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FarmsConnect : Bienvenue</title>
+  <link rel="icon" type="image/png" href="img/FarmsConnect.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/Location.css">
+
+</head>
+<body>
+  <header>
+    <img src="img/FarmsConnect.jpg" alt="Logo FarmsConnect">
+  </header>
+
+  <div class="welcome-message">
+    <p>
+      FarmsConnect, c'est la plateforme dédiée à l’élevage au Burkina Faso et dans la sous-région. Voici ce que vous pouvez faire :
+    </p>
+    <ul>
+      <li><i class="fas fa-egg"></i><strong>Commander des poules</strong> 🐔 : Des poules certifiées, traçables, à un prix équitable. De quoi avoir le poulailler qui vous fait rêver !</li>
+      <li><i class="fas fa-handshake"></i><strong>Vendre vos poules</strong> 💸 : Publiez vos annonces gratuitement et attirez les acheteurs du coin.</li>
+      <li><i class="fas fa-search"></i><strong>Explorer les annonces disponibles</strong> 🔍 : Trouvez facilement ce que vous cherchez, et achetez comme un pro !</li>
+      <li><i class="fas fa-book"></i><strong>Accéder à des ressources exclusives</strong> 📚 : Formation, forum… tout pour devenir un expert de l’élevage, tout en échangeant avec la communauté.</li>
+    </ul>
+    <p>
+      Avec FarmsConnect, on met <strong>la technologie au service de l’élevage</strong> pour que vous puissiez commander, acheter, vendre, et échanger en toute confiance. 😎
+    </p>
+    <h2>Alors, <strong>que souhaitez-vous faire ?</strong> 🤔</h2>
+    <div class="button-container">
+      <button id="continueBtn">Continuer 👍</button>
+      <button id="exitBtn">Refuser 👎</button>
+    </div>
+  </div>
+  
+  <script>
+    // Redirection si l'utilisateur clique sur "Continuer"
+    document.getElementById("continueBtn").onclick = function() {
+      window.location.href = 'Acceuil.html';
+    };
+
+    // Redirection si l'utilisateur clique sur "Refuser"
+    document.getElementById("exitBtn").onclick = function() {
+      window.location.href = 'index.html';
+    };
+  </script>
+</body>
+</html>

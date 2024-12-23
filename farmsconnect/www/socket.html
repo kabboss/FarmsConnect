@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket.IO Client</title>
+    <script src="/socket.io/socket.io.js"></script> <!-- Cela chargera la bibliothèque Socket.IO -->
+    <script src="js/socket.js"></script> <!-- Votre fichier JavaScript -->
+</head>
+<body>
+    <h1>Connexion Socket.IO</h1>
+    <script>
+        const socket = io('https://farmsconnect-b084ddb02391.herokuapp.com', {
+  transports: ['polling'], // Spécifiez le transport si nécessaire
+});
+
+        socket.on('connect', () => {
+            console.log('Connecté au serveur Socket.IO.');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Déconnecté du serveur.');
+        });
+    </script>
+</body>
+</html>
