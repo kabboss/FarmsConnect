@@ -13,6 +13,11 @@
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
 
+<feature name="Geolocation">
+    <param name="android-package" value="android.location.Location"/>
+</feature>
+
+
 <preference name="GeolocationEnabled" value="true" />
 <preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/splash.png" />
 <preference name="AndroidWindowSplashScreenDuration" value="5000" />
