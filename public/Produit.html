@@ -884,46 +884,59 @@ function validatePhoneNumber(phone) {
 }
 
 // Demander les informations à l'utilisateur
-const username = prompt("Veuillez entrer votre nom et prénom");
-if (!username) {
-    alert("Le nom d'utilisateur est requis.");
-    return;
-}
+let username;
+do {
+    username = prompt("Veuillez entrer votre nom et prénom");
+    if (!username) {
+        alert("Le nom d'utilisateur est requis.");
+    }
+} while (!username);
 
 // Demander l'email et valider qu'il est valide
-let email = prompt("Veuillez entrer votre adresse e-mail");
-if (!email || !validateEmail(email)) {
-    alert("Veuillez entrer un e-mail valide.");
-    return;
-}
+let email;
+do {
+    email = prompt("Veuillez entrer votre adresse e-mail");
+    if (!email || !validateEmail(email)) {
+        alert("Veuillez entrer un e-mail valide.");
+    }
+} while (!email || !validateEmail(email));
 
 // Demander la confirmation de l'email
-let confirmEmail = prompt("Confirmer votre e-mail");
-if (email !== confirmEmail) {
-    alert("Les adresses e-mail ne correspondent pas.");
-    return;
-}
+let confirmEmail;
+do {
+    confirmEmail = prompt("Confirmer votre e-mail");
+    if (email !== confirmEmail) {
+        alert("Les adresses e-mail ne correspondent pas.");
+    }
+} while (email !== confirmEmail);
 
 // Demander le numéro de contact principal et valider
-let contact = prompt("Votre numéro de téléphone (Fonctionnel)");
-if (!contact || !validatePhoneNumber(contact)) {
-    alert("Veuillez entrer un numéro de téléphone valide à 8 chiffres.");
-    return;
-}
+let contact;
+do {
+    contact = prompt("Votre numéro de téléphone (Fonctionnel)");
+    if (!contact || !validatePhoneNumber(contact)) {
+        alert("Veuillez entrer un numéro de téléphone valide à 8 chiffres.");
+    }
+} while (!contact || !validatePhoneNumber(contact));
 
-// Demander un numéro secondaire
-let secondaryContact = prompt("Veuillez entrer un numéro de téléphone secondaire (facultatif)");
-if (secondaryContact && !validatePhoneNumber(secondaryContact)) {
-    alert("Veuillez entrer un numéro secondaire valide à 8 chiffres.");
-    return;
-}
+// Demander un numéro secondaire (facultatif)
+let secondaryContact;
+do {
+    secondaryContact = prompt("Veuillez entrer un numéro de téléphone secondaire (facultatif)");
+    // Si le champ est rempli, on valide
+    if (secondaryContact && !validatePhoneNumber(secondaryContact)) {
+        alert("Veuillez entrer un numéro secondaire valide à 8 chiffres.");
+    }
+} while (secondaryContact && !validatePhoneNumber(secondaryContact));  // On boucle seulement si un numéro est entré et qu'il est invalide
 
 // Demander le quartier de résidence
-let residence = prompt("Nom de votre Quartier de résidence");
-if (!residence) {
-    alert("Le nom du quartier est requis.");
-    return;
-}
+let residence;
+do {
+    residence = prompt("Nom de votre Quartier de résidence");
+    if (!residence) {
+        alert("Le nom du quartier est requis.");
+    }
+} while (!residence);
 
 
 const quantityElement = document.getElementById(quantityId);
