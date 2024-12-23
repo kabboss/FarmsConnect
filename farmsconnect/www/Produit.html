@@ -1079,6 +1079,8 @@ if (traitement === "abattu") {
     typeAbattage = document.getElementById(`abattage-type-${normalizeId(nomProduit)}`).value;
 }
 
+
+
 const orderDetails = {
     username: username,
     email: email,
@@ -1090,72 +1092,94 @@ const orderDetails = {
     NomAbattre: poulesAbattues || "Non spécifié", // Ajoutez une valeur par défaut si null
     traitement: traitement || "Non spécifié", // Par défaut, "Non spécifié" si aucune option n'est choisie
     typeAbattage: typeAbattage || "Non applicable", // Si pas d'abattage, indiquer "Non applicable"
-    Residence: residence
+    Residence: residence,
+    location : null
 };
 
 console.log('Order Data:', orderDetails);
 
 
-// Afficher le spinner
-const loadingMessage = document.getElementById("loadingMessage1");
-    loadingMessage.classList.remove("hidden1");
 
 
-// Envoyer la requête POST à l'API
-fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/order', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(orderDetails)
-})
-.then(response => {
-    if (response.ok) {
-        return response.text();
+
+
+ // Étape 1 : Demander la localisation automatiquement
+ demanderLocalisation();
+
+// Fonction pour demander la localisation
+function demanderLocalisation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                // Ajouter la localisation à `orderDetails`
+                orderDetails.location = { latitude, longitude };
+                console.log("Localisation obtenue :", orderDetails.location);
+
+                // Envoyer les détails de commande
+                envoyerDetailsCommande();
+            },
+            (error) => {
+                alert("Impossible d'accéder à la localisation. Veuillez activer la localisation pour continuer.");
+                console.error("Erreur de localisation :", error);
+            }
+        );
     } else {
-        throw new Error('Erreur lors de la commande');
+        alert("La géolocalisation n'est pas prise en charge par ce navigateur.");
+    }
+}
+
+// Fonction pour envoyer les détails de commande à l'API
+function envoyerDetailsCommande() {
+    // Vérification de l'existence de la localisation avant d'envoyer
+    if (!orderDetails.location) {
+        alert("La localisation est requise pour envoyer la commande !");
+        return;
     }
 
-})
-.then(data => {
-    // Faire disparaître le spinner après 3 secondes
-    setTimeout(() => {
+    console.log('Order Data:', orderDetails);
+
+    // Afficher le spinner
+    const loadingMessage = document.getElementById("loadingMessage1");
+    loadingMessage.classList.remove("hidden1");
+
+    // Envoyer la requête POST à l'API
+    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/order', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(orderDetails)
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw new Error('Erreur lors de la commande');
+            }
+        })
+        .then(data => {
+            // Faire disparaître le spinner après 3 secondes
+            setTimeout(() => {
                 loadingMessage.classList.add("hidden1");
                 showAlert('Commande passée avec succès ! Nous vous avons envoyé un mail contenant les détails de votre commande.');
                 console.log(data);
             }, 3000);
-})
-.catch(error => {
-    console.error('Erreur lors de la commande :', error);
-     // Faire disparaître le spinner après 3 secondes et afficher l'erreur
-     setTimeout(() => {
+        })
+        .catch(error => {
+            console.error('Erreur lors de la commande :', error);
+            // Faire disparaître le spinner après 3 secondes et afficher l'erreur
+            setTimeout(() => {
                 loadingMessage.classList.add("hidden1");
                 showAlert('Erreur lors de la commande.');
             }, 3000);
-    showAlert('Erreur lors de la commande.');
-});
-
-
-
-
-  // Simuler le traitement de l'achat
-  console.log("Traitement de la commande en cours...");
-
-
-function afficherChargement() {
-  // Afficher le message de chargement
-  const loadingMessage = document.getElementById("loadingMessage1");
-  loadingMessage.classList.remove("hidden1");
-
-  // Masquer le message après 3 secondes
-  setTimeout(() => {
-    loadingMessage.classList.add("hidden1");
-  }, 3000);
+            showAlert('Erreur lors de la commande.');
+        });
+}
 }
 
-
-
-}
 
 function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
