@@ -871,6 +871,18 @@ if (isNaN(produit.poidsB) || produit.poidsB <= 0) {
 }
 
 
+// Fonction pour valider un email avec une expression régulière
+function validateEmail(email) {
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return regex.test(email);
+}
+
+// Fonction pour valider un numéro de téléphone (assume un format simple)
+function validatePhoneNumber(phone) {
+    const regex = /^[0-8]{8}$/; // Exemple : doit être un numéro à 8 chiffres
+    return regex.test(phone);
+}
+
 // Demander les informations à l'utilisateur
 const username = prompt("Veuillez entrer votre nom et prénom");
 if (!username) {
@@ -886,25 +898,33 @@ if (!email || !validateEmail(email)) {
 }
 
 // Demander la confirmation de l'email
-let confirmEmail = prompt("Veuillez confirmer votre e-mail");
+let confirmEmail = prompt("Confirmer votre e-mail");
 if (email !== confirmEmail) {
     alert("Les adresses e-mail ne correspondent pas.");
     return;
 }
 
-// Demander le numéro de contact
-const contact = prompt("Veuillez entrer votre numéro de contact");
-if (!contact) {
-    alert("Le contact est requis.");
+// Demander le numéro de contact principal et valider
+let contact = prompt("Votre numéro de téléphone (Fonctionnel)");
+if (!contact || !validatePhoneNumber(contact)) {
+    alert("Veuillez entrer un numéro de téléphone valide à 8 chiffres.");
     return;
 }
 
-// Demander le numéro de contact
-const residence = prompt("Nom de votre Quartier de residence");
-if (!contact) {
-    alert("Le contact est requis.");
+// Demander un numéro secondaire
+let secondaryContact = prompt("Veuillez entrer un numéro de téléphone secondaire (facultatif)");
+if (secondaryContact && !validatePhoneNumber(secondaryContact)) {
+    alert("Veuillez entrer un numéro secondaire valide à 8 chiffres.");
     return;
 }
+
+// Demander le quartier de résidence
+let residence = prompt("Nom de votre Quartier de résidence");
+if (!residence) {
+    alert("Le nom du quartier est requis.");
+    return;
+}
+
 
 const quantityElement = document.getElementById(quantityId);
 const weightElement = document.getElementById(weightId);
@@ -1083,6 +1103,7 @@ const orderDetails = {
     weight: poidsProduit,
     price: prixFinal.toFixed(2), // Arrondir le prix total à deux décimales
     contact: contact,
+    contact2: secondaryContact,
     Produit: nomProduit,
     NomAbattre: poulesAbattues || "Non spécifié", // Ajoutez une valeur par défaut si null
     traitement: traitement || "Non spécifié", // Par défaut, "Non spécifié" si aucune option n'est choisie
@@ -1176,10 +1197,6 @@ console.log('Order Data:', orderDetails);
 }
 
 
-function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-}
 
 
 

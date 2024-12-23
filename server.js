@@ -164,7 +164,7 @@ module.exports = app;
 
 // Route pour passer une commande et envoyer les emails de confirmation
 app.post('/api/order', async (req, res) => {
-    const { username, email, contact, price, quantity, weight, Produit: nomproduit, traitement, typeAbattage, NomAbattre, Residence, location } = req.body;
+    const { username, email, contact, contact2, price, quantity, weight, Produit: nomproduit, traitement, typeAbattage, NomAbattre, Residence, location } = req.body;
 
     // Vérifiez si traitement est défini
     if (!traitement) {
@@ -224,6 +224,8 @@ Le prix du produit peut augmenter en fonction du poids choisi. Chaque kilogramme
 👤 Client : ${username}
 ✉️ Email : ${email}
 📞 Contact : ${contact}
+📞 Contact2 : ${contact2}
+
 🍗 Produit : ${nomproduit}
 🔢 Quantité : ${quantity}
 ⚖️ Poids Total : ${weight} kg
@@ -232,7 +234,9 @@ Le prix du produit peut augmenter en fonction du poids choisi. Chaque kilogramme
 🔪 Type d'abattage : ${typeAbattage}
 🐔🔪 Quantité à abattre : ${NomAbattre}
 🏡 Quartier de Residence : ${Residence}
-📍  Localisation du client : Latitude: ${location.latitude}, Longitude: ${location.longitude}
+📍  Localisation du client : 
+- Latitude: ${location.latitude}, 
+- Longitude: ${location.longitude}
 
 
 ⏳ Action requise : Veuillez traiter cette commande dans les meilleurs délais. ⏱️            `
