@@ -920,14 +920,8 @@ do {
 } while (!contact || !validatePhoneNumber(contact));
 
 // Demander un numéro secondaire (facultatif)
-let secondaryContact;
-do {
     secondaryContact = prompt("Veuillez entrer un numéro de téléphone secondaire (facultatif)");
     // Si le champ est rempli, on valide
-    if (secondaryContact && !validatePhoneNumber(secondaryContact)) {
-        alert("Veuillez entrer un numéro secondaire valide à 8 chiffres.");
-    }
-} while (secondaryContact && !validatePhoneNumber(secondaryContact));  // On boucle seulement si un numéro est entré et qu'il est invalide
 
 // Demander le quartier de résidence
 let residence;
