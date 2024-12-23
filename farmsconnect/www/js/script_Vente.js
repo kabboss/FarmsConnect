@@ -4,13 +4,12 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
     const prixUnitaire = parseFloat(document.getElementById('prix').value);
     const commission = prixUnitaire * 0.04;
     const fraisLivraison = 500;
-    const prixFinal = prixUnitaire + commission ;
-    
+    const prixFinal = prixUnitaire + commission;
+
     const generateVendeurId = (email, contactPrincipal) => {
         // Générer un identifiant unique basé sur l'email et le numéro de téléphone
         return 'V' + Buffer.from(email + contactPrincipal).toString('hex');
     };
-    
 
     const animal = {
         categorie: document.getElementById('categorie').value,
@@ -23,10 +22,43 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
         contactSecondaire: document.getElementById('contact-secondaire').value,
         emailVendeur: document.getElementById('email-vendeur').value,
         codeVendeur: 'V' + Date.now(),
+        location: null // La localisation sera définie ici
     };
-    
+
+    // Vérifier si la localisation est déjà renseignée
+    if (!animal.location) {
+        // Si la localisation n'est pas renseignée, demander la permission d'utiliser la géolocalisation
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                // Une fois la localisation obtenue, on met à jour l'objet animal
+                animal.location = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                };
+
+                // Afficher le message de succès dès que l'utilisateur autorise la géolocalisation
+                showAlert("Annonce envoyée avec succès !");
+
+                // Maintenant, on peut envoyer les données
+                sendData(animal);
+
+            }, function(error) {
+                // Si l'utilisateur refuse ou qu'il y a un problème avec la géolocalisation
+                showAlert("Erreur : Impossible d'obtenir votre localisation.");
+            });
+        } else {
+            showAlert("La géolocalisation n'est pas supportée par votre navigateur.");
+        }
+    } else {
+        // Si la localisation est déjà renseignée, envoyer les données immédiatement
+        sendData(animal);
+    }
+});
+
+function sendData(animal) {
     console.log(animal);
-        const files = document.getElementById('images').files;
+
+    const files = document.getElementById('images').files;
     if (files.length === 0) {
         showAlert("Veuillez sélectionner au moins une image.");
         return;
@@ -52,35 +84,35 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(animal) // Assurez-vous que 'animal' est bien formé
-            
         })
-        
         .then(response => {
-            // Vérifiez si la réponse est réussie
             if (!response.ok) {
-                // Si la réponse n'est pas en succès, affichez l'erreur
                 return response.text().then(text => {
                     throw new Error(`Erreur HTTP : ${response.status} - ${text}`);
                 });
             }
-            // Essayez de convertir la réponse en JSON
             return response.json();
         })
         .then(data => {
-            // Affichez le message de succès
+            console.log("Annonce envoyée avec succès", data);
+            // Recharger la page après un délai de 2 secondes
+            setTimeout(() => {
+                location.reload();  // Rechargement de la page
+            }, 2000);
         })
-        
+        .catch(error => {
+            showAlert("Erreur lors de l'envoi de l'annonce : " + error.message);
+        });
     });
-});
+}
 
 function showAlert(message) {
     const alertBox = document.getElementById("customAlert");
     const alertMessage = document.getElementById("alertMessage");
 
     alertMessage.textContent = message;
-    alertBox.classList.add("visible"); // Ajoute la classe pour afficher l'alerte
+    alertBox.classList.add("visible");
 
-    // Masque automatiquement après 5 secondes
     setTimeout(() => closeAlert(), 10000);
 }
 
@@ -88,30 +120,3 @@ function closeAlert() {
     const alertBox = document.getElementById("customAlert");
     alertBox.classList.remove("visible");
 }
-
-
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    const modal = document.getElementById('modal');
-    const openModalButton = document.querySelector('.open-modal-button');
-    const closeModalButton = modal.querySelector('.close-button');
-
-    // Ouvrir la fenêtre modale
-    openModalButton.addEventListener('click', (event) => {
-        event.preventDefault(); // Empêche la soumission du formulaire si le bouton est dans un formulaire
-        modal.classList.add('visible'); // Affiche la modale
-    });
-
-    // Fermer la fenêtre modale
-    closeModalButton.addEventListener('click', () => {
-        modal.classList.remove('visible'); // Cache la modale
-    });
-
-    // Fermer la fenêtre modale en cliquant à l'extérieur
-    modal.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            modal.classList.remove('visible'); // Cache la modale si on clique à l'extérieur
-        }
-    });
-});

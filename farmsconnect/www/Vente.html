@@ -23,15 +23,15 @@
                 <span></span>
             </label>
             <ul class="nav-list">
-                <li><a href="Acceuil.html">Accueil</a></li>
-                <li><a href="Vente.html">Vendre</a></li>
-                <li><a href="Visiteur.html">Visiter</a></li>
-                <li><a href="Produit.html">Acheter Avec FarmsConnect</a></li>
-                <li><a href="apropos.html">À propos</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="Forum.html">Forum</a></li>
-                <li><a href="Formations.html">Vidéos Formation</a></li>
-                </ul>
+            <li><a href="Acceuil.html">Accueil</a></li>
+            <li><a href="Vente.html">Vendre</a></li>
+            <li><a href="Visiteur.html">Visiter</a></li>
+            <li><a href="Produit.html">Acheter Avec FarmsConnect</a></li>
+            <li><a href="apropos.html">À propos</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="Forum.html">Forum</a></li>
+            <li><a href="Formations.html">Vidéos Formation</a></li>
+            </ul>
         </nav>
         <div class="image-container">
             <img src="img/FarmsConnect.jpg" alt="Farms Connect" class="header-image">
@@ -92,8 +92,9 @@
             <label for="email-vendeur">E-mail* :</label>
             <input type="email" id="email-vendeur" name="email-vendeur" required placeholder="Ex: vendeur@example.com">
     
-            <button class="open-modal-button">Note Importante aux Vendeurs</button>
-<!-- Fenêtre modale -->
+    <button type="button" class="open-modal-button">Note Importante aux Vendeurs</button>
+
+            <!-- Fenêtre modale -->
 <div id="modal" class="modal hidden">
     <div class="modal-content">
         <span class="close-button">&times;</span>
@@ -135,27 +136,30 @@
 
 
     <script>
-        // Gestion de la modale
-        const openModalButton = document.querySelector('.open-modal-button');
-        const modal = document.getElementById('modal');
-        const closeButton = document.querySelector('.close-button');
+// Gestion de la modale
+const openModalButton = document.querySelector('.open-modal-button');
+const modal = document.getElementById('modal');
+const closeButton = document.querySelector('.close-button');
 
-        // Afficher la modale
-        openModalButton?.addEventListener('click', () => {
-            modal.style.display = 'flex';
-        });
+// Afficher la modale
+openModalButton?.addEventListener('click', (e) => {
+    e.preventDefault();  // Empêche le comportement par défaut (soumission du formulaire)
+    modal.classList.add('visible');  // Affiche la modale en ajoutant la classe 'visible'
+});
 
-        // Fermer la modale
-        closeButton?.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
+// Fermer la modale
+closeButton?.addEventListener('click', () => {
+    modal.classList.remove('visible');  // Cache la modale en enlevant la classe 'visible'
+});
 
-        // Clic en dehors de la modale
-        window.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
+// Clic en dehors de la modale pour la fermer
+window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+        modal.classList.remove('visible');  // Cache la modale si le clic est en dehors de celle-ci
+    }
+});
+
+
 
         // Gestion des interactions de formulaire
         document.addEventListener("DOMContentLoaded", function () {
@@ -211,7 +215,7 @@
 
                     // Si tout est correct
                     hideSpinner();
-                    showAlert("Votre annonce a été ajoutée avec succès !");
+                    showAlert("Veuillez autoriser la localisation !!!!");
                 } catch (error) {
                     console.error("Erreur :", error);
                     hideSpinner();

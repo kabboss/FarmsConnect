@@ -281,7 +281,7 @@ categoryButtons.forEach(button => {
                     // Filtrage par fourchette de prix
                     if (selectedPriceRange) {
                         filtered = filtered.filter(animal => {
-                            const price = animal.prix * 0.04 + 500; // Prix final avec frais
+                            const price = animal.prix + (animal.prix * 0.04); // Prix final avec frais (4% du prix)
                             if (selectedPriceRange === '0-500') return price <= 500;
                             if (selectedPriceRange === '501-1000') return price > 500 && price <= 1000;
                             if (selectedPriceRange === '1001-2000') return price > 1000 && price <= 2000;
@@ -357,16 +357,74 @@ fetchAnnonces(1, 10);
 
     function handlePurchase(animal) {
         const visitorInfo = {
-            username: prompt('Nom et Prénom :'),
-            contact: prompt('Entrez votre numéro de contact :'),
-            email: prompt('Votre mail valide (🚨TRES IMPORTANT ):'),
-            quantity: prompt('Combien d\'unités de ce produit souhaitez-vous acheter ?'),
-            quartier: prompt('Quel est votre Quartier ?')
-    
-        };
-        
-    
-        // Détails de l'achat et de l'acheteur
+    username: validateUsername(),
+    contact: validateContact(),
+    email: validateEmail(), // Validation de l'email avec un double prompt
+    quantity: validateQuantity(), // Validation pour la quantité
+    quartier: validateQuartier()
+};
+
+// Validation pour le champ "Nom et Prénom"
+function validateUsername() {
+    let username = prompt('Nom et Prénom :');
+    while (!username || username.trim().length < 3) { // Vérifie que ce n'est pas vide et que c'est suffisamment long
+        alert('Veuillez entrer un Nom et Prénom valides (au moins 3 caractères).');
+        username = prompt('Nom et Prénom :');
+    }
+    return username.trim();
+}
+
+// Validation pour le champ "Numéro de téléphone"
+function validateContact() {
+    let contact = prompt('Entrez votre numéro de Téléphone :');
+    const phoneRegex = /^\d{8,14}$/; // Numéro de 8 à 15 chiffres
+    while (!phoneRegex.test(contact)) {
+        alert('Veuillez entrer un numéro de téléphone valide (uniquement des chiffres, entre 8 et 15 caractères).');
+        contact = prompt('Entrez votre numéro de Téléphone :');
+    }
+    return contact;
+}
+
+// Validation pour l'email avec confirmation
+function validateEmail() {
+    let email = prompt('Votre mail valide :');
+    let confirmEmail = prompt('Confirmez votre mail :');
+    while (email !== confirmEmail || !isValidEmail(email)) {
+        alert('Les emails ne correspondent pas ou sont invalides. Veuillez réessayer.');
+        email = prompt('Votre mail valide :');
+        confirmEmail = prompt('Confirmez votre mail :');
+    }
+    return email;
+}
+
+// Vérifie si l'email est valide
+function isValidEmail(email) {
+    const emailRegex = /^\S+@\S+\.\S+$/; // Regex pour valider le format de l'email
+    return emailRegex.test(email);
+}
+
+// Validation pour la quantité
+function validateQuantity() {
+    let quantity = prompt('Combien d\'unités de ce produit souhaitez-vous acheter ?');
+    while (isNaN(quantity) || quantity <= 0) { // Vérifie que c'est un nombre supérieur à 0
+        alert('Veuillez entrer une quantité valide (nombre supérieur à 0).');
+        quantity = prompt('Combien d\'unités de ce produit souhaitez-vous acheter ?');
+    }
+    return parseInt(quantity);
+}
+
+// Validation pour le quartier
+function validateQuartier() {
+    let quartier = prompt('Quel est votre Quartier ?');
+    while (!quartier || quartier.trim().length < 2) { // Vérifie que ce n'est pas vide et que c'est suffisamment long
+        alert('Veuillez entrer un Quartier valide (au moins 2 caractères).');
+        quartier = prompt('Quel est votre Quartier ?');
+    }
+    return quartier.trim();
+}
+
+
+// Détails de l'achat et de l'acheteur
         const purchaseDetails = {
             animalId: animal._id,  // Assurez-vous que vous avez l'ID de l'animal/produit
             animalName: animal.categorie,
@@ -374,160 +432,176 @@ fetchAnnonces(1, 10);
             username: visitorInfo.username,
             contact: visitorInfo.contact,
             quantity: visitorInfo.quantity,
-            quartier: visitorInfo.quartier
+            quartier: visitorInfo.quartier,
+            location: null // Ajout des coordonnées GPS
         };
-    
-        // Envoi de l'email immédiatement au vendeur
-        const emailContentVendeur = `
-📢 Interet pour votre annonce !
+        console.log('Détails de l\'achat :', purchaseDetails);
+        // Vous pouvez ensuite utiliser purchaseDetails, par exemple, pour envoyer au serveur
 
+let locationObtained = false;  // Flag pour savoir si la localisation est obtenue
+
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const userLocation = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            };
+
+            purchaseDetails.location= userLocation ;   
+            console.log('Coordonnées géographiques obtenues :', userLocation);
+            locationObtained = true; // La localisation a été obtenue
+            processEmails(animal, visitorInfo, purchaseDetails); // Process even if location is unavailable
+
+        },
+        (error) => {
+            console.error('Erreur de géolocalisation :', error.message);
+            // Fournir une valeur par défaut ou informer l'utilisateur
+            alert('La géolocalisation n\'a pas pu être obtenue.');
+            locationObtained = false; // La localisation n'a pas pu être obtenue
+        }
+    );
+} else {
+    alert('La géolocalisation n\'est pas supportée par votre navigateur.');
+    locationObtained = false; // Si le navigateur ne supporte pas la géolocalisation
+}
+
+
+    // Empêcher l'envoi des emails tant que la localisation n'est pas obtenue
+        if (!locationObtained) {
+            alert("L'envoi des informations est bloqué tant que vous autoriser pas la localisation .");
+            return; // Empêche la suite du processus tant que la localisation n'est pas disponible
+}
+    
+processEmails(animal, visitorInfo, purchaseDetails); // Process without location
+
+}
+    
+
+async function processEmails(animal, visitorInfo, purchaseDetails) {
+        const totalPrice = (animal.prix * visitorInfo.quantity * 1.04 + 500).toLocaleString();
+        alert(`Merci ${visitorInfo.username} ! Le total à payer est : ${totalPrice} FCFA (inclut 500 FCFA de frais de traitement)`);
+
+        const emailContentVendeur = `📢 Interet pour votre annonce !
 🔹 Catégorie : ${animal.categorie}
 🔹 Quantité demandée : ${visitorInfo.quantity}
 🔹 Nom du client : ${visitorInfo.username}
 💰 Recette estimée : ${(animal.prix * visitorInfo.quantity).toLocaleString()} FCFA
-
 📦 Prochaine étape : FarmsConnect vous contactera bientôt pour organiser la livraison. 🚚
+Merci d'utiliser FarmsConnect!`;
 
-Merci d'utiliser FarmsConnect!
-`;
         sendEmailVendeur(emailContentVendeur, animal.emailVendeur);
-  
-        
-        
 
-    // Envoi de l'email de confirmation à l'acheteur
-    const emailSubject = "Votre achat a été passé avec succès !";
-    const emailContentClient = `
-Merci, ${visitorInfo.username} ! 🤝✨  
-Votre commande a été enregistrée avec succès. Voici les détails de votre achat :  
+        const emailSubject = "Votre achat a été passé avec succès !";
+        const emailContentClient = `Merci, ${visitorInfo.username} ! 🤝✨
+Votre commande a été enregistrée avec succès. Voici les détails de votre achat :
 
-🔹 Catégorie : ${animal.categorie}  
-🔹 Quantité demandée : ${visitorInfo.quantity}  
-💰 Total à payer : ${(animal.prix * visitorInfo.quantity * 1.04 + 500).toLocaleString()} FCFA  
-   _(inclut 500 FCFA de frais de traitement)_  
-🚚 Livraison : Gratuite  
+🔹 Catégorie : ${animal.categorie}
+🔹 Quantité demandée : ${visitorInfo.quantity}
+💰 Total à payer : ${(animal.prix * visitorInfo.quantity * 1.04 + 500).toLocaleString()} FCFA _(inclut 500 FCFA de frais de traitement)_
+🚚 Livraison : Gratuite
+🆔 Code du vendeur : ${animal.codeVendeur}
+🏡 Quartier de résidence : ${visitorInfo.quartier}
+📞 Vous souhaitez nous contacter ? 👉 [Cliquez ici pour nous écrire sur WhatsApp](https://wa.me/+22656663638)
+📦 Prochaine étape : FarmsConnect vous contactera bientôt pour organiser la livraison. 🚚💨
+Merci de faire confiance à FarmsConnect, votre partenaire de choix !!`;
 
-🆔 Code du vendeur : ${animal.codeVendeur}  
-🏡 Quartier de résidence : ${visitorInfo.quartier}  
+        sendEmailAcheteur(emailSubject, emailContentClient, visitorInfo.email);
 
-📞 Vous souhaitez nous contacter ?  
-👉 [Cliquez ici pour nous écrire sur WhatsApp](https://wa.me/+22656663638)  
+const emailContentFarmsConnect = `
+📋 Détails de l'achat :
 
-📦 Prochaine étape :  
-FarmsConnect vous contactera bientôt pour organiser la livraison. 🚚💨  
+👤 Vendeur:
+🔹 Catégorie : ${animal.categorie}
+💰 Prix unitaire : ${animal.prix} FCFA
+🆔 Code du vendeur : ${animal.codeVendeur}
+📞 Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? `(Secondaire : ${animal.contactSecondaire})` : ''}
+📍 - Latitude : ${animal.location.latitude }
+📍 - Longitude : ${animal.location.longitude }
 
-✨ Merci de faire confiance à FarmsConnect, votre partenaire de choix !!  
-`;
-    
-    // Fonction d'envoi de l'e-mail
+
+
+
+👤 Informations sur l'acheteur :
+🔹 Nom d'utilisateur : ${visitorInfo.username}
+📱 Contact : ${visitorInfo.contact}
+✉️ E-mail : ${visitorInfo.email}
+📦 Nombre souhaité : ${visitorInfo.quantity}
+🏡 Quartier : ${visitorInfo.quartier}
+📍 - Latitude : ${purchaseDetails.location.latitude }
+📍 - Longitude : ${purchaseDetails.location.longitude }
+💵 Total à payer : ${(animal.prix * visitorInfo.quantity * 1.04 + 500)} FCFA`;
+
+
+
+        sendEmailFarmsConnect(emailContentFarmsConnect);
+        scheduleClientEmail(purchaseDetails);
+        showAlert("Votre achat a été confirmé ! Un email contenant les details de votre/vos achat(s) vous a été envoyé.");
+    }
+
     function sendEmailAcheteur(subject, content, email) {
         const emailData = {
-            subject: subject,    // Sujet de l'e-mail
-            content: content,    // Contenu de l'e-mail
-            email: visitorInfo.email         // Destinataire
+            subject: subject,
+            content: content,
+            email: email
         };
-    
+
         fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(emailData)  // Envoi des données
-        })
-        .then(response => {
+            body: JSON.stringify(emailData)
+        }).then(response => {
             if (response.ok) {
                 console.log("Email envoyé à l'acheteur.");
             } else {
                 console.error("Erreur lors de l'envoi de l'email à l'acheteur.");
             }
-        })
-        .catch(error => console.error("Erreur réseau lors de l'envoi de l'email à l'acheteur:", error));
+        }).catch(error => console.error("Erreur réseau lors de l'envoi de l'email à l'acheteur:", error));
     }
-    
-    // Envoi de l'e-mail
-    sendEmailAcheteur(emailSubject, emailContentClient, visitorInfo.email);
-    
-    
-    
-    
-    const emailContentFarmsConnect = `
-📋 Détails de l'achat :  
-🔹 Catégorie : ${animal.categorie}  
-💰 Prix unitaire : ${animal.prix} FCFA  
-🆔 Code du vendeur : ${animal.codeVendeur}  
-📞 Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? `(Secondaire : ${animal.contactSecondaire})` : ''}  
 
-👤 Informations sur l'acheteur :  
-🔹 Nom d'utilisateur : ${visitorInfo.username}  
-📱 Contact : ${visitorInfo.contact}  
-✉️ E-mail : ${visitorInfo.email}  
-📦 Nombre souhaité : ${visitorInfo.quantity}  
-🏡 Quartier : ${visitorInfo.quartier}  
-
-💵 Total à payer : ${(animal.prix * visitorInfo.quantity * 1.04 + 500)} FCFA
-
----
-
-🌐 Veuillez traitez la Commande
-`;
-        sendEmailFarmsConnect(emailContentFarmsConnect);
-    
-        // Envoyer au backend pour planifier l'envoi du mail au client dans 24h
-        scheduleClientEmail(purchaseDetails);
-        showAlert("Votre achat a été confirmé ! Un email contenant les details de votre/vos achat (s) vous a été envoyé.");
-    }
-    
     function sendEmailVendeur(content, vendeurEmail) {
         fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ content, email: vendeurEmail })
-        })
-        .then(response => {
+        }).then(response => {
             if (response.ok) {
                 console.log("Email envoyé au vendeur.");
             } else {
                 console.error("Erreur lors de l'envoi de l'email au vendeur.");
             }
-        })
-        .catch(error => console.error("Erreur réseau lors de l'envoi de l'email au vendeur:", error));
+        }).catch(error => console.error("Erreur réseau lors de l'envoi de l'email au vendeur:", error));
     }
-    
-    
-    // Nouvelle fonction pour envoyer l'email à FarmsConnect
+
     function sendEmailFarmsConnect(content) {
-        const farmsConnectEmail = 'kaboreabwa2020@gmail.com';  // L'adresse email de FarmsConnect
-    
+        const farmsConnectEmail = 'kaboreabwa2020@gmail.com';
         fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ content, email: farmsConnectEmail })
-        })
-        .then(response => {
+        }).then(response => {
             if (response.ok) {
                 console.log("Email envoyé à FarmsConnect.");
             } else {
                 console.error("Erreur lors de l'envoi de l'email à FarmsConnect.");
             }
-        })
-        .catch(error => console.error("Erreur réseau lors de l'envoi de l'email à FarmsConnect:", error));
+        }).catch(error => console.error("Erreur réseau lors de l'envoi de l'email à FarmsConnect:", error));
     }
-    
+
     function scheduleClientEmail(purchaseDetails) {
-        // Planification de l'email 24h après l'achat (le backend s'occupera de l'envoi différé)
         fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/schedule-email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ purchaseDetails, delay: 2 })
-        })
-        .then(response => {
+        }).then(response => {
             if (response.ok) {
                 console.log("Email planifié pour le client dans 24h.");
             } else {
                 console.error("Erreur lors de la planification de l'email.");
             }
-        })
-        .catch(error => console.error('Erreur lors de la planification d\'email :', error));
+        }).catch(error => console.error('Erreur lors de la planification d\'email :', error));
     }
-    
+</script>    
     
         </script>
                 

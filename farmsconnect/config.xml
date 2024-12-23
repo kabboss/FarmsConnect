@@ -5,7 +5,7 @@
     <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
         Apache Cordova Team
     </author>
-    <content src="index.html" />
+    <content src="https://farmsconnect-b084ddb02391.herokuapp.com" />
     
     <access origin="https://farmsconnect-b084ddb02391.herokuapp.com" />
     <allow-navigation href="https://farmsconnect-b084ddb02391.herokuapp.com" />
