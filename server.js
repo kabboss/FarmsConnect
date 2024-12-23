@@ -878,7 +878,7 @@ app.get("/get-update", (req, res) => {
       // Retourne un lien direct pour télécharger la dernière version de l'application
       res.json({
         downloadUrl: "https://1drv.ms/u/c/bda8ebc010e57553/Ec2DYuPPHtVGlx_YACj-gDQBpMkwtEYpBmIa1Y9GD17xQg?e=XkMGE7",
-        message: "📱 Nouveau : VERSION 1.1.2 (Optimal)🔄 \n\n Veuillez mettre à jour votre application vers la version optimale si ce n'est pas encore fait !\n\n💡Remarque importante : Si votre application est déjà à la version 1.1.2, aucune mise à jour n'est nécessaire.",
+        message: "📱 Nouveau : VERSION 1.1.3 (Optimal)🔄 \n\n Veuillez mettre à jour votre application vers la version optimale si ce n'est pas encore fait !\n\n💡Remarque importante : Si votre application est déjà à la version 1.1.3, aucune mise à jour n'est nécessaire.",
     });
     } catch (err) {
       console.error("Erreur lors de l'envoi du lien de mise à jour :", err);
