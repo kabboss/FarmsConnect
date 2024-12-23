@@ -3,8 +3,8 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
 
     const prixUnitaire = parseFloat(document.getElementById('prix').value);
     const commission = prixUnitaire * 0.04;
-    const fraisLivraison = 650;
-    const prixFinal = prixUnitaire + commission + fraisLivraison;
+    const fraisLivraison = 500;
+    const prixFinal = prixUnitaire + commission ;
     
     const generateVendeurId = (email, contactPrincipal) => {
         // Générer un identifiant unique basé sur l'email et le numéro de téléphone
@@ -52,7 +52,9 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(animal) // Assurez-vous que 'animal' est bien formé
+            
         })
+        
         .then(response => {
             // Vérifiez si la réponse est réussie
             if (!response.ok) {
@@ -66,7 +68,6 @@ document.getElementById('vente-form').addEventListener('submit', function(e) {
         })
         .then(data => {
             // Affichez le message de succès
-            showAlert(data.message);
         })
         
     });

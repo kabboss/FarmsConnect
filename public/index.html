@@ -7,12 +7,91 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="img/FarmsConnect.jpg"> <!-- Chemin vers votre image -->
     <link rel="stylesheet" href="login.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.3/lottie.min.js"></script>
+
 </head>
 <body>
 
 <header>
     <h2 class="Bienvenue">Bienvenue sur FarmsConnect Burkina</h2>
 </header>
+
+
+<style>
+    .message { font-size: 18px; color: #333; }
+    .update-button { padding: 10px 20px; background-color: #28a745; color: white; border: none; cursor: pointer; }
+    .error { color: red; font-size: 16px; }
+</style>
+
+
+<div class="container">
+    <p id="appMessage" class="message"></p>
+    <button id="updateButton" class="update-button" style="display: none;">Télécharger la mise à jour</button>
+    <p id="errorMessage" class="error" style="display: none;"></p>
+  </div>
+  
+  <script>
+    // Fonction pour vérifier la mise à jour
+    async function checkForUpdate() {
+      try {
+        const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/get-update'); // URL de l'API
+  
+        if (!response.ok) throw new Error(`Erreur HTTP : ${response.status}`);
+  
+        const updateData = await response.json();
+  
+        const appMessage = document.getElementById('appMessage');
+        const updateButton = document.getElementById('updateButton');
+  
+        // Affiche le message de mise à jour
+        appMessage.textContent = updateData.message;
+        updateButton.style.display = 'block';
+  
+        // Redirige vers le lien de téléchargement
+        updateButton.onclick = () => {
+          window.location.href = updateData.downloadUrl;
+        };
+      } catch (err) {
+        console.error("Erreur lors de la vérification de mise à jour :", err);
+        document.getElementById('errorMessage').textContent =
+          "Impossible de vérifier les mises à jour pour le moment.";
+      }
+    }
+  
+    // Appeler la fonction au chargement de la page
+    checkForUpdate();
+  </script>
+  
+
+
+<div id="splash-screen">
+    <img src="img/FarmsConnect.jpg" alt="Logo" />
+  </div>
+  
+  <script>
+    // Après 5 secondes, masquer l'écran de démarrage
+    setTimeout(function() {
+      document.body.classList.add('splash-screen-hidden'); // Cache l'écran de démarrage
+    }, 5000);
+  </script>
+  
+
+<script>
+    // Animation de la page de démarrage
+    window.onload = function() {
+        const splashScreen = document.getElementById('splash-screen');
+        const mainContent = document.getElementById('main-content');
+
+        // Animation du splash screen pour la transition
+        gsap.to(splashScreen, { duration: 1, opacity: 0, display: "none" });
+        gsap.to(mainContent, { duration: 1, delay: 1, opacity: 1, display: "block" });
+    };
+
+    // Démarrer l'application
+    document.getElementById('startButton').addEventListener('click', function() {
+    });
+</script>
 
 <div class="home-container">
     <img src="img/FarmsConnect.jpg" alt="Bienvenue sur FarmsConnect" class="home-image">
@@ -43,7 +122,15 @@
                     🙈
                 </span>
             </div>
-            <button type="submit">Se connecter</button>
+
+ <!-- Message de patience avec animation -->
+ <div id="loadingMessage" class="loading-message">
+    <!-- Le spinner à la place de l'image -->
+    <div class="spinner"></div>
+    <p id="loadingText">Connexion en cours...</p>
+</div>
+            <button  type="submit" id="loginButton" >Se connecter</button>
+    
         </form>
     </div>
 </div>
@@ -67,14 +154,6 @@ document.getElementById("toggle-password").addEventListener("click", function ()
 
 </script>
 
-<!-- Message de chargement -->
-<div id="loadingMessage" class="hidden">
-    <div class="spinner-container">
-        <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
-        <div class="spinner"></div>
-    </div>
-    <p class="loading-text">Veuillez patienter...</p> 
-</div>
 
 
 <script>
@@ -167,16 +246,16 @@ window.onload = function() {
         <form id="extra-questions-form">
             <h3>Informations personnelles</h3>
             <label for="Nom_prenom">Nom & Prénom </label>
-            <input type="text" id="Nom_prenom" name="Nom_prenom" placeholder="Kabore Moussa" required>
+            <input type="text" id="Nom_prenom" name="Nom_prenom"  required>
             
             <label for="Numero_telephone">Numero de telephone Principale</label>
-            <input type="number" id="Numero_telephone" name="Numero_telephone" placeholder="+226 70252525" required>
+            <input type="number" id="Numero_telephone" name="Numero_telephone"  required>
 
             <label for="Numero_telephone2">Numero de telephone Secondaire</label>
-            <input type="number" id="Numero_telephone2" name="Numero_telephone2" placeholder="+226 70252525" required>
+            <input type="number" id="Numero_telephone2" name="Numero_telephone2"  required>
 
             <label for="age">Quel est votre âge ?</label>
-            <input type="number" id="age" name="age" placeholder="Ex : 25" required>
+            <input type="number" id="age" name="age"  required>
             
             <label for="region">Dans quelle région vivez-vous ?</label>
 <select id="region" name="region" required onchange="toggleRegionInput(this)">
@@ -197,7 +276,7 @@ window.onload = function() {
 </select>
 
             <label for="Localite">Quartier</label>
-            <input type="text" id="Localite" name="Localite" placeholder="Nagrin , Bendogo , Karpala" required>
+            <input type="text" id="Localite" name="Localite" placeholder=" Exemple : Nagrin , Bendogo , Karpala" required>
 
             <label for="sexe">Sexe :</label>
             <select id="sexe" name="sexe" required>
@@ -538,37 +617,51 @@ document.addEventListener("DOMContentLoaded", function() {
 <div class="modal hidden" id="farmsConnectModal">
     <div class="modal-content">
         <span class="close-button1" onclick="closeModal()">×</span>
-        <h2>Bienvenue sur FarmsConnect</h2>
-        <p><strong>La révolution numérique du marché avicole au Burkina Faso !</strong></p>
+        <h2>Bienvenue sur <strong>FarmsConnect</strong> 🐓🌍</h2>
         <p>
-          Que vous soyez <strong>consommateur</strong>, <strong>éleveur</strong>, ou <strong>vendeur</strong>, FarmsConnect est
-          <strong>LA solution</strong> qui réinvente le commerce des produits avicoles. Que vous ayez <strong>2 poules</strong> ou
-          <strong>200</strong>, que vous cherchiez des œufs frais ou un poulet prêt à cuire, FarmsConnect vous connecte à un réseau
-          fiable, transparent et accessible <strong>en un clic</strong>.
+          <strong>La révolution numérique du marché avicole au Burkina Faso ! 🚀</strong>
         </p>
-        <h3>Pour les consommateurs</h3>
-        <ul>
-          <li><strong>Commande en ligne facile et rapide</strong> : Achetez vos produits avicoles depuis le confort de votre maison.</li>
-          <li><strong>Traçabilité garantie</strong> : Des produits directement des éleveurs, certifiés et de qualité.</li>
-          <li><strong>Livraison sécurisée</strong> : Recevez vos commandes rapidement, prêtes à être dégustées.</li>
-        </ul>
-        <h3>Pour les éleveurs</h3>
-        <ul>
-          <li><strong>Vendez facilement et directement</strong> : Connectez-vous à un marché élargi sans intermédiaire.</li>
-          <li><strong>Fixez vos propres prix</strong> : Gardez le contrôle total sur vos revenus.</li>
-          <li><strong>Outils pour optimiser votre élevage</strong> : Profitez de conseils pratiques pour améliorer votre production.</li>
-        </ul>
-        <h3>Pour les vendeurs</h3>
-        <ul>
-          <li><strong>Produits certifiés directement par FarmsConnect</strong>.</li>
-          <li><strong>Achat simplifié</strong> : Gagnez en efficacité dans vos commandes et votre gestion de stocks.</li>
-          <li><strong>Partenariat durable</strong> : Travaillez en confiance avec un réseau fiable.</li>
-        </ul>
         <p>
-          <strong>Rejoignez la révolution FarmsConnect</strong> et découvrez comment nous transformons le secteur avicole au Burkina Faso.
+          Que vous soyez <strong>consommateur</strong> 🛒, <strong>éleveur</strong> 👩‍🌾, ou <strong>vendeur</strong> 🏪, 
+          <strong>FarmsConnect</strong> est <strong>LA solution innovante</strong> qui transforme le commerce des produits avicoles. 
+          Que vous possédiez <strong>2 poules</strong> 🐔 ou <strong>200 poules</strong> 🐔🐔🐔, que vous recherchiez de la volaille vivante ou prête à cuire, 
+          <strong>FarmsConnect</strong> vous connecte à un réseau <strong>fiable</strong>, <strong>transparent</strong>, et <strong>accessible en un clic</strong> 🖱️.
+        </p>
+        
+        <h3>Pour les consommateurs 🛒</h3>
+        <ul>
+          <li><strong>Commande en ligne facile et rapide</strong> 💻 : Achetez vos produits avicoles depuis le confort de votre maison.</li>
+          <li><strong>Traçabilité garantie</strong> ✅ : Des produits certifiés, directement issus des éleveurs.</li>
+          <li><strong>Livraison sécurisée</strong> 🚚 : Recevez vos commandes en un temps record grâce à notre service logistique fiable.</li>
+        </ul>
+        
+        <h3>Pour les éleveurs 👩‍🌾</h3>
+        <ul>
+          <li><strong>Accès direct au marché</strong> 🔗 : Vendez facilement vos produits sans intermédiaire.</li>
+          <li><strong>Fixez vos propres prix</strong> 💰 : Gardez un contrôle total sur vos revenus et optimisez vos profits.</li>
+          <li><strong>Outils de gestion et conseils pratiques</strong> 🛠️ : Améliorez votre production grâce à des recommandations adaptées.</li>
+        </ul>
+        
+        <h3>Pour les vendeurs 🏪</h3>
+        <ul>
+          <li><strong>Produits certifiés FarmsConnect</strong> 🥇 : Assurez-vous de la qualité et de la fiabilité de vos achats.</li>
+          <li><strong>Achat simplifié</strong> 🛍️ : Gagnez en efficacité dans la gestion de vos commandes et de vos stocks.</li>
+          <li><strong>Partenariats durables</strong> 🤝 : Collaborez avec un réseau de confiance pour développer votre activité.</li>
+        </ul>
+        
+        <p>
+          <strong>Rejoignez la révolution FarmsConnect</strong> 🌟 et découvrez comment nous transformons le secteur avicole au Burkina Faso. 
+          Ensemble, nous construisons un avenir plus connecté et prospère pour tous ! 🌱🐓
         </p>
     </div>
 </div>
+
+  
+  <div class="container">
+    <p id="appMessage" class="message"></p>
+    <button id="updateButton" class="update-button" style="display: none;">Télécharger une mise à jour</button>
+    <p id="errorMessage" class="error" style="display: none;"></p>
+  </div>
 
 
 
@@ -680,7 +773,7 @@ document.getElementById("signup-form").addEventListener("submit", async function
         if (response.ok) {
             hideSignupLoadingMessage();
             alert('Inscription réussie !');
-            window.location.href = 'Acceuil.html'; 
+            window.location.href = 'Location.html'; 
 
 
             document.getElementById("signup-modal").classList.remove("open");
@@ -742,46 +835,58 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     // Gestion de la connexion
     document.getElementById("login-form").addEventListener("submit", async function (event) {
-        event.preventDefault();
+    event.preventDefault();
 
-        const username = document.getElementById("login-username").value.trim();
-        const email = document.getElementById("login-email").value.trim();
-        const contact = document.getElementById("login-contact").value.trim();
-        const password = document.getElementById("login-password").value;
+    // Récupérer les valeurs des champs de formulaire
+    const username = document.getElementById("login-username").value.trim();
+    const email = document.getElementById("login-email").value.trim();
+    const contact = document.getElementById("login-contact").value.trim();
+    const password = document.getElementById("login-password").value;
 
-        if (!username || !email || !contact || !password) {
-            showAlert('Veuillez remplir tous les champs.');
-            return;
-        }
+    if (!username || !email || !contact || !password) {
+        showAlert('Veuillez remplir tous les champs.');
+        return;
+    }
 
-        try {
-            const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email, contact, password }),
-            });
+    // Afficher le message de patience
+    document.getElementById('loadingMessage').style.display = 'flex';
+
+    try {
+        const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, contact, password }),
+        });
+
+        // Attendre 3 secondes avant de masquer le message de patience
+        setTimeout(async () => {
+            // Cacher le message de patience
+            document.getElementById('loadingMessage').style.display = 'none';
 
             if (response.ok) {
-    const data = await response.json();
+                const data = await response.json();
 
-    // Stocker les informations utilisateur
-    localStorage.setItem('username', data.username);
-    localStorage.setItem('email', data.email);
-    localStorage.setItem('contact', data.contact);
+                // Stocker les informations utilisateur
+                localStorage.setItem('username', data.username);
+                localStorage.setItem('email', data.email);
+                localStorage.setItem('contact', data.contact);
 
-    showAlert('Connexion réussie !', 'success'); // Message de succès
-    setTimeout(() => {
-        window.location.href = 'Location.html'; // Redirection
-    }, 2000); // Attends 2 secondes avant la redirection
-} else {
-    const errorMessage = await response.text();
-    showAlert('Erreur : ' + errorMessage, 'error'); // Message d'erreur
-}
+                showAlert('Connexion réussie !', 'success'); // Message de succès
+                setTimeout(() => {
+                    window.location.href = 'Location.html'; // Redirection
+                }, 2000); // Attends 2 secondes avant la redirection
+            } else {
+                const errorMessage = await response.text();
+                showAlert('Erreur : ' + errorMessage, 'error'); // Message d'erreur
+            }
+        }, 3000); // Attendre 3 secondes avant de masquer le message de patience
 
-        } catch (error) {
-            showAlert('Erreur réseau : ' + error.message);
-        }
-    });
+    } catch (error) {
+        showAlert('Erreur réseau : ' + error.message);
+    }
+
+  });
+
 });
 
 
@@ -804,17 +909,13 @@ function closeAlert() {
     alertBox.classList.remove("visible");
 }
 
-
-
-document.addEventListener('deviceready', function() {
-    setTimeout(function() {
-        navigator.splashscreen.hide(); // Masque le splash screen après 4 secondes
-    }, 4000); // 4000 ms = 4 secondes
-}, false);
-
 </script>
 
-<script src="apropo.js"></script>
+
+
+
+
+<script src="index.js"></script>
 
 
 

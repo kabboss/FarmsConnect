@@ -3,121 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Demande de Localisation</title>
+  <title>FarmsConnect : Bienvenue</title>
   <link rel="icon" type="image/png" href="img/FarmsConnect.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="Location.css">
 
 </head>
 <body>
-
-  <div>
+  <header>
     <img src="img/FarmsConnect.jpg" alt="Logo FarmsConnect">
-  </div>
+  </header>
 
-  <div>
-    <h3>Pourquoi avons-nous besoin de votre localisation ?</h3>
-    <p>Nous avons besoin de connaître votre position géographique pour des raisons de livraison et de coordination de services. Cela nous permettra de vous fournir des services plus efficaces et adaptés à votre emplacement.</p>
-    <button id="acceptBtn">Accepter</button>
-    <button id="declineBtn">Refuser</button>
-  </div>
-
-  <!-- Fenêtre modale pour entrer l'email -->
-  <div id="emailModal" class="modal">
-    <div class="modal-content">
-      <h2>🚨Email Très Important🚨</h2>
-      <p>Veuillez entrer votre adresse email valide pour continuer.</p>
-      <input type="email" id="emailInput" placeholder="Votre adresse email..." required>
-      <input type="email" id="emailInputConfirm" placeholder="Confirmez votre email..." required>
-      <button onclick="submitEmail()">Valider</button>
+  <div class="welcome-message">
+    <p>
+      FarmsConnect, c'est la plateforme dédiée à l’élevage au Burkina Faso et dans la sous-région. Voici ce que vous pouvez faire :
+    </p>
+    <ul>
+      <li><i class="fas fa-egg"></i><strong>Commander des poules</strong> 🐔 : Des poules certifiées, traçables, à un prix équitable. De quoi avoir le poulailler qui vous fait rêver !</li>
+      <li><i class="fas fa-handshake"></i><strong>Vendre vos poules</strong> 💸 : Publiez vos annonces gratuitement et attirez les acheteurs du coin.</li>
+      <li><i class="fas fa-search"></i><strong>Explorer les annonces disponibles</strong> 🔍 : Trouvez facilement ce que vous cherchez, et achetez comme un pro !</li>
+      <li><i class="fas fa-book"></i><strong>Accéder à des ressources exclusives</strong> 📚 : Formation, forum… tout pour devenir un expert de l’élevage, tout en échangeant avec la communauté.</li>
+    </ul>
+    <p>
+      Avec FarmsConnect, on met <strong>la technologie au service de l’élevage</strong> pour que vous puissiez commander, acheter, vendre, et échanger en toute confiance. 😎
+    </p>
+    <h2>Alors, <strong>que souhaitez-vous faire ?</strong> 🤔</h2>
+    <div class="button-container">
+      <button id="continueBtn">Continuer 👍</button>
+      <button id="exitBtn">Refuser 👎</button>
     </div>
   </div>
-
-  <script src="cordova.js"></script>
-  <script src="js/index.js"></script>
+  
   <script>
-    // Variables pour les boutons
-    const acceptBtn = document.getElementById("acceptBtn");
-    const declineBtn = document.getElementById("declineBtn");
-
-    // Lorsque l'utilisateur accepte, on récupère la localisation et demande son email
-    acceptBtn.onclick = function() {
-      // Ouvrir la fenêtre modale pour demander l'email
-      document.getElementById("emailModal").style.display = "flex";
+    // Redirection si l'utilisateur clique sur "Continuer"
+    document.getElementById("continueBtn").onclick = function() {
+      window.location.href = 'Acceuil.html';
     };
 
-    // Lorsque l'utilisateur refuse, on affiche un message et redirige
-    declineBtn.onclick = function() {
-      alert("Vous avez refusé de partager votre localisation.");
-      window.location.href = 'Acceuil.html'; 
+    // Redirection si l'utilisateur clique sur "Refuser"
+    document.getElementById("exitBtn").onclick = function() {
+      window.location.href = 'index.html';
     };
-
-    // Fonction pour soumettre l'email
-    function submitEmail() {
-      const email = document.getElementById("emailInput").value;
-      const emailConfirm = document.getElementById("emailInputConfirm").value;
-
-      // Validation basique de l'email
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!email || !emailRegex.test(email) || email !== emailConfirm) {
-        alert("Les emails ne correspondent pas ou ne sont pas valides. Veuillez les saisir à nouveau.");
-        return;
-      }
-
-      console.log("Email saisi :", email);
-
-      // Récupérer la géolocalisation
-      navigator.geolocation.getCurrentPosition(
-        function(position) {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
-          console.log("Position récupérée : ", latitude, longitude);
-          saveLocation(email, latitude, longitude);  // Sauvegarder la localisation
-        },
-        function(error) {
-          if (error.code === error.PERMISSION_DENIED) {
-            alert("Vous avez refusé de partager votre localisation.");
-          } else {
-            alert("Erreur lors de la récupération de la position : " + error.message);
-          }
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 40000,
-          maximumAge: 0
-        }
-      );
-
-      // Fermer la fenêtre modale après soumission
-      document.getElementById("emailModal").style.display = "none";
-    }
-
-    // Fonction pour sauvegarder la localisation avec l'email
-    function saveLocation(email, latitude, longitude) {
-      fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/save-location', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          latitude: latitude,
-          longitude: longitude,
-          email: email
-        })
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Localisation enregistrée :', data);
-        alert("Votre localisation a été enregistrée avec succès !");
-        window.location.href = 'Acceuil.html';  // Redirection vers la page d'accueil après l'enregistrement
-      })
-      .catch(error => {
-        console.error('Erreur lors de l\'enregistrement :', error);
-        alert("Erreur : " + error.message);
-      });
-    }
   </script>
-
 </body>
 </html>

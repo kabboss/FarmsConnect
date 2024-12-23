@@ -18,8 +18,16 @@
         <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
         <div class="spinner"></div>
     </div>
-    <p class="loading-text">Veuillez patienter...</p> 
+    <p class="loading-text">Veuillez patienter... Si apres le chargement les annonces ne saffiche pas !!! verifier votre connexion et rafraissichez la page </p> 
 </div>
+
+
+
+
+
+
+
+
 
 
 <script>
@@ -31,7 +39,7 @@ window.onload = function() {
     // Masquer le message de chargement après 5 secondes (5000 ms)
     setTimeout(function() {
         loadingMessage.classList.add('hidden');  // Cacher le message de chargement
-    }, 10000);  // Temps en millisecondes
+    }, 15000);  // Temps en millisecondes
 };
 </script>
 
@@ -53,8 +61,10 @@ window.onload = function() {
                 <li><a href="Vente.html">Vendre</a></li>
                 <li><a href="Visiteur.html">Visiter</a></li>
                 <li><a href="Produit.html">Acheter Avec FarmsConnect</a></li>
-                <li><a href="apropos.html">A propos</a></li>
+                <li><a href="apropos.html">À propos</a></li>
                 <li><a href="contact.html">Contact</a></li>
+                <li><a href="Forum.html">Forum</a></li>
+                <li><a href="Formations.html">Vidéos Formation</a></li>
             </ul>
         </nav>
         <div class="image-container">
@@ -153,129 +163,161 @@ categoryButtons.forEach(button => {
 
 
 <script>
-    const animalsList = document.getElementById('animals-list');
-    const categoriesButtons = document.querySelectorAll('.category-button');
-    const priceButtonsSection = document.getElementById('price-buttons');
-    let selectedCategory = '';
-    let selectedPriceRange = '';
-
-    // Fonction pour afficher les annonces
-    function displayAnnonces(annonces) {
-        try {
-            if (!Array.isArray(annonces)) {
-                throw new Error('Données invalides pour les annonces');
+    document.addEventListener('DOMContentLoaded', function () {
+        const animalsList = document.getElementById('animals-list');
+        const categoriesButtons = document.querySelectorAll('.category-button');
+        const priceButtonsSection = document.getElementById('price-buttons');
+        const paginationContainer = document.getElementById('pagination');
+        let selectedCategory = '';
+        let selectedPriceRange = '';
+        const itemsPerPage = 6; // Nombre d'éléments par page
+    
+        // Fonction pour afficher les annonces
+        function displayAnnonces(annonces, page = 1) {
+            try {
+                if (!Array.isArray(annonces)) {
+                    throw new Error('Données invalides pour les annonces');
+                }
+                animalsList.innerHTML = ''; // Vider la section des annonces avant de les afficher
+    
+                const startIndex = (page - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const paginatedAnnonces = annonces.slice(startIndex, endIndex);
+    
+                paginatedAnnonces.forEach(animal => {
+                    const animalCard = document.createElement('div');
+                    animalCard.classList.add('animal-card');
+    
+                    // Sélection de l'image principale
+                    const mainImage = animal.images[0];
+    
+                    // Création du bouton "Voir plus"
+                    const seeMoreButton = animal.images.length > 1
+                        ? `<button class="see-more-button" data-animal='${JSON.stringify(animal)}'>Voir plus</button>`
+                        : '';
+    
+                    // Construction du contenu de la carte de l'animal
+                    animalCard.innerHTML = `
+                        <h3>(${animal.categorie})</h3>
+                        <p>Nombre : ${animal.nombre}</p>
+                        <p>Poids par animal : ${animal.poids || 'Non spécifié'} kg</p>
+                        <p>Prix unitaire : ${animal.prixFinal}
+                        <p>Code du vendeur : ${animal.codeVendeur}</p>
+                        <div class="images-section">
+                            <img src="${mainImage}" alt="Image de l'animal" class="main-image"/>
+                            <div class="additional-images hidden">
+                                ${animal.images
+                                    .slice(1)
+                                    .map(img => `<img src="${img}" alt="Image supplémentaire" class="additional-image" />`)
+                                    .join('')}
+                            </div>
+                            ${seeMoreButton}
+                        </div>
+                        <button class="buy-button" data-animal='${JSON.stringify(animal)}'>Acheter ce produit</button>
+                    `;
+                    animalsList.appendChild(animalCard);
+                });
+    
+                addEventListenersToButtons(); // Ajouter les gestionnaires d'événements
+            } catch (error) {
+                console.error(error.message);
             }
-        animalsList.innerHTML = '';  // Vider la section des annonces avant de les afficher
-        annonces.forEach(animal => {
-            const animalCard = document.createElement('div');
-            animalCard.classList.add('animal-card');
-            
-            // Sélection de l'image principale
-            const mainImage = animal.images[0];
-
-            // Création du bouton "Voir plus"
-            const seeMoreButton = animal.images.length > 1 ? 
-                `<button class="see-more-button" data-animal='${JSON.stringify(animal)}'>Voir plus</button>` : '';
-
-            // Construction du contenu de la carte de l'animal
-            animalCard.innerHTML = `
-                <h3>(${animal.categorie})</h3>
-                <p>Nombre : ${animal.nombre}</p>
-                <p>Poids par animal : ${animal.poids} kg</p>
-                <p>Prix unitaire : ${animal.prix*1.04 +650} FCFA</p>
-                <p>Code du vendeur : ${animal.codeVendeur}</p>
-                <div class="images-section">
-                    <img src="${mainImage}" alt="Image de l'animal" class="main-image"/>
-                    <div class="additional-images hidden">
-                        ${animal.images.slice(1).map(img => `<img src="${img}" alt="Image supplémentaire" class="additional-image" />`).join('')}
-                    </div>
-                    ${seeMoreButton}
-                </div>
-
-                <button class="buy-button" data-animal='${JSON.stringify(animal)}'>Acheter ce produit</button>
-            `;
-            animalsList.appendChild(animalCard);
-        });
-
-        document.querySelectorAll('.see-more-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const animal = JSON.parse(this.getAttribute('data-animal'));
-                const additionalImages = this.previousElementSibling; // Sélectionner la section d'images supplémentaires
-                additionalImages.classList.toggle('hidden');
-                this.textContent = additionalImages.classList.contains('hidden') ? 'Voir plus' : 'Voir moins';
+        }
+    
+        // Fonction pour gérer la pagination
+        function displayPagination(totalItems, currentPage) {
+            paginationContainer.innerHTML = ''; // Vider la pagination
+    
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.classList.add('pagination-button');
+                pageButton.textContent = i;
+                if (i === currentPage) pageButton.classList.add('active');
+    
+                pageButton.addEventListener('click', () => {
+                    displayAnnonces(filteredAnnonces, i); // Afficher les annonces pour la page sélectionnée
+                    displayPagination(totalItems, i); // Actualiser les boutons de pagination
+                });
+    
+                paginationContainer.appendChild(pageButton);
+            }
+        }
+    
+        // Gestionnaires d'événements pour les boutons
+        function addEventListenersToButtons() {
+            document.querySelectorAll('.see-more-button').forEach(button => {
+                button.addEventListener('click', function () {
+                    const additionalImages = this.previousElementSibling;
+                    additionalImages.classList.toggle('hidden');
+                    this.textContent = additionalImages.classList.contains('hidden') ? 'Voir plus' : 'Voir moins';
+                });
             });
-        });
-
-        document.querySelectorAll('.buy-button').forEach(button => {
+    
+            document.querySelectorAll('.buy-button').forEach(button => {
             button.addEventListener('click', function() {
                 const animal = JSON.parse(this.getAttribute('data-animal'));
                 handlePurchase(animal);
             });
         });
 
-    } catch (error) {
-            // Ignore l'erreur sans afficher dans la console
         }
-    }
-
-    // Récupérer les annonces depuis l'API
-    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/annonces')
-    .then(response => response.json())
-    .then(annonces => {
-        // Fonction pour appliquer le filtrage en fonction de la catégorie et du prix
-        function filterAnnonces() {
-            let filteredAnnonces = annonces;
-
-            // Filtrage par catégorie
-            if (selectedCategory) {
-                filteredAnnonces = filteredAnnonces.filter(animal => animal.categorie === selectedCategory);
-            }
-
-            // Filtrage par fourchette de prix
-            if (selectedPriceRange) {
-                filteredAnnonces = filteredAnnonces.filter(animal => {
-                    const price = animal.prix * 1.04 + 650; // Prix final avec frais
-                    if (selectedPriceRange === '0-500') return price <= 500;
-                    if (selectedPriceRange === '501-1000') return price > 500 && price <= 1000;
-                    if (selectedPriceRange === '1001-2000') return price > 1000 && price <= 2000;
-                    if (selectedPriceRange === '2001-5000') return price > 2000 && price <= 5000;
-                    if (selectedPriceRange === '5000+') return price > 5000;
-                    return false;
+    
+        // Récupérer les annonces depuis l'API
+        let filteredAnnonces = [];
+        fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/annonces')
+            .then(response => response.json())
+            .then(annonces => {
+                filteredAnnonces = annonces;
+    
+                function filterAnnonces() {
+                    let filtered = annonces;
+    
+                    // Filtrage par catégorie
+                    if (selectedCategory) {
+                        filtered = filtered.filter(animal => animal.categorie === selectedCategory);
+                    }
+    
+                    // Filtrage par fourchette de prix
+                    if (selectedPriceRange) {
+                        filtered = filtered.filter(animal => {
+                            const price = animal.prix * 0.04 + 500; // Prix final avec frais
+                            if (selectedPriceRange === '0-500') return price <= 500;
+                            if (selectedPriceRange === '501-1000') return price > 500 && price <= 1000;
+                            if (selectedPriceRange === '1001-2000') return price > 1000 && price <= 2000;
+                            if (selectedPriceRange === '2001-5000') return price > 2000 && price <= 5000;
+                            if (selectedPriceRange === '5000+') return price > 5000;
+                            return false;
+                        });
+                    }
+    
+                    filteredAnnonces = filtered; // Mettre à jour les annonces filtrées
+                    displayAnnonces(filteredAnnonces, 1); // Afficher la première page
+                    displayPagination(filtered.length, 1); // Afficher la pagination
+                }
+    
+                // Gestion des clics sur les catégories
+                categoriesButtons.forEach(button => {
+                    button.addEventListener('click', function () {
+                        selectedCategory = this.getAttribute('data-category');
+                        priceButtonsSection.classList.remove('hidden'); // Afficher les boutons de prix
+                        filterAnnonces();
+                    });
                 });
-            }
+    
+                // Gestion des clics sur les fourchettes de prix
+                priceButtonsSection.querySelectorAll('.price-button').forEach(button => {
+                    button.addEventListener('click', function () {
+                        selectedPriceRange = this.getAttribute('data-price');
+                        filterAnnonces();
+                    });
+                });
 
-            // Afficher les annonces filtrées
-            displayAnnonces(filteredAnnonces);
-            displayPagination(filteredAnnonces.length, 1);  // Afficher la pagination (première page)
-        }
-
-        // Quand l'utilisateur clique sur une catégorie
-        categoriesButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                selectedCategory = button.getAttribute('data-category');
-                priceButtonsSection.classList.remove('hidden'); // Afficher les boutons de prix
-                filterAnnonces(); // Appliquer le filtrage
-            });
-        });
-
-        // Quand l'utilisateur clique sur une fourchette de prix
-        priceButtonsSection.querySelectorAll('.price-button').forEach(button => {
-    button.addEventListener('click', function() {
-        selectedPriceRange = button.getAttribute('data-price');
-        filterAnnonces(); // Appliquer le filtrage
+            })
+            .catch(error => console.error('Erreur lors de la récupération des annonces :', error));
     });
-});
-
-});
- document.addEventListener('DOMContentLoaded', function() {
-
- });
-
-</script>
-
-
-
-
+    </script>
+    
 
 <script>
 async function fetchAnnonces(page = 1, limit = 10) {
@@ -311,178 +353,185 @@ fetchAnnonces(1, 10);
 </script>
 
 
+<script>
 
-
-
-
-
-
-
-
-
-
-
-
+    function handlePurchase(animal) {
+        const visitorInfo = {
+            username: prompt('Nom et Prénom :'),
+            contact: prompt('Entrez votre numéro de contact :'),
+            email: prompt('Votre mail valide (🚨TRES IMPORTANT ):'),
+            quantity: prompt('Combien d\'unités de ce produit souhaitez-vous acheter ?'),
+            quartier: prompt('Quel est votre Quartier ?')
     
-    <script>
-
-function handlePurchase(animal) {
-    const visitorInfo = {
-        username: prompt('Nom et Prénom :'),
-        contact: prompt('Entrez votre numéro de contact :'),
-        email: prompt('veuillez ecrire un mail valide  (🚨TRES IMPORTANT ):'),
-        quantity: prompt('Combien d\'unités de ce produit souhaitez-vous acheter ?'),
-        quartier: prompt('Quel est votre Quartier ?')
-
-    };
+        };
+        
     
+        // Détails de l'achat et de l'acheteur
+        const purchaseDetails = {
+            animalId: animal._id,  // Assurez-vous que vous avez l'ID de l'animal/produit
+            animalName: animal.categorie,
+            email: visitorInfo.email, // Email de l'acheteur
+            username: visitorInfo.username,
+            contact: visitorInfo.contact,
+            quantity: visitorInfo.quantity,
+            quartier: visitorInfo.quartier
+        };
+    
+        // Envoi de l'email immédiatement au vendeur
+        const emailContentVendeur = `
+📢 Interet pour votre annonce !
 
-    // Détails de l'achat et de l'acheteur
-    const purchaseDetails = {
-        animalId: animal._id,  // Assurez-vous que vous avez l'ID de l'animal/produit
-        animalName: animal.categorie,
-        email: visitorInfo.email, // Email de l'acheteur
-        username: visitorInfo.username,
-        contact: visitorInfo.contact,
-        quantity: visitorInfo.quantity,
-        quartier: visitorInfo.quartier
-    };
+🔹 Catégorie : ${animal.categorie}
+🔹 Quantité demandée : ${visitorInfo.quantity}
+🔹 Nom du client : ${visitorInfo.username}
+💰 Recette estimée : ${(animal.prix * visitorInfo.quantity).toLocaleString()} FCFA
 
-    // Envoi de l'email immédiatement au vendeur
-    const emailContentVendeur = ` 
-        Un client est intéressé par votre annonce :
-        Catégorie : ${animal.categorie}
-        Quantité demandée : ${visitorInfo.quantity}
-        Nom : ${visitorInfo.username}
-        \n\nFarmsConnect vous contactera bientôt pour organiser la livraison
-    `;
-    sendEmailVendeur(emailContentVendeur, animal.emailVendeur);
+📦 Prochaine étape : FarmsConnect vous contactera bientôt pour organiser la livraison. 🚚
 
-// Envoi de l'email de confirmation à l'acheteur
-const emailSubject = "Votre achat a été passé avec succès !";
-const emailContentAcheteur = `
-Merci ${visitorInfo.username}, nous avons bien reçu votre achat et voici les détails de votre commande :
-Catégorie : ${animal.categorie}
-Quantité demandée : ${visitorInfo.quantity}
-Code du vendeur : ${animal.codeVendeur}
-Votre Quartier de résidence est : ${visitorInfo.quartier}
-
-    Vous voulez nous contacter ? Cliquez sur ce lien pour être redirigé sur WhatsApp et nous laisser un message : https://wa.me/+22656663638
-
-    \n\nFarmsConnect vous contactera bientôt pour organiser la livraison.
+Merci d'utiliser FarmsConnect!
 `;
+        sendEmailVendeur(emailContentVendeur, animal.emailVendeur);
+  
+        
+        
 
-// Fonction d'envoi de l'e-mail
-function sendEmailAcheteur(subject, content, email) {
-    const emailData = {
-        subject: subject,    // Sujet de l'e-mail
-        content: content,    // Contenu de l'e-mail
-        email: email         // Destinataire
-    };
+    // Envoi de l'email de confirmation à l'acheteur
+    const emailSubject = "Votre achat a été passé avec succès !";
+    const emailContentClient = `
+Merci, ${visitorInfo.username} ! 🤝✨  
+Votre commande a été enregistrée avec succès. Voici les détails de votre achat :  
 
-    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(emailData)  // Envoi des données
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log("Email envoyé à l'acheteur.");
-        } else {
-            console.error("Erreur lors de l'envoi de l'email à l'acheteur.");
-        }
-    })
-    .catch(error => console.error("Erreur réseau lors de l'envoi de l'email à l'acheteur:", error));
-}
+🔹 Catégorie : ${animal.categorie}  
+🔹 Quantité demandée : ${visitorInfo.quantity}  
+💰 Total à payer : ${(animal.prix * visitorInfo.quantity * 1.04 + 500).toLocaleString()} FCFA  
+   _(inclut 500 FCFA de frais de traitement)_  
+🚚 Livraison : Gratuite  
 
-// Envoi de l'e-mail
-sendEmailAcheteur(emailSubject, emailContentAcheteur, visitorInfo.email);
+🆔 Code du vendeur : ${animal.codeVendeur}  
+🏡 Quartier de résidence : ${visitorInfo.quartier}  
 
+📞 Vous souhaitez nous contacter ?  
+👉 [Cliquez ici pour nous écrire sur WhatsApp](https://wa.me/+22656663638)  
 
+📦 Prochaine étape :  
+FarmsConnect vous contactera bientôt pour organiser la livraison. 🚚💨  
 
-
-    // Envoi de l'email à FarmsConnect avec les détails de l'achat
+✨ Merci de faire confiance à FarmsConnect, votre partenaire de choix !!  
+`;
+    
+    // Fonction d'envoi de l'e-mail
+    function sendEmailAcheteur(subject, content, email) {
+        const emailData = {
+            subject: subject,    // Sujet de l'e-mail
+            content: content,    // Contenu de l'e-mail
+            email: visitorInfo.email         // Destinataire
+        };
+    
+        fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(emailData)  // Envoi des données
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log("Email envoyé à l'acheteur.");
+            } else {
+                console.error("Erreur lors de l'envoi de l'email à l'acheteur.");
+            }
+        })
+        .catch(error => console.error("Erreur réseau lors de l'envoi de l'email à l'acheteur:", error));
+    }
+    
+    // Envoi de l'e-mail
+    sendEmailAcheteur(emailSubject, emailContentClient, visitorInfo.email);
+    
+    
+    
+    
     const emailContentFarmsConnect = `
-        Détails de l'achat :
-        Catégorie : ${animal.categorie}
-        Prix unitaire : ${animal.prix} FCFA
-        Code du vendeur : ${animal.codeVendeur}
-        Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? `(secondaire : ${animal.contactSecondaire})` : ''}
-        
-        Informations sur le visiteur :
-        Nom d'utilisateur : ${visitorInfo.username}
-        Contact : ${visitorInfo.contact}
-        E-mail : ${visitorInfo.email}
-        Nombre souhaité : ${visitorInfo.quantity}
-        Quartier de l'acheteur : ${visitorInfo.quartier}
-    `;
-    sendEmailFarmsConnect(emailContentFarmsConnect);
+📋 Détails de l'achat :  
+🔹 Catégorie : ${animal.categorie}  
+💰 Prix unitaire : ${animal.prix} FCFA  
+🆔 Code du vendeur : ${animal.codeVendeur}  
+📞 Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? `(Secondaire : ${animal.contactSecondaire})` : ''}  
 
-    // Envoyer au backend pour planifier l'envoi du mail au client dans 24h
-    scheduleClientEmail(purchaseDetails);
-    showAlert("Votre achat a été confirmé ! Un email contenant les details de votre/vos achat (s) vous a été envoyé.");
-}
+👤 Informations sur l'acheteur :  
+🔹 Nom d'utilisateur : ${visitorInfo.username}  
+📱 Contact : ${visitorInfo.contact}  
+✉️ E-mail : ${visitorInfo.email}  
+📦 Nombre souhaité : ${visitorInfo.quantity}  
+🏡 Quartier : ${visitorInfo.quartier}  
 
-function sendEmailVendeur(content, vendeurEmail) {
-    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content, email: vendeurEmail })
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log("Email envoyé au vendeur.");
-        } else {
-            console.error("Erreur lors de l'envoi de l'email au vendeur.");
-        }
-    })
-    .catch(error => console.error("Erreur réseau lors de l'envoi de l'email au vendeur:", error));
-}
+💵 Total à payer : ${(animal.prix * visitorInfo.quantity * 1.04 + 500)} FCFA
 
+---
 
-
-
-
-
-// Nouvelle fonction pour envoyer l'email à FarmsConnect
-function sendEmailFarmsConnect(content) {
-    const farmsConnectEmail = 'kaboreabwa2020@gmail.com';  // L'adresse email de FarmsConnect
-
-    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content, email: farmsConnectEmail })
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log("Email envoyé à FarmsConnect.");
-        } else {
-            console.error("Erreur lors de l'envoi de l'email à FarmsConnect.");
-        }
-    })
-    .catch(error => console.error("Erreur réseau lors de l'envoi de l'email à FarmsConnect:", error));
-}
-
-function scheduleClientEmail(purchaseDetails) {
-    // Planification de l'email 24h après l'achat (le backend s'occupera de l'envoi différé)
-    fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/schedule-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ purchaseDetails, delay: 2 })
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log("Email planifié pour le client dans 24h.");
-        } else {
-            console.error("Erreur lors de la planification de l'email.");
-        }
-    })
-    .catch(error => console.error('Erreur lors de la planification d\'email :', error));
-}
-
-
-    </script>
-        
+🌐 Veuillez traitez la Commande
+`;
+        sendEmailFarmsConnect(emailContentFarmsConnect);
+    
+        // Envoyer au backend pour planifier l'envoi du mail au client dans 24h
+        scheduleClientEmail(purchaseDetails);
+        showAlert("Votre achat a été confirmé ! Un email contenant les details de votre/vos achat (s) vous a été envoyé.");
+    }
+    
+    function sendEmailVendeur(content, vendeurEmail) {
+        fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content, email: vendeurEmail })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log("Email envoyé au vendeur.");
+            } else {
+                console.error("Erreur lors de l'envoi de l'email au vendeur.");
+            }
+        })
+        .catch(error => console.error("Erreur réseau lors de l'envoi de l'email au vendeur:", error));
+    }
+    
+    
+    // Nouvelle fonction pour envoyer l'email à FarmsConnect
+    function sendEmailFarmsConnect(content) {
+        const farmsConnectEmail = 'kaboreabwa2020@gmail.com';  // L'adresse email de FarmsConnect
+    
+        fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content, email: farmsConnectEmail })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log("Email envoyé à FarmsConnect.");
+            } else {
+                console.error("Erreur lors de l'envoi de l'email à FarmsConnect.");
+            }
+        })
+        .catch(error => console.error("Erreur réseau lors de l'envoi de l'email à FarmsConnect:", error));
+    }
+    
+    function scheduleClientEmail(purchaseDetails) {
+        // Planification de l'email 24h après l'achat (le backend s'occupera de l'envoi différé)
+        fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/schedule-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ purchaseDetails, delay: 2 })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log("Email planifié pour le client dans 24h.");
+            } else {
+                console.error("Erreur lors de la planification de l'email.");
+            }
+        })
+        .catch(error => console.error('Erreur lors de la planification d\'email :', error));
+    }
+    
+    
+        </script>
+                
+            
 
     <script src="script_Visiter.js"></script>
 

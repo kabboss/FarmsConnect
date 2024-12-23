@@ -371,6 +371,7 @@ button[type="submit"]:hover {
 
 
 
+
 /* Animation de pulsation */
 @keyframes pulse {
     0% {
@@ -406,8 +407,6 @@ button[type="submit"]:hover {
 .menu-icon:hover span {
     background-color: #3498db; /* Change la couleur au survol */
 }
-
-
 
 
 

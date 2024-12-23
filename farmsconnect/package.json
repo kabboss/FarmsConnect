@@ -24,9 +24,7 @@
     ],
     "plugins": {
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-geolocation": {
-        "GPS_REQUIRED": "true"
-      },
+      "cordova-plugin-geolocation": {},
       "cordova-plugin-android-permissions": {}
     }
   }

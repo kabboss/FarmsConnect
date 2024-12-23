@@ -324,6 +324,11 @@ form button:hover {
     visibility: visible;
 }
 
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
 .alert-content {
     display: flex;
     flex-direction: column;
@@ -348,7 +353,6 @@ form button:hover {
 
 
 
-/* Style du bouton d'ouverture */
 .open-modal-button {
     padding: 12px 30px; /* Ajout d'un espacement légèrement plus généreux */
     font-size: 18px; /* Texte légèrement plus grand pour l'accentuer */
@@ -380,50 +384,98 @@ form button:hover {
 
 
 
+/* Style de la modale */
 .modal {
-    display: none; /* Cache la modale par défaut */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* S'assurer que la modale est au-dessus du contenu */
+    z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s ease;
 }
 
+/* Apparition de la modale */
+.modal.visible {
+    visibility: visible;
+    opacity: 1;
+    display: flex; /* Affiche la modale quand elle devient visible */
+}
+
+/* Contenu de la modale */
 .modal-content {
-    background-color: #fff;
+    background: #ffffff;
     padding: 20px;
-    border-radius: 10px;
-    width: 88%;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     max-width: 600px;
-    max-height: 100%; /* Limite la hauteur de la modale */
-    overflow-y: auto; /* Permet le défilement vertical si le contenu dépasse */
     text-align: left;
-    animation: fadeIn 0.3s ease-in-out; /* Animation d'ouverture */
-    position: relative; /* Nécessaire pour le bouton de fermeture */
+    max-height: 90vh; /* Hauteur maximale de la modale pour éviter les débordements */
+    overflow-y: auto; /* Activation du défilement si nécessaire */
 }
 
+/* Style des titres dans la modale */
+.modal-content h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+/* Style du texte dans la modale */
+.modal-content p {
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Style des listes ordonnées dans la modale */
+.modal-content ol {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+/* Signature dans la modale */
+.modal-content .signature {
+    text-align: right;
+    font-style: italic;
+    color: #777;
+}
+
+/* Bouton de fermeture de la modale */
 .close-button {
-    font-size: 2rem;
-    color: #000;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
     cursor: pointer;
-    position: absolute;
-    top: 10px;
-    right: 20px;
 }
 
+.close-button:hover {
+    color: #ff0000;
+}
+
+/* Responsivité pour les petits écrans */
+@media (max-width: 600px) {
+    .modal-content {
+        padding: 10px;
+        width: 90%; /* Ajuste la largeur de la modale pour les petits écrans */
+    }
+}
+
+
+
+
+
+
+/* Masquer les images supplémentaires par défaut */
 .hidden {
     display: none;
 }
-
-@keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-}
-
 
 
 
@@ -510,20 +562,32 @@ form button:hover {
     }
 }
 
-/* Style de la boîte d'alerte */
 .alert {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    width: 400px;
+    width: 90%;
+    max-width: 400px;
     padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
     text-align: center;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    z-index: 10000;
-    animation: slideIn 0.5s ease-in-out;
+    background-color: #ffffff;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.alert.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.hidden {
+    opacity: 0;
+    visibility: hidden;
 }
 
 .alert-content {
@@ -600,21 +664,21 @@ form button:hover {
 
 /* Contenu de la modale */
 .modal-content {
-    background: linear-gradient(135deg, #2f18fd 0%, #3260f7 100%);
+    background: linear-gradient(135deg, #0dfdb5 0%, #1ef7a3 100%);
     border-radius: 12px;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
     padding: 25px;
     text-align: left;
-    width: 80%;
+    width: 90%;
     max-width: 600px;
     animation: slideIn 0.8s ease-out;
 }
 
 /* Texte mis en évidence */
 .highlight {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: bold;
-    color: #ffffff;
+    color: #0c0c0a;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     display: block;
     animation: textGlow 2s infinite;
@@ -705,3 +769,46 @@ form button:hover {
         transform: translateY(-10px);
     }
 }
+
+
+
+
+/* Animation de pulsation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Appliquer l'animation de pulsation */
+.menu-icon {
+    display: inline-block;
+    cursor: pointer;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.menu-icon span {
+    display: block;
+    width: 30px;
+    height: 5px;
+    margin: 6px 0;
+    background-color: #0bdb15;
+    transition: all 0.5s ease;
+}
+
+.menu-icon:hover span {
+    background-color: #3498db; /* Change la couleur au survol */
+}
+
+
+
+

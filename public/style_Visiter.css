@@ -696,6 +696,9 @@ body {
     align-items: center;
     flex-direction: column; /* Empiler le spinner et le texte verticalement */
     animation: fadeIn 1s ease-out; /* Apparition fluide */
+    position: fixed;
+    top: 50%;
+    left: 40%;
 }
 
 /* Animation du spinner */
@@ -846,6 +849,41 @@ body {
 
 
 
+/* Animation de pulsation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Appliquer l'animation de pulsation */
+.menu-icon {
+    display: inline-block;
+    cursor: pointer;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.menu-icon span {
+    display: block;
+    width: 30px;
+    height: 5px;
+    margin: 6px 0;
+    background-color: #0bdb15;
+    transition: all 0.5s ease;
+}
+
+.menu-icon:hover span {
+    background-color: #3498db; /* Change la couleur au survol */
+}
 
 
 

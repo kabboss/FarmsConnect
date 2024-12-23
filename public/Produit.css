@@ -251,14 +251,15 @@ header {
 /* Liste des catégories */
 .category-list {
     display: flex;
-    justify-content: center; /* Centre horizontalement */
-    gap: 15px; /* Espacement entre les boutons */
+    justify-content: left; /* Centre horizontalement */
+    flex-wrap: wrap;
+    gap: 30px; /* Espacement entre les boutons */
 }
 
 /* Style des boutons de catégorie */
 .category-list button {
-    background-color: #4a90e2; /* Couleur de fond bleu clair */
-    color: white; /* Couleur du texte */
+    background-color: #78f38d; /* Couleur de fond bleu clair */
+    color: rgb(22, 17, 17); /* Couleur du texte */
     border: none; /* Pas de bordure */
     padding: 16px 20px; /* Espacement ajusté */
     border-radius: 25px; /* Bords arrondis prononcés */
@@ -526,40 +527,60 @@ select:focus {
     margin: 0 auto; /* Centre le paragraphe */
 }
 
-/* Section Témoignages */
-.testimonials {
-    background-color: #fff;
-    color: #333;
-    padding: 30px; /* Espacement réduit */
-    text-align: center;
-}
-
-.testimonials h2 {
-    font-size: 28px; /* Taille ajustée */
-    margin-bottom: 20px; /* Marge ajustée */
-}
-
-.testimonial {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 15px; /* Espacement réduit */
-    margin: 15px auto; /* Marge réduite */
-    max-width: 90%; /* Limite de largeur */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.testimonial p {
-    font-size: 14px; /* Taille ajustée */
-    font-style: italic;
-    margin-bottom: 10px;
-}
-
-.testimonial cite {
-    font-size: 12px; /* Taille réduite */
-    color: #888;
-}
-
+            .testimonials {
+                max-width: 1200px; /* Largeur maximale de la section */
+                margin: 0 auto; /* Centrer la section */
+                padding: 20px;
+                font-family: 'Arial', sans-serif;
+                background-color: #f9f9f9;
+                border-radius: 10px;
+            }
+            
+            .testimonial {
+                background-color: #ffffff;
+                margin-bottom: 20px;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+        
+            .testimonial p {
+                line-height: 1.6;
+                font-size: 1.1rem;
+            }
+        
+            .testimonial strong {
+                color: #2c3e50;
+            }
+        
+            .testimonial em {
+                font-style: italic;
+                color: #7f8c8d;
+            }
+        
+            .testimonial p:first-child {
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #2980b9;
+            }
+        
+            .testimonial p:last-child {
+                font-size: 1rem;
+                font-weight: normal;
+                color: #34495e;
+            }
+        
+            /* Ajouter un peu de style au lien de recommandation */
+            .testimonials p:last-child {
+                font-size: 1.2rem;
+                text-align: center;
+                margin-top: 30px;
+                color: #e74c3c;
+            }
+        
+            .testimonials p:last-child strong {
+                font-weight: bold;
+            }
 /* Style du footer */
 footer {
     background-color: #2e8b57; /* Vert foncé */
@@ -874,8 +895,8 @@ footer p {
 /* Style de la modale */
 .modal {
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 5%;
+    left: 3%;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
@@ -891,13 +912,14 @@ footer p {
 /* Contenu de la modale */
 .modal-content {
     background: #ffffff;
-    padding: 20px;
+    padding: 40px;
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
+    max-width: 800px;
     text-align: left;
-    max-height: 90vh; /* Hauteur maximale pour éviter que le contenu dépasse */
+    max-height: 100vh; /* Hauteur maximale pour éviter que le contenu dépasse */
     overflow-y: auto; /* Activer le défilement si le contenu dépasse la hauteur */
+    left: 50%;
 }
 
 /* Style pour les titres dans la modale */
@@ -949,8 +971,11 @@ footer p {
 @media (max-width: 600px) {
     .modal-content {
         padding: 10px;
-        width: 90%; /* Réduire la largeur pour les petits écrans */
+        width: 95%; /* Réduire la largeur pour les petits écrans */
+        max-height: 100vh; /* Hauteur maximale pour éviter que le contenu dépasse */
+
     }
+    
 }
 
 
@@ -972,3 +997,314 @@ footer p {
         opacity: 1;
     }
 }
+
+
+
+
+
+
+/* Animation de pulsation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Appliquer l'animation de pulsation */
+.menu-icon {
+    display: inline-block;
+    cursor: pointer;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.menu-icon span {
+    display: block;
+    width: 30px;
+    height: 5px;
+    margin: 6px 0;
+    background-color: #0bdb15;
+    transition: all 0.5s ease;
+}
+
+.menu-icon:hover span {
+    background-color: #3498db; /* Change la couleur au survol */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.remise-message {
+    color: #fff;
+    background-color: #615512; /* Rouge vif */
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+@keyframes clignoter {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+
+
+
+/* Style du conteneur du champ de saisie */
+#abattage-container {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#abattage-container label {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+#abattage-container input {
+    padding: 10px;
+    font-size: 16px;
+    width: 200px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+}
+
+#abattage-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#confirm-abattage {
+    background-color: #28a745;
+    color: white;
+}
+
+#cancel-abattage {
+    background-color: #dc3545;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+
+
+/* Style du message de patience */
+.loading-message {
+    display: none; /* Initialement caché */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    background-color: rgba(0, 0, 0, 0.8); /* Fond semi-transparent */
+    color: white;
+    font-size: 20px;
+    border-radius: 15px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 0.8s forwards, bounceIn 1s forwards;
+}
+
+/* Animation de l'apparition */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Animation du rebond de l'élément */
+@keyframes bounceIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+    }
+    60% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Le spinner qui tourne */
+.spinner {
+    width: 50px;  /* Taille du spinner */
+    height: 50px;
+    border: 6px solid #f3f3f3; /* Couleur de fond du spinner */
+    border-top: 6px solid #4CAF50; /* Couleur de la partie qui tourne */
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite; /* Animation de rotation du spinner */
+    margin-bottom: 15px; /* Espace entre le spinner et le texte */
+}
+
+/* Animation de rotation du spinner */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Style du texte */
+#loadingText {
+    font-size: 22px;
+    font-weight: bold;
+    color: #f2f2f2; /* Couleur claire pour le texte */
+    animation: textFadeIn 1.5s ease-in-out; /* Animation de fondu du texte */
+}
+
+/* Animation de fondu du texte */
+@keyframes textFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+
+
+
+
+/* Cacher initialement l'élément */
+.hidden1 {
+    display: none;
+  }
+  
+  /* Style du conteneur de chargement avec effet de pulsation infini */
+  .spinner-container1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.85), rgba(50, 50, 50, 0.8));
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5), inset 0 3px 8px rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 30px 60px;
+    width: 350px; /* Légère augmentation de la largeur du conteneur */
+    border-radius: 20px; /* Plus d'arrondi pour un effet plus doux */
+    z-index: 1000;
+    text-align: center;
+    box-sizing: border-box;
+    animation: pulseContainer 2s ease-in-out infinite; /* Animation de pulsation */
+  }
+  
+  /* Animation de pulsation infinie du conteneur */
+  @keyframes pulseContainer {
+    0% {
+      transform: translate(-50%, -50%) scale(1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5), inset 0 3px 8px rgba(255, 255, 255, 0.1);
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.05); /* Effet de zoom */
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), inset 0 5px 12px rgba(255, 255, 255, 0.2); /* Effet de lumière accrue */
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5), inset 0 3px 8px rgba(255, 255, 255, 0.1);
+    }
+  }
+  
+  /* Spinner stylisé */
+  .spinner1 {
+    width: 60px;
+    height: 60px;
+    border: 6px solid rgba(255, 255, 255, 0.3);
+    border-top: 6px solid #4caf50; /* Couleur personnalisée pour le spinner */
+    border-radius: 50%;
+    animation: spin1 1.2s cubic-bezier(0.5, 0.1, 0.25, 1) infinite;
+    margin-bottom: 16px; /* Espacement plus important entre le spinner et le texte */
+  }
+  
+  /* Animation fluide pour le spinner */
+  @keyframes spin1 {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Image dans le conteneur (si nécessaire) */
+  .spinner-image1 {
+    width: 120px;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  /* Texte stylisé sous le spinner */
+  .loading-text1 {
+    font-size: 1.4em;
+    font-family: "Arial", sans-serif;
+    color: #fa0505;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+    margin-top: 15px;
+    line-height: 1.5;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  /* Animation pour le texte */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  

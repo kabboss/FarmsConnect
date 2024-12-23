@@ -13,12 +13,6 @@
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
 
-<feature name="Geolocation">
-    <param name="android-package" value="android.location.Location"/>
-</feature>
-
-
-<preference name="GeolocationEnabled" value="true" />
 <preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/splash.png" />
 <preference name="AndroidWindowSplashScreenDuration" value="5000" />
 <preference name="AndroidWindowSplashScreenBackgroundColor" value="#d0e2f7" />
@@ -33,5 +27,10 @@
         <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
         <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
         <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
+
+    <feature name="Geolocation">
+        <param name="android-package" value="android.location.Location"/>
+    </feature>
+    <preference name="GeolocationEnabled" value="true" />
     </platform>
 </widget>

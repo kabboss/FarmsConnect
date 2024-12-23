@@ -27,9 +27,11 @@
                 <li><a href="Vente.html">Vendre</a></li>
                 <li><a href="Visiteur.html">Visiter</a></li>
                 <li><a href="Produit.html">Acheter Avec FarmsConnect</a></li>
-                <li><a href="Visiteur.html">A propos</a></li>
+                <li><a href="apropos.html">À propos</a></li>
                 <li><a href="contact.html">Contact</a></li>
-            </ul>
+                <li><a href="Forum.html">Forum</a></li>
+                <li><a href="Formations.html">Vidéos Formation</a></li>
+                </ul>
         </nav>
         <div class="image-container">
             <img src="img/FarmsConnect.jpg" alt="Farms Connect" class="header-image">
@@ -38,88 +40,57 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- Spinner d'attente sophistiqué -->
 <div class="spinner hidden" id="loadingSpinner">
     <div class="spinner-content">
         <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
-        <h1 class="spinner-title">SUCCSES ✅</h1>
+        <h1 class="spinner-title">Chargement en cours.....</h1>
         <div class="loader-line-container">
             <div class="loader-line"></div>
         </div>
     </div>
 </div>
 
-<!-- Boîte d'alerte personnalisée -->
-<div id="customAlert" class="alert hidden">
-    <div class="alert-content">
-        <h1 id="alertMessage">Votre annonce a été ajoutée avec succès !</h1>
-        <button onclick="closeAlert()">OK</button>
-    </div>
-</div>
 
 
 
 
-
-
-
-<!-- Fenêtre modale -->
-<div id="photoReminderModal" class="modal-container">
-    <div class="modal-content">
-        <p>
-            <span class="highlight">N'oubliez pas de prendre les photos de vos produits<strong class="large-icon">📸</strong> avant de commencer à remplir le formulaire!</span>
-        </p>
-        <button class="btn-dismiss" onclick="closeModal()">J'ai compris👍 </button>
-    </div>
-</div>
 
 
 
     <section class="form-section">
         <form id="vente-form">
-            <label for="categorie">Catégorie :</label>
+            <span class="highlight">N'oubliez pas de prendre les photos de vos produits<strong class="large-icon">📸</strong> avant de commencer à remplir le formulaire!</span>
+<br>
+            <label for="categorie">Catégorie* :</label>
             <select id="categorie" name="categorie">
                 <option value="poulet-local">Poulet local</option>
                 <option value="poulet-chair">Poulet de chair</option>
                 <option value="poulet-ameliorer">Poulet Amélioré</option>
                 <option value="poule-pondeuse">Poule Pondeuse</option>
-            <div class="invalid-feedback">Veuillez choisir une catégorie.</div>
-
+                <div class="invalid-feedback">Veuillez choisir une catégorie.</div>
             </select>
     
-            <label for="nombre">Nombre :</label>
+            <label for="nombre">Nombre* :</label>
             <input type="number" id="nombre" name="nombre" min="1" required>
 
-            <label for="poids">Poids par animal (en kg) Pas obligatoire  :</label>
+            <label for="poids"> Poids approximatif par animal (en kg) <span style="font-style: italic; color: #888;">(optionnel)</span>:</label>
             <input type="number" id="poids" name="poids" step="0.1">
 
-            <label for="prix">Prix unitaire (en FCFA) :</label>
+            <label for="prix">Prix unitaire (en FCFA)* :</label>
             <input type="number" id="prix" name="prix" required>
 
-            <label for="images">Ajouter des images de vos/votre produit (s)  (max 10) :</label>
-            <input type="file" id="images" name="images" accept="image/*" multiple>
+            <label for="images">Ajouter une ou des images de vos/votre produit (s)  (max 10)* :</label>
+            <input type="file" id="images" name="images" required accept="image/*" multiple>
 
-            <label for="contact-principal">Contact principal :</label>
+            <label for="contact-principal">Contact principal* :</label>
             <input type="tel" id="contact-principal" name="contact-principal" required placeholder="Ex: +22670010101">
     
-            <label for="contact-secondaire">Contact secondaire (optionnel) :</label>
+            <label for="contact-secondaire">Contact secondaire :</label>
             <input type="tel" id="contact-secondaire" name="contact-secondaire" placeholder="Ex: +22670010101">
     
-            <label for="email-vendeur">E-mail (optionnel) :</label>
-            <input type="email" id="email-vendeur" name="email-vendeur" placeholder="Ex: vendeur@example.com">
+            <label for="email-vendeur">E-mail* :</label>
+            <input type="email" id="email-vendeur" name="email-vendeur" required placeholder="Ex: vendeur@example.com">
     
             <button class="open-modal-button">Note Importante aux Vendeurs</button>
 <!-- Fenêtre modale -->
@@ -134,7 +105,7 @@
         <ol>
             <li>
                 <strong>Notification lors d'une commande</strong><br>
-                Lorsqu’un client clique sur votre annonce pour acheter un produit, vous recevrez une notification via votre compte vendeur. Cette notification vous informera qu’une commande est en cours de traitement par FarmsConnect.
+                Lorsqu’un client clique sur votre annonce pour acheter un produit, vous recevrez une notification sur votre boite mail . Cette notification vous informera qu’une commande est en cours de traitement par FarmsConnect.
             </li>
             <li>
                 <strong>Certification des produits</strong><br>
@@ -150,7 +121,7 @@
             </li>
             <li>
                 <strong>Frais de Livraison</strong><br>
-                Des frais de livraison de <strong>650 FCFA</strong> seront appliqués à chaque commande, à moins que le client ne choisisse l'option de retrait en personne . Ces frais sont fixés par FarmsConnect et sont appliqués indépendamment du prix de l'animal.
+                Des frais de livraison de <strong>500 FCFA</stronsg> seront appliqués à chaque commande, à moins que le client ne choisisse l'option de retrait en personne . Ces frais sont fixés par FarmsConnect et sont appliqués indépendamment du prix de l'animal.
             </li>
         </ol>
         <p>
@@ -163,107 +134,92 @@
     
 
 
-<script>
-    // Sélectionner le bouton d'ouverture, la modale et le bouton de fermeture
-const openModalButton = document.querySelector('.open-modal-button');
-const modal = document.getElementById('modal');
-const closeButton = document.querySelector('.close-button');
+    <script>
+        // Gestion de la modale
+        const openModalButton = document.querySelector('.open-modal-button');
+        const modal = document.getElementById('modal');
+        const closeButton = document.querySelector('.close-button');
 
-// Lorsque le bouton "Note Importante aux Vendeurs" est cliqué
-openModalButton.addEventListener('click', () => {
-    modal.style.display = 'flex'; // Afficher la modale
-});
+        // Afficher la modale
+        openModalButton?.addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
 
-// Lorsque le bouton de fermeture est cliqué
-closeButton.addEventListener('click', () => {
-    modal.style.display = 'none'; // Cacher la modale
-});
+        // Fermer la modale
+        closeButton?.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
 
-// Fermer la modale si l'utilisateur clique en dehors de la fenêtre modale
-window.addEventListener('click', (event) => {
-    if (event.target === modal) {
-        modal.style.display = 'none'; // Cacher la modale
-    }
-});
+        // Clic en dehors de la modale
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
 
-</script>
+        // Gestion des interactions de formulaire
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("vente-form");
+            const spinner = document.getElementById("loadingSpinner");
+            const alertBox = document.getElementById("customAlert");
+            const alertMessage = document.getElementById("alertMessage");
 
+            if (!alertBox) console.error("L'alerte 'customAlert' est introuvable !");
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("vente-form");
-    const spinner = document.getElementById("loadingSpinner");
-    const alertBox = document.getElementById("customAlert");
-    const alertMessage = document.getElementById("alertMessage");
+            // Afficher le spinner
+            function showSpinner() {
+                spinner.classList.remove("hidden");
+            }
 
-    // Fonction pour afficher le spinner
-    function showSpinner() {
-        spinner.classList.remove("hidden");
-    }
+            // Masquer le spinner
+            function hideSpinner() {
+                spinner.classList.add("hidden");
+            }
 
-    // Fonction pour masquer le spinner
-    function hideSpinner() {
-        spinner.classList.add("hidden");
-    }
+            // Afficher une alerte
+            function showAlert(message) {
+                alertMessage.textContent = message;
+                alertBox.classList.remove("hidden");
+                alertBox.classList.add("visible");
+            }
 
-    // Fonction pour afficher l'alerte
-    function showAlert(message) {
-        alertMessage.textContent = message;
-        alertBox.classList.remove("hidden");
-    }
+            // Fermer une alerte
+            window.closeAlert = function () {
+                alertBox.classList.add("hidden");
+                alertBox.classList.remove("visible");
+            };
 
-    // Fonction pour fermer l'alerte
-    window.closeAlert = function () {
-        alertBox.classList.add("hidden");
-    };
+            // Gestionnaire d'événement pour le formulaire
+            form.addEventListener("submit", async function (event) {
+                event.preventDefault(); // Empêche l'envoi par défaut du formulaire
 
-    // Gestionnaire d'événement pour le formulaire
-    form.addEventListener("submit", function (event) {
-        event.preventDefault(); // Empêche l'envoi par défaut du formulaire
-        showSpinner(); // Affiche le spinner
+                const emailVendeur = document.getElementById('email-vendeur').value;
+                const contactPrincipal = document.getElementById('contact-principal').value;
 
-        // Simule un délai pour traiter les données
-        setTimeout(function () {
-            hideSpinner(); // Masque le spinner
+                showSpinner(); // Affiche le spinner
 
-            // Logique conditionnelle pour afficher un message d'alerte
-            showAlert("Votre annonce a été ajoutée avec succès !");
-        }, 3000); // Délai de 3 secondes
-    });
-});
+                try {
+                    // Vérification des annonces existantes
+                    const response = await fetch(`https://farmsconnect-b084ddb02391.herokuapp.com/api/annonces/count?vendeur=${emailVendeur}&contact=${contactPrincipal}`);
+                    const data = await response.json();
 
-</script>
+                    if (data.annoncesCount >= 3) {
+                        hideSpinner();
+                        showAlert("Vous ne pouvez publier que 3 annonces au maximum.");
+                        return;
+                    }
 
-
-
-
-<script>
-    document.getElementById('vente-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const emailVendeur = document.getElementById('email-vendeur').value;
-    const contactPrincipal = document.getElementById('contact-principal').value;
-
-    try {
-        // Envoyer une requête au serveur pour vérifier le nombre d'annonces
-        const response = await fetch(`https://farmsconnect-b084ddb02391.herokuapp.com/api/annonces/count?vendeur=${emailVendeur}&contact=${contactPrincipal}`);
-        const data = await response.json();
-
-        if (data.annoncesCount >= 3) {
-            alert("Vous ne pouvez publier que 3 annonces au maximum.");
-            return;
-        }
-
-        // Continuer avec la soumission si le nombre d'annonces est valide
-        this.submit();
-    } catch (error) {
-        console.error('Erreur lors de la vérification des annonces:', error);
-        alert("Une erreur est survenue. Veuillez réessayer.");
-    }
-});
-
-</script>
-
+                    // Si tout est correct
+                    hideSpinner();
+                    showAlert("Votre annonce a été ajoutée avec succès !");
+                } catch (error) {
+                    console.error("Erreur :", error);
+                    hideSpinner();
+                    showAlert("Une erreur est survenue. Veuillez réessayer.");
+                }
+            });
+        });
+    </script>
 
 
 

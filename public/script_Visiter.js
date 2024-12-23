@@ -17,6 +17,7 @@ function closeAlert() {
 
 
 
+
 // Sélectionne les éléments
 const modalVisitor = document.getElementById('modal-visitor');
 const openModalButtonVisitor = document.querySelector('.open-modal-button');
