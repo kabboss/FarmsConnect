@@ -1103,27 +1103,42 @@ console.log('Order Data:', orderDetails);
 
 
 
- // Étape 1 : Demander la localisation automatiquement
- demanderLocalisation();
+// Étape 1 : Demander la localisation automatiquement
+demanderLocalisation();
 
 // Fonction pour demander la localisation
 function demanderLocalisation() {
+    // Vérifier si la géolocalisation est supportée
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
+        // Demander la permission pour accéder à la localisation
+        cordova.plugins.permissions.requestPermission(
+            cordova.plugins.permissions.ACCESS_FINE_LOCATION,
+            function(status) {
+                if (status.hasPermission) {
+                    // Si la permission est accordée, obtenir la géolocalisation
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const latitude = position.coords.latitude;
+                            const longitude = position.coords.longitude;
 
-                // Ajouter la localisation à `orderDetails`
-                orderDetails.location = { latitude, longitude };
-                console.log("Localisation obtenue :", orderDetails.location);
+                            // Ajouter la localisation à `orderDetails`
+                            orderDetails.location = { latitude, longitude };
+                            console.log("Localisation obtenue :", orderDetails.location);
 
-                // Envoyer les détails de commande
-                envoyerDetailsCommande();
+                            // Envoyer les détails de commande
+                            envoyerDetailsCommande();
+                        },
+                        (error) => {
+                            alert("Impossible d'accéder à la localisation. Veuillez activer la localisation pour continuer.");
+                            console.error("Erreur de localisation :", error);
+                        }
+                    );
+                } else {
+                    alert("Permission de localisation refusée. Vous devez activer la permission.");
+                }
             },
-            (error) => {
-                alert("Impossible d'accéder à la localisation. Veuillez activer la localisation pour continuer.");
-                console.error("Erreur de localisation :", error);
+            function() {
+                alert("Erreur lors de la demande de permission.");
             }
         );
     } else {
@@ -1179,7 +1194,6 @@ function envoyerDetailsCommande() {
         });
 }
 }
-
 
 function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

@@ -232,7 +232,8 @@ Le prix du produit peut augmenter en fonction du poids choisi. Chaque kilogramme
 🔪 Type d'abattage : ${typeAbattage}
 🐔🔪 Quantité à abattre : ${NomAbattre}
 🏡 Quartier de Residence : ${Residence}
-📍  Localisation du client : ${location}
+📍  Localisation du client : Latitude: ${location.latitude}, Longitude: ${location.longitude}
+
 
 ⏳ Action requise : Veuillez traiter cette commande dans les meilleurs délais. ⏱️            `
         };
