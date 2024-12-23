@@ -15,6 +15,23 @@ body {
     background-color: #bee4fd;
 }
 
+/* Pseudo-élément pour flouter l'image de fond */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('img/FarmsConnect.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: blur(8px); /* Applique le flou */
+    z-index: -1; /* Assure que l'image floutée reste en arrière-plan */
+}
+
+
 
 /* En-tête */
 /* Style de l'en-tête */
