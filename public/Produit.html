@@ -1126,33 +1126,74 @@ console.log('Order Data:', orderDetails);
 
 
 
- // Étape 1 : Demander la localisation automatiquement
-    demanderLocalisation();
+document.addEventListener('deviceready', function () {
+    // Vérifier les permissions pour l'accès à la localisation
+    var permissions = cordova.plugins.permissions;
 
-    // Fonction pour demander la localisation
-    function demanderLocalisation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-
-                    // Ajouter la localisation à `orderDetails`
-                    orderDetails.location = { latitude, longitude };
-                    console.log("Localisation obtenue :", orderDetails.location);
-
-                    // Envoyer les détails de commande
-                    envoyerDetailsCommande();
-                },
-                (error) => {
-                    alert("Impossible d'accéder à la localisation. Veuillez activer la localisation pour continuer.");
-                    console.error("Erreur de localisation :", error);
-                }
-            );
+    permissions.checkPermission(permissions.ACCESS_FINE_LOCATION, function (status) {
+        if (!status.hasPermission) {
+            // Si la permission n'est pas accordée, la demander
+            permissions.requestPermission(permissions.ACCESS_FINE_LOCATION, function () {
+                console.log("Permission de localisation accordée !");
+                demanderLocalisation(); // Appeler la fonction de localisation après avoir reçu la permission
+            }, function () {
+                console.error("Permission de localisation refusée.");
+                alert("L'application a besoin de la localisation pour fonctionner correctement.");
+            });
         } else {
-            alert("La géolocalisation n'est pas prise en charge par ce navigateur.");
+            // Si la permission est déjà accordée, demander directement la localisation
+            demanderLocalisation();
         }
+    }, function (error) {
+        console.error("Erreur lors de la vérification des permissions :", error);
+    });
+});
+
+// Fonction pour demander la localisation
+function demanderLocalisation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+             // Ajouter la localisation à `orderDetails`
+                orderDetails.location = { latitude, longitude };
+                console.log("Localisation obtenue :", orderDetails.location);
+
+                // Tu peux maintenant utiliser ou envoyer les coordonnées
+                envoyerDetailsCommande(latitude, longitude);
+            },
+            (error) => {
+                console.error("Erreur lors de l'obtention de la localisation :", error);
+                let message = "";
+
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        message = "L'accès à la localisation a été refusé.";
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        message = "La localisation est indisponible.";
+                        break;
+                    case error.TIMEOUT:
+                        message = "Le temps d'attente pour obtenir la localisation est dépassé.";
+                        break;
+                    default:
+                        message = "Une erreur inconnue est survenue.";
+                        break;
+                }
+
+                alert(`Erreur de localisation : ${message}`);
+            },
+            {
+                enableHighAccuracy: true, // Utiliser le GPS pour plus de précision
+                timeout: 15000,          // Temps maximal pour obtenir la localisation
+                maximumAge: 0            // Pas de mise en cache
+            }
+        );
+    } else {
+        alert("La géolocalisation n'est pas prise en charge par cet appareil.");
     }
+}
 
     // Fonction pour envoyer les détails de commande à l'API
     function envoyerDetailsCommande() {

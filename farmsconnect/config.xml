@@ -12,6 +12,9 @@
     <allow-intent href="geo:*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
 
 <preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/splash.png" />
 <preference name="AndroidWindowSplashScreenDuration" value="5000" />
@@ -32,5 +35,11 @@
         <param name="android-package" value="android.location.Location"/>
     </feature>
     <preference name="GeolocationEnabled" value="true" />
+
+    <config-file parent="/manifest" target="AndroidManifest.xml">
+        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    </config-file>
+
     </platform>
 </widget>

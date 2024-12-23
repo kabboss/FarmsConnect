@@ -7,3 +7,6 @@ document.addEventListener('deviceready', function() {
     // Exemple d'utilisation de la fonction
     openInBrowser("https://farmsconnect-b084ddb02391.herokuapp.com");
 }, false);
+
+
+
