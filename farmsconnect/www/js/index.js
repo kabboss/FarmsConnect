@@ -1,12 +1,13 @@
-document.addEventListener('deviceready', function() {
-    // Fonction pour ouvrir le lien dans le navigateur externe
-    function openInBrowser(url) {
-        cordova.InAppBrowser.open(url, '_system'); // Ouvre le lien dans le navigateur externe (comme Chrome)
+// Fonction globale pour ouvrir un lien dans le navigateur externe
+function openInBrowser(url) {
+    if (cordova && cordova.InAppBrowser) {
+        cordova.InAppBrowser.open(url, '_system'); // Ouvre le lien dans le navigateur externe
+    } else {
+        alert("Erreur : InAppBrowser non disponible.");
     }
+}
 
-    // Exemple d'utilisation de la fonction
-    openInBrowser("https://farmsconnect-b084ddb02391.herokuapp.com");
+// Ajoute l'écouteur d'événement deviceready
+document.addEventListener('deviceready', function() {
+    console.log("Appareil prêt.");
 }, false);
-
-
-
