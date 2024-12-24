@@ -40,6 +40,19 @@
 </button>
 
 
+<script>
+    // Fonction pour ouvrir un lien dans un nouvel onglet du navigateur
+    window.openInBrowser = function (url) {
+        try {
+            console.log("Tentative d'ouverture du lien : " + url);
+            window.open(url, "_blank"); // Ouvre le lien dans un nouvel onglet
+        } catch (error) {
+            console.error("Erreur lors de l'ouverture du lien :", error);
+            alert("Impossible d'ouvrir le lien.");
+        }
+    };
+</script>
+
   <script>
     // Fonction pour vérifier la mise à jour
     async function checkForUpdate() {

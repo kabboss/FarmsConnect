@@ -6,25 +6,36 @@
         Apache Cordova Team
     </author>
     <content src="index.html" />
-<access origin="https://farmsconnect-b084ddb02391.herokuapp.com" />
-<allow-navigation href="https://farmsconnect-b084ddb02391.herokuapp.com" />
-<allow-intent href="geo:*" />
-<allow-intent href="http://*/*" />
-<allow-intent href="https://*/*" />
 
-<preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/splash.png" />
-<preference name="AndroidWindowSplashScreenDuration" value="5000" />
-<preference name="AndroidWindowSplashScreenBackgroundColor" value="#d0e2f7" />
-<preference name="SplashScreen" value="screen" />
-<preference name="SplashScreenDelay" value="3000" />
-<preference name="SplashScreenFadeOutDuration" value="1500" />
+    <!-- Access and Navigation Policies -->
+    <access origin="*" />
+    <allow-navigation href="*" />
+    <allow-intent href="geo:*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+
+    <!-- Splash Screen Preferences -->
+    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/splash.png" />
+    <preference name="AndroidWindowSplashScreenDuration" value="5000" />
+    <preference name="AndroidWindowSplashScreenBackgroundColor" value="#d0e2f7" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="SplashScreenFadeOutDuration" value="1500" />
+
+    <!-- Platform-specific Configuration -->
     <platform name="android">
+        <!-- Icons -->
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
         <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
         <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
         <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
         <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
+
+        <!-- Permissions -->
+        <config-file parent="/manifest" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+        </config-file>
     </platform>
- 
 </widget>
