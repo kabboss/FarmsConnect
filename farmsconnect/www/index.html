@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="css/login.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.3/lottie.min.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+
 
 </head>
 <body>
@@ -19,63 +21,13 @@
 
 
 
-<script>
-    // Ce code s'exécute au chargement de la page index.html
-document.addEventListener('deviceready', function () {
-    // Demander la géolocalisation
-    navigator.geolocation.getCurrentPosition(
-        function (position) {
-            // Récupérer les coordonnées
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-
-            // Sauvegarder la localisation dans une variable
-            const locationData = {
-                latitude: latitude,
-                longitude: longitude
-            };
-
-            console.log("Localisation obtenue: ", locationData);
-
-            // Envoi des données à l'API via fetch
-            fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/order', {
-                method: 'POST', // Méthode POST pour envoyer les données
-                headers: {
-                    'Content-Type': 'application/json' // Format des données envoyées
-                },
-                body: JSON.stringify({
-                    latitude: locationData.latitude,
-                    longitude: locationData.longitude
-                })
-            })
-            .then(response => response.json())  // Analyser la réponse JSON de l'API
-            .then(data => {
-                console.log("Réponse de l'API: ", data);
-            })
-            .catch(error => {
-                console.error("Erreur lors de l'envoi à l'API: ", error);
-            });
-        },
-        function (error) {
-            // Si la géolocalisation échoue
-            console.error("Erreur de géolocalisation: " + error.message);
-        },
-        {
-            enableHighAccuracy: true, // Utiliser le GPS pour la meilleure précision
-            timeout: 10000, // Délai d'attente avant de donner une erreur
-            maximumAge: 0 // Ne pas accepter une position ancienne
-        }
-    );
-}, false);
-
-</script>
 
 
-
-
-<button onclick="openInBrowser('https://farmsconnect-b084ddb02391.herokuapp.com')">
-    Ouvrir le site FarmsConnect
-</button>
+<div class="container">
+    <p id="appMessage" class="message"></p>
+    <button id="updateButton" class="update-button" style="display: none;">Télécharger la mise à jour</button>
+    <p id="errorMessage" class="error" style="display: none;"></p>
+</div>
 
 <script>
     // Fonction pour ouvrir un lien dans un nouvel onglet du navigateur

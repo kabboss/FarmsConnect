@@ -873,7 +873,6 @@ module.exports = router;
 
 // mise a jour 
 
-/*
 app.get("/get-update", (req, res) => {
     try {
       // Retourne un lien direct pour télécharger la dernière version de l'application
@@ -887,7 +886,7 @@ app.get("/get-update", (req, res) => {
     }
   });
 
-  */
+
   
 
 
