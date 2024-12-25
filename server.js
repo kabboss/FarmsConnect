@@ -491,8 +491,9 @@ app.get('/Visiteur', (req, res) => {
 const Comment = mongoose.model('Comment', new mongoose.Schema({
     username: String,
     message: String,
-    date: { type: Date, default: Date.now }
-  }));
+    date: { type: Date, default: Date.now },
+    likes: { type: Number, default: 0 }, // Ajout du champ "likes"
+}));
   
   // Middleware pour les fichiers statiques
   app.use(express.static(path.join(__dirname, 'public')));
@@ -527,6 +528,28 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
     });
   });
   
+
+
+
+
+  // Route pour ajouter un like à un commentaire
+app.post('/like/:id', async (req, res) => {
+    const commentId = req.params.id;
+    try {
+        const comment = await Comment.findById(commentId);
+        if (comment) {
+            comment.likes += 1; // Incrémente le nombre de likes
+            await comment.save();
+            res.status(200).json({ message: 'Like ajouté', likes: comment.likes });
+        } else {
+            res.status(404).json({ message: 'Commentaire non trouvé' });
+        }
+    } catch (err) {
+        res.status(500).json({ message: 'Erreur serveur', error: err });
+    }
+});
+
+
 
 
 

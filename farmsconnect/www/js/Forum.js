@@ -1,282 +1,233 @@
-const socket = io('https://farmsconnect-b084ddb02391.herokuapp.com'); // Assurez-vous d'utiliser l'URL de votre serveur
+// Connexion au serveur Socket.IO
+const socket = io('https://farmsconnect-b084ddb02391.herokuapp.com', {
+    transports: ['websocket'], // Forcer le transport WebSocket
+});
 
-document.addEventListener("DOMContentLoaded", function() {
-    const messageList = document.getElementById("message-list");
-    const messageForm = document.getElementById("message-form");
-    const messageInput = document.getElementById("message-input");
+// Classe principale pour gérer le forum
+class Forum {
+    constructor() {
+        this.messageList = document.getElementById("message-list");
+        this.messageForm = document.getElementById("message-form");
+        this.messageInput = document.getElementById("message-input");
+        this.searchInput = document.getElementById("search-input");
+        this.pagination = { page: 1, limit: 5 }; // Pagination : page actuelle et limite
+        this.sortOption = "date"; // Options de tri : "date" ou "popularity"
 
-    // Fonction pour afficher un message
-    function displayMessage(message) {
+        this.initEventListeners();
+        this.loadMessages();
+        this.listenForNewMessages();
+    }
+
+    async apiRequest(url, method = 'GET', body = null) {
+        try {
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+
+            if (body) {
+                options.body = JSON.stringify(body);
+            }
+
+            const response = await fetch(url, options);
+
+            // Vérification de la réponse
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP : ${response.status}`);
+            }
+
+            // Vérifiez si la réponse contient un contenu
+            const text = await response.text();
+            return text ? JSON.parse(text) : {};
+        } catch (error) {
+            console.error('Erreur lors de la requête API :', error);
+            throw error;
+        }
+    }
+
+    async loadMessages() {
+        const { page, limit } = this.pagination;
+        const sort = this.sortOption;
+        const search = this.searchInput?.value || "";
+
+        const url = `https://farmsconnect-b084ddb02391.herokuapp.com/api/messages?page=${page}&limit=${limit}&sort=${sort}&search=${encodeURIComponent(search)}`;
+
+        try {
+            const messages = await this.apiRequest(url);
+            this.messageList.innerHTML = ""; // Réinitialiser la liste des messages
+            messages.forEach(message => this.displayMessage(message));
+        } catch (error) {
+            console.error('Erreur lors du chargement des messages :', error);
+        }
+    }
+
+    displayMessage({ _id, username = "Utilisateur anonyme", content, replies = [], likes = 0, dislikes = 0, date }) {
         const messageDiv = document.createElement("div");
         messageDiv.className = "message";
-        
-        // Vérifiez si username existe pour éviter 'undefined'
-        const username = message.username || "Utilisateur anonyme";
-        
+        messageDiv.dataset.id = _id;
+
         messageDiv.innerHTML = `
-            <strong>${username}:</strong> ${message.content}
-            <button class="edit-button" data-id="${message._id}">Modifier</button>
-            <button class="delete-button" data-id="${message._id}">Supprimer</button>
-            <button class="reply-button" data-id="${message._id}">Répondre</button>
+            <strong>${username}:</strong> ${content}
+            <div class="meta">
+                <span>${new Date(date).toLocaleString()}</span>
+                <button class="like-button">👍 ${likes}</button>
+                <button class="dislike-button">👎 ${dislikes}</button>
+            </div>
+            <div class="actions">
+                <button class="edit-button">Modifier</button>
+                <button class="delete-button">Supprimer</button>
+                <button class="reply-button">Répondre</button>
+            </div>
             <div class="reply-input" style="display:none;">
-                <input type="text" class="reply-message-input" placeholder="Votre réponse..." required>
+                <input type="text" class="reply-message-input" placeholder="Votre réponse...">
                 <button class="send-reply-button">Envoyer</button>
             </div>
-            <div class="replies"></div> 
-            <script>
-            /* Style général des messages */
-.message {
-    background-color: #f9f9f9; /* Couleur de fond */
-    border: 1px solid #ddd; /* Bordure */
-    border-radius: 5px; /* Coins arrondis */
-    padding: 10px; /* Espacement interne */
-    margin: 10px 0; /* Espacement externe */
-    position: relative; /* Pour le positionnement absolu des boutons */
-}
-
-/* Style pour le nom d'utilisateur */
-.message strong {
-    color: #2c3e50; /* Couleur du texte pour le nom d'utilisateur */
-    font-size: 1.1em; /* Taille de police légèrement plus grande */
-}
-
-/* Style des boutons */
-button {
-    background-color: #3498db; /* Couleur de fond des boutons */
-    color: white; /* Couleur du texte des boutons */
-    border: none; /* Pas de bordure */
-    border-radius: 3px; /* Coins arrondis pour les boutons */
-    padding: 5px 10px; /* Espacement interne */
-    cursor: pointer; /* Curseur en main au survol */
-    margin-left: 5px; /* Espacement à gauche des boutons */
-    transition: background-color 0.3s; /* Transition pour l'effet de survol */
-}
-
-button:hover {
-    background-color: #2980b9; /* Couleur au survol */
-}
-
-/* Style du champ de réponse */
-.reply-input {
-    margin-top: 10px; /* Espacement au-dessus du champ de réponse */
-    display: flex; /* Pour aligner les éléments horizontalement */
-}
-
-.reply-message-input {
-    flex-grow: 1; /* Prend tout l'espace disponible */
-    padding: 5px; /* Espacement interne */
-    border: 1px solid #ccc; /* Bordure du champ */
-    border-radius: 3px; /* Coins arrondis */
-    margin-right: 5px; /* Espacement à droite */
-}
-
-/* Style pour les réponses */
-.replies {
-    margin-top: 10px; /* Espacement au-dessus des réponses */
-    padding-left: 20px; /* Indentation pour les réponses */
-    border-left: 2px solid #3498db; /* Bordure à gauche pour les réponses */
-}
-
-/* Style pour les réponses individuelles */
-.reply {
-    background-color: #e9ecef; /* Couleur de fond des réponses */
-    padding: 5px; /* Espacement interne */
-    margin: 5px 0; /* Espacement externe */
-    border-radius: 5px; /* Coins arrondis */
-}
-
-            </script>
-
+            <div class="replies">
+                ${replies.map(reply => `<div class="reply"><strong>${reply.username}:</strong> ${reply.content}</div>`).join("")}
+            </div>
         `;
 
-        message.replies.forEach(reply => {
-            const replyDiv = document.createElement("div");
-            replyDiv.className = "reply";
-            replyDiv.innerHTML = `
-<div class="reply">
-    <strong>${reply.username}:</strong> ${reply.content}
-    <button class="reply-button">Répondre</button>
-    <div class="reply-input" style="display:none;">
-        <input type="text" class="reply-message-input" placeholder="Votre réponse..." required>
-        <button class="send-reply-button">Envoyer</button>
-    </div>
-</div>
+        this.messageList.appendChild(messageDiv);
+    }
 
-<script>
-/* Style pour chaque réponse */
-.reply {
-    background-color: #e9ecef; /* Couleur de fond des réponses */
-    padding: 8px; /* Espacement interne */
-    margin: 5px 0; /* Espacement externe */
-    border-radius: 5px; /* Coins arrondis */
-    position: relative; /* Pour le positionnement des éléments internes */
-}
+    async addMessage(content) {
+        const username = localStorage.getItem('username') || "Utilisateur";
+        try {
+            await this.apiRequest('https://farmsconnect-b084ddb02391.herokuapp.com/api/messages', 'POST', { username, content });
+            this.messageInput.value = "";
+            this.loadMessages();
+        } catch (error) {
+            console.error('Erreur lors de l\'ajout du message :', error);
+        }
+    }
 
-/* Style pour le nom d'utilisateur dans les réponses */
-.reply strong {
-    color: #2980b9; /* Couleur du texte pour le nom d'utilisateur */
-    font-size: 1em; /* Taille de police pour le nom d'utilisateur */
-}
+    async addReply(messageId, content) {
+        const username = localStorage.getItem('username') || "Utilisateur";
+        try {
+            await this.apiRequest(`https://farmsconnect-b084ddb02391.herokuapp.com/api/messages/${messageId}/replies`, 'POST', { username, content });
+            this.loadMessages();
+        } catch (error) {
+            console.error('Erreur lors de l\'ajout de la réponse :', error);
+        }
+    }
 
-/* Style des boutons pour répondre */
-.reply-button {
-    background-color: #3498db; /* Couleur de fond du bouton Répondre */
-    color: white; /* Couleur du texte du bouton */
-    border: none; /* Pas de bordure */
-    border-radius: 3px; /* Coins arrondis */
-    padding: 5px 8px; /* Espacement interne */
-    cursor: pointer; /* Curseur en main au survol */
-    margin-left: 10px; /* Espacement à gauche */
-    transition: background-color 0.3s; /* Transition pour l'effet de survol */
-}
+    async editMessage(messageId, newContent) {
+        try {
+            await this.apiRequest(`https://farmsconnect-b084ddb02391.herokuapp.com/api/messages/${messageId}`, 'PUT', { content: newContent });
+            this.loadMessages();
+        } catch (error) {
+            console.error('Erreur lors de la modification du message :', error);
+        }
+    }
 
-.reply-button:hover {
-    background-color: #2980b9; /* Couleur au survol */
-}
+    async deleteMessage(messageId) {
+        try {
+            await this.apiRequest(`https://farmsconnect-b084ddb02391.herokuapp.com/api/messages/${messageId}`, 'DELETE');
+            this.loadMessages();
+        } catch (error) {
+            console.error('Erreur lors de la suppression du message :', error);
+        }
+    }
 
-/* Style du champ de réponse dans les réponses */
-.reply-input {
-    margin-top: 5px; /* Espacement au-dessus du champ de réponse */
-    display: flex; /* Pour aligner les éléments horizontalement */
-}
+    async reactToMessage(messageId, type) {
+        if (type === 'like') {
+            try {
+                const response = await fetch(`https://farmsconnect-b084ddb02391.herokuapp.com/like/${messageId}`, {
+                    method: 'POST',
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    console.log(`Le message ${messageId} a été liké. Total des likes : ${data.likes}`);
+                    // Mettez à jour l'UI ou rafraîchissez les messages après le like
+                    this.loadMessages();
+                } else {
+                    console.error('Erreur lors de l\'ajout du like:', data.message);
+                }
+            } catch (error) {
+                console.error('Erreur lors de la requête API:', error);
+            }
+        }
+    }
+        
+    changePage(increment) {
+        this.pagination.page += increment;
+        if (this.pagination.page < 1) this.pagination.page = 1;
+        this.loadMessages();
+    }
 
-.reply-message-input {
-    flex-grow: 1; /* Prend tout l'espace disponible */
-    padding: 5px; /* Espacement interne */
-    border: 1px solid #ccc; /* Bordure du champ */
-    border-radius: 3px; /* Coins arrondis */
-    margin-right: 5px; /* Espacement à droite */
-}
+    changeSort(option) {
+        this.sortOption = option;
+        this.loadMessages();
+    }
 
-/* Style du bouton Envoyer dans les réponses */
-.send-reply-button {
-    background-color: #28a745; /* Couleur de fond du bouton Envoyer */
-    color: white; /* Couleur du texte du bouton */
-    border: none; /* Pas de bordure */
-    border-radius: 3px; /* Coins arrondis */
-    padding: 5px 8px; /* Espacement interne */
-    cursor: pointer; /* Curseur en main au survol */
-    transition: background-color 0.3s; /* Transition pour l'effet de survol */
-}
-
-.send-reply-button:hover {
-    background-color: #218838; /* Couleur au survol */
-}
-
-
-</script>
-
-
-
-            `;
-            messageDiv.querySelector(".replies").appendChild(replyDiv);
+    initEventListeners() {
+        this.messageForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const newMessage = this.messageInput.value.trim();
+            if (newMessage) this.addMessage(newMessage);
         });
 
-        messageList.appendChild(messageDiv);
-    }
-
-    // Charger les messages depuis le backend
-    function loadMessages() {
-        fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/messages')
-            .then(response => response.json())
-            .then(data => {
-                messageList.innerHTML = "";
-                data.forEach(message => displayMessage(message));
-            });
-    }
-
-    // Charger les messages au chargement de la page
-    loadMessages();
-
-    // Envoyer un nouveau message au backend
-    messageForm.addEventListener("submit", function(e) {
-        e.preventDefault();
-        const newMessage = messageInput.value;
-        const username = localStorage.getItem('username');
-
-        if (newMessage.trim() !== "" && username) {
-            fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/messages', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, content: newMessage })
-            }).then(() => {
-                messageInput.value = "";
-                loadMessages(); 
-            });
-        }
-    });
-
-    // Écoute des événements de socket pour les nouveaux messages
-    socket.on('newMessage', message => {
-        displayMessage(message);
-    });
-
-    // Gestion des réponses
-    messageList.addEventListener("click", function(e) {
-        if (e.target.classList.contains("reply-button")) {
-            const replyInputDiv = e.target.nextElementSibling;
-            replyInputDiv.style.display = "block"; 
-        }
-    });
-
-    // Envoyer une réponse
-    messageList.addEventListener("click", function(e) {
-        if (e.target.classList.contains("send-reply-button")) {
-            const replyInput = e.target.previousElementSibling; 
-            const replyMessage = replyInput.value;
-            const username = localStorage.getItem('username');
-            const messageDiv = e.target.closest(".message"); 
-            const messageId = messageDiv.querySelector(".reply-button").getAttribute("data-id"); 
-
-            if (replyMessage.trim() !== "" && username) {
-                fetch(`https://farmsconnect-b084ddb02391.herokuapp.com/api/messages/${messageId}/replies`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, content: replyMessage })
-                }).then(() => {
-                    replyInput.value = "";
-                    loadMessages(); 
-                });
-            }
-        }
-    });
-
-    // Modifier un message
-    messageList.addEventListener("click", function(e) {
-        if (e.target.classList.contains("edit-button")) {
+        this.messageList.addEventListener("click", (e) => {
             const messageDiv = e.target.closest(".message");
-            const messageId = e.target.getAttribute("data-id"); 
-            const content = messageDiv.childNodes[1].textContent; 
-            const newContent = prompt("Modifier votre message:", content);
+            const messageId = messageDiv?.dataset.id;
 
-            if (newContent) {
-                fetch(`https://farmsconnect-b084ddb02391.herokuapp.com/api/messages/${messageId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ content: newContent })
-                }).then(() => {
-                    loadMessages(); 
-                });
+            if (e.target.classList.contains("reply-button")) {
+                const replyInputDiv = messageDiv.querySelector(".reply-input");
+                replyInputDiv.style.display = replyInputDiv.style.display === "none" ? "block" : "none";
             }
-        }
-    });
 
-    // Supprimer un message
-    messageList.addEventListener("click", function(e) {
-        if (e.target.classList.contains("delete-button")) {
-            const messageId = e.target.getAttribute("data-id"); 
+            if (e.target.classList.contains("send-reply-button")) {
+                const replyInput = messageDiv.querySelector(".reply-message-input").value.trim();
+                if (replyInput) this.addReply(messageId, replyInput);
+            }
 
-            fetch(`https://farmsconnect-b084ddb02391.herokuapp.com/api/messages/${messageId}`, {
-                method: 'DELETE'
-            }).then(() => {
-                loadMessages(); 
-            });
-        }
-    });
+            if (e.target.classList.contains("edit-button")) {
+                const newContent = prompt("Modifier le message:");
+                if (newContent) this.editMessage(messageId, newContent);
+            }
+
+            if (e.target.classList.contains("delete-button")) {
+                this.deleteMessage(messageId);
+            }
+
+            if (e.target.classList.contains("like-button")) {
+                this.reactToMessage(messageId, "like");
+            }
+
+            if (e.target.classList.contains("dislike-button")) {
+                this.reactToMessage(messageId, "dislike");
+            }
+        });
+
+        this.searchInput?.addEventListener("input", () => this.loadMessages());
+
+        document.getElementById("next-page").addEventListener("click", () => this.changePage(1));
+        document.getElementById("prev-page").addEventListener("click", () => this.changePage(-1));
+
+        document.getElementById("sort-option").addEventListener("change", (e) => {
+            this.changeSort(e.target.value);
+        });
+    }
+
+    listenForNewMessages() {
+        socket.on('newMessage', (message) => {
+            this.displayNotification("Un nouveau message a été ajouté !");
+            this.displayMessage(message);
+        });
+    }
+
+    displayNotification(message) {
+        const notification = document.createElement("div");
+        notification.className = "notification";
+        notification.innerText = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => notification.remove(), 3000);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    new Forum();
 });
