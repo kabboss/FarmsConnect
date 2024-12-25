@@ -198,7 +198,7 @@ Le prix du produit peut augmenter en fonction du poids choisi. Chaque kilogramme
 📞 Nous vous contacterons prochainement sur votre numéro ${contact} 📱 pour valider la commande.
 
 💬 Vous avez des questions ou souhaitez nous contacter immédiatement ?
-📲 Cliquez ici pour nous joindre sur WhatsApp
+📲 👉 [Cliquez ici pour nous écrire sur WhatsApp](https://wa.me/+22656663638)
 
             `
         };
@@ -870,6 +870,59 @@ module.exports = router;
 
 
 
+// Définition du modèle de données pour le compteur de vues
+const ViewCountSchema = new mongoose.Schema({
+  count: { type: Number, default: 0 }
+});
+
+const ViewCount = mongoose.model('ViewCount', ViewCountSchema);
+
+// Route pour obtenir le nombre de vues actuel
+app.get('/api/views', async (req, res) => {
+  try {
+    let viewCount = await ViewCount.findOne();
+    if (!viewCount) {
+      // Si le compteur n'existe pas encore, on le crée
+      viewCount = new ViewCount();
+      await viewCount.save();
+    }
+    res.json({ count: viewCount.count });
+  } catch (error) {
+    res.status(500).json({ message: "Erreur de récupération du compteur", error });
+  }
+});
+
+// Route pour mettre à jour le compteur
+app.post('/api/views', async (req, res) => {
+  try {
+    let viewCount = await ViewCount.findOne();
+    if (!viewCount) {
+      // Si le compteur n'existe pas encore, on le crée
+      viewCount = new ViewCount();
+    }
+    viewCount.count += 1; // Incrémenter le compteur
+    await viewCount.save();
+    res.json({ count: viewCount.count });
+  } catch (error) {
+    res.status(500).json({ message: "Erreur de mise à jour du compteur", error });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // mise a jour 
 
@@ -888,6 +941,10 @@ app.get("/get-update", (req, res) => {
 
 
   
+
+
+
+
 
 
 

@@ -20,6 +20,7 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="SplashScreenFadeOutDuration" value="1500" />
 
+
     <!-- Configuration spécifique Android -->
     <platform name="android">
         <!-- Icônes Android -->

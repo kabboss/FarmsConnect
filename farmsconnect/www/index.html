@@ -145,16 +145,22 @@
                 <span id="toggle-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
                     🙈
                 </span>
-            </div>
+                
+     </div>
 
- <!-- Message de patience avec animation -->
+ 
+ 
+ 
+            <!-- Message de patience avec animation -->
  <div id="loadingMessage" class="loading-message">
     <!-- Le spinner à la place de l'image -->
     <div class="spinner"></div>
     <p id="loadingText">Connexion en cours...</p>
 </div>
             <button  type="submit" id="loginButton" >Se connecter</button>
-    
+        <!-- Bouton "Continuer sans se connecter" avec redirection directe -->
+        <button type="button" onclick="window.location.href='Location.html';" id="continue-without-login-btn">Continuer sans se connecter</button>
+
         </form>
     </div>
 </div>
@@ -210,7 +216,9 @@ window.onload = function() {
             <input type="text" id="signup-username" name="username" placeholder="Nom d'utilisateur" required>
             <input type="email" id="signup-email" name="email" placeholder="Email" required>
             <input type="text" id="signup-contact" name="contact" placeholder="Contact" required>
-            <input type="password" id="signup-password" name="password" placeholder="Mot de passe" required>
+            <div style="position: relative; display: inline-block;">
+                <input type="password" id="signup-password" name="password" placeholder="Mot de passe" required style="padding-right: 40px;">
+            </div>
             <select id="signup-userType" name="userType" required>
                 <option value="" disabled selected>Type d'utilisateur</option>
                 <option value="vendeur">Vendeur</option>
@@ -220,10 +228,41 @@ window.onload = function() {
             </select>
             <button type="button" id="continue-registration">Repondre au questions de FarmConnect</button>
 
-            <button type="submit">S'inscrire</button> <!-- Changer en type="submit" -->
+            <button type="submit" id="loginButton" >S'inscrire</button> <!-- Changer en type="submit" -->
         </form>
     </div>
 </div>
+
+
+<script>
+    // Ajouter dynamiquement une icône pour basculer la visibilité du mot de passe
+    const passwordField = document.getElementById('signup-password');
+    const toggleButton = document.createElement('span');
+    toggleButton.id = 'toggle-password';
+    toggleButton.textContent = '🙈';
+    toggleButton.style.position = 'absolute';
+    toggleButton.style.right = '10px';
+    toggleButton.style.top = '50%';
+    toggleButton.style.transform = 'translateY(-50%)';
+    toggleButton.style.cursor = 'pointer';
+
+    // Ajouter l'icône à côté du champ de mot de passe
+    passwordField.parentNode.style.position = 'relative'; // Assure que le conteneur est positionné
+    passwordField.parentNode.appendChild(toggleButton);
+
+    // Ajouter un écouteur d'événement pour basculer la visibilité
+    toggleButton.addEventListener('click', function () {
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleButton.textContent = '👁️'; // Icône pour montrer
+        } else {
+            passwordField.type = 'password';
+            toggleButton.textContent = '🙈'; // Icône pour masquer
+        }
+    });
+</script>
+
+
 
 <!-- Message de chargement pour l'inscription -->
 <div id="signupLoadingMessage" class="hidden">
@@ -559,7 +598,7 @@ window.onload = function() {
             })
             .then((response) => {
                 if (response.ok) {
-                    alert("Merci pour vos réponses !");
+                    showAlert("Merci pour vos réponses !");
 
                     // Masquer la modal des questions supplémentaires
                     extraQuestionsModal.style.display = "none";
@@ -569,13 +608,13 @@ window.onload = function() {
                         signupModal.style.display = "block";
                     }, 3000); // 3000 millisecondes = 3 secondes
                 } else {
-                    alert("Une erreur est survenue lors de la soumission des questions.");
+                    showAlert("Une erreur est survenue lors de la soumission des questions.");
                 }
             })
             .catch((error) => {
                 // Gestion des erreurs réseau
                 console.error("Erreur réseau : ", error);
-                alert("Une erreur réseau est survenue.");
+                showAlert("Une erreur réseau est survenue.");
             });
         });
     });
@@ -636,6 +675,45 @@ document.addEventListener("DOMContentLoaded", function() {
  <div class="button-container1">
     <button class="open-modal-button" onclick="openModal()">En savoir plus sur FarmsConnect</button>
 </div>
+<p>Utilisateurs de FarmConnect : <span id="view-count">0</span></p>
+
+<script>
+    // Fonction pour récupérer le nombre de vues depuis le serveur
+    async function getViewCount() {
+        try {
+            const response = await fetch('http://localhost:3000/api/views');
+            const data = await response.json();
+            document.getElementById('view-count').textContent = data.count;
+        } catch (error) {
+            console.error("Erreur de récupération du compteur de vues :", error);
+        }
+    }
+
+    // Fonction pour mettre à jour le compteur de vues
+    async function updateViewCount() {
+        try {
+            const response = await fetch('http://localhost:3000/api/views', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            document.getElementById('view-count').textContent = data.count;
+        } catch (error) {
+            console.error("Erreur de mise à jour du compteur de vues :", error);
+        }
+    }
+
+    // Lorsque la page se charge, on met à jour et récupère le compteur
+    window.onload = function () {
+        updateViewCount();  // Incrémente le compteur chaque fois que la page est visitée
+        getViewCount();     // Récupère et affiche le compteur actuel
+    };
+</script>
+
+
+
 
 <!-- Fenêtre modale -->
 <div class="modal hidden" id="farmsConnectModal">
@@ -796,7 +874,7 @@ document.getElementById("signup-form").addEventListener("submit", async function
 
         if (response.ok) {
             hideSignupLoadingMessage();
-            alert('Inscription réussie !');
+            showAlert('Inscription réussie !');
             window.location.href = 'Location.html'; 
 
 
@@ -908,6 +986,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
     } catch (error) {
         showAlert('Erreur réseau : ' + error.message);
     }
+
+
+    let failedAttempts = 0;
+const MAX_ATTEMPTS = 3;
+
+if (failedAttempts >= MAX_ATTEMPTS) {
+    showAlert("Trop de tentatives échouées. Veuillez réessayer plus tard.");
+    return;
+}
+failedAttempts++;
+
+
 
   });
 

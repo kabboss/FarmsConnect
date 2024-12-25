@@ -1,70 +1,107 @@
-document.getElementById('vente-form').addEventListener('submit', function(e) {
+document.getElementById('vente-form').addEventListener('submit', function (e) {
     e.preventDefault();
 
+    // Calcul des prix et commission
     const prixUnitaire = parseFloat(document.getElementById('prix').value);
     const commission = prixUnitaire * 0.04;
-    const fraisLivraison = 500;
     const prixFinal = prixUnitaire + commission;
 
-    const generateVendeurId = (email, contactPrincipal) => {
-        // Générer un identifiant unique basé sur l'email et le numéro de téléphone
-        return 'V' + Buffer.from(email + contactPrincipal).toString('hex');
-    };
-
+    // Création de l'objet animal
     const animal = {
         categorie: document.getElementById('categorie').value,
         nombre: document.getElementById('nombre').value,
         poids: document.getElementById('poids').value,
         prix: prixUnitaire,
-        prixFinal: prixFinal.toFixed(2), // Inclure le prix final calculé
+        prixFinal: prixFinal.toFixed(2),
         images: [],
         contactPrincipal: document.getElementById('contact-principal').value,
         contactSecondaire: document.getElementById('contact-secondaire').value,
         emailVendeur: document.getElementById('email-vendeur').value,
         codeVendeur: 'V' + Date.now(),
-        location: null // La localisation sera définie ici
+        location: null // La localisation sera ajoutée ici
     };
 
-    // Vérifier si la localisation est déjà renseignée
-    if (!animal.location) {
-        // Si la localisation n'est pas renseignée, demander la permission d'utiliser la géolocalisation
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                // Une fois la localisation obtenue, on met à jour l'objet animal
+    // Vérifier les permissions pour l'accès à la localisation via Cordova
+    checkPermissions(animal);
+});
+
+// Fonction pour vérifier les permissions avec Cordova
+function checkPermissions(animal) {
+    const permissions = cordova.plugins.permissions;
+
+    permissions.checkPermission(permissions.ACCESS_FINE_LOCATION, function (status) {
+        if (!status.hasPermission) {
+            // Demander la permission si elle n'est pas accordée
+            permissions.requestPermission(permissions.ACCESS_FINE_LOCATION, 
+                function () {
+                    console.log("Permission de localisation accordée !");
+                    handleLocation(animal); // Appeler la fonction de localisation
+                }, 
+                function () {
+                    console.error("Permission de localisation refusée.");
+                    alert("L'application a besoin de la localisation pour fonctionner correctement.");
+                }
+            );
+        } else {
+            // Si la permission est déjà accordée
+            handleLocation(animal);
+        }
+    }, function (error) {
+        console.error("Erreur lors de la vérification des permissions :", error);
+    });
+}
+
+// Fonction pour gérer la localisation
+function handleLocation(animal) {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                // Ajouter la localisation à l'objet animal
                 animal.location = {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude
                 };
 
-                // Afficher le message de succès dès que l'utilisateur autorise la géolocalisation
-                showAlert("Annonce envoyée avec succès !");
-
-                // Maintenant, on peut envoyer les données
+                // Envoyer les données après obtention de la localisation
                 sendData(animal);
-
-            }, function(error) {
-                // Si l'utilisateur refuse ou qu'il y a un problème avec la géolocalisation
-                showAlert("Erreur : Impossible d'obtenir votre localisation.");
-            });
-        } else {
-            showAlert("La géolocalisation n'est pas supportée par votre navigateur.");
-        }
+                showAlert("Annonce envoyée avec succès !");
+            },
+            function (error) {
+                // Gestion des erreurs de géolocalisation
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        showAlert("❌ Permission de localisation refusée.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        showAlert("❌ Position non disponible.");
+                        break;
+                    case error.TIMEOUT:
+                        showAlert("❌ Temps d'attente dépassé.");
+                        break;
+                    default:
+                        showAlert("❌ Erreur inconnue lors de la localisation.");
+                }
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 0
+            }
+        );
     } else {
-        // Si la localisation est déjà renseignée, envoyer les données immédiatement
-        sendData(animal);
+        showAlert("❌ La géolocalisation n'est pas supportée par votre appareil.");
     }
-});
+}
 
+// Fonction pour envoyer les données de l'annonce
 function sendData(animal) {
-    console.log(animal);
-
     const files = document.getElementById('images').files;
     if (files.length === 0) {
         showAlert("Veuillez sélectionner au moins une image.");
         return;
     }
 
-    // Lire les images en tant que base64
+    // Convertir les images en base64
     const fileReaders = Array.from(files).map(file => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -77,35 +114,31 @@ function sendData(animal) {
     Promise.all(fileReaders).then(images => {
         animal.images = images;
 
-        // Envoyer les données de l'annonce au serveur
+        // Envoi des données vers l'API
         fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/annonces', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(animal) // Assurez-vous que 'animal' est bien formé
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(animal)
         })
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error(`Erreur HTTP : ${response.status} - ${text}`);
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Annonce envoyée avec succès", data);
-            // Recharger la page après un délai de 2 secondes
-            setTimeout(() => {
-                location.reload();  // Rechargement de la page
-            }, 2000);
-        })
-        .catch(error => {
-            showAlert("Erreur lors de l'envoi de l'annonce : " + error.message);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(`Erreur HTTP : ${response.status} - ${text}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Annonce envoyée avec succès", data);
+                setTimeout(() => location.reload(), 2000);
+            })
+            .catch(error => {
+                showAlert("Erreur lors de l'envoi : " + error.message);
+            });
     });
 }
 
+// Fonction pour afficher un message d'alerte
 function showAlert(message) {
     const alertBox = document.getElementById("customAlert");
     const alertMessage = document.getElementById("alertMessage");
@@ -116,6 +149,7 @@ function showAlert(message) {
     setTimeout(() => closeAlert(), 10000);
 }
 
+// Fonction pour fermer le message d'alerte
 function closeAlert() {
     const alertBox = document.getElementById("customAlert");
     alertBox.classList.remove("visible");
