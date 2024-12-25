@@ -69,52 +69,9 @@ scrollToBottom() {
             this.displayMessage(message);
         });
 
-    // Après avoir affiché les messages, faire défiler jusqu'au dernier
+        // Après avoir affiché les messages, faire défiler jusqu'au dernier
     this.scrollToBottom();
     }
-
-
-
-    document.getElementById('message-form').addEventListener('submit', async function(event) {
-        event.preventDefault();
-    
-        const messageInput = document.getElementById('message-input');
-        const audioInput = document.getElementById('audio-input');
-        const content = messageInput.value;
-        const audioFile = audioInput.files[0];  // Récupérer le fichier audio
-    
-        const formData = new FormData();
-        formData.append('content', content);
-    
-        if (audioFile) {
-            formData.append('audio', audioFile);  // Ajouter le fichier audio
-        }
-    
-        try {
-            const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/messages', {
-                method: 'POST',
-                body: formData,  // Envoi de FormData avec texte + fichier audio
-            });
-    
-            if (response.ok) {
-                messageInput.value = '';  // Réinitialiser le champ du message
-                audioInput.value = '';  // Réinitialiser le champ du fichier audio
-                console.log('Message envoyé avec succès !');
-                // Optionnellement, vous pouvez recharger les messages après envoi
-                loadMessages();
-            } else {
-                console.error('Erreur lors de l\'envoi du message');
-            }
-        } catch (error) {
-            console.error('Erreur lors de l\'envoi du message', error);
-        }
-    });
-    
-
-
-
-
-    
 
 // Fonction pour afficher un message
 displayMessage({ _id, username = "Utilisateur anonyme", content, replies = [], likes = 0, dislikes = 0, date }) {
@@ -138,7 +95,6 @@ displayMessage({ _id, username = "Utilisateur anonyme", content, replies = [], l
         <div class="reply-input" style="display:none;">
             <input type="text" class="reply-message-input" placeholder="Votre réponse...">
             <button class="send-reply-button">Envoyer</button>
-            ${message.audioUrl ? `<audio controls><source src="${message.audioUrl}" type="audio/mp3">Votre navigateur ne supporte pas la lecture audio.</audio>` : ''}
         </div>
         <div class="replies">
             ${replies.map(reply => `<div class="reply"><strong>${reply.username}:</strong> ${reply.content}</div>`).join("")}
