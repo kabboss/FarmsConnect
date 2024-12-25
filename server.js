@@ -534,20 +534,31 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
 
   app.post('/like/:id', async (req, res) => {
       const commentId = req.params.id;
+  
+      // Vérification si l'ID est valide
+      if (!mongoose.Types.ObjectId.isValid(commentId)) {
+          return res.status(400).json({ message: 'ID non valide' });
+      }
+  
       try {
-          const comment = await Comment.findById(mongoose.Types.ObjectId(commentId)); // Convertir l'ID en ObjectId
-          if (comment) {
-              comment.likes += 1;
-              await comment.save();
-              res.status(200).json({ message: 'Like ajouté', likes: comment.likes });
-          } else {
-              res.status(404).json({ message: 'Commentaire non trouvé' });
+          // Recherche du commentaire
+          const comment = await Comment.findById(commentId);
+  
+          if (!comment) {
+              return res.status(404).json({ message: 'Commentaire non trouvé' });
           }
+  
+          // Mise à jour des likes
+          comment.likes = (comment.likes || 0) + 1;
+          await comment.save();
+  
+          res.status(200).json({ message: 'Like ajouté', likes: comment.likes });
       } catch (err) {
-          res.status(500).json({ message: 'Erreur serveur', error: err });
+          console.error('Erreur serveur :', err.message);
+          res.status(500).json({ message: 'Erreur serveur', error: err.message });
       }
   });
-  
+    
 
 
 
