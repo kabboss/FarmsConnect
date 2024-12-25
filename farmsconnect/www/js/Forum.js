@@ -137,20 +137,26 @@ class Forum {
                 const response = await fetch(`https://farmsconnect-b084ddb02391.herokuapp.com/like/${messageId}`, {
                     method: 'POST',
                 });
-                const data = await response.json();
+                console.log('ID du commentaire:', messageId); // Ajoutez cette ligne pour vérifier l'ID
+                // On vérifie d'abord si la requête a réussi
                 if (response.ok) {
-                    console.log(`Le message ${messageId} a été liké. Total des likes : ${data.likes}`);
-                    // Mettez à jour l'UI ou rafraîchissez les messages après le like
-                    this.loadMessages();
+                    const data = await response.json();
+                    // Mettez à jour le nombre de likes dans l'UI
+                    const likeCountElement = document.querySelector(`#like-count-${messageId}`);
+                    likeCountElement.textContent = data.likes; // Le nouveau nombre de likes
                 } else {
-                    console.error('Erreur lors de l\'ajout du like:', data.message);
+                    const errorData = await response.json();
+                    console.error('Erreur lors de l\'ajout du like:', errorData.message);
                 }
             } catch (error) {
                 console.error('Erreur lors de la requête API:', error);
             }
         }
     }
-        
+    
+
+
+    
     changePage(increment) {
         this.pagination.page += increment;
         if (this.pagination.page < 1) this.pagination.page = 1;

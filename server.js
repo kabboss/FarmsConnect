@@ -532,22 +532,22 @@ const Comment = mongoose.model('Comment', new mongoose.Schema({
 
 
 
-  // Route pour ajouter un like à un commentaire
-app.post('/like/:id', async (req, res) => {
-    const commentId = req.params.id;
-    try {
-        const comment = await Comment.findById(commentId);
-        if (comment) {
-            comment.likes += 1; // Incrémente le nombre de likes
-            await comment.save();
-            res.status(200).json({ message: 'Like ajouté', likes: comment.likes });
-        } else {
-            res.status(404).json({ message: 'Commentaire non trouvé' });
-        }
-    } catch (err) {
-        res.status(500).json({ message: 'Erreur serveur', error: err });
-    }
-});
+  app.post('/like/:id', async (req, res) => {
+      const commentId = req.params.id;
+      try {
+          const comment = await Comment.findById(mongoose.Types.ObjectId(commentId)); // Convertir l'ID en ObjectId
+          if (comment) {
+              comment.likes += 1;
+              await comment.save();
+              res.status(200).json({ message: 'Like ajouté', likes: comment.likes });
+          } else {
+              res.status(404).json({ message: 'Commentaire non trouvé' });
+          }
+      } catch (err) {
+          res.status(500).json({ message: 'Erreur serveur', error: err });
+      }
+  });
+  
 
 
 
