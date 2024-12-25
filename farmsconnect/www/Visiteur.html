@@ -26,10 +26,6 @@
 
 
 
-
-
-
-
 <script>
 window.onload = function() {
     // Afficher le message de chargement dès que la page est chargée
@@ -82,27 +78,26 @@ window.onload = function() {
             <h2>Note Importante pour les Visiteurs</h2>
             <p><strong>Chers visiteurs,</strong></p>
             <p>
-                Nous vous remercions de l'intérêt que vous portez à nos produits sur <strong>FarmsConnect</strong>. Avant de passer votre commande, voici quelques informations importantes :
+                Nous vous remercions pour l'intérêt que vous portez à nos produits sur <strong>FarmsConnect</strong> 🌱. Avant de finaliser votre commande, voici quelques informations essentielles à connaître :
             </p>
             <ol>
                 <li>
-                    <strong>Vérification de la qualité des produits</strong><br>
-                    Chaque produit mis en vente sur notre plateforme fait l'objet d'un contrôle vétérinaire rigoureux avant la vente. Nous nous assurons que tous nos animaux sont en bonne santé et conformes aux normes de sécurité.
+                    <strong>🔍 Vérification de la qualité des produits</strong><br>
+                    Chaque produit proposé sur notre plateforme subit un contrôle vétérinaire de qualité supérieure avant la mise en vente 🐄💉. Nous garantissons que tous nos animaux sont en parfaite santé et respectent des normes de sécurité strictes 🛡️.
                 </li>
                 <li>
-                    <strong>Processus de commande</strong><br>
-                    Une fois que vous avez trouvé le produit qui vous intéresse, vous pouvez passer votre commande en toute sécurité. Nous nous occupons de la logistique et de la livraison.
+                    <strong>🛒 Processus de commande simplifié</strong><br>
+                    Une fois que vous avez trouvé l'animal ou le produit qui vous intéresse, vous pouvez passer votre commande en toute sécurité 🔒. Nous nous occupons de toute la logistique et assurons la livraison jusqu'à chez vous 🚚💨.
                 </li>
                 <li>
-                    <strong>Livraison à domicile</strong><br>
-                    Après le contrôle vétérinaire, votre commande sera livrée directement à votre adresse. Vous recevrez une notification dès que votre produit est expédié.
+                    <strong>🏡 Livraison rapide à domicile</strong><br>
+                    Après validation du contrôle vétérinaire, votre commande sera expédiée directement à votre adresse 📦. Vous recevrez une notification instantanée lorsque votre produit est en route 📲📍.
                 </li>
             </ol>
             <p>
-                <strong>Nous nous engageons à vous offrir un service de qualité et à garantir la sécurité des produits que vous achetez.</strong>
+                <strong>Nous nous engageons à vous offrir un service de qualité et à garantir la sécurité des produits que vous achetez. 💯</strong>
             </p>
-            <p>Pour toute question ou assistance, notre service client est à votre disposition.</p>
-            <p class="signature">Cordialement,<br><em>L’équipe FarmsConnect</em></p>
+            <p class="support-message">Pour toute question ou assistance, notre équipe de support est prête à vous aider 🤗. N'hésitez pas à nous contacter ! <a href="https://wa.me/+22656663638" target="_blank">Cliquez ici pour contacter sur WhatsApp</a></p>            <p class="signature">Cordialement,<br><em>L’équipe FarmsConnect 🚜</em></p>
         </div>
     </div>
 
@@ -172,77 +167,119 @@ categoryButtons.forEach(button => {
         let selectedPriceRange = '';
         const itemsPerPage = 6; // Nombre d'éléments par page
     
-        // Fonction pour afficher les annonces
-        function displayAnnonces(annonces, page = 1) {
-            try {
-                if (!Array.isArray(annonces)) {
-                    throw new Error('Données invalides pour les annonces');
-                }
-                animalsList.innerHTML = ''; // Vider la section des annonces avant de les afficher
-    
-                const startIndex = (page - 1) * itemsPerPage;
-                const endIndex = startIndex + itemsPerPage;
-                const paginatedAnnonces = annonces.slice(startIndex, endIndex);
-    
-                paginatedAnnonces.forEach(animal => {
-                    const animalCard = document.createElement('div');
-                    animalCard.classList.add('animal-card');
-    
-                    // Sélection de l'image principale
-                    const mainImage = animal.images[0];
-    
-                    // Création du bouton "Voir plus"
-                    const seeMoreButton = animal.images.length > 1
-                        ? `<button class="see-more-button" data-animal='${JSON.stringify(animal)}'>Voir plus</button>`
-                        : '';
-    
-                    // Construction du contenu de la carte de l'animal
-                    animalCard.innerHTML = `
-                        <h3>(${animal.categorie})</h3>
-                        <p>Nombre : ${animal.nombre}</p>
-                        <p>Poids par animal : ${animal.poids || 'Non spécifié'} kg</p>
-                        <p>Prix unitaire : ${animal.prixFinal}
-                        <p>Code du vendeur : ${animal.codeVendeur}</p>
-                        <div class="images-section">
-                            <img src="${mainImage}" alt="Image de l'animal" class="main-image"/>
-                            <div class="additional-images hidden">
-                                ${animal.images
-                                    .slice(1)
-                                    .map(img => `<img src="${img}" alt="Image supplémentaire" class="additional-image" />`)
-                                    .join('')}
-                            </div>
-                            ${seeMoreButton}
+// Fonction ultra-moderne et sophistiquée pour afficher les annonces
+function displayAnnonces(annonces, page = 1) {
+    try {
+        if (!Array.isArray(annonces)) {
+            throw new Error('Données invalides pour les annonces');
+        }
+
+        // Vidage dynamique de la section des annonces avant de les afficher
+        animalsList.innerHTML = ''; 
+
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedAnnonces = annonces.slice(startIndex, endIndex);
+
+        // Affichage des annonces avec une présentation soignée et moderne
+        paginatedAnnonces.forEach(animal => {
+            const animalCard = document.createElement('div');
+            animalCard.classList.add('animal-card', 'animate__animated', 'animate__fadeInUp');  // Animation d'entrée
+
+            // Sélection de l'image principale et affichage stylisé
+            const mainImage = animal.images[0];
+
+            // Création dynamique du bouton "Voir plus" si plusieurs images sont disponibles
+            const seeMoreButton = animal.images.length > 1
+                ? `<button class="see-more-button btn-modern" data-animal='${JSON.stringify(animal)}'>👁️ Voir plus</button>`
+                : '';
+
+            // Construction de la carte d'animal avec des éléments modernes et dynamiques
+            animalCard.innerHTML = `
+                <div class="animal-card-header">
+                    <h3 class="category-name">📂(${animal.categorie})</h3>
+                <p class="animal-info">🔖 Numéro de l'annonce : ${(animal.numeroAnnonce)}</p>
+
+                </div>
+                <div class="animal-card-body">
+                    <p class="animal-info">📦 Nombre : ${animal.nombre}</p>
+                    <p class="animal-info">⚖️ Poids approximatif : ${animal.poids || 'Non spécifié'} kg</p>
+                    <p class="animal-info">💵 Prix unitaire : <strong>${animal.prixFinal} FCFA </strong></p>
+                    <p class="animal-info">📜 Code vendeur : ${animal.codeVendeur}</p>
+                    <div class="images-section">
+                    <img src="${mainImage}" alt="Image de l'animal" class="animal-image"/>
+                        <div class="additional-images hidden">
+                            ${animal.images.slice(1).map(img => `<img src="${img}" alt="Image supplémentaire" class="additional-image"/>`).join('')}
                         </div>
-                        <button class="buy-button" data-animal='${JSON.stringify(animal)}'>Acheter ce produit</button>
-                    `;
-                    animalsList.appendChild(animalCard);
-                });
+                        ${seeMoreButton}
+                    </div>
+                </div>
+                <div class="animal-card-footer">
+                    <button class="buy-button btn-modern" data-animal='${JSON.stringify(animal)}'>🛒 Acheter ce produit</button>
+                </div>
+            `;
+
+            // Ajouter l'élément de la carte à la liste d'annonces
+            animalsList.appendChild(animalCard);
+        });
+
+        // Ajouter des gestionnaires d'événements dynamiques
+        addEventListenersToButtons(); 
+
+    } catch (error) {
+        console.error("Erreur lors de l'affichage des annonces :", error.message);
+    }
+}
     
-                addEventListenersToButtons(); // Ajouter les gestionnaires d'événements
-            } catch (error) {
-                console.error(error.message);
-            }
+// Fonction pour gérer la pagination
+function displayPagination(totalItems, currentPage) {
+    try {
+        paginationContainer.innerHTML = ''; // Vider la pagination
+        
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        
+        // Créer le bouton "Précédent"
+        if (currentPage > 1) {
+            const prevButton = document.createElement('button');
+            prevButton.classList.add('pagination-button', 'prev-next');
+            prevButton.textContent = 'Précédent';
+            prevButton.addEventListener('click', () => {
+                displayAnnonces(filteredAnnonces, currentPage - 1);
+                displayPagination(totalItems, currentPage - 1);
+            });
+            paginationContainer.appendChild(prevButton);
         }
-    
-        // Fonction pour gérer la pagination
-        function displayPagination(totalItems, currentPage) {
-            paginationContainer.innerHTML = ''; // Vider la pagination
-    
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-            for (let i = 1; i <= totalPages; i++) {
-                const pageButton = document.createElement('button');
-                pageButton.classList.add('pagination-button');
-                pageButton.textContent = i;
-                if (i === currentPage) pageButton.classList.add('active');
-    
-                pageButton.addEventListener('click', () => {
-                    displayAnnonces(filteredAnnonces, i); // Afficher les annonces pour la page sélectionnée
-                    displayPagination(totalItems, i); // Actualiser les boutons de pagination
-                });
-    
-                paginationContainer.appendChild(pageButton);
-            }
+
+        // Créer les boutons de page
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.classList.add('pagination-button');
+            pageButton.textContent = i;
+            if (i === currentPage) pageButton.classList.add('active');
+            
+            pageButton.addEventListener('click', () => {
+                displayAnnonces(filteredAnnonces, i);
+                displayPagination(totalItems, i);
+            });
+
+            paginationContainer.appendChild(pageButton);
         }
+
+        // Créer le bouton "Suivant"
+        if (currentPage < totalPages) {
+            const nextButton = document.createElement('button');
+            nextButton.classList.add('pagination-button', 'prev-next');
+            nextButton.textContent = 'Suivant';
+            nextButton.addEventListener('click', () => {
+                displayAnnonces(filteredAnnonces, currentPage + 1);
+                displayPagination(totalItems, currentPage + 1);
+            });
+            paginationContainer.appendChild(nextButton);
+        }
+    } catch (error) {
+        console.error('Erreur de pagination:', error.message);
+    }
+}
     
         // Gestionnaires d'événements pour les boutons
         function addEventListenersToButtons() {
@@ -333,22 +370,60 @@ async function fetchAnnonces(page = 1, limit = 10) {
     }
 }
 
-function displayPagination(totalPages, currentPage) {
-    const paginationElement = document.getElementById('pagination');
-    paginationElement.innerHTML = '';  // Vider l'élément de pagination
+// Fonction pour gérer la pagination
+function displayPagination(totalItems, currentPage) {
+    try {
+        paginationContainer.innerHTML = ''; // Vider la pagination
+        
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        
+        // Créer le bouton "Précédent"
+        if (currentPage > 1) {
+            const prevButton = document.createElement('button');
+            prevButton.classList.add('pagination-button', 'prev-next');
+            prevButton.textContent = 'Précédent';
+            prevButton.addEventListener('click', () => {
+                displayAnnonces(filteredAnnonces, currentPage - 1);
+                displayPagination(totalItems, currentPage - 1);
+            });
+            paginationContainer.appendChild(prevButton);
+        }
 
-    // Créer les boutons pour chaque page
-    for (let i = 1; i <= totalPages; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.innerText = i;
-        pageButton.disabled = i === currentPage;  // Désactiver le bouton pour la page actuelle
-        pageButton.addEventListener('click', () => fetchAnnonces(i));  // Charger la page correspondante
-        paginationElement.appendChild(pageButton);
+        // Créer les boutons de page
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.classList.add('pagination-button');
+            pageButton.textContent = i;
+            if (i === currentPage) {
+                pageButton.classList.add('active'); // Page en cours
+            }
+            
+            pageButton.addEventListener('click', () => {
+                displayAnnonces(filteredAnnonces, i);
+                displayPagination(totalItems, i);
+            });
+
+            paginationContainer.appendChild(pageButton);
+        }
+
+        // Créer le bouton "Suivant"
+        if (currentPage < totalPages) {
+            const nextButton = document.createElement('button');
+            nextButton.classList.add('pagination-button', 'prev-next');
+            nextButton.textContent = 'Suivant';
+            nextButton.addEventListener('click', () => {
+                displayAnnonces(filteredAnnonces, currentPage + 1);
+                displayPagination(totalItems, currentPage + 1);
+            });
+            paginationContainer.appendChild(nextButton);
+        }
+    } catch (error) {
+        console.error('Erreur de pagination:', error.message);
     }
 }
 
 // Charger les annonces pour la première page (exemple avec limit=10)
-fetchAnnonces(1, 10);
+fetchAnnonces(1, 100);
 
 </script>
 
@@ -433,7 +508,8 @@ function validateQuartier() {
             contact: visitorInfo.contact,
             quantity: visitorInfo.quantity,
             quartier: visitorInfo.quartier,
-            location: null // Ajout des coordonnées GPS
+            location: null, // Ajout des coordonnées GPS
+            Numeroannonce : animal.Numeroannonce
         };
         console.log('Détails de l\'achat :', purchaseDetails);
         // Vous pouvez ensuite utiliser purchaseDetails, par exemple, pour envoyer au serveur
@@ -486,8 +562,10 @@ async function processEmails(animal, visitorInfo, purchaseDetails) {
 🔹 Catégorie : ${animal.categorie}
 🔹 Quantité demandée : ${visitorInfo.quantity}
 🔹 Nom du client : ${visitorInfo.username}
+🔖Numero de l'annonce : ${animal.Numeroannonce}
 💰 Recette estimée : ${(animal.prix * visitorInfo.quantity).toLocaleString()} FCFA
 📦 Prochaine étape : FarmsConnect vous contactera bientôt pour organiser la livraison. 🚚
+
 Merci d'utiliser FarmsConnect!`;
 
         sendEmailVendeur(emailContentVendeur, animal.emailVendeur);
@@ -501,6 +579,7 @@ Votre commande a été enregistrée avec succès. Voici les détails de votre ac
 💰 Total à payer : ${(animal.prix * visitorInfo.quantity * 1.04 + 500).toLocaleString()} FCFA _(inclut 500 FCFA de frais de traitement)_
 🚚 Livraison : Gratuite
 🆔 Code du vendeur : ${animal.codeVendeur}
+🔖Numero de l'annonce : ${animal.Numeroannonce}
 🏡 Quartier de résidence : ${visitorInfo.quartier}
 📞 Vous souhaitez nous contacter ? 👉 [Cliquez ici pour nous écrire sur WhatsApp](https://wa.me/+22656663638)
 📦 Prochaine étape : FarmsConnect vous contactera bientôt pour organiser la livraison. 🚚💨
@@ -515,6 +594,7 @@ const emailContentFarmsConnect = `
 🔹 Catégorie : ${animal.categorie}
 💰 Prix unitaire : ${animal.prix} FCFA
 🆔 Code du vendeur : ${animal.codeVendeur}
+🔖Numero de l'annonce : ${animal.Numeroannonce}
 📞 Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? `(Secondaire : ${animal.contactSecondaire})` : ''}
 📍 - Latitude : ${animal.location.latitude }
 📍 - Longitude : ${animal.location.longitude }

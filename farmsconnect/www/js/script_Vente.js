@@ -6,8 +6,12 @@ document.getElementById('vente-form').addEventListener('submit', function (e) {
     const commission = prixUnitaire * 0.04;
     const prixFinal = prixUnitaire + commission;
 
-    // Création de l'objet animal
+    // Générer un numéro unique pour l'annonce
+    const numeroAnnonce = 'Annonce' + Date.now(); // Utilisation du timestamp pour générer un identifiant unique
+
+    // Création de l'objet animal avec le numéro unique
     const animal = {
+        numeroAnnonce: numeroAnnonce,  // Ajout du numéro unique à l'annonce
         categorie: document.getElementById('categorie').value,
         nombre: document.getElementById('nombre').value,
         poids: document.getElementById('poids').value,

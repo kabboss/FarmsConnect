@@ -506,22 +506,22 @@ body {
 
 
 
-.pagination-container {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.pagination-container button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    background-color: #007bff;
+.pagination-button {
+    background-color: blue; /* Couleur des pages non sélectionnées */
     color: white;
     border: none;
+    padding: 5px 10px;
+    margin: 0 5px;
     cursor: pointer;
+    font-size: 14px;
 }
 
-.pagination-container button:disabled {
-    background-color: #ccc;
+.pagination-button.active {
+    background-color: green; /* Couleur de la page sélectionnée */
+}
+
+.pagination-button:disabled {
+    background-color: gray; /* Couleur des boutons désactivés (précédent ou suivant) */
     cursor: not-allowed;
 }
 
@@ -887,6 +887,18 @@ body {
 
 
 
+
+.animal-image {
+    width: 100%;  /* Image qui prend toute la largeur de la carte */
+    height: auto; /* Garde les proportions de l'image */
+    border-radius: 15px; /* Bords arrondis pour un look plus doux */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre douce pour un effet d'élévation */
+    transition: transform 0.3s ease-in-out; /* Transition pour l'effet au survol */
+}
+
+.animal-image:hover {
+    transform: scale(1.05); /* L'image se zoom au survol */
+}
 
 
 
