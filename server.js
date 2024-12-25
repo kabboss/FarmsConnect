@@ -486,79 +486,107 @@ app.get('/Visiteur', (req, res) => {
 
 // Formation 
 
+  
 
-// Création d'un modèle pour les commentaires
-const Comment = mongoose.model('Comment', new mongoose.Schema({
-    username: String,
-    message: String,
-    date: { type: Date, default: Date.now },
-    likes: { type: Number, default: 0 }, // Ajout du champ "likes"
-}));
-  
-  // Middleware pour les fichiers statiques
-  app.use(express.static(path.join(__dirname, 'public')));
-  app.use(express.urlencoded({ extended: true }));
-  app.set('view engine', 'ejs');
-  
-  // Route principale pour afficher la page de formation
-  app.get('/', async (req, res) => {
-    const comments = await Comment.find();
-    res.render('index', { comments });
-  });
-  
-  // Route pour ajouter un commentaire
-  app.post('/comment', async (req, res) => {
-    const { username, message } = req.body;
-    const comment = new Comment({ username, message });
-    await comment.save();
-    res.redirect('/');
-  });
-  
-  // Serveur WebSocket pour gérer le chat en temps réel
-  io.on('connection', (socket) => {
+
+// Middleware pour les fichiers statiques
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
+app.set('view engine', 'ejs');
+
+
+// Route principale pour afficher la page et récupérer les messages
+app.get('/', async (req, res) => {
+    try {
+        const messages = await Message.find(); // Récupération des messages
+        res.render('index', { messages });
+    } catch (err) {
+        console.error('Erreur lors de la récupération des messages :', err.message);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
+// Route pour ajouter un nouveau commentaire
+app.post('/comment', async (req, res) => {
+    const { username, content } = req.body;
+
+    if (!username || !content) {
+        return res.status(400).send('Les champs "username" et "content" sont requis');
+    }
+
+    try {
+        const comment = new Message({ username, content });
+        await comment.save();
+        res.redirect('/');
+    } catch (err) {
+        console.error('Erreur lors de l\'ajout d\'un commentaire :', err.message);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
+// Route pour ajouter une réponse à un commentaire
+app.post('/comment/:id/reply', async (req, res) => {
+    const { id } = req.params;
+    const { username, content } = req.body;
+
+    if (!username || !content) {
+        return res.status(400).send('Les champs "username" et "content" sont requis');
+    }
+
+    try {
+        const comment = await Message.findById(id);
+        if (!comment) {
+            return res.status(404).send('Commentaire non trouvé');
+        }
+
+        comment.replies.push({ username, content });
+        await comment.save();
+
+        res.redirect('/');
+    } catch (err) {
+        console.error('Erreur lors de l\'ajout d\'une réponse :', err.message);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
+// Route pour ajouter un like à un commentaire
+app.post('/like/:id', async (req, res) => {
+    const { id } = req.params;
+
+    // Vérification si l'ID est valide
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: 'ID non valide' });
+    }
+
+    try {
+        const comment = await Message.findById(id);
+        if (!comment) {
+            return res.status(404).json({ message: 'Commentaire non trouvé' });
+        }
+
+        comment.likes += 1;
+        await comment.save();
+
+        res.status(200).json({ message: 'Like ajouté', likes: comment.likes });
+    } catch (err) {
+        console.error('Erreur lors de l\'ajout du like :', err.message);
+        res.status(500).json({ message: 'Erreur serveur', error: err.message });
+    }
+});
+
+// Serveur WebSocket pour gérer le chat en temps réel
+io.on('connection', (socket) => {
     console.log('Un utilisateur est connecté');
-    
+
     // Écoute des messages de chat
     socket.on('chat message', (msg) => {
-      io.emit('chat message', msg); // Diffuse à tous les clients
+        io.emit('chat message', msg); // Diffuse à tous les clients
     });
-  
+
     socket.on('disconnect', () => {
-      console.log('Un utilisateur a quitté');
+        console.log('Un utilisateur a quitté');
     });
-  });
-  
-
-
-
-
-  app.post('/like/:id', async (req, res) => {
-      const commentId = req.params.id;
-  
-      // Vérification si l'ID est valide
-      if (!mongoose.Types.ObjectId.isValid(commentId)) {
-          return res.status(400).json({ message: 'ID non valide' });
-      }
-  
-      try {
-          // Recherche du commentaire
-          const comment = await Comment.findById(commentId);
-  
-          if (!comment) {
-              return res.status(404).json({ message: 'Commentaire non trouvé' });
-          }
-  
-          // Mise à jour des likes
-          comment.likes = (comment.likes || 0) + 1;
-          await comment.save();
-  
-          res.status(200).json({ message: 'Like ajouté', likes: comment.likes });
-      } catch (err) {
-          console.error('Erreur serveur :', err.message);
-          res.status(500).json({ message: 'Erreur serveur', error: err.message });
-      }
-  });
-    
+});
 
 
 
