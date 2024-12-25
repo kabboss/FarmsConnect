@@ -220,65 +220,126 @@ body {
 
 
 
-/* Section du forum */
+/* Style général pour la section du forum */
 #forum {
-    max-width: 95%;
-    margin: 2rem auto;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
-    padding: 1.5rem;
-    animation: fadeIn 1s ease-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
-/* Liste des messages */
 #message-list {
-    max-height: 300px;
-    overflow-y: auto;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    border: 1px solid #eee;
-    border-radius: 10px;
+    width: 100%;
+    max-width: 900px;
+    margin-bottom: 20px;
     background: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    height: calc(100vh - 200px); /* Permet un défilement si le contenu est long */
 }
 
+/* Assurer que les messages s'adaptent correctement */
 .message {
-    margin-bottom: 1rem;
-    padding: 1rem;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+    word-wrap: break-word;  /* Permet de couper les mots longs pour les faire revenir à la ligne */
+    white-space: normal;  /* Permet d'afficher le texte sur plusieurs lignes si nécessaire */
+    margin-bottom: 15px;  /* Espacement entre les messages */
 }
 
-.message:hover {
-    transform: translateY(-5px);
+/* Si vous avez des messages dans des éléments spécifiques, vous pouvez aussi appliquer cette règle à ces éléments */
+.message p {
+    word-wrap: break-word;
+    white-space: normal;
 }
 
-/* Formulaire de publication */
 #message-form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    width: 100%;
+    max-width: 900px;
+    background: #fff;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 #message-input {
     width: 100%;
-    height: 80px;
-    padding: 0.8rem;
-    border-radius: 10px;
+    padding: 10px;
     border: 1px solid #ddd;
-    font-size: 0.9rem;
+    border-radius: 5px;
+    font-size: 16px;
+    resize: vertical; /* Permet de redimensionner la zone de texte verticalement */
+    min-height: 120px; /* Hauteur minimale de la zone de texte */
+    max-height: 300px; /* Hauteur maximale pour éviter qu'il devienne trop grand */
+    margin-bottom: 15px;
+    box-sizing: border-box;
     background: #f4f4f4;
-    outline: none;
-    resize: none;
-    transition: all 0.3s ease;
 }
 
-#message-input:focus {
-    border-color: #FF7600;
-    background: white;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+#message-form button {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#message-form button:hover {
+    background-color: #45a049;
+}
+
+/* Responsive : ajuster les styles pour les petits écrans */
+@media (max-width: 768px) {
+    #forum {
+        padding: 15px;
+    }
+
+    #message-list {
+        margin-bottom: 15px;
+        padding: 15px;
+    }
+
+    #message-form {
+        padding: 10px;
+    }
+
+    #message-input {
+        min-height: 100px;
+        max-height: 250px;
+    }
+
+    #message-form button {
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+}
+
+/* Pour les très petits écrans, comme les smartphones */
+@media (max-width: 480px) {
+    #forum {
+        padding: 10px;
+    }
+
+    #message-form {
+        padding: 8px;
+    }
+
+    #message-input {
+        min-height: 80px;
+        max-height: 200px;
+    }
+
+    #message-form button {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
 }
 
 button[type="submit"] {
@@ -410,3 +471,185 @@ button[type="submit"]:hover {
 
 
 
+
+
+
+
+
+
+
+
+/* Styles pour les messages */
+.message {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin: 10px 0;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Animation au survol du message */
+.message:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Date en haut du message */
+.message .meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.message .meta span {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* Structure du message */
+strong {
+    font-weight: bold;
+    color: #333;
+}
+
+button {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+button:hover {
+    color: #007bff;
+}
+
+/* Boutons de like et dislike */
+.like-button, .dislike-button {
+    display: inline-flex; /* Change de flex à inline-flex pour qu'ils soient alignés horizontalement */
+    align-items: center;
+    gap: 5px;
+    font-size: 1rem;
+}
+
+/* Optionnel : Ajoutez un peu de padding et de marge pour espacer les boutons si nécessaire */
+.like-button, .dislike-button {
+    padding: 5px 5px;
+    margin-right: 5px; /* Pour un petit espacement entre les boutons */
+}
+
+
+/* Section des actions (répondre, supprimer, modifier) */
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: flex-start;
+}
+
+.edit-button, .delete-button, .reply-button {
+    padding: 5px 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-button:hover, .delete-button:hover, .reply-button:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Section de réponse */
+.reply-input {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.reply-message-input {
+    width: 80%;
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.send-reply-button {
+    padding: 8px 15px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.send-reply-button:hover {
+    background-color: #218838;
+}
+
+/* Affichage des réponses */
+.replies {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.reply {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+/* Styles pour les petits écrans */
+@media (max-width: 768px) {
+    .message {
+        padding: 10px;
+        margin: 5px 0;
+    }
+
+    .message .meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .message .meta span {
+        font-size: 0.8rem;
+    }
+
+    .like-button, .dislike-button {
+        font-size: 1rem;
+    }
+
+    .actions {
+        flex-direction: row;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .edit-button, .delete-button, .reply-button {
+        width: auto;
+        padding: 5px 10px;
+    }
+
+    .reply-message-input {
+        width: 100%;
+    }
+
+    .send-reply-button {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .replies {
+        padding-left: 10px;
+    }
+}

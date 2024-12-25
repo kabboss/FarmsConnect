@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -52,18 +51,11 @@
 
         <form id="message-form">
             <textarea id="message-input" placeholder="Tapez votre message ici..." required></textarea>
+            <input type="file" id="audio-input" accept="audio/*">
             <button type="submit">Publier</button>
         </form>
     </section>
 
-    <!-- Message de chargement -->
-    <div id="loadingMessage" class="hidden">
-        <div class="spinner-container">
-            <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
-            <div class="spinner"></div>
-        </div>
-        <p class="loading-text">Veuillez patienter...</p> 
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/socket.io-client/dist/socket.io.min.js"></script>
     <script src="js/Forum.js"></script>
