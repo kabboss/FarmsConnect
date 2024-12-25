@@ -574,6 +574,35 @@ app.post('/like/:id', async (req, res) => {
     }
 });
 
+
+// Route pour ajouter un dislike à un commentaire
+app.post('/dislike/:id', async (req, res) => {
+    const { id } = req.params;
+
+    // Vérification si l'ID est valide
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: 'ID non valide' });
+    }
+
+    try {
+        const comment = await Message.findById(id);
+        if (!comment) {
+            return res.status(404).json({ message: 'Commentaire non trouvé' });
+        }
+
+        comment.dislikes += 1;
+        await comment.save();
+
+        res.status(200).json({ message: 'Dislike ajouté', dislikes: comment.dislikes });
+    } catch (err) {
+        console.error('Erreur lors de l\'ajout du dislike :', err.message);
+        res.status(500).json({ message: 'Erreur serveur', error: err.message });
+    }
+});
+
+
+
+
 // Serveur WebSocket pour gérer le chat en temps réel
 io.on('connection', (socket) => {
     console.log('Un utilisateur est connecté');
