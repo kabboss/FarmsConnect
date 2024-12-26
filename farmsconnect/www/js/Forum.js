@@ -59,19 +59,34 @@ scrollToBottom() {
 
 
     // Fonction pour charger les messages
-    async loadMessages() {
-        const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/messages');  // Récupérer les messages via l'API
-        const messages = await response.json();  // Convertir la réponse en JSON
-        const messageList = document.getElementById('message-list');  // Récupérer la section des messages
+// Fonction pour charger les messages avec un tri basé sur la sélection
+async loadMessages() {
+    const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/messages');  // Récupérer les messages via l'API
+    const messages = await response.json();  // Convertir la réponse en JSON
 
-        messageList.innerHTML = "";  // Vider la liste de messages avant de la remplir à nouveau
-        messages.forEach(message => {
-            this.displayMessage(message);
-        });
+// Trier les messages en fonction de l'option de tri
+if (this.sortOption === 'date') {
+    messages.sort((a, b) => new Date(a.date) - new Date(b.date));  // Tri croissant par date (du plus ancien au plus récent)
+} else if (this.sortOption === 'hour') {
+    messages.sort((a, b) => {
+        // Comparer les heures uniquement
+        const hourA = new Date(a.date).getHours();
+        const hourB = new Date(b.date).getHours();
+        return hourA - hourB;  // Tri croissant par heure (de l'heure la plus tôt à la plus tardive)
+    });
+} else if (this.sortOption === 'popularity') {
+    messages.sort((a, b) => a.likes - b.likes);  // Tri croissant par popularité (moins de likes en haut)
+}
+    const messageList = document.getElementById('message-list');  // Récupérer la section des messages
 
-        // Après avoir affiché les messages, faire défiler jusqu'au dernier
+    messageList.innerHTML = "";  // Vider la liste de messages avant de la remplir à nouveau
+    messages.forEach(message => {
+        this.displayMessage(message);  // Afficher chaque message
+    });
+
+    // Après avoir affiché les messages, faire défiler jusqu'au dernier
     this.scrollToBottom();
-    }
+}
 
 // Fonction pour afficher un message
 displayMessage({ _id, username = "Utilisateur anonyme", content, replies = [], likes = 0, dislikes = 0, date }) {
@@ -85,7 +100,6 @@ displayMessage({ _id, username = "Utilisateur anonyme", content, replies = [], l
         </div>
         <strong>${username}:</strong> ${content}
         <button class="like-button">👍 <span id="like-count-${_id}">${likes}</span></button>
-        <button class="dislike-button">👎 <span id="dislike-count-${_id}">${dislikes}</span></button>
         
         <div class="actions">
             <button class="edit-button">Modifier</button>
@@ -243,8 +257,6 @@ async reactToMessage(messageId, type) {
 
         this.searchInput?.addEventListener("input", () => this.loadMessages());
 
-        document.getElementById("next-page").addEventListener("click", () => this.changePage(1));
-        document.getElementById("prev-page").addEventListener("click", () => this.changePage(-1));
 
         document.getElementById("sort-option").addEventListener("change", (e) => {
             this.changeSort(e.target.value);

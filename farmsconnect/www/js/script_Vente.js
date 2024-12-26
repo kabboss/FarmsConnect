@@ -68,7 +68,6 @@ function handleLocation(animal) {
 
                 // Envoyer les données après obtention de la localisation
                 sendData(animal);
-                showAlert("Annonce envoyée avec succès !");
             },
             function (error) {
                 // Gestion des erreurs de géolocalisation
@@ -134,7 +133,12 @@ function sendData(animal) {
             })
             .then(data => {
                 console.log("Annonce envoyée avec succès", data);
-                setTimeout(() => location.reload(), 2000);
+
+                // Afficher l'alerte après envoi réussi
+                showAlert("Annonce envoyée avec succès !");
+
+                // Recharger la page après 4 secondes
+                setTimeout(() => location.reload(), 4000);
             })
             .catch(error => {
                 showAlert("Erreur lors de l'envoi : " + error.message);
@@ -150,7 +154,7 @@ function showAlert(message) {
     alertMessage.textContent = message;
     alertBox.classList.add("visible");
 
-    setTimeout(() => closeAlert(), 10000);
+    setTimeout(() => closeAlert(), 10000); // L'alerte se ferme après 10 secondes
 }
 
 // Fonction pour fermer le message d'alerte

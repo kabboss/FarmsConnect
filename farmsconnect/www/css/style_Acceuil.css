@@ -956,7 +956,7 @@ a {
  .butt {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 10px;
     padding: 20px;
     background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
     border-radius: 15px;
@@ -972,7 +972,7 @@ a {
     justify-content: center;
     text-decoration: none;
     padding: 15px;
-    width: 150px;
+    width: 100px;
     height: 200px;
     background: linear-gradient(145deg, #ffffff, #dcdcdc);
     border: 2px solid #ccc;
@@ -990,7 +990,7 @@ a {
   /* Images dans les boutons */
   .butto img {
     max-width: 100px;
-    height: auto;
+    height: 70px;
     margin-bottom: 15px;
     border-radius: 15px;
     transition: transform 0.3s ease, filter 0.3s ease;
@@ -1037,16 +1037,16 @@ a {
   /* Media Queries pour très petits écrans (mobile portrait) */
   @media (max-width: 480px) {
     .butt {
-      gap: 30px; /* Réduire l'espace entre les boutons sur les très petits écrans */
+      gap: 6px; /* Réduire l'espace entre les boutons sur les très petits écrans */
     }
 
     .butto {
-      width: 100px; /* Taille des boutons plus petite */
-      height: 130px; /* Réduire la hauteur des boutons */
+      width: 90px; /* Taille des boutons plus petite */
+      height: 100px; /* Réduire la hauteur des boutons */
     }
 
     .butto span {
-      font-size: 18px; /* Réduire la taille du texte pour les très petits écrans */
+      font-size: 12px; /* Réduire la taille du texte pour les très petits écrans */
     }
   }
 
