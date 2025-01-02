@@ -138,7 +138,7 @@ function sendData(animal) {
                 showAlert("Annonce envoyée avec succès !");
 
                 // Recharger la page après 4 secondes
-                setTimeout(() => location.reload(), 4000);
+                setTimeout(() => location.reload(), 1000);
             })
             .catch(error => {
                 showAlert("Erreur lors de l'envoi : " + error.message);

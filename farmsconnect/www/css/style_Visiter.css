@@ -894,6 +894,8 @@ body {
     border-radius: 15px; /* Bords arrondis pour un look plus doux */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre douce pour un effet d'élévation */
     transition: transform 0.3s ease-in-out; /* Transition pour l'effet au survol */
+    object-fit: Stretch;
+
 }
 
 .animal-image:hover {
