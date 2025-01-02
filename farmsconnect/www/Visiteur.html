@@ -159,161 +159,146 @@ categoryButtons.forEach(button => {
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const animalsList = document.getElementById("animals-list");
-      const categoriesButtons = document.querySelectorAll(".category-button");
-      const priceButtonsSection = document.getElementById("price-buttons");
-      const paginationContainer = document.getElementById("pagination");
-      const itemsPerPage = 6;
-    
-      let selectedCategory = "";
-      let selectedPriceRange = "";
-      let filteredAnnonces = [];
-      let allAnnonces = []; // Stockage des annonces récupérées depuis l'API
-    
-      // Fonction d'affichage des annonces
-      function displayAnnonces(annonces, page = 1) {
-        animalsList.innerHTML = "";
-    
-        const startIndex = (page - 1) * itemsPerPage;
-        const paginatedAnnonces = annonces.slice(startIndex, startIndex + itemsPerPage);
-    
-        paginatedAnnonces.forEach((animal) => {
-          const animalCard = document.createElement("div");
-          animalCard.classList.add("animal-card", "animate__animated", "animate__fadeInUp");
-    
-          const mainImage = animal.images[0] || "";
-          const additionalImages = animal.images.slice(1).map((img) => `<img src="${img}" alt="Image supplémentaire" class="additional-image">`).join("");
-    
-          animalCard.innerHTML = `
-            <div class="animal-card-header">
-              <h3 class="category-name">📂 (${animal.categorie})</h3>
-              <p>🔖 Numéro d'annonce : ${animal.numeroAnnonce}</p>
-            </div>
-            <div class="animal-card-body">
-              <p>📦 Nombre : ${animal.nombre}</p>
-              <p>⚖️ Poids : ${animal.poids || "Non spécifié"} kg</p>
-              <p><strong>💵 Prix : ${animal.prixFinal} FCFA</strong></p>
-              <p>📜 Code vendeur : ${animal.codeVendeur}</p>
-              <div class="images-section">
-                <img src="${mainImage}" alt="Image de l'animal" class="animal-image">
-                <div class="additional-images hidden">${additionalImages}</div>
-                ${animal.images.length > 1 ? `<button class="see-more-button">👁️ Voir plus</button>` : ""}
-              </div>
-            </div>
-            <div class="animal-card-footer">
-              <button class="buy-button" data-animal='${JSON.stringify(animal)}'>🛒 Acheter</button>
-            </div>
-          `;
-    
-          animalsList.appendChild(animalCard);
-        });
-    
-        addEventListenersToButtons();
-      }
-    
+        const animalsList = document.getElementById("animals-list");
+        const categoriesButtons = document.querySelectorAll(".category-button");
+        const priceButtonsSection = document.getElementById("price-buttons");
 
-      
-      // Fonction d'affichage de la pagination
-      function displayPagination(totalItems, currentPage) {
-        paginationContainer.innerHTML = "";
-    
-        const totalPages = Math.ceil(totalItems / itemsPerPage);
-    
-        if (currentPage > 1) {
-          const prevButton = document.createElement("button");
-          prevButton.textContent = "Précédent";
-          prevButton.addEventListener("click", () => updatePage(currentPage - 1));
-          paginationContainer.appendChild(prevButton);
-        }
-    
-        for (let i = 1; i <= totalPages; i++) {
-          const pageButton = document.createElement("button");
-          pageButton.textContent = i;
-          pageButton.classList.toggle("active", i === currentPage);
-          pageButton.addEventListener("click", () => updatePage(i));
-          paginationContainer.appendChild(pageButton);
-        }
-    
-        if (currentPage < totalPages) {
-          const nextButton = document.createElement("button");
-          nextButton.textContent = "Suivant";
-          nextButton.addEventListener("click", () => updatePage(currentPage + 1));
-          paginationContainer.appendChild(nextButton);
-        }
-      }
-    
-      // Fonction pour mettre à jour la page actuelle
-      function updatePage(page) {
-        displayAnnonces(filteredAnnonces, page);
-        displayPagination(filteredAnnonces.length, page);
-      }
-    
-      // Gestion des clics pour les boutons
-      function addEventListenersToButtons() {
-        document.querySelectorAll(".see-more-button").forEach((button) => {
-          button.addEventListener("click", () => {
-            const additionalImages = button.previousElementSibling;
-            additionalImages.classList.toggle("hidden");
-            button.textContent = additionalImages.classList.contains("hidden") ? "👁️ Voir plus" : "👁️ Voir moins";
-          });
-        });
-    
-        document.querySelectorAll(".buy-button").forEach((button) => {
-          button.addEventListener("click", () => {
-            const animal = JSON.parse(button.getAttribute("data-animal"));
-            alert(`Produit ajouté au panier : ${animal.categorie}`);
-          });
-        });
-      }
-    
-      // Fonction de filtrage des annonces
-      function filterAnnonces() {
-        let filtered = allAnnonces;
-    
-        if (selectedCategory) {
-          filtered = filtered.filter((animal) => animal.categorie === selectedCategory);
-        }
-    
-        if (selectedPriceRange) {
-          filtered = filtered.filter((animal) => {
-            const price = animal.prixFinal;
-            if (selectedPriceRange === "0-500") return price <= 500;
-            if (selectedPriceRange === "501-1000") return price > 500 && price <= 1000;
-            if (selectedPriceRange === "1001-2000") return price > 1000 && price <= 2000;
-            if (selectedPriceRange === "2001-5000") return price > 2000 && price <= 5000;
-            if (selectedPriceRange === "5000+") return price > 5000;
-            return false;
-          });
-        }
-    
-        filteredAnnonces = filtered;
-        updatePage(1);
-      }
-    
-      // Récupération des annonces depuis l'API
-      fetch("https://farmsconnect-b084ddb02391.herokuapp.com/api/annonces")
-        .then((response) => response.json())
-        .then((annonces) => {
-          allAnnonces = annonces; // Stockage des annonces pour filtrage futur
-    
-          categoriesButtons.forEach((button) => {
-            button.addEventListener("click", () => {
-              selectedCategory = button.getAttribute("data-category");
-              priceButtonsSection.classList.remove("hidden");
-              filterAnnonces();
+        const itemsPerPage = 6;
+        let selectedCategory = "";
+        let selectedPriceRange = "";
+        let filteredAnnonces = [];
+        let allAnnonces = []; // Stockage des annonces récupérées depuis l'API
+        let currentPage = 1;
+
+        // Fonction d'affichage des annonces
+        function displayAnnonces(annonces) {
+            annonces.forEach((animal) => {
+                const animalCard = document.createElement("div");
+                animalCard.classList.add("animal-card", "animate__animated", "animate__fadeInUp");
+
+                const mainImage = animal.images[0] || "";
+                const additionalImages = animal.images.slice(1).map((img) => `<img src="${img}" alt="Image supplémentaire" class="additional-image">`).join("");
+
+                animalCard.innerHTML = `
+                    <div class="animal-card-header">
+                        <h3 class="category-name">📂 (${animal.categorie})</h3>
+                        <p>🔖 Numéro d'annonce : ${animal.numeroAnnonce}</p>
+                    </div>
+                    <div class="animal-card-body">
+                        <p>📦 Nombre : ${animal.nombre}</p>
+                        <p>⚖️ Poids : ${animal.poids || "Non spécifié"} kg</p>
+                        <p><strong>💵 Prix : ${animal.prixFinal} FCFA</strong></p>
+                        <p>📜 Code vendeur : ${animal.codeVendeur}</p>
+                        <div class="images-section">
+                        <img src="${mainImage}" alt="Image de l'animal" class="animal-image" loading="lazy">
+                            <div class="additional-images hidden">${additionalImages}</div>
+                            ${animal.images.length > 1 ? `<button class="see-more-button">👁️ Voir plus</button>` : ""}
+                        </div>
+                    </div>
+                    <div class="animal-card-footer">
+                        <button class="buy-button" data-animal='${JSON.stringify(animal)}'>🛒 Acheter</button>
+                    </div>
+                `;
+
+                animalsList.appendChild(animalCard);
             });
-          });
-    
-          priceButtonsSection.querySelectorAll(".price-button").forEach((button) => {
-            button.addEventListener("click", () => {
-              selectedPriceRange = button.getAttribute("data-price");
-              filterAnnonces();
+
+            addEventListenersToButtons();
+        }
+
+        // Fonction d'affichage de la pagination
+        function displayPagination(totalItems, currentPage) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            if (currentPage < totalPages) {
+                loadMoreAnnonces();
+            }
+        }
+
+        // Fonction pour charger plus d'annonces
+        function loadMoreAnnonces() {
+            if (filteredAnnonces.length > 0) {
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const paginatedAnnonces = filteredAnnonces.slice(startIndex, startIndex + itemsPerPage);
+                displayAnnonces(paginatedAnnonces);
+                currentPage++;
+            }
+        }
+
+        // Fonction de filtrage des annonces
+        function filterAnnonces() {
+            let filtered = allAnnonces;
+
+            if (selectedCategory) {
+                filtered = filtered.filter((animal) => animal.categorie === selectedCategory);
+            }
+
+            if (selectedPriceRange) {
+                filtered = filtered.filter((animal) => {
+                    const price = animal.prixFinal;
+                    if (selectedPriceRange === "0-500") return price <= 500;
+                    if (selectedPriceRange === "501-1000") return price > 500 && price <= 1000;
+                    if (selectedPriceRange === "1001-2000") return price > 1000 && price <= 2000;
+                    if (selectedPriceRange === "2001-5000") return price > 2000 && price <= 5000;
+                    if (selectedPriceRange === "5000+") return price > 5000;
+                    return false;
+                });
+            }
+
+            filteredAnnonces = filtered;
+            currentPage = 1; // Réinitialiser la page actuelle
+            animalsList.innerHTML = ""; // Effacer les annonces existantes
+            loadMoreAnnonces(); // Charger les premières annonces
+        }
+
+        // Fonction d'ajout des écouteurs d'événements sur les boutons
+        function addEventListenersToButtons() {
+            document.querySelectorAll(".see-more-button").forEach((button) => {
+                button.addEventListener("click", () => {
+                    const additionalImages = button.previousElementSibling;
+                    additionalImages.classList.toggle("hidden");
+                    button.textContent = additionalImages.classList.contains("hidden") ? "👁️ Voir plus" : "👁️ Voir moins";
+                });
             });
-          });
-        })
-        .catch((error) => console.error("Erreur lors de la récupération des annonces :", error));
+
+            document.querySelectorAll(".buy-button").forEach((button) => {
+                button.addEventListener("click", () => {
+                    const animal = JSON.parse(button.getAttribute("data-animal"));
+                    alert(`Produit ajouté au panier : ${animal.categorie}`);
+                });
+            });
+        }
+
+        // Récupération des annonces depuis l'API
+        fetch("https://farmsconnect-b084ddb02391.herokuapp.com/api/annonces")
+            .then((response) => response.json())
+            .then((annonces) => {
+                allAnnonces = annonces; // Stockage des annonces pour filtrage futur
+
+                categoriesButtons.forEach((button) => {
+                    button.addEventListener("click", () => {
+                        selectedCategory = button.getAttribute("data-category");
+                        priceButtonsSection.classList.remove("hidden");
+                        filterAnnonces();
+                    });
+                });
+
+                priceButtonsSection.querySelectorAll(".price-button").forEach((button) => {
+                    button.addEventListener("click", () => {
+                        selectedPriceRange = button.getAttribute("data-price");
+                        filterAnnonces();
+                    });
+                });
+
+                // Ajouter l'écouteur d'événements pour la pagination infinie
+                window.addEventListener("scroll", () => {
+                    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500) {
+                        loadMoreAnnonces();
+                    }
+                });
+            })
+            .catch((error) => console.error("Erreur lors de la récupération des annonces :", error));
     });
-    </script>
+</script>
         
 
 <script>
