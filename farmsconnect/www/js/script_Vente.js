@@ -8,7 +8,6 @@ document.getElementById('vente-form').addEventListener('submit', function (e) {
 
 // Création de l'objet animal avec un identifiant unique
 const animal = {
-    idAnnonce: 'Annonce' + Date.now(), // Ajout de l'ID unique
     categorie: document.getElementById('categorie').value,
     nombre: document.getElementById('nombre').value,
     poids: document.getElementById('poids').value,
@@ -18,7 +17,7 @@ const animal = {
     contactPrincipal: document.getElementById('contact-principal').value,
     contactSecondaire: document.getElementById('contact-secondaire').value,
     emailVendeur: document.getElementById('email-vendeur').value,
-    codeVendeur: 'V' + Date.now(),
+    codeVendeur: 'Annonce N°' + Date.now(),
     location: null // La localisation sera ajoutée ici
 };
 
@@ -104,17 +103,51 @@ function sendData(animal) {
         return;
     }
 
-    // Convertir les images en base64
-    const fileReaders = Array.from(files).map(file => {
+    // Convertir les images en base64 après compression et redimensionnement
+    const processImages = Array.from(files).map(file => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = event => resolve(event.target.result);
+            reader.onload = event => {
+                const img = new Image();
+                img.onload = () => {
+                    // Redimensionner l'image (par exemple à 800px de large maximum)
+                    const maxWidth = 800;
+                    const maxHeight = 800;
+                    let width = img.width;
+                    let height = img.height;
+
+                    // Calculer les nouvelles dimensions en respectant le ratio
+                    if (width > maxWidth || height > maxHeight) {
+                        if (width > height) {
+                            height = Math.floor((height * maxWidth) / width);
+                            width = maxWidth;
+                        } else {
+                            width = Math.floor((width * maxHeight) / height);
+                            height = maxHeight;
+                        }
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    // Dessiner l'image redimensionnée sur le canvas
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Convertir le canvas en base64 (au format JPEG pour compression)
+                    const compressedImage = canvas.toDataURL('image/jpeg', 0.8); // 0.8 pour 80% de qualité
+                    resolve(compressedImage);
+                };
+                img.onerror = reject;
+                img.src = event.target.result; // Charger l'image
+            };
             reader.onerror = reject;
             reader.readAsDataURL(file);
         });
     });
 
-    Promise.all(fileReaders).then(images => {
+    Promise.all(processImages).then(images => {
         animal.images = images;
 
         // Envoi des données vers l'API
@@ -123,29 +156,28 @@ function sendData(animal) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(animal)
         })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => {
-                        throw new Error(`Erreur HTTP : ${response.status} - ${text}`);
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Annonce envoyée avec succès", data);
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`Erreur HTTP : ${response.status} - ${text}`);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Annonce envoyée avec succès", data);
 
-                // Afficher l'alerte après envoi réussi
-                showAlert("Annonce envoyée avec succès !");
+            // Afficher l'alerte après envoi réussi
+            showAlert("Annonce envoyée avec succès !");
 
-                 // Attendre 3 seconde avant de recharger la page
-                 setTimeout(() => {
-                   location.reload(); // Recharge la page après 1 seconde
-                }, 3000);
-
-            })
-            .catch(error => {
-                showAlert("Erreur lors de l'envoi : " + error.message);
-            });
+            // Attendre 3 secondes avant de recharger la page
+            setTimeout(() => {
+                location.reload(); // Recharge la page après 3 secondes
+            }, 3000);
+        })
+        .catch(error => {
+            showAlert("Erreur lors de l'envoi : " + error.message);
+        });
     });
 }
 

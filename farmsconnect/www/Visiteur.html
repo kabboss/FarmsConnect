@@ -183,8 +183,7 @@ categoryButtons.forEach(button => {
                 animalCard.innerHTML = `
                     <div class="animal-card-header">
                         <h3 class="category-name">📂 (${animal.categorie})</h3>
-                        <p>🔖 Numéro d'annonce : ${animal.idAnnonce}</p>
-                        <p>📜 Code vendeur : ${animal.codeVendeur}</p>
+                        <p>🔖 Numéro d'annonce  : ${animal.codeVendeur}</p>
                     </div>
                     <div class="animal-card-body">
                         <p>📦 Nombre : ${animal.nombre}</p>
@@ -340,7 +339,7 @@ categoryButtons.forEach(button => {
             if (contact === null) location.reload();
 
             if (!phoneRegex.test(contact)) {
-                alert("Veuillez entrer un numéro de téléphone valide (uniquement des chiffres, entre 8 et 14 caractères).");
+                alert("Veuillez entrer un numéro de téléphone valide.");
             }
         } while (!phoneRegex.test(contact));
         return contact;
@@ -405,60 +404,86 @@ categoryButtons.forEach(button => {
         return quartier.trim();
     }
 
-// Détails de l'achat et de l'acheteur
-        const purchaseDetails = {
-            animalId: animal._id,  // Assurez-vous que vous avez l'ID de l'animal/produit
-            animalName: animal.categorie,
-            email: visitorInfo.email, // Email de l'acheteur
-            username: visitorInfo.username,
-            contact: visitorInfo.contact,
-            quantity: visitorInfo.quantity,
-            quartier: visitorInfo.quartier,
-            location: null, // Ajout des coordonnées GPS
-            Numeroannonce : animal.idAnnonce
-        };
-        console.log('Détails de l\'achat :', purchaseDetails);
-        // Vous pouvez ensuite utiliser purchaseDetails, par exemple, pour envoyer au serveur
+// Vérification des permissions pour l'accès à la localisation via Cordova
+checkPermissions(animal);
 
-let locationObtained = false;  // Flag pour savoir si la localisation est obtenue
+// Fonction pour vérifier les permissions avec Cordova
+function checkPermissions(animal) {
+    const permissions = cordova.plugins.permissions;
 
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-            const userLocation = {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude
-            };
-
-            purchaseDetails.location= userLocation ;   
-            console.log('Coordonnées géographiques obtenues :', userLocation);
-            locationObtained = true; // La localisation a été obtenue
-            processEmails(animal, visitorInfo, purchaseDetails); // Process even if location is unavailable
-
-        },
-        (error) => {
-            console.error('Erreur de géolocalisation :', error.message);
-            // Fournir une valeur par défaut ou informer l'utilisateur
-            alert('La géolocalisation n\'a pas pu être obtenue.');
-            locationObtained = false; // La localisation n'a pas pu être obtenue
+    permissions.checkPermission(permissions.ACCESS_FINE_LOCATION, function (status) {
+        if (!status.hasPermission) {
+            // Demander la permission si elle n'est pas accordée
+            permissions.requestPermission(permissions.ACCESS_FINE_LOCATION, 
+                function () {
+                    console.log("Permission de localisation accordée !");
+                    handleLocation(animal); // Appeler la fonction de localisation
+                }, 
+                function () {
+                    console.error("Permission de localisation refusée.");
+                    alert("L'application a besoin de la localisation pour fonctionner correctement.");
+                }
+            );
+        } else {
+            // Si la permission est déjà accordée
+            handleLocation(animal);
         }
-    );
-} else {
-    alert('La géolocalisation n\'est pas supportée par votre navigateur.');
-    locationObtained = false; // Si le navigateur ne supporte pas la géolocalisation
+    }, function (error) {
+        console.error("Erreur lors de la vérification des permissions :", error);
+    });
 }
 
+// Fonction pour gérer la localisation après la vérification des permissions
+function handleLocation(animal) {
+    const purchaseDetails = {
+        animalId: animal._id,  // Assurez-vous que vous avez l'ID de l'animal/produit
+        animalName: animal.categorie,
+        email: visitorInfo.email, // Email de l'acheteur
+        username: visitorInfo.username,
+        contact: visitorInfo.contact,
+        quantity: visitorInfo.quantity,
+        quartier: visitorInfo.quartier,
+        location: null, // Ajout des coordonnées GPS
+    };
+    console.log('Détails de l\'achat :', purchaseDetails);
+
+    let locationObtained = false;  // Flag pour savoir si la localisation est obtenue
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const userLocation = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                };
+
+                purchaseDetails.location = userLocation;   
+                console.log('Coordonnées géographiques obtenues :', userLocation);
+                locationObtained = true; // La localisation a été obtenue
+                processEmails(animal, visitorInfo, purchaseDetails); // Process emails même sans localisation si nécessaire
+            },
+            (error) => {
+                console.error('Erreur de géolocalisation :', error.message);
+                // Fournir une valeur par défaut ou informer l'utilisateur
+                alert('La géolocalisation n\'a pas pu être obtenue.');
+                locationObtained = false; // La localisation n'a pas pu être obtenue
+            }
+        );
+    } else {
+        alert('La géolocalisation n\'est pas supportée par votre navigateur.');
+        locationObtained = false; // Si le navigateur ne supporte pas la géolocalisation
+    }
 
     // Empêcher l'envoi des emails tant que la localisation n'est pas obtenue
-        if (!locationObtained) {
-            alert("L'envoi des informations est bloqué tant que vous autoriser pas la localisation .");
-            return; // Empêche la suite du processus tant que la localisation n'est pas disponible
-}
-    
-processEmails(animal, visitorInfo, purchaseDetails); // Process without location
+    if (!locationObtained) {
+        alert("L'envoi des informations est bloqué tant que vous n'avez pas autorisé la localisation.");
+        return; // Empêche la suite du processus tant que la localisation n'est pas disponible
+    }
 
+    // Process emails avec ou sans localisation
+    processEmails(animal, visitorInfo, purchaseDetails);s
 }
-    
+}    
 
 async function processEmails(animal, visitorInfo, purchaseDetails) {
         const totalPrice = (animal.prix * visitorInfo.quantity * 1.04 + 500).toLocaleString();
@@ -468,8 +493,7 @@ async function processEmails(animal, visitorInfo, purchaseDetails) {
 🔹 Catégorie : ${animal.categorie}
 🔹 Quantité demandée : ${visitorInfo.quantity}
 🔹 Nom du client : ${visitorInfo.username}
-🔖Numero de l'annonce : ${animal.idAnnonce}
-🆔 Votre Code vendeur : ${animal.codeVendeur}
+🔖Numero de l'annonce : ${animal.codeVendeur}
 💰 Recette estimée : ${(animal.prix * visitorInfo.quantity).toLocaleString()} FCFA
 📦 Prochaine étape : FarmsConnect vous contactera bientôt pour organiser la livraison. 🚚
 
@@ -485,8 +509,7 @@ Votre commande a été enregistrée avec succès. Voici les détails de votre ac
 🔹 Quantité demandée : ${visitorInfo.quantity}
 💰 Total à payer : ${(animal.prix * visitorInfo.quantity * 1.04 + 500).toLocaleString()} FCFA _(inclut 500 FCFA de frais de traitement)_
 🚚 Livraison : Gratuite
-🆔 Code du vendeur : ${animal.codeVendeur}
-🔖Numero de l'annonce : ${animal.idAnnonce}
+🔖Numero de l'annonce : ${animal.codeVendeur}
 🏡 Quartier de résidence : ${visitorInfo.quartier}
 📞 Vous souhaitez nous contacter ? 👉 [Cliquez ici pour nous écrire sur WhatsApp](https://wa.me/+22656663638)
 📦 Prochaine étape : FarmsConnect vous contactera bientôt pour organiser la livraison. 🚚💨
@@ -500,8 +523,7 @@ const emailContentFarmsConnect = `
 👤 Vendeur:
 🔹 Catégorie : ${animal.categorie}
 💰 Prix unitaire : ${animal.prix} FCFA
-🆔 Code du vendeur : ${animal.codeVendeur}
-🔖Numero de l'annonce : ${animal.animal.idAnnonce}
+🔖Numero de l'annonce : ${animal.codeVendeur}
 📞 Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? `(Secondaire : ${animal.contactSecondaire})` : ''}
 📍 - Latitude : ${animal.location.latitude }
 📍 - Longitude : ${animal.location.longitude }

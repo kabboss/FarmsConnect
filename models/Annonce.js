@@ -9,8 +9,8 @@ const annonceSchema = new mongoose.Schema({
   images: {
     type: [String],
     validate: {
-      validator: (val) => val.length <= 10,
-      message: 'Maximum de 10 images par annonce',
+      validator: (val) => val.length <= 3,
+      message: 'Maximum de 3 images par annonce',
     },
   },
   contactPrincipal: { type: String, required: true },
