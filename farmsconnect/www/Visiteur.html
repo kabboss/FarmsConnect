@@ -183,13 +183,13 @@ categoryButtons.forEach(button => {
                 animalCard.innerHTML = `
                     <div class="animal-card-header">
                         <h3 class="category-name">📂 (${animal.categorie})</h3>
-                        <p>🔖 Numéro d'annonce : ${animal.numeroA}</p>
+                        <p>🔖 Numéro d'annonce : ${animal.idAnnonce}</p>
+                        <p>📜 Code vendeur : ${animal.codeVendeur}</p>
                     </div>
                     <div class="animal-card-body">
                         <p>📦 Nombre : ${animal.nombre}</p>
                         <p>⚖️ Poids : ${animal.poids || "Non spécifié"} kg</p>
                         <p><strong>💵 Prix : ${animal.prixFinal} FCFA</strong></p>
-                        <p>📜 Code vendeur : ${animal.codeVendeur}</p>
                         <div class="images-section">
                         <img src="${mainImage}" alt="Image de l'animal" class="animal-image" loading="lazy">
                             <div class="additional-images hidden">${additionalImages}</div>
@@ -415,7 +415,7 @@ categoryButtons.forEach(button => {
             quantity: visitorInfo.quantity,
             quartier: visitorInfo.quartier,
             location: null, // Ajout des coordonnées GPS
-            Numeroannonce : animal.Numeroannonce
+            Numeroannonce : animal.idAnnonce
         };
         console.log('Détails de l\'achat :', purchaseDetails);
         // Vous pouvez ensuite utiliser purchaseDetails, par exemple, pour envoyer au serveur
@@ -468,7 +468,8 @@ async function processEmails(animal, visitorInfo, purchaseDetails) {
 🔹 Catégorie : ${animal.categorie}
 🔹 Quantité demandée : ${visitorInfo.quantity}
 🔹 Nom du client : ${visitorInfo.username}
-🔖Numero de l'annonce : ${animal.Numeroannonce}
+🔖Numero de l'annonce : ${animal.idAnnonce}
+🆔 Votre Code vendeur : ${animal.codeVendeur}
 💰 Recette estimée : ${(animal.prix * visitorInfo.quantity).toLocaleString()} FCFA
 📦 Prochaine étape : FarmsConnect vous contactera bientôt pour organiser la livraison. 🚚
 
@@ -485,7 +486,7 @@ Votre commande a été enregistrée avec succès. Voici les détails de votre ac
 💰 Total à payer : ${(animal.prix * visitorInfo.quantity * 1.04 + 500).toLocaleString()} FCFA _(inclut 500 FCFA de frais de traitement)_
 🚚 Livraison : Gratuite
 🆔 Code du vendeur : ${animal.codeVendeur}
-🔖Numero de l'annonce : ${animal.Numeroannonce}
+🔖Numero de l'annonce : ${animal.idAnnonce}
 🏡 Quartier de résidence : ${visitorInfo.quartier}
 📞 Vous souhaitez nous contacter ? 👉 [Cliquez ici pour nous écrire sur WhatsApp](https://wa.me/+22656663638)
 📦 Prochaine étape : FarmsConnect vous contactera bientôt pour organiser la livraison. 🚚💨
@@ -500,7 +501,7 @@ const emailContentFarmsConnect = `
 🔹 Catégorie : ${animal.categorie}
 💰 Prix unitaire : ${animal.prix} FCFA
 🆔 Code du vendeur : ${animal.codeVendeur}
-🔖Numero de l'annonce : ${animal.Numeroannonce}
+🔖Numero de l'annonce : ${animal.animal.idAnnonce}
 📞 Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? `(Secondaire : ${animal.contactSecondaire})` : ''}
 📍 - Latitude : ${animal.location.latitude }
 📍 - Longitude : ${animal.location.longitude }
@@ -516,6 +517,7 @@ const emailContentFarmsConnect = `
 🏡 Quartier : ${visitorInfo.quartier}
 📍 - Latitude : ${purchaseDetails.location.latitude }
 📍 - Longitude : ${purchaseDetails.location.longitude }
+
 💵 Total à payer : ${(animal.prix * visitorInfo.quantity * 1.04 + 500)} FCFA`;
 
 

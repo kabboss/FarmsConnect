@@ -6,24 +6,24 @@ document.getElementById('vente-form').addEventListener('submit', function (e) {
     const commission = prixUnitaire * 0.04;
     const prixFinal = prixUnitaire + commission;
 
-    // Générer un numéro unique pour l'annonce
-    const numAnnonce = 'Annonce' + performance.now();
+// Création de l'objet animal avec un identifiant unique
+const animal = {
+    idAnnonce: 'Annonce' + Date.now(), // Ajout de l'ID unique
+    categorie: document.getElementById('categorie').value,
+    nombre: document.getElementById('nombre').value,
+    poids: document.getElementById('poids').value,
+    prix: prixUnitaire,
+    prixFinal: prixFinal.toFixed(2),
+    images: [],
+    contactPrincipal: document.getElementById('contact-principal').value,
+    contactSecondaire: document.getElementById('contact-secondaire').value,
+    emailVendeur: document.getElementById('email-vendeur').value,
+    codeVendeur: 'V' + Date.now(),
+    location: null // La localisation sera ajoutée ici
+};
 
-    // Création de l'objet animal avec le numéro unique
-    const animal = {
-        numeroA: numAnnonce,  // Ajout du numéro unique à l'annonce
-        categorie: document.getElementById('categorie').value,
-        nombre: document.getElementById('nombre').value,
-        poids: document.getElementById('poids').value,
-        prix: prixUnitaire,
-        prixFinal: prixFinal.toFixed(2),
-        images: [],
-        contactPrincipal: document.getElementById('contact-principal').value,
-        contactSecondaire: document.getElementById('contact-secondaire').value,
-        emailVendeur: document.getElementById('email-vendeur').value,
-        codeVendeur: 'V' + Date.now(),
-        location: null // La localisation sera ajoutée ici
-    };
+// Vous pouvez maintenant utiliser l'objet animal avec un identifiant unique
+console.log(animal);
 
     // Vérifier les permissions pour l'accès à la localisation via Cordova
     checkPermissions(animal);
@@ -136,6 +136,12 @@ function sendData(animal) {
 
                 // Afficher l'alerte après envoi réussi
                 showAlert("Annonce envoyée avec succès !");
+
+                 // Attendre 3 seconde avant de recharger la page
+                 setTimeout(() => {
+                   location.reload(); // Recharge la page après 1 seconde
+                }, 3000);
+
             })
             .catch(error => {
                 showAlert("Erreur lors de l'envoi : " + error.message);
