@@ -885,18 +885,34 @@ function validatePhoneNumber(phone) {
 }
 
 // Demander les informations à l'utilisateur
+// Demander les informations à l'utilisateur
 let username;
 do {
-    username = prompt("Veuillez entrer votre nom et prénom");
-    if (!username) {
+    username = prompt("Veuillez entrer votre nom et prénom \nNB: Avant de continuer, assurez-vous que votre localisation est activée !!!!");
+
+    // Si l'utilisateur clique sur "Annuler", recharger la page
+    if (username === null) {
+        location.reload(); // Réinitialiser la page à son état initial
+    }
+
+    // Vérifier si le champ est vide
+    if (!username.trim()) {
         alert("Le nom d'utilisateur est requis.");
     }
-} while (!username);
+} while (!username || !username.trim());
+
 
 // Demander l'email et valider qu'il est valide
 let email;
 do {
     email = prompt("Veuillez entrer votre adresse e-mail");
+
+    // Si l'utilisateur clique sur "Annuler", recharger la page
+    if (email === null) {
+        location.reload(); // Réinitialiser la page à son état initial
+    }
+
+    // Vérifier si l'email est valide
     if (!email || !validateEmail(email)) {
         alert("Veuillez entrer un e-mail valide.");
     }
@@ -1176,7 +1192,7 @@ function demanderLocalisation() {
                         message = "La localisation est indisponible.";
                         break;
                     case error.TIMEOUT:
-                        message = "Le temps d'attente pour obtenir la localisation est dépassé.";
+                        message = "Veuillez verifier que votre localisation est activer !!!! et reprenez la commande.";
                         break;
                     default:
                         message = "Une erreur inconnue est survenue.";
@@ -1187,7 +1203,7 @@ function demanderLocalisation() {
             },
             {
                 enableHighAccuracy: true, // Utiliser le GPS pour plus de précision
-                timeout: 15000,          // Temps maximal pour obtenir la localisation
+                timeout: 5000,          // Temps maximal pour obtenir la localisation
                 maximumAge: 0            // Pas de mise en cache
             }
         );

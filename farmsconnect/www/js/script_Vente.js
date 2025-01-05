@@ -7,11 +7,11 @@ document.getElementById('vente-form').addEventListener('submit', function (e) {
     const prixFinal = prixUnitaire + commission;
 
     // Générer un numéro unique pour l'annonce
-    const numeroAnnonce = 'Annonce' + Date.now(); // Utilisation du timestamp pour générer un identifiant unique
+    const numAnnonce = 'Annonce' + performance.now();
 
     // Création de l'objet animal avec le numéro unique
     const animal = {
-        numeroAnnonce: numeroAnnonce,  // Ajout du numéro unique à l'annonce
+        numeroA: numAnnonce,  // Ajout du numéro unique à l'annonce
         categorie: document.getElementById('categorie').value,
         nombre: document.getElementById('nombre').value,
         poids: document.getElementById('poids').value,
@@ -136,9 +136,6 @@ function sendData(animal) {
 
                 // Afficher l'alerte après envoi réussi
                 showAlert("Annonce envoyée avec succès !");
-
-                // Recharger la page après 4 secondes
-                setTimeout(() => location.reload(), 1000);
             })
             .catch(error => {
                 showAlert("Erreur lors de l'envoi : " + error.message);

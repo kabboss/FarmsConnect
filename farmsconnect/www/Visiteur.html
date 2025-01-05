@@ -178,11 +178,12 @@ categoryButtons.forEach(button => {
 
                 const mainImage = animal.images[0] || "";
                 const additionalImages = animal.images.slice(1).map((img) => `<img src="${img}" alt="Image supplémentaire" class="additional-image">`).join("");
+                console.log(animal.numeroAnnonce); // Vérifiez si le numéro est bien généré
 
                 animalCard.innerHTML = `
                     <div class="animal-card-header">
                         <h3 class="category-name">📂 (${animal.categorie})</h3>
-                        <p>🔖 Numéro d'annonce : ${animal.numeroAnnonce}</p>
+                        <p>🔖 Numéro d'annonce : ${animal.numeroA}</p>
                     </div>
                     <div class="animal-card-body">
                         <p>📦 Nombre : ${animal.nombre}</p>
@@ -263,8 +264,8 @@ categoryButtons.forEach(button => {
             document.querySelectorAll(".buy-button").forEach((button) => {
                 button.addEventListener("click", () => {
                     const animal = JSON.parse(button.getAttribute("data-animal"));
-                    alert(`Produit ajouté au panier : ${animal.categorie}`);
-                });
+                    handlePurchase(animal);
+               });
             });
         }
 
@@ -312,65 +313,97 @@ categoryButtons.forEach(button => {
     quartier: validateQuartier()
 };
 
-// Validation pour le champ "Nom et Prénom"
-function validateUsername() {
-    let username = prompt('Nom et Prénom :');
-    while (!username || username.trim().length < 3) { // Vérifie que ce n'est pas vide et que c'est suffisamment long
-        alert('Veuillez entrer un Nom et Prénom valides (au moins 3 caractères).');
-        username = prompt('Nom et Prénom :');
+    // Validation pour le champ "Nom et Prénom"
+    function validateUsername() {
+        let username;
+        do {
+            username = prompt("Veuillez entrer votre nom et prénom \nNB: Avant de continuer, assurez-vous que votre localisation est activée !!!!");
+
+            // Recharge la page si "Annuler" est cliqué
+            if (username === null) location.reload();
+
+            if (!username || username.trim().length < 3) {
+                alert("Veuillez entrer un Nom et Prénom valides (au moins 3 caractères).");
+            }
+        } while (!username || username.trim().length < 3);
+        return username.trim();
     }
-    return username.trim();
-}
 
-// Validation pour le champ "Numéro de téléphone"
-function validateContact() {
-    let contact = prompt('Entrez votre numéro de Téléphone :');
-    const phoneRegex = /^\d{8,14}$/; // Numéro de 8 à 15 chiffres
-    while (!phoneRegex.test(contact)) {
-        alert('Veuillez entrer un numéro de téléphone valide (uniquement des chiffres, entre 8 et 15 caractères).');
-        contact = prompt('Entrez votre numéro de Téléphone :');
+    // Validation pour le champ "Numéro de téléphone"
+    function validateContact() {
+        let contact;
+        const phoneRegex = /^\d{8}$/; // Numéro de 8 chiffres
+        do {
+            contact = prompt("Entrez votre numéro de Téléphone :");
+
+            // Recharge la page si "Annuler" est cliqué
+            if (contact === null) location.reload();
+
+            if (!phoneRegex.test(contact)) {
+                alert("Veuillez entrer un numéro de téléphone valide (uniquement des chiffres, entre 8 et 14 caractères).");
+            }
+        } while (!phoneRegex.test(contact));
+        return contact;
     }
-    return contact;
-}
 
-// Validation pour l'email avec confirmation
-function validateEmail() {
-    let email = prompt('Votre mail valide :');
-    let confirmEmail = prompt('Confirmez votre mail :');
-    while (email !== confirmEmail || !isValidEmail(email)) {
-        alert('Les emails ne correspondent pas ou sont invalides. Veuillez réessayer.');
-        email = prompt('Votre mail valide :');
-        confirmEmail = prompt('Confirmez votre mail :');
+    // Validation pour l'email avec confirmation
+    function validateEmail() {
+        let email, confirmEmail;
+        do {
+            email = prompt("Votre mail valide :");
+
+            // Recharge la page si "Annuler" est cliqué
+            if (email === null) location.reload();
+
+            confirmEmail = prompt("Confirmez votre mail :");
+
+            // Recharge la page si "Annuler" est cliqué
+            if (confirmEmail === null) location.reload();
+
+            if (email !== confirmEmail || !isValidEmail(email)) {
+                alert("Les emails ne correspondent pas ou sont invalides. Veuillez réessayer.");
+            }
+        } while (email !== confirmEmail || !isValidEmail(email));
+        return email;
     }
-    return email;
-}
 
-// Vérifie si l'email est valide
-function isValidEmail(email) {
-    const emailRegex = /^\S+@\S+\.\S+$/; // Regex pour valider le format de l'email
-    return emailRegex.test(email);
-}
-
-// Validation pour la quantité
-function validateQuantity() {
-    let quantity = prompt('Combien d\'unités de ce produit souhaitez-vous acheter ?');
-    while (isNaN(quantity) || quantity <= 0) { // Vérifie que c'est un nombre supérieur à 0
-        alert('Veuillez entrer une quantité valide (nombre supérieur à 0).');
-        quantity = prompt('Combien d\'unités de ce produit souhaitez-vous acheter ?');
+    // Vérifie si l'email est valide
+    function isValidEmail(email) {
+        const emailRegex = /^\S+@\S+\.\S+$/; // Regex pour valider le format de l'email
+        return emailRegex.test(email);
     }
-    return parseInt(quantity);
-}
 
-// Validation pour le quartier
-function validateQuartier() {
-    let quartier = prompt('Quel est votre Quartier ?');
-    while (!quartier || quartier.trim().length < 2) { // Vérifie que ce n'est pas vide et que c'est suffisamment long
-        alert('Veuillez entrer un Quartier valide (au moins 2 caractères).');
-        quartier = prompt('Quel est votre Quartier ?');
+    // Validation pour la quantité
+    function validateQuantity() {
+        let quantity;
+        do {
+            quantity = prompt("Combien d'unités de ce produit souhaitez-vous acheter ?");
+
+            // Recharge la page si "Annuler" est cliqué
+            if (quantity === null) location.reload();
+
+            if (isNaN(quantity) || quantity <= 0) {
+                alert("Veuillez entrer une quantité valide (nombre supérieur à 0).");
+            }
+        } while (isNaN(quantity) || quantity <= 0);
+        return parseInt(quantity);
     }
-    return quartier.trim();
-}
 
+    // Validation pour le quartier
+    function validateQuartier() {
+        let quartier;
+        do {
+            quartier = prompt("Quel est votre Quartier ?");
+
+            // Recharge la page si "Annuler" est cliqué
+            if (quartier === null) location.reload();
+
+            if (!quartier || quartier.trim().length < 2) {
+                alert("Veuillez entrer un Quartier valide (au moins 2 caractères).");
+            }
+        } while (!quartier || quartier.trim().length < 2);
+        return quartier.trim();
+    }
 
 // Détails de l'achat et de l'acheteur
         const purchaseDetails = {
