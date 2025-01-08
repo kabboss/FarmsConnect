@@ -1144,27 +1144,61 @@ console.log('Order Data:', orderDetails);
 
 
 document.addEventListener('deviceready', function () {
-    // Vérifier les permissions pour l'accès à la localisation
-    var permissions = cordova.plugins.permissions;
+    // Vérification si Cordova est disponible et si le plugin diagnostic est présent
+    if (typeof cordova !== "undefined" && cordova.plugins && cordova.plugins.diagnostic) {
+        var diagnostic = cordova.plugins.diagnostic;
 
-    permissions.checkPermission(permissions.ACCESS_FINE_LOCATION, function (status) {
-        if (!status.hasPermission) {
-            // Si la permission n'est pas accordée, la demander
-            permissions.requestPermission(permissions.ACCESS_FINE_LOCATION, function () {
-                console.log("Permission de localisation accordée !");
-                demanderLocalisation(); // Appeler la fonction de localisation après avoir reçu la permission
-            }, function () {
-                console.error("Permission de localisation refusée.");
-                alert("L'application a besoin de la localisation pour fonctionner correctement.");
-            });
-        } else {
-            // Si la permission est déjà accordée, demander directement la localisation
-            demanderLocalisation();
-        }
-    }, function (error) {
-        console.error("Erreur lors de la vérification des permissions :", error);
-    });
+        // Vérification si le GPS est activé
+        diagnostic.isLocationEnabled(function (enabled) {
+            if (!enabled) {
+                // Si le GPS n'est pas activé, rediriger l'utilisateur vers les paramètres pour l'activer
+                diagnostic.switchToLocationSettings(function () {
+                    console.log("L'utilisateur a été redirigé vers les paramètres pour activer le GPS.");
+                    demanderPermissionLocalisation(); // Demander la permission après activation
+                }, function (error) {
+                    console.error("Erreur lors de la redirection vers les paramètres : ", error);
+                });
+            } else {
+                // Si le GPS est déjà activé, vérifier la permission
+                demanderPermissionLocalisation();
+            }
+        }, function (error) {
+            console.error("Erreur lors de la vérification de l'état du GPS : ", error);
+        });
+    } else {
+        // Si Cordova n'est pas disponible, on vérifie directement la permission et la géolocalisation standard
+        demanderPermissionLocalisation();
+    }
 });
+
+// Fonction pour demander la permission de localisation
+function demanderPermissionLocalisation() {
+    // Vérification de la disponibilité des permissions pour les environnements Cordova
+    if (typeof cordova !== "undefined" && cordova.plugins.permissions) {
+        var permissions = cordova.plugins.permissions;
+
+        permissions.checkPermission(permissions.ACCESS_FINE_LOCATION, function (status) {
+            if (!status.hasPermission) {
+                // Si la permission n'est pas accordée, la demander
+                permissions.requestPermission(permissions.ACCESS_FINE_LOCATION, function () {
+                    console.log("Permission de localisation accordée !");
+                    demanderLocalisation(); // Appeler la fonction de localisation après avoir reçu la permission
+                }, function () {
+                    console.error("Permission de localisation refusée.");
+                    alert("L'application a besoin de la localisation pour fonctionner correctement.");
+                });
+            } else {
+                // Si la permission est déjà accordée, demander directement la localisation
+                demanderLocalisation();
+            }
+        }, function (error) {
+            console.error("Erreur lors de la vérification des permissions :", error);
+        });
+    } else {
+        // Si Cordova n'est pas disponible, on accède directement à la géolocalisation avec l'API standard
+        demanderLocalisation();
+    }
+}
 
 // Fonction pour demander la localisation
 function demanderLocalisation() {
@@ -1173,7 +1207,7 @@ function demanderLocalisation() {
             (position) => {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
-             // Ajouter la localisation à `orderDetails`
+                // Ajouter la localisation à `orderDetails`
                 orderDetails.location = { latitude, longitude };
                 console.log("Localisation obtenue :", orderDetails.location);
 
@@ -1192,7 +1226,7 @@ function demanderLocalisation() {
                         message = "La localisation est indisponible.";
                         break;
                     case error.TIMEOUT:
-                        message = "Veuillez verifier que votre localisation est activer !!!! et reprenez la commande.";
+                        message = "Veuillez vérifier que votre localisation est activée et reprenez la commande.";
                         break;
                     default:
                         message = "Une erreur inconnue est survenue.";
@@ -1203,8 +1237,8 @@ function demanderLocalisation() {
             },
             {
                 enableHighAccuracy: true, // Utiliser le GPS pour plus de précision
-                timeout: 5000,          // Temps maximal pour obtenir la localisation
-                maximumAge: 0            // Pas de mise en cache
+                timeout: 5000,            // Temps maximal pour obtenir la localisation
+                maximumAge: 0             // Pas de mise en cache
             }
         );
     } else {

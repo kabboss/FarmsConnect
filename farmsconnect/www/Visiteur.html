@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="img/FarmsConnect.jpg"> <!-- Chemin vers votre image -->
     <link rel="stylesheet" href="css/style_Visiter.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="cordova.js"></script>
 
 </head>
 <body>    
@@ -18,7 +19,7 @@
         <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
         <div class="spinner"></div>
     </div>
-    <p class="loading-text">Veuillez patienter... Si apres le chargement les annonces ne saffiche pas !!! verifier votre connexion et rafraissichez la page </p> 
+    <p class="loading-text">Si les annonces ne saffiche pas ! verifier votre connexion et patientez </p> 
 </div>
 
 
@@ -178,7 +179,6 @@ categoryButtons.forEach(button => {
 
                 const mainImage = animal.images[0] || "";
                 const additionalImages = animal.images.slice(1).map((img) => `<img src="${img}" alt="Image supplémentaire" class="additional-image">`).join("");
-                console.log(animal.numeroAnnonce); // Vérifiez si le numéro est bien généré
 
                 animalCard.innerHTML = `
                     <div class="animal-card-header">
@@ -300,26 +300,190 @@ categoryButtons.forEach(button => {
     });
 </script>
         
-
 <script>
 
-    function handlePurchase(animal) {
-        const visitorInfo = {
-    username: validateUsername(),
-    contact: validateContact(),
-    email: validateEmail(), // Validation de l'email avec un double prompt
-    quantity: validateQuantity(), // Validation pour la quantité
-    quartier: validateQuartier()
-};
+// Variable globale pour stocker la localisation
+let userLocation = null;
 
-    // Validation pour le champ "Nom et Prénom"
-    function validateUsername() {
+// Vérification si Cordova est disponible
+if (typeof cordova !== "undefined") {
+    document.addEventListener("deviceready", function () {
+        checkGPSStatusAndRequestPermission();
+    });
+} else {
+    // Fallback si Cordova n'est pas disponible
+    checkGPSStatusAndRequestPermission();
+}
+
+// Fonction pour vérifier si le GPS est activé et demander la permission
+function checkGPSStatusAndRequestPermission() {
+    if (typeof cordova !== "undefined" && cordova.plugins.diagnostic) {
+        const diagnostic = cordova.plugins.diagnostic;
+
+        // Vérifie si le GPS est activé
+        diagnostic.isLocationEnabled(function (enabled) {
+            if (!enabled) {
+                // Si le GPS n'est pas activé, on tente de l'activer automatiquement
+                diagnostic.switchToLocationSettings(function () {
+                    console.log("L'utilisateur a été redirigé vers les paramètres pour activer le GPS.");
+                }, function (error) {
+                    console.error("Erreur lors de la redirection vers les paramètres : ", error);
+                });
+            }
+            // Demander la permission de localisation
+            requestLocationPermission();
+        }, function (error) {
+            console.error("Erreur lors de la vérification de l'état du GPS : ", error);
+        });
+    } else {
+        // Si Cordova n'est pas disponible, utiliser l'API de géolocalisation standard
+        requestLocationPermission();
+    }
+}
+
+// Fonction pour demander les permissions de localisation via Cordova
+function requestLocationPermission() {
+    if (typeof cordova !== "undefined" && cordova.plugins.permissions) {
+        const permissions = cordova.plugins.permissions;
+
+        // Vérifie si la permission est déjà accordée
+        permissions.checkPermission(permissions.ACCESS_FINE_LOCATION, (status) => {
+            if (!status.hasPermission) {
+                // Si la permission n'est pas accordée, on la demande
+                permissions.requestPermission(
+                    permissions.ACCESS_FINE_LOCATION,
+                    () => {
+                        console.log("Permission de localisation accordée !");
+                        getLocation(); // Récupère la localisation après avoir obtenu la permission
+                    },
+                    () => {
+                        console.error("Permission de localisation refusée.");
+                        alert("L'application a besoin de la localisation pour fonctionner correctement.");
+                    }
+                );
+            } else {
+                console.log("Permission de localisation déjà accordée.");
+                getLocation(); // Si la permission est déjà accordée, on récupère la localisation
+            }
+        }, (error) => {
+            console.error("Erreur lors de la vérification des permissions :", error);
+        });
+    } else {
+        // Si Cordova n'est pas disponible, utilise l'API de géolocalisation standard
+        getLocation();
+    }
+}
+
+// Fonction pour récupérer la localisation de l'utilisateur
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                // Localisation réussie
+                userLocation = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                };
+                console.log("Localisation obtenue :", userLocation);
+            },
+            (error) => {
+                handleGeolocationError(error);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0,
+            }
+        );
+    } else {
+        alert("La géolocalisation n'est pas supportée par votre appareil.");
+    }
+}
+
+// Gestion des erreurs de géolocalisation
+function handleGeolocationError(error) {
+    let message = "";
+
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            message = "L'accès à la localisation a été refusé.";
+            break;
+        case error.POSITION_UNAVAILABLE:
+            message = "La localisation est indisponible.";
+            break;
+        case error.TIMEOUT:
+            message = "Le temps pour obtenir la localisation a expiré. Assurez-vous que votre GPS est activé.";
+            break;
+        default:
+            message = "Une erreur inconnue est survenue.";
+            break;
+    }
+
+    alert(`Erreur de localisation : ${message}`);
+}
+
+
+let isInfoCollected = false; // Flag pour vérifier si les informations ont déjà été collectées
+
+// Fonction pour gérer l'achat d'un produit/animal
+function handlePurchase(animal) {
+    // Si les informations ont déjà été collectées, on n'affiche pas les prompt
+    if (isInfoCollected) {
+        processEmails(animal);
+        return;
+    }
+
+    const visitorInfo = {
+        username: validateUsername(),
+        contact: validateContact(),
+        email: validateEmail(),
+        quantity: validateQuantity(),
+        quartier: validateQuartier(),
+    };
+
+    // Arrête l'exécution si une donnée est manquante
+    if (Object.values(visitorInfo).includes(null)) {
+        alert("L'achat a été annulé ou des informations sont manquantes.");
+        return;
+    }
+
+    // Si toutes les informations sont valides, on met à jour le flag
+    isInfoCollected = true;
+
+    // Vérifie si la localisation est disponible avant de continuer
+    if (!userLocation) {
+        alert("La localisation de l'utilisateur n'est pas encore disponible.");
+        return;
+    }
+
+    // Création des détails d'achat avec la localisation globale
+    const purchaseDetails = {
+        animalId: animal._id,
+        animalName: animal.categorie,
+        email: visitorInfo.email,
+        username: visitorInfo.username,
+        contact: visitorInfo.contact,
+        quantity: visitorInfo.quantity,
+        quartier: visitorInfo.quartier,
+        location: userLocation, // Utilise la localisation globale ici
+    };
+
+console.log("Détails de l'achat :", purchaseDetails);
+console.log(visitorInfo);  // Vérifier si `quantity` est défini ici
+processEmails(animal, visitorInfo, purchaseDetails);
+
+}
+
+// Validation pour le champ "Nom et Prénom"
+function validateUsername() {
         let username;
         do {
-            username = prompt("Veuillez entrer votre nom et prénom \nNB: Avant de continuer, assurez-vous que votre localisation est activée !!!!");
+            username = prompt("Veuillez entrer votre nom et prénom.");
 
-            // Recharge la page si "Annuler" est cliqué
-            if (username === null) location.reload();
+            if (username === null) {
+                alert("Action annulée par l'utilisateur.");
+                return null;
+            }
 
             if (!username || username.trim().length < 3) {
                 alert("Veuillez entrer un Nom et Prénom valides (au moins 3 caractères).");
@@ -331,15 +495,17 @@ categoryButtons.forEach(button => {
     // Validation pour le champ "Numéro de téléphone"
     function validateContact() {
         let contact;
-        const phoneRegex = /^\d{8}$/; // Numéro de 8 chiffres
+        const phoneRegex = /^\d{8}$/; // Format : numéro de 8 chiffres
         do {
             contact = prompt("Entrez votre numéro de Téléphone :");
 
-            // Recharge la page si "Annuler" est cliqué
-            if (contact === null) location.reload();
+            if (contact === null) {
+                alert("Action annulée par l'utilisateur.");
+                return null;
+            }
 
             if (!phoneRegex.test(contact)) {
-                alert("Veuillez entrer un numéro de téléphone valide.");
+                alert("Veuillez entrer un numéro de téléphone valide (8 chiffres).");
             }
         } while (!phoneRegex.test(contact));
         return contact;
@@ -349,15 +515,19 @@ categoryButtons.forEach(button => {
     function validateEmail() {
         let email, confirmEmail;
         do {
-            email = prompt("Votre mail valide :");
+            email = prompt("Votre adresse e-mail :");
 
-            // Recharge la page si "Annuler" est cliqué
-            if (email === null) location.reload();
+            if (email === null) {
+                alert("Action annulée par l'utilisateur.");
+                return null;
+            }
 
-            confirmEmail = prompt("Confirmez votre mail :");
+            confirmEmail = prompt("Confirmez votre adresse e-mail :");
 
-            // Recharge la page si "Annuler" est cliqué
-            if (confirmEmail === null) location.reload();
+            if (confirmEmail === null) {
+                alert("Action annulée par l'utilisateur.");
+                return null;
+            }
 
             if (email !== confirmEmail || !isValidEmail(email)) {
                 alert("Les emails ne correspondent pas ou sont invalides. Veuillez réessayer.");
@@ -366,27 +536,28 @@ categoryButtons.forEach(button => {
         return email;
     }
 
-    // Vérifie si l'email est valide
+    // Vérification du format de l'email
     function isValidEmail(email) {
-        const emailRegex = /^\S+@\S+\.\S+$/; // Regex pour valider le format de l'email
+        const emailRegex = /^\S+@\S+\.\S+$/;
         return emailRegex.test(email);
     }
 
-    // Validation pour la quantité
-    function validateQuantity() {
-        let quantity;
-        do {
-            quantity = prompt("Combien d'unités de ce produit souhaitez-vous acheter ?");
+function validateQuantity() {
+    let quantity;
+    do {
+        quantity = prompt("Combien d'unités de ce produit souhaitez-vous acheter ?");
 
-            // Recharge la page si "Annuler" est cliqué
-            if (quantity === null) location.reload();
+        if (quantity === null) {
+            alert("Action annulée par l'utilisateur.");
+            return null;
+        }
 
-            if (isNaN(quantity) || quantity <= 0) {
-                alert("Veuillez entrer une quantité valide (nombre supérieur à 0).");
-            }
-        } while (isNaN(quantity) || quantity <= 0);
-        return parseInt(quantity);
-    }
+        if (isNaN(quantity) || quantity <= 0) {
+            alert("Veuillez entrer une quantité valide (nombre supérieur à 0).");
+        }
+    } while (isNaN(quantity) || quantity <= 0);
+    return parseInt(quantity);  // Assurez-vous que vous renvoyez un nombre
+}
 
     // Validation pour le quartier
     function validateQuartier() {
@@ -394,8 +565,10 @@ categoryButtons.forEach(button => {
         do {
             quartier = prompt("Quel est votre Quartier ?");
 
-            // Recharge la page si "Annuler" est cliqué
-            if (quartier === null) location.reload();
+            if (quartier === null) {
+                alert("Action annulée par l'utilisateur.");
+                return null;
+            }
 
             if (!quartier || quartier.trim().length < 2) {
                 alert("Veuillez entrer un Quartier valide (au moins 2 caractères).");
@@ -404,92 +577,17 @@ categoryButtons.forEach(button => {
         return quartier.trim();
     }
 
-// Vérification des permissions pour l'accès à la localisation via Cordova
-checkPermissions(animal);
+    
 
-// Fonction pour vérifier les permissions avec Cordova
-function checkPermissions(animal) {
-    const permissions = cordova.plugins.permissions;
-
-    permissions.checkPermission(permissions.ACCESS_FINE_LOCATION, function (status) {
-        if (!status.hasPermission) {
-            // Demander la permission si elle n'est pas accordée
-            permissions.requestPermission(permissions.ACCESS_FINE_LOCATION, 
-                function () {
-                    console.log("Permission de localisation accordée !");
-                    handleLocation(animal); // Appeler la fonction de localisation
-                }, 
-                function () {
-                    console.error("Permission de localisation refusée.");
-                    alert("L'application a besoin de la localisation pour fonctionner correctement.");
-                }
-            );
-        } else {
-            // Si la permission est déjà accordée
-            handleLocation(animal);
-        }
-    }, function (error) {
-        console.error("Erreur lors de la vérification des permissions :", error);
-    });
-}
-
-// Fonction pour gérer la localisation après la vérification des permissions
-function handleLocation(animal) {
-    const purchaseDetails = {
-        animalId: animal._id,  // Assurez-vous que vous avez l'ID de l'animal/produit
-        animalName: animal.categorie,
-        email: visitorInfo.email, // Email de l'acheteur
-        username: visitorInfo.username,
-        contact: visitorInfo.contact,
-        quantity: visitorInfo.quantity,
-        quartier: visitorInfo.quartier,
-        location: null, // Ajout des coordonnées GPS
-    };
-    console.log('Détails de l\'achat :', purchaseDetails);
-
-    let locationObtained = false;  // Flag pour savoir si la localisation est obtenue
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const userLocation = {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                };
-
-                purchaseDetails.location = userLocation;   
-                console.log('Coordonnées géographiques obtenues :', userLocation);
-                locationObtained = true; // La localisation a été obtenue
-                processEmails(animal, visitorInfo, purchaseDetails); // Process emails même sans localisation si nécessaire
-            },
-            (error) => {
-                console.error('Erreur de géolocalisation :', error.message);
-                // Fournir une valeur par défaut ou informer l'utilisateur
-                alert('La géolocalisation n\'a pas pu être obtenue.');
-                locationObtained = false; // La localisation n'a pas pu être obtenue
-            }
-        );
-    } else {
-        alert('La géolocalisation n\'est pas supportée par votre navigateur.');
-        locationObtained = false; // Si le navigateur ne supporte pas la géolocalisation
-    }
-
-    // Empêcher l'envoi des emails tant que la localisation n'est pas obtenue
-    if (!locationObtained) {
-        alert("L'envoi des informations est bloqué tant que vous n'avez pas autorisé la localisation.");
-        return; // Empêche la suite du processus tant que la localisation n'est pas disponible
-    }
-
-    // Process emails avec ou sans localisation
-    processEmails(animal, visitorInfo, purchaseDetails);s
-}
-}    
-
-async function processEmails(animal, visitorInfo, purchaseDetails) {
+    async function processEmails(animal, visitorInfo, purchaseDetails) {
+    try {
+        // Calcul du prix total et affichage de l'alerte
+        console.log("Calcul du total et affichage de l'alerte");
         const totalPrice = (animal.prix * visitorInfo.quantity * 1.04 + 500).toLocaleString();
         alert(`Merci ${visitorInfo.username} ! Le total à payer est : ${totalPrice} FCFA (inclut 500 FCFA de frais de traitement)`);
 
-        const emailContentVendeur = `📢 Interet pour votre annonce !
+        // Contenu de l'email pour le vendeur
+        const emailContentVendeur = `📢 Intérêt pour votre annonce !
 🔹 Catégorie : ${animal.categorie}
 🔹 Quantité demandée : ${visitorInfo.quantity}
 🔹 Nom du client : ${visitorInfo.username}
@@ -499,8 +597,11 @@ async function processEmails(animal, visitorInfo, purchaseDetails) {
 
 Merci d'utiliser FarmsConnect!`;
 
-        sendEmailVendeur(emailContentVendeur, animal.emailVendeur);
+        console.log("Envoi de l'email au vendeur");
+        // Envoi de l'email au vendeur
+        await sendEmailVendeur(emailContentVendeur, animal.emailVendeur);
 
+        // Sujet et contenu de l'email pour le client
         const emailSubject = "Votre achat a été passé avec succès !";
         const emailContentClient = `Merci, ${visitorInfo.username} ! 🤝✨
 Votre commande a été enregistrée avec succès. Voici les détails de votre achat :
@@ -515,20 +616,21 @@ Votre commande a été enregistrée avec succès. Voici les détails de votre ac
 📦 Prochaine étape : FarmsConnect vous contactera bientôt pour organiser la livraison. 🚚💨
 Merci de faire confiance à FarmsConnect, votre partenaire de choix !!`;
 
-        sendEmailAcheteur(emailSubject, emailContentClient, visitorInfo.email);
+        console.log("Envoi de l'email au client");
+        // Envoi de l'email au client
+        await sendEmailAcheteur(emailSubject, emailContentClient, visitorInfo.email);
+
+        // Contenu de l'email pour FarmsConnect
 
 const emailContentFarmsConnect = `
 📋 Détails de l'achat :
-
 👤 Vendeur:
 🔹 Catégorie : ${animal.categorie}
 💰 Prix unitaire : ${animal.prix} FCFA
-🔖Numero de l'annonce : ${animal.codeVendeur}
-📞 Contact du vendeur : ${animal.contactPrincipal} ${animal.contactSecondaire ? `(Secondaire : ${animal.contactSecondaire})` : ''}
-📍 - Latitude : ${animal.location.latitude }
-📍 - Longitude : ${animal.location.longitude }
-
-
+🔖 Numero de l'annonce : ${animal.codeVendeur}
+📞 Contact du vendeur : ${animal.contactPrincipal}
+📍 Latitude : ${animal.location.latitude}
+📍 Longitude : ${animal.location.longitude}
 
 
 👤 Informations sur l'acheteur :
@@ -542,12 +644,22 @@ const emailContentFarmsConnect = `
 
 💵 Total à payer : ${(animal.prix * visitorInfo.quantity * 1.04 + 500)} FCFA`;
 
+console.log("Envoi de l'email à FarmsConnect");
+await sendEmailFarmsConnect(emailContentFarmsConnect);
 
 
-        sendEmailFarmsConnect(emailContentFarmsConnect);
-        scheduleClientEmail(purchaseDetails);
-        showAlert("Votre achat a été confirmé ! Un email contenant les details de votre/vos achat(s) vous a été envoyé.");
+// Planification de l'email client
+        console.log("Planification de l'email client");
+        await scheduleClientEmail(purchaseDetails);
+
+        // Affichage de l'alerte de confirmation
+        console.log("Affichage de l'alerte");
+        showAlert("Votre achat a été confirmé ! Un email contenant les détails de votre/vos achat(s) vous a été envoyé.");
+
+    } catch (error) {
+        console.error("Erreur lors du traitement des emails :", error);
     }
+}
 
     function sendEmailAcheteur(subject, content, email) {
         const emailData = {
