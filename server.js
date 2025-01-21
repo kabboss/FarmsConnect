@@ -994,7 +994,7 @@ app.get("/get-update", (req, res) => {
     try {
       // Retourne un lien direct pour télécharger la dernière version de l'application
       res.json({
-        downloadUrl: "https://drive.google.com/uc?export=download&id=1mbLVnZFxva4gWJ-v2g6EHRgyXjFpV24f",
+        downloadUrl: "https://1drv.ms/u/c/bda8ebc010e57553/ETXg_Y8ocuJHmGups8P1LO4BuY1DGc_W8_556fKHNy-ChQ?e=hckKNJ",
         message: "📱 Nouveau : VERSION 2.0.0 (Optimal)🔄 \n\n Veuillez mettre à jour votre application vers la version optimale si ce n'est pas encore fait !\n\n💡Remarque importante : Si votre application est déjà à la version 2.0.0, aucune mise à jour n'est nécessaire.",
     });
     } catch (err) {
