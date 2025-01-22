@@ -1003,7 +1003,12 @@ app.get("/get-update", (req, res) => {
       res.json({
         
         downloadUrl: "https://drive.google.com/file/d/12zATa4beMkU8AcavDwTYbWJP4JLg2kpH/view?usp=sharing",
-        message: "📱 Nouveau : VERSION 2.0.0 (Optimal)🔄 \n\n Veuillez mettre à jour votre application vers la version optimale si ce n'est pas encore fait !\n\n💡Remarque importante : Si votre application est déjà à la version 2.0.0, aucune mise à jour n'est nécessaire.",
+        message: `📱 Mise à jour disponible : V2.1.0 (Optimal) 🔄
+        Publiée le : 22 janvier 2025.
+        
+        Veuillez mettre à jour si ce n'est pas encore fait. Si votre application est déjà en V2.1.0, aucune mise à jour n'est nécessaire.`,
+    
+
     });
     } catch (err) {
       console.error("Erreur lors de l'envoi du lien de mise à jour :", err);
