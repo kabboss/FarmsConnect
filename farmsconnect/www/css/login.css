@@ -30,30 +30,78 @@ body {
     }
 }
 
-/* Style de l'en-tête avec animation */
-header {
+/* Styles pour le header */
+.header-animated {
+    position: relative;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(90deg, #4caf50, #32a852, #26c485);
+    background-size: 400% 400%;
+    animation: gradientAnimation 6s ease infinite;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px;
-    background: linear-gradient(135deg, #fdb10b, #e9bf06);
-    border-radius: 10px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-    margin: 20px;
-    text-align: center;
-    opacity: 0; /* Initialement invisible */
-    animation: apparaitre 2s ease-out forwards; /* Durée de l'animation et activation */
+    overflow: hidden;
 }
 
-/* Style du texte de bienvenue */
+/* Animation du dégradé */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Styles pour le texte */
 .Bienvenue {
-    font-size: 2.5em;
-    color: #fffefe;
     font-family: 'Poppins', sans-serif;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: 2px;
+    animation: textAnimation 2.5s ease-out infinite alternate;
+}
+
+/* Animation du texte */
+@keyframes textAnimation {
+    0% {
+        transform: scale(1);
+        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+    }
+    100% {
+        transform: scale(1.1);
+        text-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* Effet de lumière en mouvement */
+.header-animated::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150px;
+    width: 150px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: skewX(-45deg);
+    animation: lightEffect 3s linear infinite;
+}
+
+@keyframes lightEffect {
+    0% {
+        left: -150px;
+    }
+    100% {
+        left: 100%;
+    }
 }
 
 
@@ -1497,82 +1545,65 @@ button:hover {
 
 
   
-/* Conteneur principal */
+/* Style pour le conteneur principal */
 .container {
-    width: 100%;
-    max-width: 700px;
-    padding: 10px;
-    background: #fff;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 1s ease-out;
-    margin-bottom: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1), inset 0px 4px 8px rgba(255, 255, 255, 0.2);
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
 }
 
-/* Animation de fondu */
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Message de mise à jour dans un petit carré avec défilement */
+/* Message principal */
 .message {
-    font-size: 17px;
-    font-weight: 600;
-    color: #555;
-    opacity: 0.9;
-    transition: opacity 0.3s ease;
-    background-color: #f8f8f8;
-    border-radius: 8px;
-    padding: 5px;
-    max-height: 100px;
-    overflow-y: auto; /* Active le défilement */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 3px;
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+    animation: fadeIn 1.5s ease-in-out;
 }
 
-/* Bouton de mise à jour */
+/* Bouton */
 .update-button {
-    background: linear-gradient(45deg, #4CAF50, #66bb6a);
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 1.2rem;
     color: #fff;
-    padding: 18px 30px;
-    font-size: 18px;
-    font-weight: 600;
+    background: linear-gradient(90deg, #4caf50, #32a852);
     border: none;
-    border-radius: 50px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
     cursor: pointer;
-    outline: none;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    text-transform: uppercase;
 }
 
 .update-button:hover {
-    background: linear-gradient(45deg, #1146f3, #619efa);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
-    transform: translateY(-5px);
+    background: linear-gradient(90deg, #32a852, #4caf50);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
 }
 
 .update-button:active {
     transform: translateY(2px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* Message d'erreur */
 .error {
-    color: #f44336;
-    font-size: 14px;
-    font-weight: 500;
-    opacity: 0;
-    animation: errorAnimation 0.5s forwards;
+    font-size: 1rem;
+    color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ff4d4d;
+    margin-top: 20px;
+    animation: shake 0.5s ease;
 }
 
-@keyframes errorAnimation {
+/* Animation de fade-in */
+@keyframes fadeIn {
     0% {
         opacity: 0;
         transform: translateY(-20px);
@@ -1583,37 +1614,63 @@ button:hover {
     }
 }
 
-/* Animation du bouton lors de l'apparition */
-@keyframes buttonPop {
-    0% {
-        transform: scale(0);
-        opacity: 0;
+/* Animation de shake pour les erreurs */
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
     }
-    100% {
-        transform: scale(1);
-        opacity: 1;
+    25% {
+        transform: translateX(-5px);
+    }
+    50% {
+        transform: translateX(5px);
+    }
+    75% {
+        transform: translateX(-5px);
     }
 }
 
-/* Lorsque le bouton de mise à jour est visible */
-.update-button {
-    animation: buttonPop 0.6s ease-out;
-}
-
-/* Responsivité */
-@media (max-width: 600px) {
+/* Responsive Design */
+@media (max-width: 768px) {
     .container {
-        width: 90%;
-        padding: 0px;
+        padding: 15px;
+        margin: 20px auto;
+        max-width: 90%;
     }
 
     .message {
-        font-size: 16px;
+        font-size: 1.2rem;
     }
 
     .update-button {
-        font-size: 16px;
-        padding: 15px 25px;
+        padding: 12px 25px;
+        font-size: 1rem;
+    }
+
+    .error {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+        margin: 10px auto;
+        max-width: 95%;
+    }
+
+    .message {
+        font-size: 1rem;
+    }
+
+    .update-button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+
+    .error {
+        font-size: 0.8rem;
+        padding: 8px;
     }
 }
 

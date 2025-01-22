@@ -594,7 +594,7 @@ async function processEmails(animal, visitorInfo, purchaseDetails) {
         // Email pour le vendeur
         const emailSubjectVendeur = "📢 Intérêt pour votre annonce sur FarmsConnect !";
         const emailContentVendeur = `
-Bonjour ${animal. usernameVendeur}
+Bonjour ${animal.usernameVendeur}
 
 Nous avons le plaisir de vous informer qu'un client est intéressé par votre annonce. Voici les détails de la commande :
 
@@ -641,14 +641,14 @@ L’équipe FarmsConnect
         await sendEmail(emailSubjectClient, emailContentClient, visitorInfo.email);
 
         // Email pour FarmsConnect
-        const emailSubjectFarmsConnect = "Nouvelle commande enregistrée sur FarmsConnect";
+        const emailSubjectFarmsConnect = "🔴Nouvelle commande enregistrée sur FarmsConnect";
         const emailContentFarmsConnect = `
 Bonjour FarmsConnect,
 
 Une nouvelle commande a été passée avec succès. Voici les détails :  
 
 👤 Vendeur :  
-🔹 Nom : ${animal.usernameVendeu}
+🔹 Nom : ${animal.usernameVendeur}
 🔹 Contact : ${animal.contactPrincipal}  
 🔹 Catégorie : ${animal.categorie}  
 🔖 Numéro de l'annonce : ${animal.codeVendeur}  

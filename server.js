@@ -611,25 +611,29 @@ io.on('connection', (socket) => {
       scheduledTime.setMinutes(scheduledTime.getMinutes() + delay);
   
       const mailOptionsClient = {
-          from: 'kaboreabwa2020@gmail.com',
-          to: purchaseDetails.email,    // Email du client
-          subject: 'Merci pour votre achat !',
-          text: `👋 Bonjour ${purchaseDetails.username},
-
-✨ Merci pour votre achat !  
-Votre satisfaction nous tient à cœur 💖. Nous vous invitons à partager votre expérience avec nous en répondant à ce rapide formulaire de feedback 📝 :  
-          
-🔗 [Donnez votre avis ici !](https://ee.kobotoolbox.org/x/uhCnWFCN)
-          
-🌟 Vos retours nous aident à améliorer nos services et à vous offrir la meilleure expérience possible.  
-          
-Merci de faire confiance à *FarmsConnect* 🚜🐓.  
-À bientôt !  
-          
-📧 *Pour toute question, contactez-nous directement.*  
-          `
-                };
-  
+        from: 'kaboreabwa2020@gmail.com',
+        to: purchaseDetails.email, // Email du client
+        subject: '✔ Merci pour votre achat sur FarmsConnect !',
+        text: `👋 Bonjour ${purchaseDetails.username},
+    
+    Nous vous remercions chaleureusement pour votre achat sur *FarmsConnect*. Votre satisfaction est notre priorité absolue. 
+    
+    Afin de mieux répondre à vos besoins et d'améliorer continuellement nos services, nous serions ravis d'avoir votre retour via ce court formulaire de feedback :  
+              
+    🔗 [Partagez votre avis ici !](https://ee.kobotoolbox.org/x/uhCnWFCN)
+    
+    Chaque commentaire compte pour nous et contribue à vous offrir une expérience encore plus optimale.  
+    
+    Merci de nous faire confiance pour vos achats.  
+    Nous restons à votre disposition pour toute question ou assistance.  
+    
+    À très bientôt !  
+    
+📧 Pour toute question, [contactez-nous directement ici](https://wa.me/+22656663638).*  
+Cordialement,  
+L'équipe FarmsConnect        `
+    };
+      
       // Planifier l'envoi de l'email au client après le délai spécifié (2 minutes)
       schedule.scheduleJob(scheduledTime, async () => {
           try {
@@ -1003,10 +1007,8 @@ app.get("/get-update", (req, res) => {
       res.json({
         
         downloadUrl: "https://drive.google.com/file/d/12zATa4beMkU8AcavDwTYbWJP4JLg2kpH/view?usp=sharing",
-        message: `📱 Mise à jour disponible : V2.1.0 (Optimal) 🔄
-        Publiée le : 22 janvier 2025.
-        
-        Veuillez mettre à jour si ce n'est pas encore fait. Si votre application est déjà en V2.1.0, aucune mise à jour n'est nécessaire.`,
+        message: `📱 Mise à jour disponible: V2.1.0 (Optimal) 🔄
+        Publiée le : 22 janvier 2025..`,
     
 
     });
