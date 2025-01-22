@@ -127,7 +127,7 @@ const animal = {
     images: [], // Vous pouvez remplir ce tableau si nécessaire pour inclure les fichiers sélectionnés
     contactPrincipal: document.getElementById('contact-principal').value,
     contactSecondaire: document.getElementById('contact-secondaire').value,
-    emailVendeur: email, // Utilise l'email validé
+    emailVendeur: document.getElementById('email-vendeur').value,
     codeVendeur: 'Annonce N°' + Date.now(), // Génère un code unique basé sur le timestamp
     location: vendLocation // La localisation ajoutée ici
 };
@@ -211,7 +211,15 @@ function sendData(animal) {
         .then(data => {
             console.log("Annonce envoyée avec succès", data);
             showAlert("Annonce envoyée avec succès! 😀 Vous pouvez fermer !!");
+        
+            // Recharge la page après l'envoi
+            setTimeout(() => {
+                location.reload(); // Recharge la page après un délai de 1 seconde
+            }, 3000);
         })
+
+        
+        
         .catch(error => {
             showAlert("Erreur lors de l'envoi : " + error.message);
         });

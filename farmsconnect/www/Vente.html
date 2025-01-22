@@ -93,24 +93,11 @@
             <label for="contact-secondaire">Contact secondaire :</label>
             <input type="tel" id="contact-secondaire" name="contact-secondaire" placeholder="Ex: +22670010101">
     
+            <span class="email-note">Veuillez entrer un e-mail valide et fonctionnel.</span>
+            <label for="email-vendeur" class="important-label">E-mail* :</label>
+            <input type="email" id="email-vendeur" name="email-vendeur" required>
             
-<label for="email-vendeur">E-mail* :</label>
-<input type="email" id="email-vendeur" name="email-vendeur" required placeholder="Ex: vendeur@example.com">
 
-<label for="email-vendeur-confirmation">Confirmez l'E-mail* :</label>
-<input type="email" id="email-vendeur-confirmation" name="email-vendeur-confirmation" required placeholder="Re-saisir votre e-mail">
-
-<script>
-    document.querySelector('form').addEventListener('submit', function (e) {
-        const email = document.getElementById('email-vendeur').value;
-        const emailConfirmation = document.getElementById('email-vendeur-confirmation').value;
-
-        if (email !== emailConfirmation) {
-            e.preventDefault(); // Empêche l'envoi du formulaire
-            alert('Les e-mails ne correspondent pas. Veuillez vérifier et réessayer.');
-        }
-    });
-</script>
   
  
 <button type="submit" class="styled-button">Ajouter l'annonce</button>
@@ -242,7 +229,9 @@ window.addEventListener('click', (event) => {
 
                     // Si tout est correct
                     hideSpinner();
-                    showAlert("Veuillez patientez....................!Ne toucher à rien si l'annonce n'est pas envoyer ");
+                    showAlert("Veuillez patientez.!Ne toucher à rien si l'annonce n'est pas envoyer ");
+                    showAlert("Annonce envoyée avec succès! 😀 Vous pouvez fermer !!");
+
                 } catch (error) {
                     console.error("Erreur :", error);
                     hideSpinner();

@@ -823,3 +823,17 @@ form button:hover {
     box-shadow: 0 0 5px #28a745, 0 0 10px #218838; /* Éclairage subtil */
 }
 
+
+
+.important-label {
+    font-weight: bold;
+    color: #14e61e; /* Couleur rouge pour attirer l'attention */
+    font-size: 1.1em;
+}
+
+.email-note {
+    display: block;
+    font-size: 0.9em;
+    color: #f44336; /* Rouge clair pour l'alerte */
+    margin-top: 5px;
+}
