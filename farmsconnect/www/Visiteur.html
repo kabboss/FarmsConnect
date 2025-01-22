@@ -495,24 +495,25 @@ function validateUsername() {
     // Validation pour le champ "Numéro de téléphone"
 // Validation pour le champ "Numéro de téléphone"
 function validateContact() {
-    const phoneRegex = /^\d{10}$/; // Format : numéro de 10 chiffres
-    let contact;
+    const phoneRegex = /^\d{8}$/; // Format : numéro de 8 chiffres
 
     while (true) {
-        contact = prompt("Entrez votre numéro de téléphone :");
+        // Demander à l'utilisateur d'entrer son numéro de téléphone
+        const contact = prompt("Entrez votre numéro de téléphone :");
 
-        // Si l'utilisateur annule l'action
+        // Vérifier si l'utilisateur a annulé l'action
         if (contact === null) {
             alert("Action annulée par l'utilisateur.");
-            return null;
+            return null; // Retourne null si l'utilisateur annule
         }
 
-        // Vérification de la validité du numéro
+        // Vérifier si le numéro est valide
         if (phoneRegex.test(contact)) {
-            return contact; // Retourne le numéro s'il est valide
-        } else {
-            alert("Veuillez entrer un numéro de téléphone valide .");
+            return contact; // Retourne le numéro valide
         }
+
+        // Message d'erreur si le numéro est invalide
+        alert("Veuillez entrer un numéro de téléphone valide (8 chiffres).");
     }
 }
 
@@ -593,7 +594,7 @@ async function processEmails(animal, visitorInfo, purchaseDetails) {
         // Email pour le vendeur
         const emailSubjectVendeur = "📢 Intérêt pour votre annonce sur FarmsConnect !";
         const emailContentVendeur = `
-Bonjour ${animal.nomVendeur},
+Bonjour ${animal. usernameVendeur}
 
 Nous avons le plaisir de vous informer qu'un client est intéressé par votre annonce. Voici les détails de la commande :
 
@@ -606,12 +607,17 @@ Nous avons le plaisir de vous informer qu'un client est intéressé par votre an
 📦 FarmsConnect vous contactera bientôt pour organiser la livraison.  
 
 Merci d'utiliser FarmsConnect, votre partenaire de confiance !
+
+Cordialement,  
+L’équipe FarmsConnect 
+
         `;
         console.log("Envoi de l'email au vendeur");
+        console.log("Email du vendeur :", animal.emailVendeur);
         await sendEmail(emailSubjectVendeur, emailContentVendeur, animal.emailVendeur);
 
-        // Email pour le client
-        const emailSubjectClient = "Votre achat a été confirmé avec succès !";
+        // Email pour le client 
+        const emailSubjectClient = "🟢Votre achat a été confirmé avec succès."
         const emailContentClient = `
 Bonjour ${visitorInfo.username},
 
@@ -625,8 +631,11 @@ Merci pour votre commande ! Voici les détails de votre achat :
 
 Nous vous contacterons prochainement pour organiser la livraison.  
 
-Merci de faire confiance à FarmsConnect ! 🚀  
+Merci de faire confiance à FarmsConnect ! 
 Vous avez des questions ? Contactez-nous 👉 [Cliquez ici pour WhatsApp](https://wa.me/+22656663638)
+
+Cordialement,  
+L’équipe FarmsConnect 
         `;
         console.log("Envoi de l'email au client");
         await sendEmail(emailSubjectClient, emailContentClient, visitorInfo.email);
@@ -639,7 +648,7 @@ Bonjour FarmsConnect,
 Une nouvelle commande a été passée avec succès. Voici les détails :  
 
 👤 Vendeur :  
-🔹 Nom : ${animal.nomVendeur}  
+🔹 Nom : ${animal.usernameVendeu}
 🔹 Contact : ${animal.contactPrincipal}  
 🔹 Catégorie : ${animal.categorie}  
 🔖 Numéro de l'annonce : ${animal.codeVendeur}  
@@ -656,6 +665,9 @@ Une nouvelle commande a été passée avec succès. Voici les détails :
 📍 Coordonnées d'achat : Latitude ${purchaseDetails.location.latitude}, Longitude ${purchaseDetails.location.longitude}  
 
 Merci de confirmer cette commande et de planifier la livraison.
+
+Cordialement,  
+L’équipe FarmsConnect 
         `;
         console.log("Envoi de l'email à FarmsConnect");
         await sendEmail(emailSubjectFarmsConnect, emailContentFarmsConnect, "kaboreabwa2020@gmail.com");

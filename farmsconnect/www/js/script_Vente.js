@@ -116,20 +116,21 @@ document.getElementById('vente-form').addEventListener('submit', function (e) {
     const commission = prixUnitaire * 0.04;
     const prixFinal = prixUnitaire + commission;
 
-    // Création de l'objet animal
-    const animal = {
-        categorie: document.getElementById('categorie').value,
-        nombre: document.getElementById('nombre').value,
-        poids: document.getElementById('poids').value,
-        prix: prixUnitaire,
-        prixFinal: prixFinal.toFixed(2),
-        images: [],
-        contactPrincipal: document.getElementById('contact-principal').value,
-        contactSecondaire: document.getElementById('contact-secondaire').value,
-        emailVendeur: document.getElementById('email-vendeur').value,
-        codeVendeur: 'Annonce N°' + Date.now(),
-        location: vendLocation // La localisation est ajoutée ici
-    };
+// Création de l'objet animal
+const animal = {
+    usernameVendeur: document.getElementById('username-vendeur').value, // Ajout du nom d'utilisateur du vendeur
+    categorie: document.getElementById('categorie').value,
+    nombre: document.getElementById('nombre').value,
+    poids: document.getElementById('poids').value,
+    prix: prixUnitaire,
+    prixFinal: prixFinal.toFixed(2),
+    images: [], // Vous pouvez remplir ce tableau si nécessaire pour inclure les fichiers sélectionnés
+    contactPrincipal: document.getElementById('contact-principal').value,
+    contactSecondaire: document.getElementById('contact-secondaire').value,
+    emailVendeur: email, // Utilise l'email validé
+    codeVendeur: 'Annonce N°' + Date.now(), // Génère un code unique basé sur le timestamp
+    location: vendLocation // La localisation ajoutée ici
+};
 
     console.log("Infos animal :", animal);
 

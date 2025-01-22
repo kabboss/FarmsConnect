@@ -55,10 +55,17 @@
 
     <section class="form-section">
         <form id="vente-form">
-            <span class="highlight">
-                N'oubliez pas de prendre des photos de vos produits <strong class="large-icon">📸</strong> avant de commencer à remplir le formulaire !
-            </span>
-            <br>
+            <div id="info-box" class="info-box highlight">
+                <span>
+                    N'oubliez pas de prendre des photos de vos produits 
+                    <strong class="large-icon">📸</strong> avant de commencer à remplir le formulaire !
+                </span>
+            </div>
+        <br>
+
+        <label for="username-vendeur">Nom d'utilisateur du vendeur* :</label>
+        <input type="text" id="username-vendeur" name="username-vendeur" required placeholder="Ex: Nom Vendeur">
+
             <label for="categorie">Catégorie* :</label>
             <select id="categorie" name="categorie">
                 <option value="poulet-local">Poulet local</option>
@@ -67,8 +74,8 @@
                 <option value="poule-pondeuse">Poule Pondeuse</option>
                 <div class="invalid-feedback">Veuillez choisir une catégorie.</div>
             </select>
-    
-            <label for="nombre">Nombre* :</label>
+
+            <label for="nombre">Nombre à vendre * :</label>
             <input type="number" id="nombre" name="nombre" min="1" required>
 
             <label for="poids"> Poids approximatif par animal (en kg) <span style="font-style: italic; color: #888;">(Pas Obligatoire)</span>:</label>
@@ -86,9 +93,28 @@
             <label for="contact-secondaire">Contact secondaire :</label>
             <input type="tel" id="contact-secondaire" name="contact-secondaire" placeholder="Ex: +22670010101">
     
-            <label for="email-vendeur">E-mail* :</label>
-            <input type="email" id="email-vendeur" name="email-vendeur" required placeholder="Ex: vendeur@example.com">
-    
+            
+<label for="email-vendeur">E-mail* :</label>
+<input type="email" id="email-vendeur" name="email-vendeur" required placeholder="Ex: vendeur@example.com">
+
+<label for="email-vendeur-confirmation">Confirmez l'E-mail* :</label>
+<input type="email" id="email-vendeur-confirmation" name="email-vendeur-confirmation" required placeholder="Re-saisir votre e-mail">
+
+<script>
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const email = document.getElementById('email-vendeur').value;
+        const emailConfirmation = document.getElementById('email-vendeur-confirmation').value;
+
+        if (email !== emailConfirmation) {
+            e.preventDefault(); // Empêche l'envoi du formulaire
+            alert('Les e-mails ne correspondent pas. Veuillez vérifier et réessayer.');
+        }
+    });
+</script>
+  
+ 
+<button type="submit" class="styled-button">Ajouter l'annonce</button>
+
     <button type="button" class="open-modal-button">Note Importante aux Vendeurs</button>
 
             <!-- Fenêtre modale -->
@@ -129,8 +155,10 @@
         <p class="signature" style="font-style: italic; text-align: right; margin-top: 30px;">
             Cordialement,<br>
             <em>L’équipe FarmsConnect </em>
-        </p>    </div>
+        </p>    
+    
     </div>
+</div>
     
 
 
@@ -224,9 +252,6 @@ window.addEventListener('click', (event) => {
         });
     </script>
 
-
-
-            <button type="submit">Ajouter l'annonce</button>
         </form>
     </section>
     

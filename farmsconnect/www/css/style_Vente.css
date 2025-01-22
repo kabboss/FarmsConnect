@@ -674,6 +674,10 @@ form button:hover {
     animation: slideIn 0.8s ease-out;
 }
 
+
+
+
+
 /* Texte mis en évidence */
 .highlight {
     font-size: 1.5rem;
@@ -752,63 +756,70 @@ form button:hover {
 
 
 
-/* Style pour l'icône agrandie */
-.large-icon {
-    font-size: 2.5rem; /* Agrandir la taille de l'icône */
-    vertical-align: middle; /* Alignement avec le texte */
-    margin-right: 10px; /* Espacement entre l'icône et le texte */
-    animation: bounce 1.5s infinite ease-in-out; /* Animation pour attirer l'attention */
-}
-
-/* Animation de rebond subtile */
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-
-
-
-/* Animation de pulsation */
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    50% {
-        transform: scale(1.2);
-        opacity: 0.7;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-/* Appliquer l'animation de pulsation */
-.menu-icon {
+/* Style de la boîte d'information */
+.info-box {
     display: inline-block;
+    padding: 15px 20px;
+    margin: 20px 0;
+    background: linear-gradient(45deg, #ffe16b, #f5c150);
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 18px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    transform: scale(1);
+    animation: zoomEffect 0.5s ease-in-out 3;
+    animation-fill-mode: forwards; /* Maintient le dernier état de l'animation */
+}
+
+/* Style de l'icône */
+.large-icon {
+    font-size: 2em;
+    margin-left: 5px;
+}
+
+/* Animation de zoom */
+@keyframes zoomEffect {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2); /* Effet de zoom à 120% */
+    }
+}
+
+
+/* Style du bouton */
+.styled-button {
+    background: linear-gradient(45deg, #28a745, #218838);
+    color: #ffffff;
+    font-size:30px;
+    font-weight: bold;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
-    animation: pulse 1.5s ease-in-out infinite;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.3s, background 0.3s;
 }
 
-.menu-icon span {
-    display: block;
-    width: 30px;
-    height: 5px;
-    margin: 6px 0;
-    background-color: #0bdb15;
-    transition: all 0.5s ease;
+/* Effet survol (hover) */
+.styled-button:hover {
+    background: linear-gradient(45deg, #218838, #1c7430);
+    transform: scale(1.05); /* Légère augmentation de la taille */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Ombre plus prononcée */
 }
 
-.menu-icon:hover span {
-    background-color: #3498db; /* Change la couleur au survol */
+/* Effet lors du clic */
+.styled-button:active {
+    transform: scale(0.98); /* Légère réduction pour donner un effet de clic */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre réduite */
 }
 
-
-
+/* Style focus (pour navigation clavier) */
+.styled-button:focus {
+    outline: none;
+    box-shadow: 0 0 5px #28a745, 0 0 10px #218838; /* Éclairage subtil */
+}
 

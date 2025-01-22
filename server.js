@@ -307,14 +307,21 @@ app.post('/api/getUserInfo', async (req, res) => {
 
 // Route pour envoyer les informations d'achat par email
 app.post('/api/send-email', async (req, res) => {
-    const { content } = req.body;
+    const { email, subject, content } = req.body; // Récupérer les données dynamiques de la requête
+
+    // Assurez-vous que l'email du destinataire est fourni
+    if (!email) {
+        return res.status(400).send("L'adresse e-mail du destinataire est manquante.");
+    }
+
     const mailOptions = {
-        from: 'kaboreabwa2020@gmail.com',
-        to: 'kaboreabwa2020@gmail.com',
-        subject: 'Nouvelle commande reçue',
-        text: content
+        from: 'kaboreabwa2020@gmail.com', // Adresse de l'expéditeur (peut être codée en dur ou dynamique)
+        to: email, // Adresse du destinataire reçue dynamiquement
+        subject: subject || 'Nouvelle commande reçue', // Sujet de l'email (optionnel)
+        text: content // Contenu de l'email
     };
 
+    // Envoi de l'e-mail
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error('Erreur lors de l\'envoi de l\'e-mail :', error);
