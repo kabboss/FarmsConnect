@@ -1,0 +1,356 @@
+/* Global styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #e0dddd;
+    color: #333;
+}
+
+h2, h3 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+/* Header styles */
+header {
+    background-color: #2e8b57;
+    padding: 15px 20px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: flex-start;
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #ecf0f1;
+}
+
+/* Hero section */
+.hero {
+    text-align: center;
+    background-color: #2980b9;
+    color: white;
+    padding: 40px 20px;
+}
+
+.hero h2 {
+    font-size: 2.5em;
+}
+
+.hero p {
+    font-size: 1.2em;
+}
+
+/* Categories section */
+.categories {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.category-list button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.category-list button:hover {
+    background-color: #2980b9;
+}
+
+/* Products section */
+.products {
+    margin: 20px 0;
+}
+
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.product {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 70px;
+    padding: 15px;
+    text-align: center;
+    width: 250px;
+    transition: transform 0.2s;
+    margin-top: -50px;
+
+}
+
+.product img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.product h3 {
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+.product p {
+    font-size: 1.2em;
+    color: #e74c3c; /* Couleur pour le prix */
+}
+
+.product label {
+    margin: 5px 0;
+    display: block;
+}
+
+.product input {
+    width: 80%;
+    padding: 5px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.product button {
+    background-color: #2e8b57; /* Couleur pour le bouton "Acheter" */
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.product button:hover {
+    background-color: #219653; /* Couleur pour le survol du bouton */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .product-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul {
+        flex-direction: column;
+    }
+
+    nav ul li {
+        margin-bottom: 10px;
+    }
+
+    .hero h2 {
+        font-size: 2em;
+    }
+
+    .hero p {
+        font-size: 1em;
+    }
+}
+
+
+/* En-tête */
+header {
+    background-color: #4CAF50; /* Couleur de fond de l'en-tête */
+    padding: 20px 0; /* Espacement en haut et en bas */
+    text-align: center; /* Centre le contenu */
+}
+
+nav {
+    margin-bottom: 15px; /* Espace en bas du menu */
+}
+
+nav ul {
+    list-style: none; /* Supprime les puces des éléments de la liste */
+    padding: 0; /* Supprime le padding par défaut */
+    display: flex; /* Affiche les éléments de la liste en ligne */
+    justify-content: center; /* Centre les éléments horizontalement */
+}
+
+nav ul li {
+    margin: 0 20px; /* Espace horizontal entre les éléments du menu */
+}
+
+nav ul li a {
+    color: white; /* Couleur du texte des liens */
+    text-decoration: none; /* Supprime le soulignement des liens */
+    font-size: 20px; /* Taille de la police agrandie */
+    transition: color 0.3s; /* Transition douce pour le changement de couleur */
+}
+
+nav ul li a:hover {
+    color: #e7f3fe; /* Couleur du texte au survol */
+}
+
+h2 {
+    font-size: 36px; /* Taille de la police agrandie pour le titre */
+    color: white; /* Couleur du texte du titre */
+    margin: 0; /* Supprime la marge par défaut */
+}
+
+
+/* Section des catégories */
+.categories {
+    display: flex; /* Utilise Flexbox pour centrer le contenu */
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
+    padding: 40px 0; /* Espacement en haut et en bas */
+    margin-top: -10px;
+}
+
+.category-list {
+    display: flex; /* Affiche les boutons en ligne */
+    gap: 20px; /* Espace entre les boutons */
+}
+
+.category-list button {
+    padding: 15px 25px; /* Espacement interne des boutons */
+    font-size: 20px; /* Taille de la police agrandie */
+    color: white; /* Couleur du texte */
+    background-color: #413fd6; /* Couleur de fond des boutons */
+    border: none; /* Supprime la bordure par défaut */
+    border-radius: 25px; /* Coins arrondis */
+    cursor: pointer; /* Change le curseur au survol */
+    transition: background-color 0.3s, transform 0.2s; /* Transition douce pour le changement de couleur et d'échelle */
+}
+
+.category-list button:hover {
+    background-color: #45a049; /* Couleur de fond au survol */
+    transform: scale(1.05); /* Légère augmentation de la taille au survol */
+}
+
+
+
+/* Style général */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Style de la section À propos */
+.about {
+    background-color: #2e8b57; /* Vert foncé rappelant la nature et l'agriculture */
+    color: white;
+    padding: 50px;
+    text-align: center;
+}
+
+.about h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.about p {
+    font-size: 18px;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Style de la section Témoignages */
+.testimonials {
+    background-color: #fff;
+    color: #333;
+    padding: 50px;
+    text-align: center;
+}
+
+.testimonials h2 {
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+.testimonial {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial p {
+    font-size: 16px;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.testimonial cite {
+    font-size: 14px;
+    color: #888;
+}
+
+/* Style du footer */
+footer {
+    background-color: #2e8b57; /* Vert foncé */
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+
+.alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; /* Largeur ajustable selon tes préférences */
+    max-width: 600px; /* Limite maximale de la largeur */
+    background-color: #21f02c;
+    color: white;
+    padding: 30px; /* Plus d’espace pour agrandir l’alerte */
+    font-size: px; /* Augmente la taille du texte */
+    text-align: center; /* Centrer le texte */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    transition: opacity 0.5s;
+}
+
+.alert.hidden {
+    display: none;
+}
+
+.alert button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px; /* Augmente la taille du bouton de fermeture */
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+
+
+
+
+

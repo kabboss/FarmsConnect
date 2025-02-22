@@ -1,0 +1,188 @@
+/* Style de base */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #4CAF50;
+    padding: 20px;
+    text-align: center;
+    color: white;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+/* Section des animaux */
+.animals-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* S'adapte automatiquement aux tailles d'écran */
+    gap: 20px;
+    padding: 20px;
+}
+
+.animal-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+}
+
+.animal-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+.animal-card h3 {
+    margin: 15px 0;
+    font-size: 22px;
+    color: #4CAF50;
+}
+
+.animal-card p {
+    color: #666;
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.animal-card .price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.animal-card button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.animal-card button:hover {
+    background-color: #45a049;
+}
+
+/* Responsive Navigation */
+nav {
+    background-color: #333;
+    padding: 10px 0;
+}
+
+.nav-list {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap; /* Permet de passer sur plusieurs lignes si l'écran est trop étroit */
+}
+
+.nav-list li {
+    margin: 0 15px;
+}
+
+.nav-list a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-list a:hover {
+    background-color: #4CAF50;
+    border-radius: 5px;
+}
+
+/* Responsive pour les écrans moyens */
+@media (max-width: 768px) {
+    .animals-list {
+        grid-template-columns: 1fr 1fr; /* Deux colonnes sur les écrans moyens */
+    }
+
+    .nav-list {
+        flex-direction: column; /* La navigation passe en colonne pour les écrans plus petits */
+        align-items: center;
+    }
+
+    .nav-list li {
+        margin: 10px 0;
+    }
+}
+
+/* Responsive pour les petits écrans */
+@media (max-width: 480px) {
+    .animals-list {
+        grid-template-columns: 1fr; /* Une seule colonne sur les petits écrans */
+    }
+
+    header h1 {
+        font-size: 24px; /* Réduction de la taille du titre */
+    }
+
+    .animal-card h3 {
+        font-size: 18px; /* Réduction de la taille des titres */
+    }
+
+    .animal-card p, .animal-card .price {
+        font-size: 14px; /* Réduction de la taille du texte */
+    }
+
+    .nav-list {
+        flex-direction: column; /* Navigation en colonne pour petits écrans */
+        align-items: center;
+    }
+
+    .nav-list a {
+        font-size: 16px; /* Taille de la police réduite */
+        padding: 8px 15px; /* Ajustement du padding */
+    }
+}
+
+
+.alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; /* Largeur ajustable selon tes préférences */
+    max-width: 600px; /* Limite maximale de la largeur */
+    background-color: #21f02c;
+    color: white;
+    padding: 30px; /* Plus d’espace pour agrandir l’alerte */
+    font-size: 20px; /* Augmente la taille du texte */
+    text-align: center; /* Centrer le texte */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+.alert.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.alert button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px; /* Augmente la taille du bouton de fermeture */
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
