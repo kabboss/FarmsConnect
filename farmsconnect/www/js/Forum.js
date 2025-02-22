@@ -1,288 +1,215 @@
-// Connexion au serveur Socket.IO
+// Connexion sécurisée au serveur Socket.IO avec transport WebSocket
 const socket = io('https://farmsconnect-b084ddb02391.herokuapp.com', {
-    transports: ['websocket'], // Forcer l'utilisation du transport WebSocket
+    transports: ['websocket'],
 });
 
-// Classe principale pour gérer le forum
+// Gestion du forum dynamique avec animations et fonctionnalités avancées
 class Forum {
     constructor() {
+        // Élément du DOM
         this.messageList = document.getElementById("message-list");
         this.messageForm = document.getElementById("message-form");
         this.messageInput = document.getElementById("message-input");
+        this.sortSelect = document.getElementById("sort-select");
         this.searchInput = document.getElementById("search-input");
-        this.pagination = { page: 1, limit: 5 }; // Pagination : page actuelle et limite
-        this.sortOption = "date"; // Options de tri : "date" ou "popularity"
 
-        this.initEventListeners();
-        this.loadMessages();
-        this.listenForNewMessages();
+        // Pagination et tri par défaut
+        this.pagination = { page: 1, limit: 10 };
+        this.sortOption = "date";
+        this.searchQuery = "";
+
+        // Initialisation
+        this._bindEvents();
+        this._initializeForum();
     }
 
-    // Fonction générique pour effectuer une requête API
-    async apiRequest(url, method = 'GET', body = null) {
+    // Initialiser le forum
+    async _initializeForum() {
         try {
-            const options = {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            };
-
-            if (body) {
-                options.body = JSON.stringify(body);
-            }
-
-            const response = await fetch(url, options);
-
-            // Vérification de la réponse
-            if (!response.ok) {
-                throw new Error(`Erreur HTTP : ${response.status}`);
-            }
-
-            const text = await response.text();
-            return text ? JSON.parse(text) : {};
+            this._displayNotification("Chargement des messages...", "info");
+            await this._loadMessages();
+            this._listenForNewMessages();
         } catch (error) {
-            console.error('Erreur lors de la requête API :', error);
-            throw error;
+            this._displayNotification("Erreur lors de l'initialisation du forum", "error");
+            console.error(error);
         }
     }
 
+    // Gestion des événements
+    _bindEvents() {
+        this.messageForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const content = this.messageInput.value.trim();
+            if (content) this._addMessage(content);
+        });
 
+        this.messageList.addEventListener("click", (event) => this._handleListClick(event));
 
+        this.sortSelect.addEventListener("change", (event) => {
+            this.sortOption = event.target.value;
+            this._loadMessages();
+        });
 
-// Fonction pour défiler jusqu'au bas des messages
-scrollToBottom() {
-    this.messageList.scrollTop = this.messageList.scrollHeight;
-}
+        this.searchInput.addEventListener("input", (event) => {
+            this.searchQuery = event.target.value.trim().toLowerCase();
+            this._loadMessages();
+        });
+    }
 
-
-
-
-    // Fonction pour charger les messages
-// Fonction pour charger les messages avec un tri basé sur la sélection
-async loadMessages() {
-    const response = await fetch('https://farmsconnect-b084ddb02391.herokuapp.com/api/messages');  // Récupérer les messages via l'API
-    const messages = await response.json();  // Convertir la réponse en JSON
-
-// Trier les messages en fonction de l'option de tri
-if (this.sortOption === 'date') {
-    messages.sort((a, b) => new Date(a.date) - new Date(b.date));  // Tri croissant par date (du plus ancien au plus récent)
-} else if (this.sortOption === 'hour') {
-    messages.sort((a, b) => {
-        // Comparer les heures uniquement
-        const hourA = new Date(a.date).getHours();
-        const hourB = new Date(b.date).getHours();
-        return hourA - hourB;  // Tri croissant par heure (de l'heure la plus tôt à la plus tardive)
-    });
-} else if (this.sortOption === 'popularity') {
-    messages.sort((a, b) => a.likes - b.likes);  // Tri croissant par popularité (moins de likes en haut)
-}
-    const messageList = document.getElementById('message-list');  // Récupérer la section des messages
-
-    messageList.innerHTML = "";  // Vider la liste de messages avant de la remplir à nouveau
-    messages.forEach(message => {
-        this.displayMessage(message);  // Afficher chaque message
-    });
-
-    // Après avoir affiché les messages, faire défiler jusqu'au dernier
-    this.scrollToBottom();
-}
-
-// Fonction pour afficher un message
-displayMessage({ _id, username = "Utilisateur anonyme", content, replies = [], likes = 0, dislikes = 0, date }) {
-    const messageDiv = document.createElement("div");
-    messageDiv.className = "message";
-    messageDiv.dataset.id = _id;
-
-    messageDiv.innerHTML = `
-    <div class="meta">
-            <span>${new Date(date).toLocaleString()}</span>
-        </div>
-        <strong>${username}:</strong> ${content}
-        <button class="like-button">👍 <span id="like-count-${_id}">${likes}</span></button>
-        
-        <div class="actions">
-            <button class="edit-button">Modifier</button>
-            <button class="delete-button">Supprimer</button>
-            <button class="reply-button">Répondre</button>
-        </div>
-        <div class="reply-input" style="display:none;">
-            <input type="text" class="reply-message-input" placeholder="Votre réponse...">
-            <button class="send-reply-button">Envoyer</button>
-        </div>
-        <div class="replies">
-            ${replies.map(reply => `<div class="reply"><strong>${reply.username}:</strong> ${reply.content}</div>`).join("")}
-        </div>
-    `;
-
-    this.messageList.appendChild(messageDiv);
-}
-
-    // Fonction pour ajouter un message
-    async addMessage(content) {
-        const username = localStorage.getItem('username') || "Utilisateur";
+    // Charger les messages
+    async _loadMessages() {
         try {
-            await this.apiRequest('https://farmsconnect-b084ddb02391.herokuapp.com/api/messages', 'POST', { username, content });
+            const { page, limit } = this.pagination;
+            const messages = await this._apiRequest(
+                `/api/messages?page=${page}&limit=${limit}`
+            );
+
+            // Filtrage par recherche
+            const filteredMessages = messages.filter((message) =>
+                message.content.toLowerCase().includes(this.searchQuery)
+            );
+
+            this.messageList.innerHTML = ""; // Réinitialiser la liste
+            filteredMessages.sort(this._getSortFunction());
+            filteredMessages.forEach((message) => this._displayMessage(message));
+
+            this._scrollToBottom();
+        } catch (error) {
+            this._displayNotification("Erreur lors du chargement des messages", "error");
+            console.error(error);
+        }
+    }
+
+    // Afficher un message avec animations
+    _displayMessage({ _id, username = "Utilisateur anonyme", content, replies = [], likes = 0, dislikes = 0, date }) {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "message fade-in";
+        messageDiv.dataset.id = _id;
+
+        messageDiv.innerHTML = `
+            <div class="meta">
+                <span>${new Date(date).toLocaleString()}</span>
+                <strong>${username}:</strong>
+            </div>
+            <div class="content">${content}</div>
+            <div class="actions">
+                <button class="edit-button">✏️ Modifier</button>
+                <button class="delete-button">🗑️ Supprimer</button>
+                <button class="reply-button">💬 Répondre</button>
+            </div>
+            <div class="reply-input" style="display:none;">
+                <input type="text" class="reply-message-input" placeholder="Votre réponse...">
+                <button class="send-reply-button">Envoyer</button>
+            </div>
+            <div class="replies">
+                ${replies.map((reply) => `<div class="reply"><strong>${reply.username}:</strong> ${reply.content}</div>`).join("")}
+            </div>
+        `;
+
+        this.messageList.appendChild(messageDiv);
+    }
+
+    // Ajouter un message
+    async _addMessage(content) {
+        try {
+            const username = localStorage.getItem('username') || "Utilisateur";
+            await this._apiRequest('/api/messages', 'POST', { username, content });
             this.messageInput.value = "";
-            this.loadMessages();  // Recharger les messages après l'ajout
+            this._displayNotification("Message ajouté avec succès !", "success");
+            await this._loadMessages();
         } catch (error) {
-            console.error('Erreur lors de l\'ajout du message :', error);
+            this._displayNotification("Erreur lors de l'ajout du message", "error");
+            console.error(error);
         }
     }
 
-    // Fonction pour ajouter une réponse à un message
-    async addReply(messageId, content) {
-        const username = localStorage.getItem('username') || "Utilisateur";
+    // Modifier un message
+    async _editMessage(messageId, content) {
         try {
-            await this.apiRequest(`https://farmsconnect-b084ddb02391.herokuapp.com/api/messages/${messageId}/replies`, 'POST', { username, content });
-            this.loadMessages();  // Recharger les messages après l'ajout de la réponse
+            await this._apiRequest(`/api/messages/${messageId}`, 'PUT', { content });
+            this._displayNotification("Message modifié avec succès !", "success");
+            await this._loadMessages();
         } catch (error) {
-            console.error('Erreur lors de l\'ajout de la réponse :', error);
+            this._displayNotification("Erreur lors de la modification du message", "error");
+            console.error(error);
         }
     }
 
-    // Fonction pour éditer un message
-    async editMessage(messageId, newContent) {
+    // Supprimer un message
+    async _deleteMessage(messageId) {
         try {
-            await this.apiRequest(`https://farmsconnect-b084ddb02391.herokuapp.com/api/messages/${messageId}`, 'PUT', { content: newContent });
-            this.loadMessages();  // Recharger les messages après l'édition
+            await this._apiRequest(`/api/messages/${messageId}`, 'DELETE');
+            this._displayNotification("Message supprimé avec succès !", "success");
+            await this._loadMessages();
         } catch (error) {
-            console.error('Erreur lors de la modification du message :', error);
+            this._displayNotification("Erreur lors de la suppression du message", "error");
+            console.error(error);
         }
     }
 
-    // Fonction pour supprimer un message
-    async deleteMessage(messageId) {
+    // Réagir à un message (likes/dislikes)
+    async _reactToMessage(messageId, type) {
         try {
-            await this.apiRequest(`https://farmsconnect-b084ddb02391.herokuapp.com/api/messages/${messageId}`, 'DELETE');
-            this.loadMessages();  // Recharger les messages après la suppression
+            const url = type === 'like' 
+                ? `/api/messages/${messageId}/like`
+                : `/api/messages/${messageId}/dislike`;
+
+            await this._apiRequest(url, 'POST');
+            this._displayNotification(`Message ${type === "like" ? "aimé" : "désapprouvé"} !`, "info");
+            await this._loadMessages();
         } catch (error) {
-            console.error('Erreur lors de la suppression du message :', error);
+            this._displayNotification(`Erreur lors de la réaction (${type})`, "error");
+            console.error(error);
         }
     }
 
-// Fonction pour réagir à un message (ajouter un like ou un dislike)
-async reactToMessage(messageId, type) {
-    // Empêcher un utilisateur de liker plusieurs fois le même message
-    const likedMessages = JSON.parse(localStorage.getItem('likedMessages')) || [];
-    if (likedMessages.includes(messageId)) {
-        alert("Vous avez déjà aimé ce message !");
-        return;
-    }
-
-    const url = type === 'like' 
-        ? `https://farmsconnect-b084ddb02391.herokuapp.com/like/${messageId}`
-        : `https://farmsconnect-b084ddb02391.herokuapp.com/dislike/${messageId}`;
-
-    try {
-        const response = await fetch(url, { method: 'POST' });
-
-        if (response.ok) {
-            const data = await response.json();  // Récupérer les données mises à jour
-            const likeCountElement = document.querySelector(`#like-count-${messageId}`);
-            const dislikeCountElement = document.querySelector(`#dislike-count-${messageId}`);
-
-            // Mettre à jour le nombre de likes et dislikes
-            if (likeCountElement) {
-                likeCountElement.textContent = `${data.likes} likes`;  // Mettre à jour le nombre de likes
-            }
-
-            if (dislikeCountElement) {
-                dislikeCountElement.textContent = `${data.dislikes} dislikes`;  // Mettre à jour le nombre de dislikes
-            }
-
-            // Enregistrer l'ID du message liké pour éviter les likes multiples
-            likedMessages.push(messageId);
-            localStorage.setItem('likedMessages', JSON.stringify(likedMessages));
-        } else {
-            const errorData = await response.json();
-            console.error('Erreur lors de la réaction au message:', errorData.message);
-        }
-    } catch (error) {
-        console.error('Erreur lors de la requête API:', error);
-    }
-}
-    // Fonction pour gérer la pagination
-    changePage(increment) {
-        this.pagination.page += increment;
-        if (this.pagination.page < 1) this.pagination.page = 1;
-        this.loadMessages();
-    }
-
-    // Fonction pour changer l'option de tri
-    changeSort(option) {
-        this.sortOption = option;
-        this.loadMessages();
-    }
-
-    // Initialisation des écouteurs d'événements
-    initEventListeners() {
-        this.messageForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const newMessage = this.messageInput.value.trim();
-            if (newMessage) this.addMessage(newMessage);
-        });
-
-        this.messageList.addEventListener("click", (e) => {
-            const messageDiv = e.target.closest(".message");
-            const messageId = messageDiv?.dataset.id;
-
-            if (e.target.classList.contains("reply-button")) {
-                const replyInputDiv = messageDiv.querySelector(".reply-input");
-                replyInputDiv.style.display = replyInputDiv.style.display === "none" ? "block" : "none";
-            }
-
-            if (e.target.classList.contains("send-reply-button")) {
-                const replyInput = messageDiv.querySelector(".reply-message-input").value.trim();
-                if (replyInput) this.addReply(messageId, replyInput);
-            }
-
-            if (e.target.classList.contains("edit-button")) {
-                const newContent = prompt("Modifier le message:");
-                if (newContent) this.editMessage(messageId, newContent);
-            }
-
-            if (e.target.classList.contains("delete-button")) {
-                this.deleteMessage(messageId);
-            }
-
-            if (e.target.classList.contains("like-button")) {
-                this.reactToMessage(messageId, "like");
-            }
-
-            if (e.target.classList.contains("dislike-button")) {
-                this.reactToMessage(messageId, "dislike");
-            }
-        });
-
-        this.searchInput?.addEventListener("input", () => this.loadMessages());
-
-
-        document.getElementById("sort-option").addEventListener("change", (e) => {
-            this.changeSort(e.target.value);
-        });
-    }
-
-    // Fonction pour écouter les nouveaux messages via Socket.IO
-    listenForNewMessages() {
-        socket.on('newMessage', (message) => {
-            this.displayNotification("Un nouveau message a été ajouté !");
-            this.displayMessage(message);
-        });
-    }
-
-    // Fonction pour afficher une notification
-    displayNotification(message) {
+    // Notifications animées
+    _displayNotification(message, type) {
         const notification = document.createElement("div");
-        notification.className = "notification";
-        notification.innerText = message;
+        notification.className = `notification ${type} slide-in`;
+        notification.textContent = message;
+
         document.body.appendChild(notification);
 
-        setTimeout(() => notification.remove(), 3000);
+        setTimeout(() => {
+            notification.classList.replace("slide-in", "slide-out");
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    // Fonction utilitaire pour requête API
+    async _apiRequest(endpoint, method = 'GET', body = null) {
+        const url = `https://farmsconnect-b084ddb02391.herokuapp.com${endpoint}`;
+        const options = {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+        };
+        if (body) options.body = JSON.stringify(body);
+
+        const response = await fetch(url, options);
+        if (!response.ok) throw new Error(`Erreur HTTP : ${response.status}`);
+        return response.json();
+    }
+
+    // Obtenir la fonction de tri
+    _getSortFunction() {
+        const sortFunctions = {
+            date: (a, b) => new Date(a.date) - new Date(b.date),
+            popularity: (a, b) => b.likes - a.likes,
+        };
+        return sortFunctions[this.sortOption] || sortFunctions.date;
+    }
+
+    // Écouter les nouveaux messages
+    _listenForNewMessages() {
+        socket.on('newMessage', () => this._loadMessages());
+    }
+
+    // Défiler vers le bas
+    _scrollToBottom() {
+        this.messageList.scrollTop = this.messageList.scrollHeight;
     }
 }
 
 // Initialiser le forum
-document.addEventListener("DOMContentLoaded", () => {
-    const forum = new Forum();
-});
+new Forum();

@@ -1052,6 +1052,56 @@ a {
 
 
 
+
+  .hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+  }
+  
+  .hero-content {
+    z-index: 2;
+    animation: float 6s infinite ease-in-out;
+  }
+  
+  
+  /* --- Animation infinie pour les boutons --- */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+  
+  /* --- Particules dynamiques d'arrière-plan --- */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(240, 4, 4, 0.2) 10%, transparent 20%);
+    background-size: 5% 5%;
+    z-index: 1;
+    animation: particles 4s infinite linear;
+  }
+  
+  @keyframes particles {
+    0% {
+      background-position: 0 0, 50px 50px, 100px 100px;
+    }
+    100% {
+      background-position: 50px 50px, 100px 100px, 0 0;
+    }
+  }
+
   
 
 

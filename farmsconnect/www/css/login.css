@@ -756,8 +756,8 @@ nav ul li a:hover {
 
 /* Style du bouton */
 .open-modal-button {
-    padding: 20px 40px; /* Augmenter la taille du bouton */
-    font-size: 24px; /* Texte plus grand */
+    padding: 10px 20px; /* Augmenter la taille du bouton */
+    font-size: 12px; /* Texte plus grand */
     font-weight: bold; /* Mettre en valeur le texte */
     color: #fff; /* Couleur du texte */
     background: linear-gradient(45deg, #6a11cb, #2575fc); /* Dégradé moderne */
